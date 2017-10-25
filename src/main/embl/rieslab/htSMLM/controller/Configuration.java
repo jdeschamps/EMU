@@ -64,8 +64,11 @@ public class Configuration {
 			
 			// launch wizard
 			UIWizard wizard = new UIWizard();
-			boolean completed = wizard.newConfiguration(uipropertySet, uiparameterSet, mmproperties);
-			if(completed){
+			wizard.newConfiguration(uipropertySet, uiparameterSet, mmproperties);
+			
+			// thread wait for end?
+			
+			if(true){
 				uiproperties_ = wizard.getWizProperties();
 				uiparameters_ = wizard.getWizParameters();
 			} 
@@ -73,6 +76,8 @@ public class Configuration {
 			
 		    return false;
 		} catch (IOException ex) {
+			// show error message?
+			
 		    return false;
 		}
 		return true;

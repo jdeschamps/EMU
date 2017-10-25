@@ -57,6 +57,12 @@ public class MMProperties {
 		return devices_;
 	}
 	
+	public String[] getDevicesList(){
+		String[] s = new String[devices_.size()];
+		devices_.keySet().toArray(s);
+		return s;
+	}
+	
 	public boolean isProperty(String hash){
 		return properties_.containsKey(hash);
 	}

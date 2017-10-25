@@ -99,7 +99,7 @@ public class SystemController {
 
 
 		} else {
-			// quit?
+			// launch wizard
 		}
 	}
 	
