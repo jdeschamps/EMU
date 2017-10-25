@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.swing.AbstractCellEditor;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -24,7 +25,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
+
+import main.embl.rieslab.htSMLM.controller.SystemConstants;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
+import main.embl.rieslab.htSMLM.util.ColorRepository;
 
 
 // This class has been adapted from a java document example
@@ -37,12 +41,11 @@ public class ComboTable extends JPanel {
 
 	private MMProperties mmproperties_;
 	
-	private JComboBox behaviour, color;
+	private JComboBox behaviour, color, devices, properties;
 	private SpinnerNumberModel spinmodel;
 	private int numlasers=0;
 	private JTable table;
 	private boolean powerenabled = false;
-	private ArrayList<LaserSettings> lasersettings;
 	
 	final private String behaviourString = "Default behaviour";
 	final private String colorString = "Colour ";
@@ -52,31 +55,38 @@ public class ComboTable extends JPanel {
 	final private String operationPropString = "On/off property";
 	
 	public ComboTable() {
-		lasersettings = new ArrayList<LaserSettings>();
 		
 		// Color combobox
 		Map<Object, ColorIcon> icons = new HashMap<Object, ColorIcon>();
 		color = new JComboBox();
-		for(int k=0; k<Configuration.colors.length;k++){
-			color.addItem(Configuration.colors[k]);
-			icons.put(Configuration.colors[k], new ColorIcon(Configuration.getColor(Configuration.colors[k])));
+		String[] strarray = ColorRepository.getColors();
+		for(int k=0; k<strarray.length;k++){
+			color.addItem(strarray[k]);
+			icons.put(strarray[k], new ColorIcon(ColorRepository.getColor(strarray[k])));
 		}
 		color.setRenderer(new IconListRenderer(icons));
 		
 		// Behaviour combobox
 		behaviour = new JComboBox();
-		for(int k=0; k<Configuration.behaviours.length;k++){
-			behaviour.addItem(Configuration.behaviours[k]);
+		strarray = SystemConstants.FPGA_BEHAVIOURS;
+		for(int k=0; k<strarray.length;k++){
+			behaviour.addItem(strarray[k]);
+		}
+		
+		// 
+		devices = new JComboBox();
+		strarray = SystemConstants.FPGA_BEHAVIOURS;
+		for(int k=0; k<strarray.length;k++){
+			behaviour.addItem(strarray[k]);
 		}
         
-		// Number of lasers
-		spinmodel = new SpinnerNumberModel(numlasers, 0,Configuration.maxLasers, 1);
+		//spinmodel = new SpinnerNumberModel(numlasers, 0,Configuration.maxLasers, 1);
 		
 		// Define table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {
-				"Property", "Value" }, 0);
+				"UI property", "Device", "Property" }, 0);
 		model.addRow(new Object[] { "Enable power settings", Boolean.FALSE });
-		model.addRow(new Object[] { "Number of lasers", spinmodel });
+		//model.addRow(new Object[] { "Number of lasers", spinmodel });
 
 		table = new JTable(model) {
 			/**
@@ -144,22 +154,7 @@ public class ComboTable extends JPanel {
 		return numlasers;
 	}
 	
-	/**
-	 * Reads out the table and fill up the laser settings list.
-	 */
-	private void grabLaserSettings(){
-		lasersettings.clear();
-		
-		for(int i=0;i<getCountLaser();i++){
-			if(powerenabled){
-				lasersettings.add(new LaserSettings(i,(String) table.getValueAt(2+i*6,1),(String) table.getValueAt(2+i*6+1,1),
-						(String) table.getValueAt(2+i*6+2,1),(String) table.getValueAt(2+i*6+3,1),(String) table.getValueAt(2+i*6+4,1),(String) table.getValueAt(2+i*6+5,1)));
-			} else {
-				lasersettings.add(new LaserSettings(i,(String) table.getValueAt(2+i*3,1),(String) table.getValueAt(2+i*3+1,1),
-						(String) table.getValueAt(2+i*3+2,1),"","",""));
-			}
-		}
-	}
+
 	/**
 	 * Add rows to the table corresponding to one laser.
 	 */
@@ -246,11 +241,8 @@ public class ComboTable extends JPanel {
 			}
 		}
 	}
-
-	public ArrayList<LaserSettings> getLaserSettings(){
-		getLaserSettings();
-		return lasersettings;
-	}
+	
+	private 
 
 	/**
 	 * Spinner cell editor with a changed listener to monitor the number of lasers
