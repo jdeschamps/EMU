@@ -7,7 +7,6 @@ import java.util.HashMap;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -38,7 +37,7 @@ public class PropertyComboTable extends JPanel {
 	private String[] uipropkeys_;
 	private HelpWindow help_;
 		
-	public PropertyComboTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties) {
+	public PropertyComboTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HelpWindow help) {
 		
 		uipropertySet_ = uipropertySet; 
 		mmproperties_ = mmproperties;
@@ -51,7 +50,7 @@ public class PropertyComboTable extends JPanel {
 			devices.addItem(strarray[k]);
 		}
 		        		
-		// Extract uipropertie names
+		// Extract uiproperty names
 		uipropkeys_ = new String[uipropertySet_.size()];
 		String[] temp = new String[uipropertySet_.size()]; 
 		uipropkeys_ = StringSorting.sort(uipropertySet_.keySet().toArray(temp));
@@ -140,9 +139,7 @@ public class PropertyComboTable extends JPanel {
 		    }
 		});
 		
-		help_ = new HelpWindow("Click on a property to display description");
-		help_.showHelp(true);
-
+		help_ = help;
 		
 		JScrollPane sc = new JScrollPane(table);
 		sc.setPreferredSize(new Dimension(440,590));

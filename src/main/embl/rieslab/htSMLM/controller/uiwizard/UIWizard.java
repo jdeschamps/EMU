@@ -5,6 +5,7 @@ import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
+import javax.swing.JTabbedPane;
 
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
@@ -14,7 +15,8 @@ public class UIWizard {
 
 	HashMap<String, String> prop_;
 	HashMap<String, String> param_;
-	PropertyComboTable propertytable;
+	PropertyComboTable propertytable_;
+	ParameterComboTable parametertable_;
 	
 	public UIWizard() {
 		prop_ = new HashMap<String, String>();
@@ -24,35 +26,47 @@ public class UIWizard {
 	@SuppressWarnings("rawtypes")
 	public void newConfiguration(final HashMap<String, UIProperty> uipropertySet,
 			final HashMap<String, UIParameter> uiparameterSet, final MMProperties mmproperties) {
-		
-		// Create UI
+
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+			public void run() {
 
-	        //Create and set up the window.
-	        JFrame frame = new JFrame("UI properties wizard");
-	        //frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-	        frame.addWindowListener(new WindowAdapter()
-	        {
-	            @Override
-	            public void windowClosing(WindowEvent e)
-	            {
-	            	propertytable.disposeHelp();
-	                e.getWindow().dispose();
-	            }
-	        });
+				JFrame frame = new JFrame("UI properties wizard");
+				frame.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosing(WindowEvent e) {
+						propertytable_.disposeHelp();
+						parametertable_.disposeHelp();
+						e.getWindow().dispose();
+					}
+				});
+				
+				HelpWindow help = new HelpWindow("Click on a row to display the description");
 
-	        //Create and set up the content pane.
-	        propertytable = new PropertyComboTable(uipropertySet, mmproperties);
-	        propertytable.setOpaque(true); //content panes must be opaque
-	        frame.setContentPane(propertytable);
+				// Table defining the properties
+				propertytable_ = new PropertyComboTable(uipropertySet, mmproperties, help);
+				propertytable_.setOpaque(true); 
+				
+				// now parameters
+				parametertable_ = new ParameterComboTable(uiparameterSet, help);
+				parametertable_.setOpaque(true); 
+				
+				JTabbedPane tabbedpane = new JTabbedPane();
+				
+				
+				
+				
+				
+				
+				
+				
+				frame.setContentPane(parametertable_);
 
-	        //Display the window.
-	        frame.pack();
-	        frame.setVisible(true);
-            }
+				// Display the window.
+				frame.pack();
+				frame.setVisible(true);
+			}
 		});
-		
+
 	}
 
 	public HashMap<String, String> getWizProperties() {

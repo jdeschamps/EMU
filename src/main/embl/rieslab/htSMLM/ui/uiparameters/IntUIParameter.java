@@ -1,11 +1,12 @@
 package main.embl.rieslab.htSMLM.ui.uiparameters;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.util.utils;
 
 public class IntUIParameter extends UIParameter<Integer>{
 
-	public IntUIParameter(String name, String description, int value) {
-		super(name, description);
+	public IntUIParameter(PropertyPanel owner, String name, String description, int value) {
+		super(owner, name, description);
 		
 		setValue(value);
 	}

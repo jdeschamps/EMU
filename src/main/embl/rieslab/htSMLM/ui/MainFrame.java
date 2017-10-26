@@ -38,7 +38,7 @@ public class MainFrame extends PropertyMainFrame{
         }
         
 
-        focusPanel = new FocusPanel();
+        focusPanel = new FocusPanel("Focus panel");
         this.add(focusPanel);
 
         this.pack(); // avoid packing when one can

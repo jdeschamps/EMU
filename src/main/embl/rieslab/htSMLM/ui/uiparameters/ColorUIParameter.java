@@ -2,11 +2,13 @@ package main.embl.rieslab.htSMLM.ui.uiparameters;
 
 import java.awt.Color;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+
 public class ColorUIParameter extends UIParameter<Color>{
 	
 
-	public ColorUIParameter(String name, String description, Color value) {
-		super(name, description);
+	public ColorUIParameter(PropertyPanel owner, String name, String description, Color value) {
+		super(owner, name, description);
 		setValue(value);
 	}
 	

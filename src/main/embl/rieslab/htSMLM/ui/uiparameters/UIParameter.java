@@ -1,13 +1,17 @@
 package main.embl.rieslab.htSMLM.ui.uiparameters;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+
 public abstract class UIParameter<T> {
 
 	private String name_;
 	private String description_;
 	protected UIParameterType type_;
 	private T value_;
+	private PropertyPanel owner_;
 	
-	public UIParameter(String name, String description){
+	public UIParameter(PropertyPanel owner, String name, String description){
+		owner_ = owner;
 		name_ = name;
 		description_ = description;
 		
@@ -19,7 +23,7 @@ public abstract class UIParameter<T> {
 	}
 
 	public String getName(){
-		return name_;
+		return owner_.getLabel()+" - "+name_;
 	}
 
 	public String getDescription(){
@@ -39,7 +43,7 @@ public abstract class UIParameter<T> {
 			value_ = convertValue(val);
 		}
 	}
-	
+		
 	public abstract void setType();
 	public abstract boolean isSuitable(String val);
 	protected abstract T convertValue(String val);

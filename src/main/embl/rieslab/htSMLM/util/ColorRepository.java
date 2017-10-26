@@ -14,30 +14,40 @@ public class ColorRepository {
 	public static Color orange = new Color(219, 153, 70);
 	public static Color darkorange = new Color(153, 99, 30);
 	public static Color violet = new Color(164, 110, 234);
-	public static   Color darkviolet = new Color(116, 67, 178);
+	public static Color darkviolet = new Color(116, 67, 178);
+	public static String strblue = "blue";
+	public static String strdarkblue = "darkblue";
+	public static String strblack = "black";
+	public static String strgreen = "green";
+	public static String strdarkgreen = "darkgreen";
+	public static String strgray = "gray";
+	public static String strdarkred = "darkred";
+	public static String strorange = "orange";
+	public static String strdarkorange = "darkorange";
+	public static String strviolet = "violet";
+	public static String strdarkviolet = "darkviolet";
 	
-	public static String[] colors = {};
 	
 	public static Color getColor(String colorname){
-		if(colorname.equals("blue")){
+		if(colorname.equals(strblue)){
 			return blue;
-		} else if(colorname.equals("darkblue")){
+		} else if(colorname.equals(strdarkblue)){
 			return darkblue;
-		} else if(colorname.equals("green")){
+		} else if(colorname.equals(strgreen)){
 			return green;
-		} else if(colorname.equals("darkgreen")){
+		} else if(colorname.equals(strdarkgreen)){
 			return gray;
-		} else if(colorname.equals("gray")){
+		} else if(colorname.equals(strgray)){
 			return darkgreen;
-		} else if(colorname.equals("darkred")){
+		} else if(colorname.equals(strdarkred)){
 			return darkred;
-		} else if(colorname.equals("darkorange")){
+		} else if(colorname.equals(strdarkorange)){
 			return darkorange;
-		} else if(colorname.equals("orange")){
+		} else if(colorname.equals(strorange)){
 			return orange;
-		} else if(colorname.equals("violet")){
+		} else if(colorname.equals(strviolet)){
 			return violet;
-		} else if(colorname.equals("darkviolet")){
+		} else if(colorname.equals(strdarkviolet)){
 			return darkviolet;
 		} else {
 			return Color.black;
@@ -45,6 +55,7 @@ public class ColorRepository {
 	}
 	
 	public static String[] getColors(){
+		String[] colors = {strblack,strblue,strdarkblue,strgreen,strdarkgreen,strgray,strdarkred,strorange,strdarkorange,strviolet,strdarkviolet};
 		return colors;
 	}
 }

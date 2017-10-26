@@ -1,11 +1,12 @@
 package main.embl.rieslab.htSMLM.ui.uiparameters;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.util.utils;
 
 public class FloatUIParameter extends UIParameter<Float>{
 
-	public FloatUIParameter(String name, String description, Float val) {
-		super(name, description);
+	public FloatUIParameter(PropertyPanel owner, String name, String description, Float val) {
+		super(owner, name, description);
 		setValue(val);
 	}
 

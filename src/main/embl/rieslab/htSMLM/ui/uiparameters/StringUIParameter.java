@@ -1,9 +1,11 @@
 package main.embl.rieslab.htSMLM.ui.uiparameters;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+
 public class StringUIParameter extends UIParameter<String>{
 
-	public StringUIParameter(String name, String description, String value) {
-		super(name, description);
+	public StringUIParameter(PropertyPanel owner, String name, String description, String value) {
+		super(owner, name, description);
 		setValue(value);
 	}
 

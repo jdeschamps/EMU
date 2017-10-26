@@ -31,7 +31,7 @@ import main.embl.rieslab.htSMLM.util.utils;
  * @author Joran Deschamps
  */
 public class FocusPanel extends PropertyPanel {
-	
+
 	/**
 	 * 
 	 */
@@ -72,7 +72,10 @@ public class FocusPanel extends PropertyPanel {
 	private double smallstep_, largestep_;
 	private int idle_, npos_; 
 	
-
+	public FocusPanel(String label) {
+		super(label);
+	}
+	
 	public void setupPanel() {
 		graph_ = new TimeChart("position","time","position",npos_,300,200,false);
 		updater_ = new TimeChartUpdater(graph_,getUIProperty(FOCUS_POSITION),idle_);
@@ -389,10 +392,10 @@ public class FocusPanel extends PropertyPanel {
 		idle_ = 100;
 		npos_ = 30; 
 		
-		addUIParameter(new DoubleUIParameter(PARAM_LARGESTEP,"Default value for large z stage step.",largestep_));
-		addUIParameter(new DoubleUIParameter(PARAM_SMALLSTEP,"Default value for large z stage step.",smallstep_));
-		addUIParameter(new IntUIParameter(PARAM_IDLE,"Idle time of the stage position monitoring.",idle_)); // thread idle time
-		addUIParameter(new IntUIParameter(PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
+		addUIParameter(new DoubleUIParameter(this, PARAM_LARGESTEP,"Default value for large z stage step.",largestep_));
+		addUIParameter(new DoubleUIParameter(this, PARAM_SMALLSTEP,"Default value for large z stage step.",smallstep_));
+		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time of the stage position monitoring.",idle_)); // thread idle time
+		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
 	}
 
 	@Override
