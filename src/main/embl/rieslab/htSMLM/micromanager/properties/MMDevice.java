@@ -2,6 +2,8 @@ package main.embl.rieslab.htSMLM.micromanager.properties;
 
 import java.util.HashMap;
 
+import main.embl.rieslab.htSMLM.controller.uiwizard.StringSorting;
+
 public class MMDevice {
 
 	@SuppressWarnings("rawtypes")
@@ -16,7 +18,7 @@ public class MMDevice {
 	
 	public void registerProperty(@SuppressWarnings("rawtypes") MMProperty p){
 		if(!hasProperty(p.getPropertyName())){
-			properties_.put(p.getPropertyName(), p);
+			properties_.put(p.getHash(), p);
 		}
 	}
 	
@@ -26,5 +28,11 @@ public class MMDevice {
 	
 	public String getLabel(){
 		return label_;
+	}
+	
+	public String[] getPropertiesHash(){
+		String[] str = new String[properties_.size()];
+		String[] sorted = StringSorting.sort(properties_.keySet().toArray(str)); 
+		return sorted;
 	}
 }

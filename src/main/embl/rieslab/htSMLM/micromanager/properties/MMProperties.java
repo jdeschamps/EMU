@@ -27,9 +27,11 @@ public class MMProperties {
 
 		for (String device : deviceList) {
 			MMDevice dev = new MMDevice(device);
+			//System.out.println("- Adding new device: "+device);
 			try {
 				propertyList = core_.getDevicePropertyNames(device);
 				for (String property : propertyList) {
+					//System.out.println("--- Adding new property: "+property);
 					MMProperty prop = builder.getNewProperty(device, property);
 					dev.registerProperty(prop);
 					properties_.put(prop.getHash(),prop);

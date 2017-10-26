@@ -55,12 +55,11 @@ public class SystemController {
 		// read out configuration
 		config = new Configuration();
 		boolean read = config.readConfiguration(uiproperties_, uiparameters_, mmproperties_);
-
+/*
 		// if got a configuration
 		if(read){
 			// Allocate UI properties
-			HashMap<String, String> configprop = config
-					.getPropertiesConfiguration();
+			HashMap<String, String> configprop = config.getPropertiesConfiguration();
 
 			String uiprop;
 			Iterator<String> itstr = configprop.keySet().iterator();
@@ -100,7 +99,7 @@ public class SystemController {
 
 		} else {
 			// launch wizard
-		}
+		}*/
 	}
 	
 

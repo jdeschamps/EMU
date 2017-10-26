@@ -65,7 +65,8 @@ public class htSMLM implements MMPlugin {
 	           @Override
 	           public void run()
 	           {
-	       		
+	       		SystemController controller = new SystemController(core_);
+	       		controller.start();
 	        	   
 	           }
 	       }); 
