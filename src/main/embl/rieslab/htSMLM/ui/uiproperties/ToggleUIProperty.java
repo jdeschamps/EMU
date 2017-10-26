@@ -12,4 +12,8 @@ public class ToggleUIProperty extends UIProperty{
 		super(owner, name, description);
 	}
 
+	@Override
+	public boolean isToggle(){
+		return true;
+	}
 }

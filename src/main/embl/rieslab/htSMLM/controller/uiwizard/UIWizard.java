@@ -1,5 +1,7 @@
 package main.embl.rieslab.htSMLM.controller.uiwizard;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
@@ -12,6 +14,7 @@ public class UIWizard {
 
 	HashMap<String, String> prop_;
 	HashMap<String, String> param_;
+	PropertyComboTable propertytable;
 	
 	public UIWizard() {
 		prop_ = new HashMap<String, String>();
@@ -28,12 +31,21 @@ public class UIWizard {
 
 	        //Create and set up the window.
 	        JFrame frame = new JFrame("UI properties wizard");
-	        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	        //frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+	        frame.addWindowListener(new WindowAdapter()
+	        {
+	            @Override
+	            public void windowClosing(WindowEvent e)
+	            {
+	            	propertytable.disposeHelp();
+	                e.getWindow().dispose();
+	            }
+	        });
 
 	        //Create and set up the content pane.
-	        WizardComboTable newContentPane = new WizardComboTable(uipropertySet, uiparameterSet, mmproperties);
-	        newContentPane.setOpaque(true); //content panes must be opaque
-	        frame.setContentPane(newContentPane);
+	        propertytable = new PropertyComboTable(uipropertySet, mmproperties);
+	        propertytable.setOpaque(true); //content panes must be opaque
+	        frame.setContentPane(propertytable);
 
 	        //Display the window.
 	        frame.pack();

@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
-import java.util.Set;
 
 import main.embl.rieslab.htSMLM.controller.uiwizard.UIWizard;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
@@ -19,6 +18,7 @@ public class Configuration {
 
 	// Keys
 	public static String KEY_UNALLOCATED = "Unallocated";
+	public static String KEY_ENTERVALUE = "Enter value";
 	public static String KEY_UIPROPERTY = "UI Property: ";
 	public static String KEY_UIPARAMETER = "UI Parameter: ";
 

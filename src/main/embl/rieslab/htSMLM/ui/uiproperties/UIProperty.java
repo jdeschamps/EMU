@@ -50,4 +50,8 @@ public class UIProperty {
 			mmproperty_.setStringValue(val);
 		}  
 	}
+	
+	public boolean isToggle(){
+		return false;
+	}
 }

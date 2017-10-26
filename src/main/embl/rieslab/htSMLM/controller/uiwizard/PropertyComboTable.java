@@ -4,23 +4,26 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.HashMap;
+
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+
 import main.embl.rieslab.htSMLM.controller.Configuration;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
-import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.ToggleUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 
 
-// This class has been adapted from a java document example
-public class WizardComboTable extends JPanel {
+public class PropertyComboTable extends JPanel {
 
     /**
 	 * 
@@ -31,17 +34,13 @@ public class WizardComboTable extends JPanel {
 	private JTable table;
 		
 	private HashMap<String, UIProperty> uipropertySet_;
-	@SuppressWarnings("rawtypes")
-	private HashMap<String, UIParameter> uiparameterSet_;
 	private MMProperties mmproperties_;
 	private String[] uipropkeys_;
-	
-	@SuppressWarnings("rawtypes")
-	public WizardComboTable(HashMap<String, UIProperty> uipropertySet,
-			HashMap<String, UIParameter> uiparameterSet, MMProperties mmproperties) {
+	private HelpWindow help_;
+		
+	public PropertyComboTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties) {
 		
 		uipropertySet_ = uipropertySet; 
-		uiparameterSet_ = uiparameterSet;
 		mmproperties_ = mmproperties;
 		
 		// Combobox holding the device names
@@ -62,7 +61,13 @@ public class WizardComboTable extends JPanel {
 				"UI property", "Device", "Property" }, 0);
 		
 		for(int i=0;i<uipropkeys_.length;i++){
-			model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
+			if(!uipropertySet.get(uipropkeys_[i]).isToggle()){
+				model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
+			} else {
+				model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
+				model.addRow(new Object[] {uipropkeys_[i]+" "+ToggleUIProperty.ON, "", Configuration.KEY_ENTERVALUE});
+				model.addRow(new Object[] {uipropkeys_[i]+" "+ToggleUIProperty.OFF, "", Configuration.KEY_ENTERVALUE});
+			}
 		}
 
 		table = new JTable(model) {
@@ -73,7 +78,7 @@ public class WizardComboTable extends JPanel {
 
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
-				switch(column){
+				switch (column) {
 				case 0:
 					return new BoldTableCellRenderer();
 				case 1:
@@ -87,22 +92,32 @@ public class WizardComboTable extends JPanel {
 
 			@Override
 			public TableCellEditor getCellEditor(int row, int column) {
-				switch(column){
-				case 0:
-					return super.getCellEditor(row, column);
-				case 1:
-					return new DefaultCellEditor(devices);
-				case 2:
-					return new DefaultCellEditor(getDeviceProperties((String) getValueAt(row, 1)));
-				default:
-					return super.getCellEditor(row, column);
+				String s = (String) table.getValueAt(row, 0);
+				if((s.contains(" "+ToggleUIProperty.ON) ||
+						s.contains(" "+ToggleUIProperty.OFF)) && column > 1){
+					return new DefaultCellEditor(new JTextField(Configuration.KEY_ENTERVALUE));
+				} else {
+					switch(column){
+					case 0:
+						return super.getCellEditor(row, column);
+					case 1:
+						return new DefaultCellEditor(devices);
+					case 2:
+						return new DefaultCellEditor(getDeviceProperties((String) getValueAt(row, 1)));
+					default:
+						return super.getCellEditor(row, column);
+					}
 				}
 			}
 			
 			@Override
 	        public boolean isCellEditable(int row, int col) { // only second column is editable
-	            if (col < 1) {
+				String s = (String) table.getValueAt(row, 0);
+	            if (col < 1 ) {
 	                return false;
+	            } else if((s.contains(" "+ToggleUIProperty.ON) ||
+						s.contains(" "+ToggleUIProperty.OFF)) && col==1){
+	            	return false;
 	            } else {
 	                return true;
 	            }
@@ -113,6 +128,21 @@ public class WizardComboTable extends JPanel {
 		table.getColumnModel().getColumn(0).setMaxWidth(160);
 		table.getColumnModel().getColumn(1).setMaxWidth(120);
 		table.getColumnModel().getColumn(2).setMaxWidth(160);
+		
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = table.rowAtPoint(evt.getPoint());
+		        int col = table.columnAtPoint(evt.getPoint());
+		        if (col==0) {
+		            updateHelper(row);
+		        }
+		    }
+		});
+		
+		help_ = new HelpWindow("Click on a property to display description");
+		help_.showHelp(true);
+
 		
 		JScrollPane sc = new JScrollPane(table);
 		sc.setPreferredSize(new Dimension(440,590));
@@ -133,7 +163,31 @@ public class WizardComboTable extends JPanel {
 		return cb;
 
 	}
+	
+	public void showHelp(boolean b){
+		help_.showHelp(b);
+		updateHelper(table.getSelectedRow());
+	}
 
+	private void updateHelper(int row){
+		String s = (String) table.getValueAt(row, 0);
+	
+		if (s.contains(" "+ToggleUIProperty.ON)){
+			s = (String) table.getValueAt(row-1, 0);
+			help_.update("Enter the value sent to the device when set to ON state.\n\n"+s+":\n\n"+uipropertySet_.get(s).getDescription());
+		}else if (s.contains(" "+ToggleUIProperty.OFF)){
+			s = (String) table.getValueAt(row-2, 0);
+			help_.update("Enter the value sent to the device when set to OFF state.\n\n"+s+":\n\n"+uipropertySet_.get(s).getDescription());
+		} else if(uipropertySet_.containsKey(s)){
+			help_.update(s+":\n\n"+uipropertySet_.get(s).getDescription());
+		}
+	}
+	
+	public void disposeHelp(){
+		help_.disposeHelp();
+	}
+	
+	
 	/**
 	 * Renders cell text with a bold font. Adapted from: https://stackoverflow.com/questions/22325138/cellrenderer-making-text-bold
 	 */
