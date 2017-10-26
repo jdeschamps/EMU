@@ -69,8 +69,8 @@ public class Configuration {
 			// thread wait for end?
 			
 			if(true){
-				uiproperties_ = wizard.getWizProperties();
-				uiparameters_ = wizard.getWizParameters();
+				uiproperties_ = wizard.getWizardProperties();
+				uiparameters_ = wizard.getWizardParameters();
 			} 
 			
 			

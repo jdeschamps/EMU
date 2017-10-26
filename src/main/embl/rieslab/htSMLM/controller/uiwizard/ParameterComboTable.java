@@ -1,7 +1,6 @@
 package main.embl.rieslab.htSMLM.controller.uiwizard;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,6 +61,7 @@ public class ParameterComboTable extends JPanel{
 			model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getValue()});
 		}
 
+
 		table = new JTable(model) {
 			/**
 			 * 
@@ -113,8 +113,8 @@ public class ParameterComboTable extends JPanel{
 		};
 		table.setAutoCreateRowSorter(false);
 		table.setRowHeight(23); 
-		table.getColumnModel().getColumn(0).setMaxWidth(210);
-		table.getColumnModel().getColumn(1).setMaxWidth(70);
+		//table.getColumnModel().getColumn(0).setMaxWidth(210);
+		//table.getColumnModel().getColumn(1).setMaxWidth(70);
 		
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 		    @Override
@@ -130,7 +130,7 @@ public class ParameterComboTable extends JPanel{
 		help_ = help;
 
 		JScrollPane sc = new JScrollPane(table);
-		sc.setPreferredSize(new Dimension(280,590));
+		//sc.setPreferredSize(new Dimension(280,590));
 		this.add(sc);
 	}
 	

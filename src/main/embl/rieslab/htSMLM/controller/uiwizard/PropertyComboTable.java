@@ -1,7 +1,6 @@
 package main.embl.rieslab.htSMLM.controller.uiwizard;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.util.HashMap;
 
@@ -124,9 +123,9 @@ public class PropertyComboTable extends JPanel {
 		};
 		table.setAutoCreateRowSorter(false);
 		table.setRowHeight(23); 
-		table.getColumnModel().getColumn(0).setMaxWidth(160);
-		table.getColumnModel().getColumn(1).setMaxWidth(120);
-		table.getColumnModel().getColumn(2).setMaxWidth(160);
+		//table.getColumnModel().getColumn(0).setMaxWidth(160);
+		//table.getColumnModel().getColumn(1).setMaxWidth(120);
+		//table.getColumnModel().getColumn(2).setMaxWidth(160);
 		
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 		    @Override
@@ -142,7 +141,7 @@ public class PropertyComboTable extends JPanel {
 		help_ = help;
 		
 		JScrollPane sc = new JScrollPane(table);
-		sc.setPreferredSize(new Dimension(440,590));
+		//sc.setPreferredSize(new Dimension(440,590));
 		this.add(sc);
 	}
 	
@@ -174,7 +173,7 @@ public class PropertyComboTable extends JPanel {
 			help_.update("Enter the value sent to the device when set to ON state.\n\n"+s+":\n\n"+uipropertySet_.get(s).getDescription());
 		}else if (s.contains(" "+ToggleUIProperty.OFF)){
 			s = (String) table.getValueAt(row-2, 0);
-			help_.update("Enter the value sent to the device when set to OFF state.\n\n"+s+":\n\n"+uipropertySet_.get(s).getDescription());
+			help_.update("Enter the value sent to the device when set to OFF state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
 		} else if(uipropertySet_.containsKey(s)){
 			help_.update(s+":\n\n"+uipropertySet_.get(s).getDescription());
 		}
