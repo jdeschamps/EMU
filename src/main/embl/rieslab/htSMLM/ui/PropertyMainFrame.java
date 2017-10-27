@@ -39,9 +39,20 @@ public abstract class PropertyMainFrame extends JFrame {
 		PropertyPanel pan;
 		while(it.hasNext()){
 			pan = it.next();
+			System.out.println(pan.getLabel());
 			pan.updateAllProperties();
 			pan.updateAllParameters();
 		}
+	}
+	
+	public void shutDown(){
+		Iterator<PropertyPanel> it = panels_.iterator();
+		PropertyPanel pan;
+		while(it.hasNext()){
+			pan = it.next();
+			pan.shutDown();
+		}
+		this.dispose();
 	}
 	
 	protected abstract void initComponents();

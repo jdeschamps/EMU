@@ -29,4 +29,9 @@ public class DoubleUIParameter extends UIParameter<Double> {
 		return Double.parseDouble(val);
 	}
 
+	@Override
+	public String getStringValue() {
+		return String.valueOf(getValue());
+	}
+
 }

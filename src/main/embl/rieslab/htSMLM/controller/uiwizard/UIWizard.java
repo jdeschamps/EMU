@@ -1,7 +1,5 @@
 package main.embl.rieslab.htSMLM.controller.uiwizard;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 
+import main.embl.rieslab.htSMLM.controller.Configuration;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
@@ -28,8 +27,12 @@ public class UIWizard {
 	PropertyComboTable propertytable_;
 	ParameterComboTable parametertable_;
 	HelpWindow help_;
+	Configuration config_;
+	JFrame frame_;
 	
-	public UIWizard() {
+	public UIWizard(Configuration config) {
+		config_ = config;
+		
 		prop_ = new HashMap<String, String>();
 		param_ = new HashMap<String, String>();
 	}
@@ -41,8 +44,8 @@ public class UIWizard {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 
-				JFrame frame = new JFrame("UI properties wizard");
-				frame.addWindowListener(new WindowAdapter() {
+				frame_ = new JFrame("UI properties wizard");
+				frame_.addWindowListener(new WindowAdapter() {
 					@Override
 					public void windowClosing(WindowEvent e) {
 						// show dialogue
@@ -109,11 +112,11 @@ public class UIWizard {
 				contentpane.add(lowerpane);
 				contentpane.setLayout(new BoxLayout(contentpane, BoxLayout.PAGE_AXIS));
 		
-				frame.setContentPane(contentpane);
+				frame_.setContentPane(contentpane);
 
 				// Display the window.
-				frame.pack();
-				frame.setVisible(true);
+				frame_.pack();
+				frame_.setVisible(true);
 			}
 		});
 
@@ -131,11 +134,18 @@ public class UIWizard {
 		help_.showHelp(b);
 	}
 	
-	public void saveConfiguration(){
-		//prop_ = propertytable_.getSettings();
-		//param_ = parametertable_.getSettings();
+	private void saveConfiguration(){
+		prop_ = propertytable_.getSettings();
+		param_ = parametertable_.getSettings();
+		
+		config_.getWizardSettings();
+		
+		frame_.dispose();
 	}
 
-
+	public void shutDown(){
+		help_.disposeHelp();
+		frame_.dispose();
+	}
 	
 }

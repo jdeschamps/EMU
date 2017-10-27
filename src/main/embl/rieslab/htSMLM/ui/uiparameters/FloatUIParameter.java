@@ -28,4 +28,9 @@ public class FloatUIParameter extends UIParameter<Float>{
 		return Float.parseFloat(val);
 	}
 
+	@Override
+	public String getStringValue() {
+		return String.valueOf(getValue());
+	}
+
 }

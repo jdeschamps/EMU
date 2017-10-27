@@ -27,10 +27,14 @@ public class UIProperty {
 	}
 	
 	public void setProperty(MMProperty prop){
-		if(!initialised_){
+		if(!initialised_ && prop != null){
 			mmproperty_ = prop;
 			initialised_ = true;
 		}
+	}
+	
+	public boolean isInitialised(){
+		return initialised_;
 	}
 	
 	public void mmPropertyHasChanged(String value){
@@ -44,14 +48,21 @@ public class UIProperty {
 		return "0";
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void setPropertyValue(String val){
 		if(initialised_){
 			mmproperty_.setStringValue(val);
 		}  
 	}
 	
+	protected MMProperty getMMPoperty(){
+		return mmproperty_;
+	}
+	
 	public boolean isToggle(){
+		return false;
+	}
+	
+	public boolean isSingleValue(){
 		return false;
 	}
 }

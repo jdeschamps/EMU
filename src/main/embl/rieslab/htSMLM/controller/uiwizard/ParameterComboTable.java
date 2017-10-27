@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameterType;
@@ -58,7 +59,7 @@ public class ParameterComboTable extends JPanel{
 		// Define table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"UI parameter", "Value" }, 0);
 		for(int i=0;i<uiparamkeys_.length;i++){
-			model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getValue()});
+			model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
 		}
 
 
@@ -146,6 +147,19 @@ public class ParameterComboTable extends JPanel{
 	
 	public void disposeHelp(){
 		help_.disposeHelp();
+	}
+	
+	public HashMap<String,String> getSettings(){
+		HashMap<String,String> settings = new HashMap<String,String>();
+		
+		TableModel model = table.getModel();
+		int nrow = model.getRowCount();
+		
+		for(int i=0;i<nrow;i++){
+			settings.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 1));
+		}
+		
+		return settings;
 	}
 	
 	/**

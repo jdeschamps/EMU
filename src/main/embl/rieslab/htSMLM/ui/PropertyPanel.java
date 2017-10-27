@@ -51,8 +51,13 @@ public abstract class PropertyPanel extends JPanel{
 	}
 	
 	public UIParameter getUIParameter(String name){
-		if(parameters_.containsKey(name)){
-			return parameters_.get(name);
+		Iterator<String> it = parameters_.keySet().iterator();
+		UIParameter param;
+		while(it.hasNext()){
+			param = parameters_.get(it.next());
+			if(param.getLabel().equals(name)){
+				return param;
+			}
 		}
 		return null;
 	}
@@ -62,7 +67,7 @@ public abstract class PropertyPanel extends JPanel{
 	}	
 	
 	protected void addUIParameter(UIParameter p){
-		parameters_.put(p.getName(),p);
+		parameters_.put(p.getHash(),p);
 	}
 	
 	public void updateAllProperties(){
@@ -77,7 +82,7 @@ public abstract class PropertyPanel extends JPanel{
 	public void updateAllParameters(){
 		Iterator<String> it = parameters_.keySet().iterator();
 		while(it.hasNext()){
-			parameterhasChanged(it.next());
+			parameterhasChanged(parameters_.get(it.next()).getLabel());
 		}
 	}
 	
@@ -90,7 +95,7 @@ public abstract class PropertyPanel extends JPanel{
 	public abstract void setupPanel();
 	protected abstract void changeProperty(String name, String value);
 	public abstract void propertyhasChanged(String name, String newvalue);
-	public abstract void parameterhasChanged(String name);
+	public abstract void parameterhasChanged(String label);
 	public abstract void shutDown();
 	
 }

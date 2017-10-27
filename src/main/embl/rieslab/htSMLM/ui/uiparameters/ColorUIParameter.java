@@ -3,6 +3,7 @@ package main.embl.rieslab.htSMLM.ui.uiparameters;
 import java.awt.Color;
 
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+import main.embl.rieslab.htSMLM.util.ColorRepository;
 
 public class ColorUIParameter extends UIParameter<Color>{
 	
@@ -25,6 +26,11 @@ public class ColorUIParameter extends UIParameter<Color>{
 	@Override
 	protected Color convertValue(String val) {
 		return Color.getColor(val);
+	}
+
+	@Override
+	public String getStringValue() {
+		return ColorRepository.getStringColor(getValue());
 	}
 	
 }

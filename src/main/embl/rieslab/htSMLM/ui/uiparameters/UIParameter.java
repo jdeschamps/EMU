@@ -4,15 +4,15 @@ import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 
 public abstract class UIParameter<T> {
 
-	private String name_;
+	private String label_;
 	private String description_;
 	protected UIParameterType type_;
 	private T value_;
 	private PropertyPanel owner_;
 	
-	public UIParameter(PropertyPanel owner, String name, String description){
+	public UIParameter(PropertyPanel owner, String label, String description){
 		owner_ = owner;
-		name_ = name;
+		label_ = label;
 		description_ = description;
 		
 		setType();
@@ -22,8 +22,12 @@ public abstract class UIParameter<T> {
 		return type_;
 	}
 
-	public String getName(){
-		return owner_.getLabel()+" - "+name_;
+	public String getHash(){
+		return owner_.getLabel()+" - "+label_;
+	}
+	
+	public String getLabel(){
+		return label_;
 	}
 
 	public String getDescription(){
@@ -47,4 +51,5 @@ public abstract class UIParameter<T> {
 	public abstract void setType();
 	public abstract boolean isSuitable(String val);
 	protected abstract T convertValue(String val);
+	public abstract String getStringValue();
 }

@@ -29,4 +29,9 @@ public class IntUIParameter extends UIParameter<Integer>{
 		return Integer.parseInt(val);
 	}
 
+	@Override
+	public String getStringValue() {
+		return String.valueOf(getValue());
+	}
+
 }

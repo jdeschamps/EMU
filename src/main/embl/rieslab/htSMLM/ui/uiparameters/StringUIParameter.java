@@ -24,4 +24,9 @@ public class StringUIParameter extends UIParameter<String>{
 		return val;
 	}
 
+	@Override
+	public String getStringValue() {
+		return getValue();
+	}
+
 }

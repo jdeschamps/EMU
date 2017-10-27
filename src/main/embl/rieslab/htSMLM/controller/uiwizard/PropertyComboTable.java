@@ -14,9 +14,11 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
 
 import main.embl.rieslab.htSMLM.controller.Configuration;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
+import main.embl.rieslab.htSMLM.ui.uiproperties.SingleValueUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.ToggleUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 
@@ -59,12 +61,15 @@ public class PropertyComboTable extends JPanel {
 				"UI property", "Device", "Property" }, 0);
 		
 		for(int i=0;i<uipropkeys_.length;i++){
-			if(!uipropertySet.get(uipropkeys_[i]).isToggle()){
+			if(uipropertySet.get(uipropkeys_[i]).isToggle()){
 				model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
+				model.addRow(new Object[] {uipropkeys_[i]+ToggleUIProperty.getToggleOnName(), "", Configuration.KEY_ENTERVALUE});
+				model.addRow(new Object[] {uipropkeys_[i]+ToggleUIProperty.getToggleOffName(), "", Configuration.KEY_ENTERVALUE});
+			} else if(uipropertySet.get(uipropkeys_[i]).isSingleValue()){
+				model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
+				model.addRow(new Object[] {uipropkeys_[i]+SingleValueUIProperty.getValueName(), "", Configuration.KEY_ENTERVALUE});
 			} else {
 				model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
-				model.addRow(new Object[] {uipropkeys_[i]+" "+ToggleUIProperty.ON, "", Configuration.KEY_ENTERVALUE});
-				model.addRow(new Object[] {uipropkeys_[i]+" "+ToggleUIProperty.OFF, "", Configuration.KEY_ENTERVALUE});
 			}
 		}
 
@@ -91,8 +96,8 @@ public class PropertyComboTable extends JPanel {
 			@Override
 			public TableCellEditor getCellEditor(int row, int column) {
 				String s = (String) table.getValueAt(row, 0);
-				if((s.contains(" "+ToggleUIProperty.ON) ||
-						s.contains(" "+ToggleUIProperty.OFF)) && column > 1){
+				if((s.contains(SingleValueUIProperty.getValueName()) || s.contains(ToggleUIProperty.getToggleOnName()) ||
+						s.contains(ToggleUIProperty.getToggleOffName())) && column > 1){
 					return new DefaultCellEditor(new JTextField(Configuration.KEY_ENTERVALUE));
 				} else {
 					switch(column){
@@ -113,8 +118,8 @@ public class PropertyComboTable extends JPanel {
 				String s = (String) table.getValueAt(row, 0);
 	            if (col < 1 ) {
 	                return false;
-	            } else if((s.contains(" "+ToggleUIProperty.ON) ||
-						s.contains(" "+ToggleUIProperty.OFF)) && col==1){
+	            } else if((s.contains(SingleValueUIProperty.getValueName()) || s.contains(ToggleUIProperty.getToggleOnName()) ||
+						s.contains(ToggleUIProperty.getToggleOffName())) && col==1){
 	            	return false;
 	            } else {
 	                return true;
@@ -168,12 +173,15 @@ public class PropertyComboTable extends JPanel {
 	private void updateHelper(int row){
 		String s = (String) table.getValueAt(row, 0);
 	
-		if (s.contains(" "+ToggleUIProperty.ON)){
+		if (s.contains(ToggleUIProperty.getToggleOnName())){
 			s = (String) table.getValueAt(row-1, 0);
 			help_.update("Enter the value sent to the device when set to ON state.\n\n"+s+":\n\n"+uipropertySet_.get(s).getDescription());
-		}else if (s.contains(" "+ToggleUIProperty.OFF)){
+		}else if (s.contains(ToggleUIProperty.getToggleOffName())){
 			s = (String) table.getValueAt(row-2, 0);
 			help_.update("Enter the value sent to the device when set to OFF state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+		} else if (s.contains(SingleValueUIProperty.getValueName())){
+			s = (String) table.getValueAt(row-1, 0);
+			help_.update("Enter the constant value sent to the device.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
 		} else if(uipropertySet_.containsKey(s)){
 			help_.update(s+":\n\n"+uipropertySet_.get(s).getDescription());
 		}
@@ -183,6 +191,18 @@ public class PropertyComboTable extends JPanel {
 		help_.disposeHelp();
 	}
 	
+	public HashMap<String,String> getSettings(){
+		HashMap<String,String> settings = new HashMap<String,String>();
+		
+		TableModel model = table.getModel();
+		int nrow = model.getRowCount();
+		
+		for(int i=0;i<nrow;i++){
+			settings.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 2));
+		}
+		
+		return settings;
+	}
 	
 	/**
 	 * Renders cell text with a bold font. Adapted from: https://stackoverflow.com/questions/22325138/cellrenderer-making-text-bold

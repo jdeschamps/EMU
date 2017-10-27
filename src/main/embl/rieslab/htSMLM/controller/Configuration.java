@@ -12,6 +12,7 @@ import java.util.Properties;
 import main.embl.rieslab.htSMLM.controller.uiwizard.UIWizard;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.ToggleUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 
 public class Configuration {
@@ -25,7 +26,11 @@ public class Configuration {
 	private HashMap<String,String> uiproperties_;
 	private HashMap<String,String> uiparameters_;
 	
-	public Configuration(){
+	private SystemController controller_;
+	private UIWizard wizard_;
+	
+	public Configuration(SystemController controller){
+		controller_ = controller;
 		uiproperties_ = new HashMap<String,String>();
 		uiparameters_ = new HashMap<String,String>();
 	}
@@ -48,7 +53,21 @@ public class Configuration {
 		    	uihash = it.next();
 		    	mmhash = props.getProperty(KEY_UIPROPERTY+uihash, KEY_UNALLOCATED);
 		    	
-		    	uiproperties_.put(uihash, mmhash);
+		    	if(mmproperties.isProperty(mmhash)){
+		    		uiproperties_.put(uihash, mmhash);
+		    	} else {
+		    		uiproperties_.put(uihash, KEY_UNALLOCATED);
+		    	}
+		    	
+		    	if(uipropertySet.get(uihash).isToggle()){
+		    		String onval = uihash+ToggleUIProperty.getToggleOnName();
+			    	mmhash = props.getProperty(KEY_UIPROPERTY+onval, KEY_UNALLOCATED);
+		    		uiproperties_.put(onval, mmhash);
+
+		    		String offval = uihash+ToggleUIProperty.getToggleOffName();
+			    	mmhash = props.getProperty(KEY_UIPROPERTY+offval, KEY_UNALLOCATED);
+		    		uiproperties_.put(offval, mmhash);
+		    	}
 		    }	 
 		    
 		    it = uiparameterSet.keySet().iterator();
@@ -60,24 +79,10 @@ public class Configuration {
 		    }	 
 		    
 		    reader.close();
-		} catch (FileNotFoundException ex) {
-			
-			// launch wizard
-			UIWizard wizard = new UIWizard();
-			wizard.newConfiguration(uipropertySet, uiparameterSet, mmproperties);
-			
-			// thread wait for end?
-			
-			if(true){
-				uiproperties_ = wizard.getWizardProperties();
-				uiparameters_ = wizard.getWizardParameters();
-			} 
-			
-			
+		} catch (FileNotFoundException ex) {			
 		    return false;
 		} catch (IOException ex) {
 			// show error message?
-			
 		    return false;
 		}
 		return true;
@@ -114,11 +119,36 @@ public class Configuration {
 		return true;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public void launchWizard(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
+			MMProperties mmproperties){
+		// launch wizard
+		wizard_ = new UIWizard(this);
+		wizard_.newConfiguration(uipropertySet, uiparameterSet, mmproperties);
+	}
+
+	public void getWizardSettings() {
+		if (wizard_ != null) {
+			uiproperties_ = wizard_.getWizardProperties();
+			uiparameters_ = wizard_.getWizardParameters();
+
+			saveConfiguration(uiproperties_, uiparameters_);
+
+			controller_.getConfiguration();
+		}
+	}
+	
 	public HashMap<String,String> getPropertiesConfiguration(){
 		return uiproperties_;
 	}
 	
 	public HashMap<String,String> getParametersConfiguration(){
 		return uiparameters_;
+	}
+	
+	public void shutDown(){
+		if (wizard_ != null) {
+			wizard_.shutDown();
+		}
 	}
 }

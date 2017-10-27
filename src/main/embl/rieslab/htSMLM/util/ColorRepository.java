@@ -27,6 +27,7 @@ public class ColorRepository {
 	public static String strviolet = "violet";
 	public static String strdarkviolet = "darkviolet";
 	
+	private static String[] colors = {strblack,strblue,strdarkblue,strgreen,strdarkgreen,strgray,strdarkred,strorange,strdarkorange,strviolet,strdarkviolet};
 	
 	public static Color getColor(String colorname){
 		if(colorname.equals(strblue)){
@@ -55,7 +56,15 @@ public class ColorRepository {
 	}
 	
 	public static String[] getColors(){
-		String[] colors = {strblack,strblue,strdarkblue,strgreen,strdarkgreen,strgray,strdarkred,strorange,strdarkorange,strviolet,strdarkviolet};
 		return colors;
+	}
+	
+	public static String getStringColor(Color c){
+		for(int i=0;i<colors.length;i++){
+			if(c.getRGB() == getColor(colors[i]).getRGB()){
+				return colors[i];
+			}
+		}
+		return strblack;
 	}
 }
