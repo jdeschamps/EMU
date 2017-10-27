@@ -22,13 +22,14 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 
 public class UIWizard {
 
-	HashMap<String, String> prop_;
-	HashMap<String, String> param_;
-	PropertyComboTable propertytable_;
-	ParameterComboTable parametertable_;
-	HelpWindow help_;
-	Configuration config_;
-	JFrame frame_;
+	private HashMap<String, String> prop_;
+	private HashMap<String, String> param_;
+	private PropertyComboTable propertytable_;
+	private ParameterComboTable parametertable_;
+	private HelpWindow help_;
+	private Configuration config_;
+	private JFrame frame_;
+	private boolean running_ = false;
 	
 	public UIWizard(Configuration config) {
 		config_ = config;
@@ -43,7 +44,8 @@ public class UIWizard {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-
+				running_ = true;
+				
 				frame_ = new JFrame("UI properties wizard");
 				frame_.addWindowListener(new WindowAdapter() {
 					@Override
@@ -119,9 +121,17 @@ public class UIWizard {
 				frame_.setVisible(true);
 			}
 		});
-
 	}
 
+	public void existingConfiguration(HashMap<String, String> uipropertySet,
+			HashMap<String, String> uiparameterSet) {
+		
+	}
+	
+	public boolean isRunning(){
+		return running_;
+	}
+	
 	public HashMap<String, String> getWizardProperties() {
 		return prop_;
 	}
@@ -131,7 +141,9 @@ public class UIWizard {
 	}
 	
 	public void showHelp(boolean b){
-		help_.showHelp(b);
+		if(help_ != null){
+			help_.showHelp(b);
+		}
 	}
 	
 	private void saveConfiguration(){
@@ -141,11 +153,18 @@ public class UIWizard {
 		config_.getWizardSettings();
 		
 		frame_.dispose();
+		running_ = false;
 	}
 
 	public void shutDown(){
-		help_.disposeHelp();
-		frame_.dispose();
+		if(help_ != null){
+			help_.disposeHelp();
+		}
+		if(frame_ != null){
+			frame_.dispose();
+		}
+		running_ = false;
 	}
+
 	
 }

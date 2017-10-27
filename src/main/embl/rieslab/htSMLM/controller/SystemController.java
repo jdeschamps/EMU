@@ -1,5 +1,6 @@
 package main.embl.rieslab.htSMLM.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,12 +39,15 @@ public class SystemController {
 		unallocatedprop_ = new ArrayList<String>();
 	}
 	
+	/**
+	 * Collects Micro-manager device properties, creates the user interface and loads the configuration. 
+	 */
 	public void start() {
 		// extract MM properties
 		mmproperties_ = new MMProperties(core_);
 
 		// initiate UI
-		mainframe_ = new MainFrame();
+		mainframe_ = new MainFrame("ht-SMLM control center", this);
 
 		// extract UI properties and parameters
 		Iterator<PropertyPanel> it = mainframe_.getPropertyPanels().iterator();
@@ -63,27 +67,49 @@ public class SystemController {
 			getConfiguration();
 		} else { // if failed
 			System.out.println("Launch wizard");
-			// launch wizard
-			config.launchWizard(uiproperties_, uiparameters_, mmproperties_);
+			// launch a new wizard
+			config.launchNewWizard(uiproperties_, uiparameters_, mmproperties_);
 		}
 	}
 	
+	/**
+	 * Loads new configuration.
+	 * 
+	 * @param f Configuration to be read
+	 * @return True if reading successful
+	 */
+	public boolean loadConfiguration(File f){
+		boolean read = config.readConfiguration(uiproperties_, uiparameters_, mmproperties_, f);
+		
+		if(read){ // if read a configuration, then update.
+			getConfiguration();
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Reads out the properties from the configuration and link them to ui properties.
+	 * 
+	 * @param configprop Mapping of the Micro-manager properties to the UI properties.
+	 */
 	public void readProperties(HashMap<String, String> configprop){
 		String uiprop;
-		unallocatedprop_.clear();
+		unallocatedprop_.clear(); // clear the list of unallocated properties
 		
-		Iterator<String> itstr = configprop.keySet().iterator();
+		Iterator<String> itstr = configprop.keySet().iterator(); // iteration through all the mapped UI properties
 		while (itstr.hasNext()) {
-			uiprop = itstr.next();
+			uiprop = itstr.next(); // ui property
 
-			// if uiproperty exist
+			// if ui property exists
 			if (uiproperties_.containsKey(uiprop)) {
 
-				// if exist then link, otherwise add to list of unallocated properties
+				// if the ui property is not allocated, add to the list of unallocated properties.  
 				if (configprop.get(uiprop).equals(Configuration.KEY_UNALLOCATED)) {
 					// register missing allocation
 					unallocatedprop_.add(uiprop);
-				} else if (mmproperties_.isProperty(configprop.get(uiprop))) {
+				} else if (mmproperties_.isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
 					// link the properties
 					addPair(uiproperties_.get(uiprop),mmproperties_.getProperty(configprop.get(uiprop)));
 					
@@ -107,6 +133,11 @@ public class SystemController {
 		}
 	}
 	
+	/**
+	 * Reads out the ui parameters from the configuration.
+	 * 
+	 * @param configparam Values set by the user mapped to their corresponding ui parameter.
+	 */
 	public void readParameters(HashMap<String, String> configparam){
 		String uiparam;
 		Iterator<String> itstr = configparam.keySet().iterator();
@@ -121,6 +152,11 @@ public class SystemController {
 		}
 	}
 
+	/**
+	 * Extracts the configuration for the ui properties and parameters, then updates the UI accordingly. If
+	 * there are some unallocated properties, then pops-up a message.
+	 * 
+	 */
 	public void getConfiguration() {
 		// Allocate UI properties and parameters
 		readProperties(config.getPropertiesConfiguration());
@@ -135,7 +171,23 @@ public class SystemController {
 			showUnallocatedMessage();
 		}
 	}
+	
 
+	
+	/**
+	 * If no Wizard running, then launches a new one in order to modify the current configuration. 
+	 * 
+	 * @return False if a Wizard is already running.
+	 */
+	public boolean launchWizard() {
+		return config.launchWizard();
+	}
+	
+
+
+	/**
+	 * Pops-up a message indicating the unallocated ui properties.
+	 */
 	private void showUnallocatedMessage() {
 		String title = "Unallocated properties";
 		
@@ -147,21 +199,36 @@ public class SystemController {
 		}
 		message = message+". \n\n";
 		
-		message = message+"The UI components related to these properties will not function until these properties are allocated. Lauch the configuration wizard to allocate them.";
+		message = message+"The UI components related to these properties will not function until these properties are allocated. \n Create or load configuration to allocate them.";
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
+	/**
+	 * Links a ui property and a Micro-manager property together.
+	 * 
+	 * @param ui UI property
+	 * @param mm Micro-manager property
+	 */
 	@SuppressWarnings("rawtypes")
 	private void addPair(UIProperty ui, MMProperty mm){
 		pairs_.add(new PropertyPair(ui,mm));
 	}
 	
+	/**
+	 * Shutdowns the UI.
+	 * 
+	 */
 	public void shutDown(){
 		config.shutDown();
 		mainframe_.shutDown();
 	}
 	
+	/**
+	 * Returns the camera exposure value.
+	 * 
+	 * @return Camera exposure
+	 */
 	public double getExposure(){
 		try {
 			double exp = core_.getExposure();
@@ -171,4 +238,5 @@ public class SystemController {
 			return 0;
 		}
 	}
+
 }

@@ -1,14 +1,15 @@
 package main.embl.rieslab.htSMLM.ui;
 
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.util.Iterator;
-
-import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
+
+import main.embl.rieslab.htSMLM.controller.SystemController;
 
 public class MainFrame extends PropertyMainFrame{
 	
+	public MainFrame(String title, SystemController controller) {
+		super(title, controller);
+	}
+
 	/**
 	 * 
 	 */
@@ -36,26 +37,13 @@ public class MainFrame extends PropertyMainFrame{
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        
-
+    
         focusPanel = new FocusPanel("Focus panel");
         this.add(focusPanel);
-
+ 
         this.pack(); // avoid packing when one can
         this.setResizable(false);
- 	    this.setVisible(true);
-
-		this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    	this.addWindowListener(new WindowAdapter() {
-    	    @Override
-    	    public void windowClosing(WindowEvent e) {
-    	    	Iterator<PropertyPanel> it = getPropertyPanels().iterator();
-    	    	while(it.hasNext()){
-    	    		it.next().shutDown();
-    	    	}
-    	    }
-    	});
-        
+ 	    this.setVisible(true);        
     }
 
 	@Override
