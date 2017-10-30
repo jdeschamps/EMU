@@ -64,5 +64,9 @@ public class UIProperty {
 	
 	public boolean isSingleValue(){
 		return false;
+	}	
+	
+	public boolean isMultipleValues(){
+		return false;
 	}
 }

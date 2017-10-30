@@ -18,16 +18,18 @@ public class Chart {
 
 	String name_, nameX_, nameY_;
 	int width_, height_, maxN_;
+	int maxrange_;
     private XYSeries series;
     ChartPanel cp;
 	
-	public Chart(String name, String nameX, String nameY, int maxN, int width, int height){
+	public Chart(String name, String nameX, String nameY, int maxN, int width, int height, int maxRange){
 		name_ = name;
 		nameX_ = nameX;
 		nameY_ = nameY;
 		width_ = width;
 		height_ = height;
 		maxN_ = maxN;
+		maxrange_ = maxRange;
 		
 		initialize();
 	}
@@ -44,9 +46,9 @@ public class Chart {
         
         XYPlot plot = (XYPlot) chart.getPlot();
         ValueAxis yAxis = plot.getRangeAxis();
-        yAxis.setRange(0, 700);
+        yAxis.setRange(0, maxrange_);
         ValueAxis xAxis = plot.getDomainAxis();
-        xAxis.setRange(0, 700);
+        xAxis.setRange(0, maxrange_);
         
       	plot.setBackgroundPaint(new Color(230,230,230));
     	plot.setDomainGridlinePaint(new Color(100,100,100));

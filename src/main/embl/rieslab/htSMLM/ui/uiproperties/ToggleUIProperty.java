@@ -37,7 +37,7 @@ public class ToggleUIProperty extends UIProperty{
 	
 	@Override
 	public void setPropertyValue(String val) {
-		if (isInitialised()) {
+		if(isInitialised()) {
 			if (val.equals(ON)) {
 				getMMPoperty().setStringValue(onval_);
 			} else {
