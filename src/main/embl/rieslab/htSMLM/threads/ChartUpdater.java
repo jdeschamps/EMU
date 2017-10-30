@@ -48,6 +48,14 @@ public class ChartUpdater {
 		running_ = false;
 	}
 	
+	public void changeIdleTime(int newtime){
+		idletime_ = newtime;
+	}
+
+	public void changeChart(Chart newchart){
+		chart_ = newchart;
+	}
+	
 	private class UIupdater extends SwingWorker<Integer, Double[]> {
 
 		@Override

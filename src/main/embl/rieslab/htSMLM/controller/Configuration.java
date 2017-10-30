@@ -210,11 +210,13 @@ public class Configuration {
 		wizard_.newConfiguration(uipropertySet, uiparameterSet, mmproperties);
 	}
 
-	public boolean launchWizard(){
+	@SuppressWarnings("rawtypes")
+	public boolean launchWizard(HashMap<String,UIProperty> uipropertySet, 
+			HashMap<String,UIParameter> uiparameterSet, MMProperties mmproperties){
 		if(!isWizardRunning()){	
 			System.out.println("Launch wizard");
 			wizard_ = new UIWizard(this);
-			wizard_.existingConfiguration(uiproperties_, uiparameters_);
+			wizard_.existingConfiguration(uipropertySet, uiparameterSet, mmproperties, uiproperties_, uiparameters_);
 			return true;
 		}
 		return false;

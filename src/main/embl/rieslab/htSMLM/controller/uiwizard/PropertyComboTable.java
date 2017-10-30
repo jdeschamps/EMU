@@ -37,39 +37,185 @@ public class PropertyComboTable extends JPanel {
 	private MMProperties mmproperties_;
 	private String[] uipropkeys_;
 	private HelpWindow help_;
-		
-	public PropertyComboTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HelpWindow help) {
-		
-		uipropertySet_ = uipropertySet; 
+
+	public PropertyComboTable(HashMap<String, UIProperty> uipropertySet,
+			MMProperties mmproperties, HelpWindow help) {
+
+		uipropertySet_ = uipropertySet;
 		mmproperties_ = mmproperties;
-		
+
 		// Combobox holding the device names
 		devices = new JComboBox();
 		String[] strarray = StringSorting.sort(mmproperties_.getDevicesList());
 		devices.addItem(Configuration.KEY_UNALLOCATED);
-		for(int k=0; k<strarray.length;k++){
+		for (int k = 0; k < strarray.length; k++) {
 			devices.addItem(strarray[k]);
 		}
-		        		
+
 		// Extract uiproperty names
 		uipropkeys_ = new String[uipropertySet_.size()];
-		String[] temp = new String[uipropertySet_.size()]; 
+		String[] temp = new String[uipropertySet_.size()];
 		uipropkeys_ = StringSorting.sort(uipropertySet_.keySet().toArray(temp));
-		
+
 		// Define table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {
 				"UI property", "Device", "Property" }, 0);
-		
-		for(int i=0;i<uipropkeys_.length;i++){
-			if(uipropertySet.get(uipropkeys_[i]).isToggle()){
-				model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
-				model.addRow(new Object[] {uipropkeys_[i]+ToggleUIProperty.getToggleOnName(), "", Configuration.KEY_ENTERVALUE});
-				model.addRow(new Object[] {uipropkeys_[i]+ToggleUIProperty.getToggleOffName(), "", Configuration.KEY_ENTERVALUE});
-			} else if(uipropertySet.get(uipropkeys_[i]).isSingleValue()){
-				model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
-				model.addRow(new Object[] {uipropkeys_[i]+SingleValueUIProperty.getValueName(), "", Configuration.KEY_ENTERVALUE});
+
+		for (int i = 0; i < uipropkeys_.length; i++) {
+			if (uipropertySet.get(uipropkeys_[i]).isToggle()) {
+				model.addRow(new Object[] { uipropkeys_[i],
+						Configuration.KEY_UNALLOCATED,
+						Configuration.KEY_UNALLOCATED });
+				model.addRow(new Object[] {
+						uipropkeys_[i] + ToggleUIProperty.getToggleOnName(),
+						"", Configuration.KEY_ENTERVALUE });
+				model.addRow(new Object[] {
+						uipropkeys_[i] + ToggleUIProperty.getToggleOffName(),
+						"", Configuration.KEY_ENTERVALUE });
+			} else if (uipropertySet.get(uipropkeys_[i]).isSingleValue()) {
+				model.addRow(new Object[] { uipropkeys_[i],
+						Configuration.KEY_UNALLOCATED,
+						Configuration.KEY_UNALLOCATED });
+				model.addRow(new Object[] {
+						uipropkeys_[i] + SingleValueUIProperty.getValueName(),
+						"", Configuration.KEY_ENTERVALUE });
 			} else {
-				model.addRow(new Object[] {uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED});
+				model.addRow(new Object[] { uipropkeys_[i],
+						Configuration.KEY_UNALLOCATED,
+						Configuration.KEY_UNALLOCATED });
+			}
+		}
+
+		table = new JTable(model) {
+			/**
+		 * 
+		 */
+			private static final long serialVersionUID = -7528102943663023952L;
+
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				switch (column) {
+				case 0:
+					return new BoldTableCellRenderer();
+				case 1:
+					return new DefaultTableCellRenderer();
+				case 2:
+					return new DefaultTableCellRenderer();
+				default:
+					return super.getCellRenderer(row, column);
+				}
+			}
+
+			@Override
+			public TableCellEditor getCellEditor(int row, int column) {
+				String s = (String) table.getValueAt(row, 0);
+				if ((s.contains(SingleValueUIProperty.getValueName())
+						|| s.contains(ToggleUIProperty.getToggleOnName()) || s
+							.contains(ToggleUIProperty.getToggleOffName()))
+						&& column > 1) {
+					return new DefaultCellEditor(new JTextField(
+							Configuration.KEY_ENTERVALUE));
+				} else {
+					switch (column) {
+					case 0:
+						return super.getCellEditor(row, column);
+					case 1:
+						return new DefaultCellEditor(devices);
+					case 2:
+						return new DefaultCellEditor(
+								getDeviceProperties((String) getValueAt(row, 1)));
+					default:
+						return super.getCellEditor(row, column);
+					}
+				}
+			}
+
+			@Override
+			public boolean isCellEditable(int row, int col) { // only second
+																// column is
+																// editable
+				String s = (String) table.getValueAt(row, 0);
+				if (col < 1) {
+					return false;
+				} else if ((s.contains(SingleValueUIProperty.getValueName())
+						|| s.contains(ToggleUIProperty.getToggleOnName()) || s
+							.contains(ToggleUIProperty.getToggleOffName()))
+						&& col == 1) {
+					return false;
+				} else {
+					return true;
+				}
+			}
+		};
+		table.setAutoCreateRowSorter(false);
+		table.setRowHeight(23);
+		// table.getColumnModel().getColumn(0).setMaxWidth(160);
+		// table.getColumnModel().getColumn(1).setMaxWidth(120);
+		// table.getColumnModel().getColumn(2).setMaxWidth(160);
+
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = table.rowAtPoint(evt.getPoint());
+				int col = table.columnAtPoint(evt.getPoint());
+				if (col == 0) {
+					updateHelper(row);
+				}
+			}
+		});
+
+		help_ = help;
+
+		JScrollPane sc = new JScrollPane(table);
+		// sc.setPreferredSize(new Dimension(440,590));
+		this.add(sc);
+	}
+
+	public PropertyComboTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HashMap<String, String> propertymapping, HelpWindow help) {
+
+		uipropertySet_ = uipropertySet;
+		mmproperties_ = mmproperties;
+
+		// Combobox holding the device names
+		devices = new JComboBox();
+		String[] strarray = StringSorting.sort(mmproperties_.getDevicesList());
+		devices.addItem(Configuration.KEY_UNALLOCATED);
+		for (int k = 0; k < strarray.length; k++) {
+			devices.addItem(strarray[k]);
+		}
+
+		// Extract uiproperty names
+		uipropkeys_ = new String[uipropertySet_.size()];
+		String[] temp = new String[uipropertySet_.size()];
+		uipropkeys_ = StringSorting.sort(uipropertySet_.keySet().toArray(temp));
+
+		// Define table
+		DefaultTableModel model = new DefaultTableModel(new Object[] {
+				"UI property", "Device", "Property" }, 0);
+
+		String mmprop, uion, uioff, uisingle;
+		for (int i = 0; i < uipropkeys_.length; i++) {
+			mmprop = propertymapping.get(uipropkeys_[i]);
+		
+			if (propertymapping.containsKey(uipropkeys_[i]) && mmproperties.isProperty(mmprop)) { // if exists in the current configuration
+				model.addRow(new Object[] { uipropkeys_[i], mmproperties.getProperty(mmprop).getDeviceName(), mmprop });
+				if (uipropertySet.get(uipropkeys_[i]).isToggle()) { // if toggle
+					uion = propertymapping.get(uipropkeys_[i]+ ToggleUIProperty.getToggleOnName());
+					uioff = propertymapping.get(uipropkeys_[i]+ ToggleUIProperty.getToggleOffName());
+					model.addRow(new Object[] {uipropkeys_[i] + ToggleUIProperty.getToggleOnName(),"", uion });
+					model.addRow(new Object[] {uipropkeys_[i]+ ToggleUIProperty.getToggleOffName(), "",	uioff });
+				} else if (uipropertySet.get(uipropkeys_[i]).isSingleValue()) { // if single value property
+					uisingle = propertymapping.get(uipropkeys_[i]+ SingleValueUIProperty.getValueName());
+					model.addRow(new Object[] {	uipropkeys_[i] + SingleValueUIProperty.getValueName(), "", uisingle });
+				} 
+			} else {
+				model.addRow(new Object[] {uipropkeys_[i],Configuration.KEY_UNALLOCATED,Configuration.KEY_UNALLOCATED });
+				if (uipropertySet.get(uipropkeys_[i]).isToggle()) {
+					model.addRow(new Object[] {uipropkeys_[i] + ToggleUIProperty.getToggleOnName(),"", Configuration.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i]+ ToggleUIProperty.getToggleOffName(), "",Configuration.KEY_ENTERVALUE });
+				} else if (uipropertySet.get(uipropkeys_[i]).isSingleValue()) {
+					model.addRow(new Object[] {uipropkeys_[i]+ SingleValueUIProperty.getValueName(), "",Configuration.KEY_ENTERVALUE });
+				} 
 			}
 		}
 
@@ -96,57 +242,65 @@ public class PropertyComboTable extends JPanel {
 			@Override
 			public TableCellEditor getCellEditor(int row, int column) {
 				String s = (String) table.getValueAt(row, 0);
-				if((s.contains(SingleValueUIProperty.getValueName()) || s.contains(ToggleUIProperty.getToggleOnName()) ||
-						s.contains(ToggleUIProperty.getToggleOffName())) && column > 1){
-					return new DefaultCellEditor(new JTextField(Configuration.KEY_ENTERVALUE));
+				if ((s.contains(SingleValueUIProperty.getValueName())
+						|| s.contains(ToggleUIProperty.getToggleOnName()) || s
+							.contains(ToggleUIProperty.getToggleOffName()))
+						&& column > 1) {
+					return new DefaultCellEditor(new JTextField(
+							Configuration.KEY_ENTERVALUE));
 				} else {
-					switch(column){
+					switch (column) {
 					case 0:
 						return super.getCellEditor(row, column);
 					case 1:
 						return new DefaultCellEditor(devices);
 					case 2:
-						return new DefaultCellEditor(getDeviceProperties((String) getValueAt(row, 1)));
+						return new DefaultCellEditor(
+								getDeviceProperties((String) getValueAt(row, 1)));
 					default:
 						return super.getCellEditor(row, column);
 					}
 				}
 			}
-			
+
 			@Override
-	        public boolean isCellEditable(int row, int col) { // only second column is editable
+			public boolean isCellEditable(int row, int col) { // only second
+																// column is
+																// editable
 				String s = (String) table.getValueAt(row, 0);
-	            if (col < 1 ) {
-	                return false;
-	            } else if((s.contains(SingleValueUIProperty.getValueName()) || s.contains(ToggleUIProperty.getToggleOnName()) ||
-						s.contains(ToggleUIProperty.getToggleOffName())) && col==1){
-	            	return false;
-	            } else {
-	                return true;
-	            }
-	        }
+				if (col < 1) {
+					return false;
+				} else if ((s.contains(SingleValueUIProperty.getValueName())
+						|| s.contains(ToggleUIProperty.getToggleOnName()) || s
+							.contains(ToggleUIProperty.getToggleOffName()))
+						&& col == 1) {
+					return false;
+				} else {
+					return true;
+				}
+			}
 		};
 		table.setAutoCreateRowSorter(false);
-		table.setRowHeight(23); 
-		//table.getColumnModel().getColumn(0).setMaxWidth(160);
-		//table.getColumnModel().getColumn(1).setMaxWidth(120);
-		//table.getColumnModel().getColumn(2).setMaxWidth(160);
-		
+		table.setRowHeight(23);
+		// table.getColumnModel().getColumn(0).setMaxWidth(160);
+		// table.getColumnModel().getColumn(1).setMaxWidth(120);
+		// table.getColumnModel().getColumn(2).setMaxWidth(160);
+
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
-		    @Override
-		    public void mouseClicked(java.awt.event.MouseEvent evt) {
-		        int row = table.rowAtPoint(evt.getPoint());
-		        int col = table.columnAtPoint(evt.getPoint());
-		        if (col==0) {
-		            updateHelper(row);
-		        }
-		    }
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = table.rowAtPoint(evt.getPoint());
+				int col = table.columnAtPoint(evt.getPoint());
+				if (col == 0) {
+					updateHelper(row);
+				}
+			}
 		});
-		
+
 		help_ = help;
-		
+
 		JScrollPane sc = new JScrollPane(table);
-		//sc.setPreferredSize(new Dimension(440,590));
+		// sc.setPreferredSize(new Dimension(440,590));
 		this.add(sc);
 	}
 	

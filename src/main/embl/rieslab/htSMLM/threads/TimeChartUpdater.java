@@ -46,6 +46,14 @@ public class TimeChartUpdater {
 	public void stopUpdater(){
 		running_ = false;
 	}
+
+	public void changeIdleTime(int newtime){
+		idletime_ = newtime;
+	}
+
+	public void changeChart(TimeChart newchart){
+		chart_ = newchart;
+	}
 	
 	private class UIupdater extends SwingWorker<Integer, Double> {
 
@@ -56,7 +64,7 @@ public class TimeChartUpdater {
 			while(running_){	
 				value = Double.parseDouble(property_.getPropertyValue());
 				publish(value);
-				
+
 				Thread.sleep(idletime_);
 			}
 			return 1;

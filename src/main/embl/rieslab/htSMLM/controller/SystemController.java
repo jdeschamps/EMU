@@ -175,12 +175,12 @@ public class SystemController {
 
 	
 	/**
-	 * If no Wizard running, then launches a new one in order to modify the current configuration. 
+	 * Launches new property Wizard in order to modify the current configuration. 
 	 * 
 	 * @return False if a Wizard is already running.
 	 */
 	public boolean launchWizard() {
-		return config.launchWizard();
+		return config.launchWizard(uiproperties_, uiparameters_, mmproperties_);
 	}
 	
 

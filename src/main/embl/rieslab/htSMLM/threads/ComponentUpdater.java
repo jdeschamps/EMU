@@ -40,7 +40,11 @@ public abstract class ComponentUpdater<T extends JComponent> {
 	public void stopUpdater(){
 		running_ = false;
 	}
-
+	
+	public void changeIdleTime(int newtime){
+		idletime_ = newtime;
+	}
+	
 	public abstract boolean sanityCheck(UIProperty prop);
 	public abstract void updateComponent(String val);
 		

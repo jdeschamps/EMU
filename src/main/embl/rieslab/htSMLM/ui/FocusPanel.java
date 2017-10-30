@@ -71,6 +71,7 @@ public class FocusPanel extends PropertyPanel {
 	//////// Default parameters
 	private double smallstep_, largestep_;
 	private int idle_, npos_; 
+	private boolean initialised = false;
 	
 	public FocusPanel(String label) {
 		super(label);
@@ -348,6 +349,10 @@ public class FocusPanel extends PropertyPanel {
 		}
 	}
 	
+	public boolean isMonitoring(){
+		return togglebuttonMonitor_.isSelected();
+	}
+	
 	private String getUserInput(){
 		String s = textfieldPosition_.getText();
 		if(utils.isNumeric(s)){
@@ -372,9 +377,11 @@ public class FocusPanel extends PropertyPanel {
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		if(name.equals(FOCUS_POSITION)){
-			if(utils.isFloat(newvalue)){
-				double val = Double.parseDouble(newvalue);
-				graph_.addPoint(val);
+			if(utils.isNumeric(newvalue)){
+				if(!initialised){
+					initialised = true;
+					textfieldPosition_.setText(newvalue);
+				}
 			}
 		} else if(name.equals(FOCUS_STABILIZATION)){
 			if(newvalue.equals(ToggleUIProperty.ON)){
@@ -407,9 +414,19 @@ public class FocusPanel extends PropertyPanel {
 			smallstep_ = ((DoubleUIParameter) getUIParameter(PARAM_SMALLSTEP)).getValue();
 			textfieldSmallStep_.setText(String.valueOf(smallstep_));
 		}else if(name.equals(PARAM_IDLE)){
-			idle_ = ((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue();
+			if(((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue() != idle_){
+				idle_ = ((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue();
+				updater_.changeIdleTime(idle_);
+			}
 		}else if(name.equals(PARAM_NPOS)){
-			npos_ = ((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue();
+			if(((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue() != npos_){
+				npos_ = ((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue();
+				panelGraph_.remove(graph_.getChart());
+				graph_ = new TimeChart("position","time","position",npos_,300,200,false);
+				panelGraph_.add(graph_.getChart());
+				panelGraph_.updateUI();
+				updater_.changeChart(graph_);
+			}
 		}
 	}
 
