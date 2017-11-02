@@ -128,6 +128,7 @@ public class SystemController {
 						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties_.get(uiprop);
 						int numpos = t.getNumberOfStates();
 						for(int j=0;j<numpos;j++){
+							System.out.println("-----  States : "+configprop.get(uiprop+MultiStateUIProperty.getStateName(j)));
 							t.setStateValue(j, configprop.get(uiprop+MultiStateUIProperty.getStateName(j)));
 						}
 					}
@@ -153,10 +154,15 @@ public class SystemController {
 			uiparam = itstr.next();
 			
 			if (uiparameters_.containsKey(uiparam)) {
-				uiparameters_.get(uiparam).setStringValue(configparam.get(uiparam));
-			} else {
-				System.out.println(uiparam+" is not a valid UI parameter.");
-			}
+				try{
+					uiparameters_.get(uiparam).setStringValue(configparam.get(uiparam));
+				} catch (Exception e){
+					
+					
+					System.out.println(uiparam+" has a non valid value");
+					System.out.println(e.getMessage());
+				}
+			} 
 		}
 	}
 
@@ -197,6 +203,25 @@ public class SystemController {
 	 * Pops-up a message indicating the unallocated ui properties.
 	 */
 	private void showUnallocatedMessage() {
+		String title = "Unallocated properties";
+		
+		String message = "The following properties from the UI have not been allocated: \n\n";
+		Iterator<String> it = unallocatedprop_.iterator();
+		message = message+it.next();
+		while(it.hasNext()){
+			message = message+", "+it.next();
+		}
+		message = message+". \n\n";
+		
+		message = message+"The UI components related to these properties will not function until these properties are allocated. \n Create or load configuration to allocate them.";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
+	 * Pops-up a message indicating that a parameter has been wrongly set.
+	 */
+	private void showWrongParameterMessage() {
 		String title = "Unallocated properties";
 		
 		String message = "The following properties from the UI have not been allocated: \n\n";

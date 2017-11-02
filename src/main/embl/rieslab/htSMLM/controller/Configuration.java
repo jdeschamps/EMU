@@ -89,7 +89,7 @@ public class Configuration {
 		    		int numval = ((MultiStateUIProperty) uipropertySet.get(uihash)).getNumberOfStates();
 		    		String name, val;
 		    		for(int i=0;i<numval;i++){
-		    			name = MultiStateUIProperty.getStateName(i);
+		    			name = uihash+MultiStateUIProperty.getStateName(i);
 		    			val =  props.getProperty(KEY_UIPROPERTY+name, KEY_UNALLOCATED);
 			    		uiproperties_.put(name, val);
 		    		}
@@ -171,7 +171,7 @@ public class Configuration {
 		    		int numval = ((MultiStateUIProperty) uipropertySet.get(uihash)).getNumberOfStates();
 		    		String name, val;
 		    		for(int i=0;i<numval;i++){
-		    			name = MultiStateUIProperty.getStateName(i);
+		    			name = uihash+MultiStateUIProperty.getStateName(i);
 		    			val =  props.getProperty(KEY_UIPROPERTY+name, KEY_UNALLOCATED);
 			    		uiproperties_.put(name, val);
 		    		}

@@ -346,13 +346,6 @@ public class PropertyComboTable extends JPanel {
 	}
 	
 	/**
-	 * Disposes the help window. 
-	 */
-	public void disposeHelp(){
-		help_.disposeHelp();
-	}
-	
-	/**
 	 * Extracts the fields filled by the user. 
 	 * 
 	 * @return HashMap of the UI properties and the corresponding MM properties and states value.

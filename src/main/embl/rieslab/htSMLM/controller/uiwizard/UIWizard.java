@@ -38,6 +38,13 @@ public class UIWizard {
 		param_ = new HashMap<String, String>();
 	}
 	
+	/**
+	 * Creates a new Wizard configuration frame. 
+	 * 
+	 * @param uipropertySet HashMap containing the UI properties.
+	 * @param uiparameterSet HashMap containing the UI parameters.
+	 * @param mmproperties Object holding the device properties from Micro-manager.
+	 */
 	@SuppressWarnings("rawtypes")
 	public void newConfiguration(final HashMap<String, UIProperty> uipropertySet,
 			final HashMap<String, UIParameter> uiparameterSet, final MMProperties mmproperties) {
@@ -45,84 +52,31 @@ public class UIWizard {
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				running_ = true;
-				
-				frame_ = new JFrame("UI properties wizard");
-				frame_.addWindowListener(new WindowAdapter() {
-					@Override
-					public void windowClosing(WindowEvent e) {
-						// show dialogue
-						boolean b = true;
-						if(b){
-							propertytable_.disposeHelp();
-							parametertable_.disposeHelp();
-							e.getWindow().dispose();
-						}
-					}
-				});
-				
-				help_ = new HelpWindow("Click on a row to display the description");
 
+				help_ = new HelpWindow("Click on a row to display the description");
+				
 				// Table defining the properties
 				propertytable_ = new PropertyComboTable(uipropertySet, mmproperties, help_);
 				propertytable_.setOpaque(true); 
 				
-				// now parameters
+				// and parameters
 				parametertable_ = new ParameterComboTable(uiparameterSet, help_);
 				parametertable_.setOpaque(true); 
 				
-				// Tab containing the tables
-				JTabbedPane tabbedpane = new JTabbedPane();
-				tabbedpane.addTab("Properties", null, propertytable_, null);
-				tabbedpane.addTab("Parameters", null, parametertable_, null);
-				
-				// content pane
-				JPanel contentpane = new JPanel();
-				
-				// gridbag layout for upper and lower panel
-				JPanel upperpane = new JPanel();
-				upperpane.setLayout(new GridLayout(0,4));
-
-				JToggleButton helptoggle = new JToggleButton("HELP");
-				helptoggle.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						JToggleButton toggle = (JToggleButton) e.getSource();
-						boolean selected = toggle.getModel().isSelected();
-						showHelp(selected);
-					}
-				});
-				upperpane.add(new JLabel(""));
-				upperpane.add(new JLabel(""));
-				upperpane.add(new JLabel(""));
-				upperpane.add(helptoggle);
-
-				JPanel lowerpane = new JPanel();
-				lowerpane.setLayout(new GridLayout(0, 3));
-
-				JButton save = new JButton("Save");
-				save.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						saveConfiguration();
-					}
-				});
-
-				lowerpane.add(save);
-				lowerpane.add(new JLabel(""));
-				lowerpane.add(new JLabel(""));
-			
-				contentpane.add(upperpane);
-				contentpane.add(tabbedpane);
-				contentpane.add(lowerpane);
-				contentpane.setLayout(new BoxLayout(contentpane, BoxLayout.PAGE_AXIS));
-		
-				frame_.setContentPane(contentpane);
-
-				// Display the window.
-				frame_.pack();
-				frame_.setVisible(true);
+				frame_ = createFrame(propertytable_, parametertable_, help_);
 			}
 		});
 	}
 
+	/**
+	 * Creates a Wizard configuration frame from an existing configuration.
+	 * 
+	 * @param uipropertySet HashMap containing the UI properties.
+	 * @param uiparameterSet HashMap containing the UI parameters.
+	 * @param mmproperties Object holding the device properties from Micro-manager.
+	 * @param configprop HashMap linking mm properties to ui properties from the configuration.
+	 * @param configparam HashMap holding the values of the ui parameters from the configuration.
+	 */
 	@SuppressWarnings("rawtypes")
 	public void existingConfiguration(final HashMap<String, UIProperty> uipropertySet,
 			final HashMap<String, UIParameter> uiparameterSet, final MMProperties mmproperties, final HashMap<String, String> configprop,
@@ -132,23 +86,9 @@ public class UIWizard {
 			public void run() {
 				running_ = true;
 				
-				frame_ = new JFrame("UI properties wizard");
-				frame_.addWindowListener(new WindowAdapter() {
-					@Override
-					public void windowClosing(WindowEvent e) {
-						// show dialogue
-						boolean b = true;
-						if(b){
-							propertytable_.disposeHelp();
-							parametertable_.disposeHelp();
-							e.getWindow().dispose();
-						}
-					}
-				});
-				
 				help_ = new HelpWindow("Click on a row to display the description");
 
-				// Table defining the properties
+				// Table defining the properties using configuration
 				propertytable_ = new PropertyComboTable(uipropertySet, mmproperties, configprop, help_);
 				propertytable_.setOpaque(true); 
 				
@@ -156,57 +96,77 @@ public class UIWizard {
 				parametertable_ = new ParameterComboTable(uiparameterSet, help_);
 				parametertable_.setOpaque(true); 
 				
-				// Tab containing the tables
-				JTabbedPane tabbedpane = new JTabbedPane();
-				tabbedpane.addTab("Properties", null, propertytable_, null);
-				tabbedpane.addTab("Parameters", null, parametertable_, null);
-				
-				// content pane
-				JPanel contentpane = new JPanel();
-				
-				// gridbag layout for upper and lower panel
-				JPanel upperpane = new JPanel();
-				upperpane.setLayout(new GridLayout(0,4));
-
-				JToggleButton helptoggle = new JToggleButton("HELP");
-				helptoggle.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						JToggleButton toggle = (JToggleButton) e.getSource();
-						boolean selected = toggle.getModel().isSelected();
-						showHelp(selected);
-					}
-				});
-				upperpane.add(new JLabel(""));
-				upperpane.add(new JLabel(""));
-				upperpane.add(new JLabel(""));
-				upperpane.add(helptoggle);
-
-				JPanel lowerpane = new JPanel();
-				lowerpane.setLayout(new GridLayout(0, 3));
-
-				JButton save = new JButton("Save");
-				save.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						saveConfiguration();
-					}
-				});
-
-				lowerpane.add(save);
-				lowerpane.add(new JLabel(""));
-				lowerpane.add(new JLabel(""));
-			
-				contentpane.add(upperpane);
-				contentpane.add(tabbedpane);
-				contentpane.add(lowerpane);
-				contentpane.setLayout(new BoxLayout(contentpane, BoxLayout.PAGE_AXIS));
-		
-				frame_.setContentPane(contentpane);
-
-				// Display the window.
-				frame_.pack();
-				frame_.setVisible(true);
+				frame_ = createFrame(propertytable_,parametertable_, help_);
 			}
 		});
+	}
+	
+	private JFrame createFrame(final PropertyComboTable propertytable, final ParameterComboTable parametertable, final HelpWindow help){
+		JFrame frame = new JFrame("UI properties wizard");
+		frame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				// show dialogue
+				boolean b = true;
+				if(b){
+					help.disposeHelp();
+					e.getWindow().dispose();
+				}
+			}
+		});
+		
+		
+		// Tab containing the tables
+		JTabbedPane tabbedpane = new JTabbedPane();
+		tabbedpane.addTab("Properties", null, propertytable, null);
+		tabbedpane.addTab("Parameters", null, parametertable, null);
+		
+		// content pane
+		JPanel contentpane = new JPanel();
+		
+		// gridbag layout for upper and lower panel
+		JPanel upperpane = new JPanel();
+		upperpane.setLayout(new GridLayout(0,4));
+
+		JToggleButton helptoggle = new JToggleButton("HELP");
+		helptoggle.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JToggleButton toggle = (JToggleButton) e.getSource();
+				boolean selected = toggle.getModel().isSelected();
+				showHelp(selected);
+			}
+		});
+		upperpane.add(new JLabel(""));
+		upperpane.add(new JLabel(""));
+		upperpane.add(new JLabel(""));
+		upperpane.add(helptoggle);
+
+		JPanel lowerpane = new JPanel();
+		lowerpane.setLayout(new GridLayout(0, 3));
+
+		JButton save = new JButton("Save");
+		save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveConfiguration();
+			}
+		});
+
+		lowerpane.add(save);
+		lowerpane.add(new JLabel(""));
+		lowerpane.add(new JLabel(""));
+	
+		contentpane.add(upperpane);
+		contentpane.add(tabbedpane);
+		contentpane.add(lowerpane);
+		contentpane.setLayout(new BoxLayout(contentpane, BoxLayout.PAGE_AXIS));
+
+		frame.setContentPane(contentpane);
+
+		// Display the window.
+		frame.pack();
+		frame.setVisible(true);
+		
+		return frame;
 	}
 	
 	public boolean isRunning(){

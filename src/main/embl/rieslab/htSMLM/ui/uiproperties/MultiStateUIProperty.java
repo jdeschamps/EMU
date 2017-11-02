@@ -11,6 +11,7 @@ public class MultiStateUIProperty extends UIProperty{
 	public MultiStateUIProperty(PropertyPanel owner, String name, String description, int size) {
 		super(owner, name, description);
 		
+		System.out.println("blopppp");
 		states_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";

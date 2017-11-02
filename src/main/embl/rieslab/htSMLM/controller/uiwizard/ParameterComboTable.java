@@ -249,10 +249,6 @@ public class ParameterComboTable extends JPanel{
 		help_.update(s+":\n\n"+uiparameterSet_.get(s).getDescription());
 	}
 	
-	public void disposeHelp(){
-		help_.disposeHelp();
-	}
-	
 	public HashMap<String,String> getSettings(){
 		HashMap<String,String> settings = new HashMap<String,String>();
 		

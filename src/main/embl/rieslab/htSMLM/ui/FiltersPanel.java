@@ -104,8 +104,6 @@ public class FiltersPanel extends PropertyPanel {
 	private void setColors(){
 		String[] astr = colors_.split(",");
 		for(int i=0;i<togglebuttons_.length;i++){
-			System.out.println("New color: "+astr[i]);
-			System.out.println("Which corresponds to: "+ColorRepository.getStringColor(ColorRepository.getColor(astr[i])));
 			togglebuttons_[i].setForeground(ColorRepository.getColor(astr[i]));
 		}
 	}
