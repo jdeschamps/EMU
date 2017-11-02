@@ -2,7 +2,7 @@ package main.embl.rieslab.htSMLM.micromanager.properties;
 
 import java.util.HashMap;
 
-import main.embl.rieslab.htSMLM.controller.uiwizard.StringSorting;
+import main.embl.rieslab.htSMLM.util.StringSorting;
 
 public class MMDevice {
 

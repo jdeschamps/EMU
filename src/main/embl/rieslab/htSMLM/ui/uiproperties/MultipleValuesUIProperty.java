@@ -32,6 +32,26 @@ public class MultipleValuesUIProperty extends UIProperty{
 		}
 	}
 	
+	public int getSize(){
+		return value_.length;
+	}
+	
+	public int getPositionNumber(String val){
+		for(int i=0;i<value_.length;i++){
+			if(value_[i].equals(val)){
+				return i;
+			}
+		}
+		return 0;
+	}
+	
+	public String getValueFromPosition(int pos){
+		if(pos<value_.length){
+			return value_[pos];
+		}
+		return "";
+	}
+	
 	@Override
 	public void setPropertyValue(String val) {
 		if (isInitialised()) {

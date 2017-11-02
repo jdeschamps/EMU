@@ -1,5 +1,7 @@
 package main.embl.rieslab.htSMLM.ui;
 
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import main.embl.rieslab.htSMLM.controller.SystemController;
@@ -14,8 +16,10 @@ public class MainFrame extends PropertyMainFrame{
 	 * 
 	 */
 	private static final long serialVersionUID = -7647811940748674013L;
-	
+
 	public FocusPanel focusPanel;
+	public QPDPanel qpdPanel;
+	public FiltersPanel filterPanel;
     
     protected void initComponents() {
     	
@@ -37,9 +41,18 @@ public class MainFrame extends PropertyMainFrame{
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-    
+
         focusPanel = new FocusPanel("Focus panel");
-        this.add(focusPanel);
+        qpdPanel = new QPDPanel("QPD");
+        filterPanel = new FiltersPanel("Filter wheel");
+
+        JPanel mainpane = new JPanel();
+        mainpane.setLayout(new BoxLayout(mainpane, BoxLayout.PAGE_AXIS));
+        
+        mainpane.add(focusPanel);
+        mainpane.add(qpdPanel);
+        mainpane.add(filterPanel);
+        this.add(mainpane);
  
         this.pack(); // avoid packing when one can
         this.setResizable(false);
@@ -49,5 +62,7 @@ public class MainFrame extends PropertyMainFrame{
 	@Override
 	protected void registerPropertyPanels() {
         registerPropertyPanel(focusPanel);
+        registerPropertyPanel(qpdPanel);
+        registerPropertyPanel(filterPanel);
 	}
 }

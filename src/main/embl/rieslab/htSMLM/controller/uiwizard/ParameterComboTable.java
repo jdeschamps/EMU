@@ -20,6 +20,7 @@ import javax.swing.table.TableModel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameterType;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
+import main.embl.rieslab.htSMLM.util.StringSorting;
 
 public class ParameterComboTable extends JPanel{
 

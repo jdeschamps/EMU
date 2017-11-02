@@ -21,6 +21,7 @@ import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleValueUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.ToggleUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.util.StringSorting;
 
 
 public class PropertyComboTable extends JPanel {

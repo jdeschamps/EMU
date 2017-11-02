@@ -82,7 +82,7 @@ public class FocusPanel extends PropertyPanel {
 		updater_ = new TimeChartUpdater(graph_,getUIProperty(FOCUS_POSITION),idle_);
 		
 		this.setLayout(new GridBagLayout());
-		this.setBorder(BorderFactory.createTitledBorder(null, "Focus", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+		this.setBorder(BorderFactory.createTitledBorder(null, getLabel(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		
 		panelLeftControl_ = new JPanel();
 		panelGraph_ = new JPanel();
@@ -406,19 +406,19 @@ public class FocusPanel extends PropertyPanel {
 	}
 
 	@Override
-	public void parameterhasChanged(String name) {
-		if(name.equals(PARAM_LARGESTEP)){
+	public void parameterhasChanged(String label) {
+		if(label.equals(PARAM_LARGESTEP)){
 			largestep_ = ((DoubleUIParameter) getUIParameter(PARAM_LARGESTEP)).getValue();
 			textfieldLargeStep_.setText(String.valueOf(largestep_));
-		} else if(name.equals(PARAM_SMALLSTEP)){
+		} else if(label.equals(PARAM_SMALLSTEP)){
 			smallstep_ = ((DoubleUIParameter) getUIParameter(PARAM_SMALLSTEP)).getValue();
 			textfieldSmallStep_.setText(String.valueOf(smallstep_));
-		}else if(name.equals(PARAM_IDLE)){
+		}else if(label.equals(PARAM_IDLE)){
 			if(((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue() != idle_){
 				idle_ = ((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue();
 				updater_.changeIdleTime(idle_);
 			}
-		}else if(name.equals(PARAM_NPOS)){
+		}else if(label.equals(PARAM_NPOS)){
 			if(((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue() != npos_){
 				npos_ = ((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue();
 				panelGraph_.remove(graph_.getChart());

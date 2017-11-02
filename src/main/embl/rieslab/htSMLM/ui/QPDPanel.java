@@ -129,8 +129,8 @@ public class QPDPanel extends PropertyPanel {
 		zmax_ = 700;
 		idle_ = 100;
 		
-		addUIParameter(new IntUIParameter(this, PARAM_XYMAX,"Default for the maximum X and Y signals value to display.",xymax_));
-		addUIParameter(new IntUIParameter(this, PARAM_ZMAX,"Default for the maximum Z signal value to display.",zmax_));
+		addUIParameter(new IntUIParameter(this, PARAM_XYMAX,"Maximum X and Y signals value to display.",xymax_));
+		addUIParameter(new IntUIParameter(this, PARAM_ZMAX,"Maximum Z signal value to display.",zmax_));
 		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time of the QPD signals monitoring.",idle_)); // thread idle time
 	}
 

@@ -220,8 +220,12 @@ public class SystemController {
 	 * 
 	 */
 	public void shutDown(){
-		config.shutDown();
-		mainframe_.shutDown();
+		if(config != null){
+			config.shutDown();
+		}
+		if(mainframe_ != null){
+			mainframe_.shutDown();
+		}
 	}
 	
 	/**

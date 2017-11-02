@@ -234,6 +234,7 @@ public class UIWizard {
 		config_.getWizardSettings();
 		
 		frame_.dispose();
+		help_.disposeHelp();
 		running_ = false;
 	}
 
