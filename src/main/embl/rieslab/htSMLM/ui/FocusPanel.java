@@ -22,7 +22,7 @@ import main.embl.rieslab.htSMLM.threads.TimeChartUpdater;
 import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
 import main.embl.rieslab.htSMLM.ui.uiparameters.DoubleUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
-import main.embl.rieslab.htSMLM.ui.uiproperties.ToggleUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.utils;
 
@@ -335,9 +335,9 @@ public class FocusPanel extends PropertyPanel {
 
 	protected void lockPosition(boolean b) {
 		if(b){
-			changeProperty(FOCUS_STABILIZATION,ToggleUIProperty.ON);
+			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.ON);
 		} else {
-			changeProperty(FOCUS_STABILIZATION,ToggleUIProperty.OFF);
+			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.OFF);
 		}
 	}
 
@@ -364,7 +364,7 @@ public class FocusPanel extends PropertyPanel {
 	@Override
 	protected void initializeProperties() {
 		addUIProperty(new UIProperty(this, FOCUS_POSITION,"Position property of the stage, used for movements and monitoring."));
-		addUIProperty(new ToggleUIProperty(this, FOCUS_STABILIZATION,"Property used for focus stabilization."));
+		addUIProperty(new TwoStateUIProperty(this, FOCUS_STABILIZATION,"Property used for focus stabilization."));
 	}
 
 	@Override
@@ -384,7 +384,7 @@ public class FocusPanel extends PropertyPanel {
 				}
 			}
 		} else if(name.equals(FOCUS_STABILIZATION)){
-			if(newvalue.equals(ToggleUIProperty.ON)){
+			if(newvalue.equals(TwoStateUIProperty.ON)){
 				togglebuttonLock_.setSelected(true);
 			} else {
 				togglebuttonLock_.setSelected(false);

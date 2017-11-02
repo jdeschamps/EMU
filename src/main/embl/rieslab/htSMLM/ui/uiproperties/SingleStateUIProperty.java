@@ -2,34 +2,33 @@ package main.embl.rieslab.htSMLM.ui.uiproperties;
 
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 
-public class SingleValueUIProperty extends UIProperty{
+public class SingleStateUIProperty extends UIProperty{
 
-	public static String VALUE = "Value";
+	public static String STATE = "state";
 	
-	private String value_ = "";
+	private String state_ = "";
 	
-	public SingleValueUIProperty(PropertyPanel owner, String name, String description) {
+	public SingleStateUIProperty(PropertyPanel owner, String name, String description) {
 		super(owner, name, description);
 	}
 
-	
 	public void setConstantValue(String v){
-		value_ = v;
+		state_ = v;
 	}
 	
 	@Override
 	public void setPropertyValue(String val) {
 		if (isInitialised()) {
-			getMMPoperty().setStringValue(value_);
+			getMMPoperty().setStringValue(state_);
 		}
 	}
 	
 	@Override
-	public boolean isSingleValue(){
+	public boolean isSingleState(){
 		return true;
 	}
 	
 	public static String getValueName(){
-		return " "+VALUE;
+		return " "+STATE;
 	}
 }

@@ -12,7 +12,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
 
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
-import main.embl.rieslab.htSMLM.ui.uiproperties.MultipleValuesUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
 
 public class FiltersPanel extends PropertyPanel {
@@ -112,12 +112,12 @@ public class FiltersPanel extends PropertyPanel {
 	
 	
 	protected String getValueFromPosition(int pos){
-		return ((MultipleValuesUIProperty) getUIProperty(FW_POSITION)).getValueFromPosition(pos);
+		return ((MultiStateUIProperty) getUIProperty(FW_POSITION)).getStateValue(pos);
 	}
 	
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new MultipleValuesUIProperty(this, FW_POSITION,"Filter wheel position property.",NUM_POS));		
+		addUIProperty(new MultiStateUIProperty(this, FW_POSITION,"Filter wheel position property.",NUM_POS));		
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class FiltersPanel extends PropertyPanel {
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		if(name.equals(FW_POSITION)){
-			int pos = ((MultipleValuesUIProperty) getUIProperty(FW_POSITION)).getPositionNumber(newvalue);
+			int pos = ((MultiStateUIProperty) getUIProperty(FW_POSITION)).getStatePositionNumber(newvalue);
 			if(pos<togglebuttons_.length){
 				togglebuttons_[pos].setSelected(true);
 			}

@@ -12,9 +12,10 @@ import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
 import main.embl.rieslab.htSMLM.ui.MainFrame;
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyPair;
-import main.embl.rieslab.htSMLM.ui.uiproperties.SingleValueUIProperty;
-import main.embl.rieslab.htSMLM.ui.uiproperties.ToggleUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
@@ -113,15 +114,22 @@ public class SystemController {
 					// link the properties
 					addPair(uiproperties_.get(uiprop),mmproperties_.getProperty(configprop.get(uiprop)));
 					
-					if(uiproperties_.get(uiprop).isToggle()){ // if toggle property (on/off)
+					// test if the property has finite number of states
+					if(uiproperties_.get(uiprop).isTwoState()){ // if it is a two-state property
 						// extract the on/off values
-						ToggleUIProperty t = (ToggleUIProperty) uiproperties_.get(uiprop);
-						t.setOnValue(configprop.get(uiprop+ToggleUIProperty.getToggleOnName()));
-						t.setOffValue(configprop.get(uiprop+ToggleUIProperty.getToggleOffName()));
-					} else if(uiproperties_.get(uiprop).isSingleValue()){ // if constant value property
-						// extract the constant value
-						SingleValueUIProperty t = (SingleValueUIProperty) uiproperties_.get(uiprop);
-						t.setConstantValue(configprop.get(uiprop+SingleValueUIProperty.getValueName()));
+						TwoStateUIProperty t = (TwoStateUIProperty) uiproperties_.get(uiprop);
+						t.setOnStateValue(configprop.get(uiprop+TwoStateUIProperty.getOnStateName()));
+						t.setOffStateValue(configprop.get(uiprop+TwoStateUIProperty.getOffStateName()));
+					} else if(uiproperties_.get(uiprop).isSingleState()){ // if single state property
+						// extract the state value
+						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties_.get(uiprop);
+						t.setConstantValue(configprop.get(uiprop+SingleStateUIProperty.getValueName()));
+					} else if (uiproperties_.get(uiprop).isMultiState()) {// if it is a multistate property
+						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties_.get(uiprop);
+						int numpos = t.getNumberOfStates();
+						for(int j=0;j<numpos;j++){
+							t.setStateValue(j, configprop.get(uiprop+MultiStateUIProperty.getStateName(j)));
+						}
 					}
 				} else {
 					// register missing allocation

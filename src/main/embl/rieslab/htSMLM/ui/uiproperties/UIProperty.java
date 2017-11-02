@@ -58,15 +58,15 @@ public class UIProperty {
 		return mmproperty_;
 	}
 	
-	public boolean isToggle(){
+	public boolean isTwoState(){
 		return false;
 	}
 	
-	public boolean isSingleValue(){
+	public boolean isSingleState(){
 		return false;
 	}	
 	
-	public boolean isMultipleValues(){
+	public boolean isMultiState(){
 		return false;
 	}
 }

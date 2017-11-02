@@ -12,7 +12,9 @@ import java.util.Properties;
 import main.embl.rieslab.htSMLM.controller.uiwizard.UIWizard;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
-import main.embl.rieslab.htSMLM.ui.uiproperties.ToggleUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 
 public class Configuration {
@@ -71,15 +73,28 @@ public class Configuration {
 		    		uiproperties_.put(uihash, KEY_UNALLOCATED);
 		    	}
 		    	
-		    	if(uipropertySet.get(uihash).isToggle()){
-		    		String onval = uihash+ToggleUIProperty.getToggleOnName();
-			    	mmhash = props.getProperty(KEY_UIPROPERTY+onval, KEY_UNALLOCATED);
-		    		uiproperties_.put(onval, mmhash);
+		    	if(uipropertySet.get(uihash).isTwoState()){
+		    		String onval = uihash+TwoStateUIProperty.getOnStateName();
+			    	String val = props.getProperty(KEY_UIPROPERTY+onval, KEY_UNALLOCATED);
+		    		uiproperties_.put(onval, val);
 
-		    		String offval = uihash+ToggleUIProperty.getToggleOffName();
-			    	mmhash = props.getProperty(KEY_UIPROPERTY+offval, KEY_UNALLOCATED);
-		    		uiproperties_.put(offval, mmhash);
+		    		String offval = uihash+TwoStateUIProperty.getOffStateName();
+			    	val = props.getProperty(KEY_UIPROPERTY+offval, KEY_UNALLOCATED);
+		    		uiproperties_.put(offval, val);  
+		    	} else if (uipropertySet.get(uihash).isSingleState()){
+		    		String valname = uihash+SingleStateUIProperty.getValueName();
+			    	String val = props.getProperty(KEY_UIPROPERTY+valname, KEY_UNALLOCATED);
+		    		uiproperties_.put(valname, val);
+		    	} else if (uipropertySet.get(uihash).isMultiState()){
+		    		int numval = ((MultiStateUIProperty) uipropertySet.get(uihash)).getNumberOfStates();
+		    		String name, val;
+		    		for(int i=0;i<numval;i++){
+		    			name = MultiStateUIProperty.getStateName(i);
+		    			val =  props.getProperty(KEY_UIPROPERTY+name, KEY_UNALLOCATED);
+			    		uiproperties_.put(name, val);
+		    		}
 		    	}
+
 		    }	 
 		    
 		    it = uiparameterSet.keySet().iterator();
@@ -140,14 +155,26 @@ public class Configuration {
 		    		uiproperties_.put(uihash, KEY_UNALLOCATED);
 		    	}
 		    	
-		    	if(uipropertySet.get(uihash).isToggle()){
-		    		String onval = uihash+ToggleUIProperty.getToggleOnName();
+		    	if(uipropertySet.get(uihash).isTwoState()){
+		    		String onval = uihash+TwoStateUIProperty.getOnStateName();
 			    	mmhash = props.getProperty(KEY_UIPROPERTY+onval, KEY_UNALLOCATED);
 			    	uiproperties_.put(onval, mmhash);
 
-		    		String offval = uihash+ToggleUIProperty.getToggleOffName();
+		    		String offval = uihash+TwoStateUIProperty.getOffStateName();
 			    	mmhash = props.getProperty(KEY_UIPROPERTY+offval, KEY_UNALLOCATED);
 			    	uiproperties_.put(offval, mmhash);
+		    	} else if (uipropertySet.get(uihash).isSingleState()){
+		    		String valname = uihash+SingleStateUIProperty.getValueName();
+			    	String val = props.getProperty(KEY_UIPROPERTY+valname, KEY_UNALLOCATED);
+		    		uiproperties_.put(valname, val);
+		    	} else if (uipropertySet.get(uihash).isMultiState()){
+		    		int numval = ((MultiStateUIProperty) uipropertySet.get(uihash)).getNumberOfStates();
+		    		String name, val;
+		    		for(int i=0;i<numval;i++){
+		    			name = MultiStateUIProperty.getStateName(i);
+		    			val =  props.getProperty(KEY_UIPROPERTY+name, KEY_UNALLOCATED);
+			    		uiproperties_.put(name, val);
+		    		}
 		    	}
 		    }	 
 		    
