@@ -20,6 +20,7 @@ public class MainFrame extends PropertyMainFrame{
 	public FocusPanel focusPanel;
 	public QPDPanel qpdPanel;
 	public FiltersPanel filterPanel;
+	public LaserPulsingPanel pulsePanel;
     
     protected void initComponents() {
     	
@@ -45,6 +46,7 @@ public class MainFrame extends PropertyMainFrame{
         focusPanel = new FocusPanel("Focus panel");
         qpdPanel = new QPDPanel("QPD");
         filterPanel = new FiltersPanel("Filter wheel");
+        pulsePanel = new LaserPulsingPanel("UV pulse");
 
         JPanel mainpane = new JPanel();
         mainpane.setLayout(new BoxLayout(mainpane, BoxLayout.PAGE_AXIS));
@@ -52,6 +54,7 @@ public class MainFrame extends PropertyMainFrame{
         mainpane.add(focusPanel);
         mainpane.add(qpdPanel);
         mainpane.add(filterPanel);
+        mainpane.add(pulsePanel);
         this.add(mainpane);
  
         this.pack(); // avoid packing when one can
@@ -64,5 +67,6 @@ public class MainFrame extends PropertyMainFrame{
         registerPropertyPanel(focusPanel);
         registerPropertyPanel(qpdPanel);
         registerPropertyPanel(filterPanel);
+        registerPropertyPanel(pulsePanel);
 	}
 }

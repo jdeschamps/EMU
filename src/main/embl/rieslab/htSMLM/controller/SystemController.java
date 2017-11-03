@@ -64,10 +64,8 @@ public class SystemController {
 		boolean read = config.readConfiguration(uiproperties_, uiparameters_, mmproperties_);
 
 		if(read){ // if read a configuration
-			System.out.println("Read out configuration");
 			getConfiguration();
 		} else { // if failed
-			System.out.println("Launch wizard");
 			// launch a new wizard
 			config.launchNewWizard(uiproperties_, uiparameters_, mmproperties_);
 		}
@@ -136,9 +134,7 @@ public class SystemController {
 					// register missing allocation
 					unallocatedprop_.add(uiprop);
 				}
-			} else {
-				System.out.println(uiprop+" is not a valid UI property.");
-			}
+			} 
 		}
 	}
 	
@@ -150,6 +146,7 @@ public class SystemController {
 	public void readParameters(HashMap<String, String> configparam){
 		String uiparam;
 		Iterator<String> itstr = configparam.keySet().iterator();
+		ArrayList<String> wrg = new ArrayList<String>();
 		while (itstr.hasNext()) {
 			uiparam = itstr.next();
 			
@@ -157,12 +154,12 @@ public class SystemController {
 				try{
 					uiparameters_.get(uiparam).setStringValue(configparam.get(uiparam));
 				} catch (Exception e){
-					
-					
-					System.out.println(uiparam+" has a non valid value");
-					System.out.println(e.getMessage());
+					wrg.add(uiparam);
 				}
 			} 
+		}
+		if(wrg.size()>0){
+			showWrongParameterMessage(wrg);
 		}
 	}
 
@@ -177,7 +174,6 @@ public class SystemController {
 		readParameters(config.getParametersConfiguration());
 
 		// update all properties and parameters
-		System.out.println("Update all ui and params");
 		mainframe_.updateAll();
 
 		// if unallocated properties show message
@@ -200,28 +196,28 @@ public class SystemController {
 
 
 	/**
-	 * Pops-up a message indicating the unallocated ui properties.
+	 * Pops-up a message indicating that a parameter has been wrongly set.
 	 */
-	private void showUnallocatedMessage() {
+	private void showWrongParameterMessage(ArrayList<String> wrongvals) {
 		String title = "Unallocated properties";
 		
-		String message = "The following properties from the UI have not been allocated: \n\n";
-		Iterator<String> it = unallocatedprop_.iterator();
+		String message = "The following parameters have been set to a wrong value: \n\n";
+		Iterator<String> it = wrongvals.iterator();
 		message = message+it.next();
 		while(it.hasNext()){
 			message = message+", "+it.next();
 		}
 		message = message+". \n\n";
 		
-		message = message+"The UI components related to these properties will not function until these properties are allocated. \n Create or load configuration to allocate them.";
+		message = message+"The value from these parameters will be ignored.";
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	/**
-	 * Pops-up a message indicating that a parameter has been wrongly set.
+	/**	 
+	 * Pops-up a message indicating the unallocated ui properties.
 	 */
-	private void showWrongParameterMessage() {
+	private void showUnallocatedMessage() {
 		String title = "Unallocated properties";
 		
 		String message = "The following properties from the UI have not been allocated: \n\n";

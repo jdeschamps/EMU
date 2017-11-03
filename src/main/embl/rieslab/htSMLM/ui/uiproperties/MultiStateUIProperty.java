@@ -109,7 +109,7 @@ public class MultiStateUIProperty extends UIProperty{
 	}
 	
 	public static String getGenericStateName(){
-		return STATE+"\\d+";
+		return ".*"+STATE+"\\d+";
 
 	}
 }

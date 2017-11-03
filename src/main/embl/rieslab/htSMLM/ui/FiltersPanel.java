@@ -26,7 +26,7 @@ public class FiltersPanel extends PropertyPanel {
 	private JToggleButton[] togglebuttons_;
 	
 	//////// Properties
-	public static String FW_POSITION = "Filter wheel positions";
+	public static String FW_POSITION = "Filter wheel position";
 	
 	//////// Parameters
 	public static String PARAM_NAMES = "Filters name";
@@ -96,14 +96,16 @@ public class FiltersPanel extends PropertyPanel {
 	
 	private void setNames(){
 		String[] astr = names_.split(",");
-		for(int i=0;i<togglebuttons_.length;i++){
+		int maxind = togglebuttons_.length > astr.length ? astr.length : togglebuttons_.length;
+		for(int i=0;i<maxind;i++){
 			togglebuttons_[i].setText(astr[i]);
 		}
 	}
 	
 	private void setColors(){
 		String[] astr = colors_.split(",");
-		for(int i=0;i<togglebuttons_.length;i++){
+		int maxind = togglebuttons_.length > astr.length ? astr.length : togglebuttons_.length;
+		for(int i=0;i<maxind;i++){
 			togglebuttons_[i].setForeground(ColorRepository.getColor(astr[i]));
 		}
 	}

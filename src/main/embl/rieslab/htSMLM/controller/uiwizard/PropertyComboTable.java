@@ -331,12 +331,25 @@ public class PropertyComboTable extends JPanel {
 	private void updateHelper(int row){
 		String s = (String) table.getValueAt(row, 0);
 	
-		if (s.contains(TwoStateUIProperty.getOnStateName())){
+		if(s.matches(MultiStateUIProperty.getGenericStateName())){
+			int nmb = 0;
+			for(int i=row;i>=1;i--){
+				String str = (String) table.getValueAt(i-1, 0);
+				if(!str.matches(MultiStateUIProperty.getGenericStateName())){
+					nmb = i;
+				}
+			}
+			s = (String) table.getValueAt(nmb, 0);
+			help_.update("Enter the value for this specific state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+		} else if (s.contains(TwoStateUIProperty.getOnStateName())){
 			s = (String) table.getValueAt(row-1, 0);
-			help_.update("Enter the value sent to the device when set to ON state.\n\n"+s+":\n\n"+uipropertySet_.get(s).getDescription());
-		}else if (s.contains(TwoStateUIProperty.getOffStateName())){
+			help_.update("Enter the value sent to the device when set to ON state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+		} else if (s.contains(TwoStateUIProperty.getOffStateName())){
 			s = (String) table.getValueAt(row-2, 0);
 			help_.update("Enter the value sent to the device when set to OFF state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+		} else if (s.contains(SingleStateUIProperty.getValueName())){
+			s = (String) table.getValueAt(row-1, 0);
+			help_.update("Enter the constant value sent to the device.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
 		} else if (s.contains(SingleStateUIProperty.getValueName())){
 			s = (String) table.getValueAt(row-1, 0);
 			help_.update("Enter the constant value sent to the device.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());

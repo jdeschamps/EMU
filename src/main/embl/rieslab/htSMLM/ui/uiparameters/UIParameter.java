@@ -48,6 +48,14 @@ public abstract class UIParameter<T> {
 		}
 	}
 		
+	public boolean isCommaSeparated(){
+		return false;
+	}
+	
+	public int getDepth(){
+		return 1;
+	}
+	
 	public abstract void setType();
 	public abstract boolean isSuitable(String val);
 	protected abstract T convertValue(String val);

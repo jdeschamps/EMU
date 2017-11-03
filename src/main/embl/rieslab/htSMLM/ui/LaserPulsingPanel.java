@@ -1,5 +1,6 @@
 package main.embl.rieslab.htSMLM.ui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,34 +10,54 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
 
-import main.de.embl.MicroInterface.dataflow.IntPropertyInterface;
-import main.de.embl.MicroInterface.dataflow.UIPanel;
-import main.de.embl.MicroInterface.dataflow.Parameter;
-import main.de.embl.MicroInterface.utils.Colors;
-import main.de.embl.MicroInterface.utils.utils;
 import main.embl.rieslab.htSMLM.ui.misc.LogarithmicJSlider;
-import mmcorej.PropertyType;
+import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.util.utils;
 
-public class LaserPulsingPanel extends UIPanel {
+public class LaserPulsingPanel extends PropertyPanel {
 
+	
+	
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1379090644780233443L;
+
+	//////// Components
+	private JTextField textfieldmax_;
+	private JTextField textfieldvalue_;
+	private LogarithmicJSlider logslider_;
+	private TitledBorder border_;
+
+	//////// Properties
+	public static String CAMERA_EXPOSURE = "Camera exposure";
+	public static String LASER_PULSE = "Laser pulse length";	
 	
+	//////// Parameters
+	public static String PARAM_TITLE = "Title";
+	public static String PARAM_COLOR = "Color";	
+	private String title_;	
+	private Color color_;
 	
+	public LaserPulsingPanel(String label) {
+		super(label);
+	}
+
 	@Override
-	public void initComponents() {
+	public void setupPanel() {
 
 		this.setLayout(new GridBagLayout());
-		this.setBorder(BorderFactory.createTitledBorder(null, (getParameter("Label").getValues())[0], javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-				null, Colors.getColor(getParameter("Color").getValues()[0])));
+		
+		border_ = BorderFactory.createTitledBorder(null, title_, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, color_);
+		this.setBorder(border_);
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -62,10 +83,10 @@ public class LaserPulsingPanel extends UIPanel {
         	    int val = Integer.parseInt(typed);
         	    if(val<=logslider_.getMaxWithin()){
         	    	logslider_.setValueWithin(val);
-        	    	setProperty("Laser pulse",textfieldvalue_.getText());
+        	    	changeProperty(LASER_PULSE,typed);
         	    } else {
         	    	logslider_.setValueWithin(logslider_.getMaxWithin());
-        	    	setProperty("Laser pulse",String.valueOf(logslider_.getMaxWithin()));
+        	    	changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
         	    }
         	}
          });
@@ -79,10 +100,10 @@ public class LaserPulsingPanel extends UIPanel {
         	    int val = Integer.parseInt(typed);
         	    if(val<=logslider_.getMaxWithin()){
         	    	logslider_.setValueWithin(val);
-        	    	setProperty("Laser pulse",textfieldvalue_.getText());
+        	    	changeProperty(LASER_PULSE,typed);
         	    } else {
         	    	logslider_.setValueWithin(logslider_.getMaxWithin());
-        	    	setProperty("Laser pulse",String.valueOf(logslider_.getMaxWithin()));
+        	    	changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
         	    }
         	}
         });
@@ -97,18 +118,25 @@ public class LaserPulsingPanel extends UIPanel {
 		textfieldmax_.addActionListener(new java.awt.event.ActionListener() {
 	         public void actionPerformed(java.awt.event.ActionEvent evt) {	
 	        	 String s = textfieldmax_.getText();
-		    	 if(utils.isInteger(s)){
-		    		 int max = Integer.parseInt(s);
-		    		 if(max>1000*((IntPropertyInterface)getProperty("Camera exposure")).getCastValue()){
-		    			 max = 1000*((IntPropertyInterface)getProperty("Camera exposure")).getCastValue();
-		    		 }
-		    		 logslider_.setMaxWithin(max);
-		    		 if(logslider_.getValue()>logslider_.getMaxWithin()){
-		    			 logslider_.setValueWithin(logslider_.getMaxWithin());
-		    			 textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
-		    			 setProperty("Laser pulse",String.valueOf(logslider_.getValue()));
-		    		 }
-		    	 } 
+					if (utils.isInteger(s)) {
+						int max = Integer.parseInt(s);
+						String str = getUIProperty(CAMERA_EXPOSURE).getPropertyValue();
+						
+						if (utils.isNumeric(str)) {
+							double exp = Double.parseDouble(str);
+
+							if (max > 1000 * exp) {
+								max = (int) Math.round(1000 * exp);
+							}
+						}
+
+						logslider_.setMaxWithin(max);
+						if (logslider_.getValue() > logslider_.getMaxWithin()) {
+							logslider_.setValueWithin(logslider_.getMaxWithin());
+							textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
+							changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
+						}
+					}
 	         }
 	    });
 		textfieldmax_.addFocusListener(new FocusListener() {
@@ -116,23 +144,31 @@ public class LaserPulsingPanel extends UIPanel {
           public void focusGained(FocusEvent ex) {
           }
 
-          @Override
-          public void focusLost(FocusEvent ex) {
-	        	 String s = textfieldmax_.getText();
-		    	 if(utils.isInteger(s)){
-		    		 int max = Integer.parseInt(s);
-		    		 if(max>1000*((IntPropertyInterface)getProperty("Camera exposure")).getCastValue()){
-		    			 max = 1000*((IntPropertyInterface)getProperty("Camera exposure")).getCastValue();
-		    		 }
-		    		 logslider_.setMaxWithin(max);
-		    		 if(logslider_.getValue()>logslider_.getMaxWithin()){
-		    			 logslider_.setValueWithin(logslider_.getMaxWithin());
-		    			 textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
-		    			 setProperty("Laser pulse",String.valueOf(logslider_.getValue()));
-		    		 }
-		    	 } 
-	         }
-	    });
+			@Override
+			public void focusLost(FocusEvent ex) {
+				String s = textfieldmax_.getText();
+				if (utils.isInteger(s)) {
+					int max = Integer.parseInt(s);
+					String str = getUIProperty(CAMERA_EXPOSURE).getPropertyValue();
+					
+					if (utils.isNumeric(str)) {
+						double exp = Double.parseDouble(str);
+
+						if (max > 1000 * exp) {
+							max = (int) Math.round(1000 * exp);
+						}
+					}
+
+					logslider_.setMaxWithin(max);
+					if (logslider_.getValue() > logslider_.getMaxWithin()) {
+						logslider_.setValueWithin(logslider_.getMaxWithin());
+						textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
+						changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
+					}
+				}
+			}
+
+		});
 		
 		///////////////////////////////////////////////////////////////////////// Log JSlider
 		logslider_ = new LogarithmicJSlider(JSlider.VERTICAL,1, 10000, 10);
@@ -148,7 +184,7 @@ public class LaserPulsingPanel extends UIPanel {
 				  logslider_.setValueWithin(val);
 				  try{
 					  textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
-					  setProperty("Laser pulse",String.valueOf(logslider_.getValue()));
+					  changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
 				  } catch(Exception ex){
 					  ex.printStackTrace();
 				  }  
@@ -158,52 +194,64 @@ public class LaserPulsingPanel extends UIPanel {
 		c.gridheight = 8;
 		this.add(logslider_, c);
 	}
-
 	
-	//////// Components
-	private JTextField textfieldmax_;
-	private JTextField textfieldvalue_;
-	private LogarithmicJSlider logslider_;
 
 	@Override
-	public HashMap<String,Parameter> buildDefaultParameters() {
-		HashMap<String,Parameter> defparam = new HashMap<String,Parameter>();
+	protected void initializeProperties() {
+		addUIProperty(new UIProperty(this, CAMERA_EXPOSURE,"Camera exposure in ms."));
+		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length of the activation laser."));
+	}
+
+	@Override
+	protected void initializeParameters() {
+		title_ = "UV";	
+		color_ = Color.black;
 		
-		String[] defaultlabelval = {"Laser pulsing"};
-		defparam.put("Label",new Parameter("Label",defaultlabelval,PropertyType.String,true));
-		String[] defaultcolorval = {"black"};
-		defparam.put("Color",new Parameter("Color",defaultcolorval,PropertyType.String,true));
-		
-		return defparam;
+		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
+		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Default value for large z stage step.",color_));
 	}
 
-	@Override
-	public void propertyChanged(String ID) {
-		if(ID.equals("Laser pulse")){
-			int val = ((IntPropertyInterface) getProperty(ID)).getCastValue();
-			int max = logslider_.getMaxWithin();
-			if(val>max){
-				logslider_.setMaximum(val);
-			}
-			logslider_.setValue(val);
-			textfieldvalue_.setText(((IntPropertyInterface) getProperty(ID)).getValue());
-		} else if (ID.equals("Camera exposure")){
-			int val = ((IntPropertyInterface) getProperty(ID)).getCastValue();
-			logslider_.setMaximum(1000*val);
-		}	
-	}
 
 	@Override
-	protected void createProperties() {
-		addProperty(new IntPropertyInterface("Laser pulse","Laser pulse length",this));
-		addProperty(new IntPropertyInterface("Camera exposure","Camera exposure",this));		
-	}
-
-	@Override
-	public boolean checkParameters(HashMap<String, Parameter> param) {
-		if(param.size() == 2){	
-			return Parameter.testProperty(param, getParameter("Label"), "Label", 1) && Parameter.testProperty(param, getParameter("Color"), "Color", 1);
+	protected void changeProperty(String name, String value) {
+		if(name.equals(LASER_PULSE)){
+			getUIProperty(name).setPropertyValue(value);
 		}
-		return false;
+	}
+
+	@Override
+	public void propertyhasChanged(String name, String newvalue) {
+		if(name.equals(LASER_PULSE)){
+			if(utils.isInteger(newvalue)){
+				int val = Integer.parseInt(newvalue);
+				
+				if(val>logslider_.getMaxWithin()){
+					logslider_.setValueWithin(logslider_.getMaxWithin());
+					textfieldvalue_.setText(String.valueOf(logslider_.getMaxWithin()));
+					changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
+				} else {
+					logslider_.setValueWithin(val);
+					textfieldvalue_.setText(newvalue);
+				}
+			}
+		}
+	}
+
+	@Override
+	public void parameterhasChanged(String label) {
+		if(label.equals(PARAM_TITLE)){
+			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
+			border_.setTitle(title_);
+			this.repaint();
+		} else if(label.equals(PARAM_COLOR)){
+			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
+			border_.setTitleColor(color_);
+			this.repaint();
+		}
+	}
+
+	@Override
+	public void shutDown() {
+		// do nothing
 	}
 }
