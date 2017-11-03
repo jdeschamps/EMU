@@ -1,6 +1,7 @@
 package main.embl.rieslab.htSMLM.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,6 +11,7 @@ import java.awt.event.ItemListener;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
+import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
@@ -47,7 +49,8 @@ public class FiltersPanel extends PropertyPanel {
 	public void setupPanel() {
 		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createTitledBorder(null, getLabel(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
-	
+		((TitledBorder) this.getBorder()).setTitleFont(((TitledBorder) this.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.BOTH;

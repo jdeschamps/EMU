@@ -21,6 +21,7 @@ public class MainFrame extends PropertyMainFrame{
 	public QPDPanel qpdPanel;
 	public FiltersPanel filterPanel;
 	public LaserPulsingPanel pulsePanel;
+	public LaserTriggerPanel triggerPanel;
     
     protected void initComponents() {
     	
@@ -43,18 +44,20 @@ public class MainFrame extends PropertyMainFrame{
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
-        focusPanel = new FocusPanel("Focus panel");
-        qpdPanel = new QPDPanel("QPD");
-        filterPanel = new FiltersPanel("Filter wheel");
-        pulsePanel = new LaserPulsingPanel("UV pulse");
+        //focusPanel = new FocusPanel("Focus panel");
+        //qpdPanel = new QPDPanel("QPD");
+        //filterPanel = new FiltersPanel("Filter wheel");
+        //pulsePanel = new LaserPulsingPanel("UV pulse");
+        triggerPanel = new LaserTriggerPanel("Trigger");
 
         JPanel mainpane = new JPanel();
         mainpane.setLayout(new BoxLayout(mainpane, BoxLayout.PAGE_AXIS));
         
-        mainpane.add(focusPanel);
-        mainpane.add(qpdPanel);
-        mainpane.add(filterPanel);
-        mainpane.add(pulsePanel);
+        //mainpane.add(focusPanel);
+        //mainpane.add(qpdPanel);
+        //mainpane.add(filterPanel);
+        //mainpane.add(pulsePanel);
+        mainpane.add(triggerPanel);
         this.add(mainpane);
  
         this.pack(); // avoid packing when one can
@@ -64,9 +67,10 @@ public class MainFrame extends PropertyMainFrame{
 
 	@Override
 	protected void registerPropertyPanels() {
-        registerPropertyPanel(focusPanel);
-        registerPropertyPanel(qpdPanel);
-        registerPropertyPanel(filterPanel);
-        registerPropertyPanel(pulsePanel);
+        //registerPropertyPanel(focusPanel);
+        //registerPropertyPanel(qpdPanel);
+        //registerPropertyPanel(filterPanel);
+        //registerPropertyPanel(pulsePanel);
+        registerPropertyPanel(triggerPanel);
 	}
 }

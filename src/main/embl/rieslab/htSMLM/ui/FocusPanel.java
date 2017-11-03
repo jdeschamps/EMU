@@ -1,6 +1,7 @@
 package main.embl.rieslab.htSMLM.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -17,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.threads.TimeChartUpdater;
 import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
@@ -71,7 +73,7 @@ public class FocusPanel extends PropertyPanel {
 	//////// Default parameters
 	private double smallstep_, largestep_;
 	private int idle_, npos_; 
-	private boolean initialised = false;
+	private boolean initialised = false; // used only for initial textfield value
 	
 	public FocusPanel(String label) {
 		super(label);
@@ -82,7 +84,8 @@ public class FocusPanel extends PropertyPanel {
 		updater_ = new TimeChartUpdater(graph_,getUIProperty(FOCUS_POSITION),idle_);
 		
 		this.setLayout(new GridBagLayout());
-		this.setBorder(BorderFactory.createTitledBorder(null, getLabel(), javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+		this.setBorder(BorderFactory.createTitledBorder(null, getLabel(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+		((TitledBorder) this.getBorder()).setTitleFont(((TitledBorder) this.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 		
 		panelLeftControl_ = new JPanel();
 		panelGraph_ = new JPanel();

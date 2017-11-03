@@ -1,6 +1,7 @@
 package main.embl.rieslab.htSMLM.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -10,7 +11,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
@@ -24,7 +24,6 @@ import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.utils;
-import mmcorej.PropertyType;
 
 public class LaserControlPanel extends PropertyPanel {
 
@@ -57,8 +56,10 @@ public class LaserControlPanel extends PropertyPanel {
 	public void setupPanel() {
 		
 		this.setLayout(new GridBagLayout());
-		this.setBorder(BorderFactory.createTitledBorder(null, (getParameter("Label").getValues())[0], javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-				null, Colors.getColor(getParameter("Color").getValues()[0])));
+		
+		border_ = BorderFactory.createTitledBorder(null, title_, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, color_);
+		this.setBorder(border_);
+		border_.setTitleFont(border_.getTitleFont().deriveFont(Font.BOLD, 12));
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -86,7 +87,7 @@ public class LaserControlPanel extends PropertyPanel {
 					if (val <= 100 && val >= 0) {
 						togglebuttonUser_.setText(typed + "%");
 						if (togglebuttonUser_.isSelected()) {
-							setProperty("Laser Power %", typed);
+							changeProperty(LASER_PERCENTAGE,typed);
 						}
 					}
 				} catch (Exception e) {
@@ -106,7 +107,7 @@ public class LaserControlPanel extends PropertyPanel {
 					if (val <= 100 && val >= 0) {
 						togglebuttonUser_.setText(typed + "%");
 						if (togglebuttonUser_.isSelected()) {
-							setProperty("Laser Power %", typed);
+							changeProperty(LASER_PERCENTAGE,typed);
 						}
 					}
 				} catch (Exception exc) {
@@ -121,7 +122,7 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Laser Power %","100");
+					changeProperty(LASER_PERCENTAGE,"100");
 				}
 			}
         });
@@ -133,7 +134,7 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Laser Power %",getUserInput());
+					changeProperty(LASER_PERCENTAGE,getUserInput());
 				}
 			}
         });
@@ -145,7 +146,7 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Laser Power %","50");
+					changeProperty(LASER_PERCENTAGE,"50");
 				}
 			}
         });
@@ -157,7 +158,7 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Laser Power %","1");
+					changeProperty(LASER_PERCENTAGE,"1");
 				}
 			}
         });
@@ -177,9 +178,9 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Laser On/Off",getParameter("On value").getValues()[0]);
+					changeProperty(LASER_OPERATION,TwoStateUIProperty.ON);
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					setProperty("Laser On/Off",getParameter("Off value").getValues()[0]);
+					changeProperty(LASER_OPERATION,TwoStateUIProperty.OFF);
 				}
 			}
         });
@@ -202,50 +203,6 @@ public class LaserControlPanel extends PropertyPanel {
 			return s;
 		}
 		return null;
-	}
-
-	@Override
-	public HashMap<String, Parameter> buildDefaultParameters() {
-		HashMap<String, Parameter> defparam = new HashMap<String, Parameter>();
-		
-		String[] defaultlabelval = {"405"};
-		defparam.put("Label",new Parameter("Label",defaultlabelval,PropertyType.String,true));
-		String[] defaultcolorval = {"blue"};
-		defparam.put("Color",new Parameter("Color of the label",defaultcolorval,PropertyType.String,true));
-		String[] defaultonval = {"1"};
-		defparam.put("On value",new Parameter("Value of the On property",defaultonval,PropertyType.String,true));
-		String[] defaultoffval = {"0"};
-		defparam.put("Off value",new Parameter("Value of the On property",defaultoffval,PropertyType.String,true));
-		
-		return defparam;
-	}
-
-
-	@Override
-	public void propertyChanged(String ID) {
-		if(ID.equals("Laser Power %")){
-			int val = ((IntPropertyInterface) getProperty(ID)).getCastValue();
-			if(val == 100){
-				togglebutton100_.setSelected(true);
-			} else if(val == 20){
-				togglebutton50_.setSelected(true);
-			} else if(val == 0){
-				togglebutton1_.setSelected(true);
-			} else {
-				if(val>0 && val<100){
-					togglebuttonUser_.setSelected(true);
-					togglebuttonUser_.setText(String.valueOf(val)+"%");
-					textfieldUser_.setText(String.valueOf(val));
-				} 
-			}
-		} else if(ID.equals("Laser On/Off")){
-			String val = getProperty(ID).getValue();
-			if(val.equals(getParameter("Off value").getValues()[0])){
-				togglebuttonOnOff_.setSelected(false);
-			} else if (val.equals(getParameter("On value").getValues()[0])){
-				togglebuttonOnOff_.setSelected(true);
-			} 
-		}
 	}
 
 	@Override
@@ -313,7 +270,6 @@ public class LaserControlPanel extends PropertyPanel {
 
 	@Override
 	public void shutDown() {
-		// TODO Auto-generated method stub
-		
+		// nothing to do
 	}
 }

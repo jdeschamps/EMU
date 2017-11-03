@@ -1,6 +1,7 @@
 package main.embl.rieslab.htSMLM.ui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -20,12 +21,9 @@ import main.embl.rieslab.htSMLM.ui.misc.LogarithmicJSlider;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
-import main.embl.rieslab.htSMLM.util.ColorRepository;
 import main.embl.rieslab.htSMLM.util.utils;
 
 public class LaserPulsingPanel extends PropertyPanel {
-
-	
 	
 	/**
 	 * 
@@ -59,6 +57,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 		
 		border_ = BorderFactory.createTitledBorder(null, title_, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, color_);
 		this.setBorder(border_);
+		border_.setTitleFont(border_.getTitleFont().deriveFont(Font.BOLD, 12));
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;

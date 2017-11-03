@@ -1,5 +1,8 @@
 package main.embl.rieslab.htSMLM.ui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -9,97 +12,288 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
-import javax.swing.JToggleButton;
+import javax.swing.border.TitledBorder;
 
-import main.de.embl.MicroInterface.dataflow.BooleanParameter;
-import main.de.embl.MicroInterface.dataflow.IntPropertyInterface;
-import main.de.embl.MicroInterface.dataflow.UIPanel;
-import main.de.embl.MicroInterface.dataflow.Parameter;
-import main.de.embl.MicroInterface.utils.Colors;
-import main.de.embl.MicroInterface.utils.utils;
-import mmcorej.PropertyType;
+import main.embl.rieslab.htSMLM.controller.SystemConstants;
+import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.util.BinaryConverter;
+import main.embl.rieslab.htSMLM.util.ColorRepository;
+import main.embl.rieslab.htSMLM.util.utils;
 
-public class LaserTriggerPanel extends UIPanel {
+
+public class LaserTriggerPanel extends PropertyPanel {
 
 	private static final long serialVersionUID = -6553153910855055671L;
-	
-	@Override
-	public void initComponents() {
-		
-		this.setLayout(new GridBagLayout());
-		this.setBorder(BorderFactory.createTitledBorder(null, (getParameter("Label").getValues())[0], javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, 
-				null, Colors.getColor(getParameter("Color").getValues()[0])));
-		
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.weighty = 0.9;
-		c.weightx = 0.7;
-		c.insets = new Insets(2,15,2,15);
-		
-		///////////////////////////////////////////////////////////////////////// User input text field
-		//TODO
-	}
-	
-	private String getUserInput(){
-		return null;
-	}
 	
 	//////// Components
 	private JLabel labelbehaviour_;
 	private JLabel labelpulselength_;
-	private JLabel labelmaxpower_;	
+	private JLabel labelsequence_;
 	private JComboBox combobehaviour_;	
+	private JCheckBox usesequence_;
 	private JTextField textfieldpulselength_;
-	private JTextField textfieldmaxpower_;
 	private JTextField textfieldsequence_;
 	private JSlider sliderpulse_;
+	private TitledBorder border_;
 
-
-	@Override
-	public HashMap<String, Parameter> buildDefaultParameters() {
-		HashMap<String, Parameter> defparam = new HashMap<String, Parameter>();
-		
-		String[] defaultlabelval = {"Laser"};
-		defparam.put("Label",new Parameter("Label",defaultlabelval,PropertyType.String,true));
-		String[] defaultcolorval = {"40","58","150"};
-		defparam.put("Color",new Parameter("Color",defaultcolorval,PropertyType.String,true));
-		String[] defaultenablemaxpower = {"0"};
-		defparam.put("Enable max power", new BooleanParameter("Enable max power field",defaultenablemaxpower,true));
-		String[] defaultmaxpowerval = {"300"};
-		defparam.put("Max power", new BooleanParameter("Max power value",defaultmaxpowerval,true));
-		
-		return defparam;
-	}
-
-
-
-	@Override
-	public void propertyChanged(String ID) {
-		
+	//////// Properties
+	private static String TRIGGER_BEHAVIOUR = "Trigger behaviour";
+	private static String TRIGGER_SEQUENCE = "Trigger sequence";
+	private static String PULSE_LENGTH = "Pulse length";
+	
+	//////// Parameters
+	private static String PARAM_TITLE = "Title";
+	private static String PARAM_COLOR = "Color";
+	private static String PARAM_DEF_BEHAVIOUR = "Default trigger behaviour";
+	private String title_, behaviour_;
+	private boolean useseq_ = false;
+	private Color color_;
+	
+	public LaserTriggerPanel(String label) {
+		super(label);
 	}
 
 	@Override
-	protected void createProperties() {
-		addProperty(new IntPropertyInterface("Laser Power","Laser Power",this));
-		addProperty(new IntPropertyInterface("Laser On/Off","Laser On/Off",this));
-		addProperty(new IntPropertyInterface("Maximum power","Maximum power",this));
+	public void setupPanel() {
+		this.setLayout(new GridBagLayout());
+		
+		border_ = BorderFactory.createTitledBorder(null, title_, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION,  null, color_);
+		this.setBorder(border_);
+		border_.setTitleFont(border_.getTitleFont().deriveFont(Font.BOLD, 12));
+	
+		
+		///////////////////////////////////////////////////////////////////////// Instantiate components
+		
+		/////////////////////////////////////////////////////// labels
+		labelbehaviour_ = new JLabel("Trigger behaviour:");
+		labelpulselength_ = new JLabel("Pulse length (us):");
+		labelsequence_ = new JLabel("Trigger sequence:");
+
+		/////////////////////////////////////////////////////// behaviour combobox
+		combobehaviour_ = new JComboBox(SystemConstants.FPGA_BEHAVIOURS);
+		combobehaviour_.addActionListener(new ActionListener(){
+	    	public void actionPerformed(ActionEvent e){
+	    		String val=(String) combobehaviour_.getSelectedItem();
+	    		changeProperty(TRIGGER_BEHAVIOUR,val);
+	    	}
+        });
+
+		/////////////////////////////////////////////////////// use seuqnece checkbox
+		usesequence_ = new JCheckBox();
+		usesequence_.addItemListener(new ItemListener(){
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					useseq_ = true;
+				} else if(e.getStateChange()==ItemEvent.DESELECTED){
+					useseq_ = false;
+				}
+			}
+        });
+
+		/////////////////////////////////////////////////////// pulse length
+		textfieldpulselength_ = new JTextField();
+		textfieldpulselength_.setPreferredSize(new Dimension(60,20));
+		textfieldpulselength_.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {	
+				String s = textfieldpulselength_.getText();
+				if (utils.isInteger(s)) {
+					if(Integer.parseInt(s)<=SystemConstants.FPGA_MAX_PULSE){
+						sliderpulse_.setValue(Integer.parseInt(s));
+						changeProperty(PULSE_LENGTH,s);
+					} else {
+						sliderpulse_.setValue(SystemConstants.FPGA_MAX_PULSE);
+						textfieldpulselength_.setText(String.valueOf(SystemConstants.FPGA_MAX_PULSE));
+						changeProperty(PULSE_LENGTH,String.valueOf(SystemConstants.FPGA_MAX_PULSE));
+					}
+				}
+	         }
+	    });
+		textfieldpulselength_.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent ex) {}
+
+			@Override
+			public void focusLost(FocusEvent ex) {
+				String s = textfieldpulselength_.getText();
+				if (utils.isInteger(s)) {
+					if (Integer.parseInt(s) <= SystemConstants.FPGA_MAX_PULSE) {
+						sliderpulse_.setValue(Integer.parseInt(s));
+						changeProperty(PULSE_LENGTH, s);
+					} else {
+						sliderpulse_.setValue(SystemConstants.FPGA_MAX_PULSE);
+						textfieldpulselength_.setText(String.valueOf(SystemConstants.FPGA_MAX_PULSE));
+						changeProperty(PULSE_LENGTH,String.valueOf(SystemConstants.FPGA_MAX_PULSE));
+					}
+				}
+			}
+		});
+		
+		sliderpulse_ = new JSlider(JSlider.HORIZONTAL, 0, SystemConstants.FPGA_MAX_PULSE, 0);
+		sliderpulse_.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent e) {				
+				  textfieldpulselength_.setText(String.valueOf(sliderpulse_.getValue()));
+			      changeProperty(PULSE_LENGTH,String.valueOf(sliderpulse_.getValue()));
+			}});
+		
+
+		/////////////////////////////////////////////////////// sequence
+		textfieldsequence_ = new JTextField();
+		textfieldsequence_.setPreferredSize(new Dimension(105,20));
+		textfieldsequence_.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {	
+				String s = textfieldsequence_.getText();
+				if (BinaryConverter.is16bits(s)) {
+					textfieldsequence_.setForeground(ColorRepository.getColor("black"));
+					if(useseq_){
+						String str = String.valueOf(BinaryConverter.getDecimal16bits(s));
+						changeProperty(TRIGGER_SEQUENCE,str);
+					}
+				} else if(BinaryConverter.isBits(s)) {
+					textfieldsequence_.setForeground(ColorRepository.getColor("blue"));
+				} else {
+					textfieldsequence_.setForeground(ColorRepository.getColor("red"));
+				}
+	         }
+	    });
+		textfieldsequence_.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent ex) {}
+
+			@Override
+			public void focusLost(FocusEvent ex) {
+				String s = textfieldpulselength_.getText();
+				if (utils.isInteger(s)) {
+					if (Integer.parseInt(s) <= SystemConstants.FPGA_MAX_PULSE) {
+						sliderpulse_.setValue(Integer.parseInt(s));
+						changeProperty(PULSE_LENGTH, s);
+					} else {
+						sliderpulse_.setValue(SystemConstants.FPGA_MAX_PULSE);
+						textfieldpulselength_.setText(String.valueOf(SystemConstants.FPGA_MAX_PULSE));
+						changeProperty(PULSE_LENGTH,String.valueOf(SystemConstants.FPGA_MAX_PULSE));
+					}
+				}
+			}
+		});
+		
+
+		/////////////////////////////////////////////////////// place components
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weighty = 1;
+		c.weightx = 1;
+		c.gridheight = 1;
+		c.gridwidth = 1;
+		c.insets = new Insets(2,5,2,5);
+		
+		// 0,0
+		c.gridwidth = 3;
+		this.add(labelbehaviour_,c);
+
+		c.gridy = 1;
+		this.add(labelpulselength_,c);
+		
+		c.gridy = 2;
+		c.gridwidth = 9;
+		this.add(sliderpulse_,c);
+		
+		c.gridy = 3;
+		c.gridwidth = 3;
+		this.add(labelsequence_,c);
+
+		c.gridx = 5;
+		c.gridy = 0;
+		this.add(combobehaviour_,c);
+
+		c.gridy = 1;
+		this.add(textfieldpulselength_,c);
+
+		c.gridx = 4;
+		c.gridy = 3;
+		c.gridwidth = 4;
+		this.add(textfieldsequence_,c);
+
+		c.gridx = 3;
+		c.gridy = 3;
+		c.weightx = 1;
+		c.gridwidth = 1;
+		this.add(usesequence_,c);
+			
 	}
 
 	@Override
-	public boolean checkParameters(HashMap<String, Parameter> param) {
-		if(param.size() == 4){
-			//TODO
+	protected void initializeProperties() {	
+		addUIProperty(new UIProperty(this, TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing."));
+		addUIProperty(new UIProperty(this, TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered)."));
+		addUIProperty(new UIProperty(this, PULSE_LENGTH,"Pulse length of the laser."));
+	}
+
+	@Override
+	protected void initializeParameters() {
+		title_="Laser";
+		behaviour_=SystemConstants.FPGA_BEHAVIOURS[4];
+		color_=Color.black;		
+		
+		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Name of the laser.",title_));
+		addUIParameter(new StringUIParameter(this, PARAM_DEF_BEHAVIOUR,"Default trigger behaviour of the laser.",behaviour_));
+		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Color of the laser.",color_)); 
+	}
+
+	@Override
+	protected void changeProperty(String name, String value) {
+		if(name.equals(TRIGGER_BEHAVIOUR) || name.equals(PULSE_LENGTH)){
+			getUIProperty(name).setPropertyValue(value);
+		} else if(name.equals(TRIGGER_SEQUENCE)){
+			if(useseq_){
+				getUIProperty(name).setPropertyValue(value);
+			}
 		}
-		return false;
+	}
+
+	@Override
+	public void propertyhasChanged(String name, String newvalue) {
+		if(name.equals(TRIGGER_BEHAVIOUR)){
+			combobehaviour_.setSelectedItem(newvalue);
+		} else if(name.equals(TRIGGER_SEQUENCE)){
+			textfieldsequence_.setText(BinaryConverter.getBinary16bits(Integer.parseInt(newvalue)));
+		} else if(name.equals(PULSE_LENGTH)){
+			textfieldpulselength_.setText(newvalue);
+			if(utils.isInteger(newvalue)){
+				sliderpulse_.setValue(Integer.parseInt(newvalue));
+			}
+		}
+	}
+
+	@Override
+	public void parameterhasChanged(String label) {
+		if(label.equals(PARAM_TITLE)){
+			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
+			border_.setTitle(title_);
+			this.repaint();
+		} else if(label.equals(PARAM_COLOR)){
+			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
+			border_.setTitleColor(color_);
+			this.repaint();
+		} else if(label.equals(PARAM_DEF_BEHAVIOUR)){
+			behaviour_ = ((StringUIParameter) getUIParameter(PARAM_DEF_BEHAVIOUR)).getValue();
+			combobehaviour_.setSelectedItem(behaviour_);
+		}
+	}
+
+	@Override
+	public void shutDown() {
+		// do nothing
 	}
 }

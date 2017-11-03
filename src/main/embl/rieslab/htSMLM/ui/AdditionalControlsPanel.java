@@ -21,7 +21,7 @@ import main.de.embl.MicroInterface.dataflow.Parameter;
 import main.de.embl.MicroInterface.utils.Colors;
 import mmcorej.PropertyType;
 
-public class AdditionalControlsPanel extends UIPanel {
+public class AdditionalControlsPanel extends PropertyPanel{
 
 	/**
 	 * 
