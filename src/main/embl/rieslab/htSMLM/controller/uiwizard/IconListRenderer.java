@@ -17,9 +17,9 @@ public class IconListRenderer extends DefaultListCellRenderer {
 	 * 
 	 */
 	private static final long serialVersionUID = -4250151427157236056L;
-	private Map<Object, ColorIcon> icons = null;
+	private Map<String, ColorIcon> icons = null;
 
-	public IconListRenderer(Map<Object, ColorIcon> icons) {
+	public IconListRenderer(Map<String, ColorIcon> icons) {
 		this.icons = icons;
 	}
 
@@ -28,17 +28,14 @@ public class IconListRenderer extends DefaultListCellRenderer {
 			int index, boolean isSelected, boolean cellHasFocus) {
 
 		// Get the renderer component from parent class
-
-		JLabel label = (JLabel) super.getListCellRendererComponent(list,
-				"", index, isSelected, cellHasFocus);
+		JLabel label = (JLabel) super.getListCellRendererComponent(list,value, index, isSelected, cellHasFocus);
 
 		// Get icon to use for the list item value
-
 		ColorIcon icon = icons.get(value);
 
 		// Set icon to display for value
-
 		label.setIcon(icon);
+		
 		return label;
 	}
 }

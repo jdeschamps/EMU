@@ -20,6 +20,7 @@ import main.embl.rieslab.htSMLM.ui.misc.LogarithmicJSlider;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.util.ColorRepository;
 import main.embl.rieslab.htSMLM.util.utils;
 
 public class LaserPulsingPanel extends PropertyPanel {

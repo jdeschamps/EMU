@@ -43,7 +43,7 @@ public class ParameterComboTable extends JPanel{
 		uiparameterSet_ = uiparameterSet; 
 		
 		// Color combobox
-		Map<Object, ColorIcon> icons = new HashMap<Object, ColorIcon>();
+		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
 		color = new JComboBox();
 		String[] colors = ColorRepository.getColors();
 		for(int k=0; k<colors.length;k++){
@@ -142,7 +142,7 @@ public class ParameterComboTable extends JPanel{
 		uiparameterSet_ = uiparameterSet; 
 		
 		// Color combobox
-		Map<Object, ColorIcon> icons = new HashMap<Object, ColorIcon>();
+		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
 		color = new JComboBox();
 		String[] colors = ColorRepository.getColors();
 		for(int k=0; k<colors.length;k++){

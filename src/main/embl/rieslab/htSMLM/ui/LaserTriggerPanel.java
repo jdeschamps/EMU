@@ -29,7 +29,7 @@ import main.de.embl.MicroInterface.utils.Colors;
 import main.de.embl.MicroInterface.utils.utils;
 import mmcorej.PropertyType;
 
-public class LaserParameterPanel extends UIPanel {
+public class LaserTriggerPanel extends UIPanel {
 
 	private static final long serialVersionUID = -6553153910855055671L;
 	

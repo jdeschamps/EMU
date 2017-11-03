@@ -25,7 +25,7 @@ public class ColorUIParameter extends UIParameter<Color>{
 
 	@Override
 	protected Color convertValue(String val) {
-		return Color.getColor(val);
+		return ColorRepository.getColor(val);
 	}
 
 	@Override

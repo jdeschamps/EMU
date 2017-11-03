@@ -1,5 +1,6 @@
 package main.embl.rieslab.htSMLM.ui;
 
+import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -16,21 +17,44 @@ import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.border.TitledBorder;
 
-import main.de.embl.MicroInterface.dataflow.IntPropertyInterface;
-import main.de.embl.MicroInterface.dataflow.UIPanel;
-import main.de.embl.MicroInterface.dataflow.StringPropertyInterface;
-import main.de.embl.MicroInterface.dataflow.Parameter;
-import main.de.embl.MicroInterface.utils.Colors;
-import main.de.embl.MicroInterface.utils.utils;
+import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.util.utils;
 import mmcorej.PropertyType;
 
-public class LaserControlPanel extends UIPanel {
+public class LaserControlPanel extends PropertyPanel {
 
 	private static final long serialVersionUID = -6553153910855055671L;
 	
+	//////// Components
+	private JTextField textfieldUser_;
+	private JToggleButton togglebutton100_;
+	private JToggleButton togglebuttonUser_;
+	private JToggleButton togglebutton50_;
+	private JToggleButton togglebutton1_;
+	private JToggleButton togglebuttonOnOff_;	
+	private TitledBorder border_;
+
+	//////// Properties
+	public static String LASER_PERCENTAGE = "Laser power percentage";
+	public static String LASER_OPERATION = "Laser on/off property";	
+	
+	//////// Parameters
+	public static String PARAM_TITLE = "Title";
+	public static String PARAM_COLOR = "Color";	
+	private String title_;	
+	private Color color_;
+	
+	public LaserControlPanel(String label) {
+		super(label);
+	}
+	
 	@Override
-	public void initComponents() {
+	public void setupPanel() {
 		
 		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createTitledBorder(null, (getParameter("Label").getValues())[0], javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, 
@@ -179,15 +203,6 @@ public class LaserControlPanel extends UIPanel {
 		}
 		return null;
 	}
-	
-	//////// Components
-	private JTextField textfieldUser_;
-	private JToggleButton togglebutton100_;
-	private JToggleButton togglebuttonUser_;
-	private JToggleButton togglebutton50_;
-	private JToggleButton togglebutton1_;
-	private JToggleButton togglebuttonOnOff_;
-
 
 	@Override
 	public HashMap<String, Parameter> buildDefaultParameters() {
@@ -234,17 +249,71 @@ public class LaserControlPanel extends UIPanel {
 	}
 
 	@Override
-	protected void createProperties() {
-		addProperty(new IntPropertyInterface("Laser Power %","Laser Power percentage",this));
-		addProperty(new StringPropertyInterface("Laser On/Off","Laser On/Off",this));
+	protected void initializeProperties() {
+		addUIProperty(new UIProperty(this, LASER_PERCENTAGE,"Power percentage of the laser."));
+		addUIProperty(new TwoStateUIProperty(this, LASER_OPERATION,"Laser On/Off operation property."));
 	}
 
 	@Override
-	public boolean checkParameters(HashMap<String, Parameter> param) {
-		if(param.size() == 4){	
-			return Parameter.testProperty(param, getParameter("Label"), "Label", 1) && Parameter.testProperty(param, getParameter("Color"), "Color", 1)
-					&& Parameter.testProperty(param, getParameter("On value"), "On value", 1) && Parameter.testProperty(param, getParameter("Off value"), "Off value", 1);
+	protected void initializeParameters() {
+		title_ = "UV";	
+		color_ = Color.black;
+		
+		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
+		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Default value for large z stage step.",color_));
+	}
+
+	@Override
+	protected void changeProperty(String name, String value) {
+		if(name.equals(LASER_PERCENTAGE) || name.equals(LASER_OPERATION)){
+			getUIProperty(name).setPropertyValue(value);
+		}		
+	}
+
+	@Override
+	public void propertyhasChanged(String name, String newvalue) {
+		if(name.equals(LASER_PERCENTAGE)){
+			if(utils.isNumeric(newvalue)){
+				double val = Double.parseDouble(newvalue) ;
+				if(val == 100){
+					togglebutton100_.setSelected(true);
+				} else if(val == 20){
+					togglebutton50_.setSelected(true);
+				} else if(val == 0){
+					togglebutton1_.setSelected(true);
+				} else {
+					if(val>0 && val<100){
+						togglebuttonUser_.setSelected(true);
+						togglebuttonUser_.setText(String.valueOf(val)+"%");
+						textfieldUser_.setText(String.valueOf(val));
+					} 
+				}
+			}
+		} else if(name.equals(LASER_OPERATION)){
+			if(newvalue.equals(TwoStateUIProperty.ON)){
+				togglebuttonOnOff_.setSelected(true);
+			} else {
+				togglebuttonOnOff_.setSelected(false);
+			}
+		}		
+	}
+
+	@Override
+	public void parameterhasChanged(String label) {
+		if(label.equals(PARAM_TITLE)){
+			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
+			border_.setTitle(title_);
+			this.repaint();
+		} else if(label.equals(PARAM_COLOR)){
+			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
+			border_.setTitleColor(color_);
+			this.repaint();
 		}
-		return false;
+	}
+
+	@Override
+	public void shutDown() {
+		// TODO Auto-generated method stub
+		
 	}
 }
