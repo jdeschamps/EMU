@@ -19,23 +19,52 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import main.de.embl.MicroInterface.dataflow.FloatPropertyInterface;
-import main.de.embl.MicroInterface.dataflow.IntPropertyInterface;
-import main.de.embl.MicroInterface.dataflow.UIPanel;
-import main.de.embl.MicroInterface.dataflow.Parameter;
-import main.de.embl.MicroInterface.graph.TimeChart;
-import main.de.embl.MicroInterface.utils.utils;
+import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
 
-public class ActivationPanel extends UIPanel {
-
+public class ActivationPanel extends PropertyPanel {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -517213311514918870L;
 
+	//////// Components
+	private JLabel labelsdcoeff_;
+	private JLabel labelfeeback_;
+	private JLabel labeldT_;
+	private JTextField textfieldcutoff_;
+	private JTextField textfieldN0_;
+	private JTextField textfieldsdcoeff_;
+	private JTextField textfieldfeedback_;
+	private JTextField textfielddT_;
+	private JToggleButton togglebuttonrun_;
+	private JToggleButton togglebuttonautocutoff_;
+	private JButton buttongetN_;
+	private JButton buttongetcutoff_;
+	private JButton buttonclear_;
+	private JCheckBox checkboxnms_;
+	private JCheckBox checkboxactivate_;
+	private TimeChart graph_;
+	
+	//////// Properties
+	private static String LASER_PULSE = "Laser pulse length";
+	
+	//////// Parameters
+	private static String PARAM_IDLE = "Idle ime";
+	private static String PARAM_NPOS = "Number of points";
+	private static String PARAM_DEF_SD = "Default sd coeff";
+	private static String PARAM_DEF_FB = "Default feedback";
+
+	//////// Conveniance variables
+	private boolean update_ = false;
+	
+	public ActivationPanel(String label) {
+		super(label);
+		// TODO Auto-generated constructor stub
+	}
+	
 	@Override
-	public void initComponents() {
+	public void setupPanel() {
 		this.setLayout(new GridBagLayout());
 		
 		GridBagConstraints c = new GridBagConstraints();
@@ -405,24 +434,6 @@ public class ActivationPanel extends UIPanel {
 		return pane;
 	}
 
-	//////// Components
-	private JLabel labelsdcoeff_;
-	private JLabel labelfeeback_;
-	private JLabel labeldT_;
-	private JTextField textfieldcutoff_;
-	private JTextField textfieldN0_;
-	private JTextField textfieldsdcoeff_;
-	private JTextField textfieldfeedback_;
-	private JTextField textfielddT_;
-	private JToggleButton togglebuttonrun_;
-	private JToggleButton togglebuttonautocutoff_;
-	private JButton buttongetN_;
-	private JButton buttongetcutoff_;
-	private JButton buttonclear_;
-	private JCheckBox checkboxnms_;
-	private JCheckBox checkboxactivate_;
-	private TimeChart graph_;
-
 	@Override
 	public HashMap<String, Parameter> buildDefaultParameters() {		
 		return new HashMap<String, Parameter>();
@@ -458,6 +469,48 @@ public class ActivationPanel extends UIPanel {
 		addProperty(new FloatPropertyInterface("Activate" ,"Activate: use UV or not", this));						
 		addProperty(new FloatPropertyInterface("Run activation" ,"Run activation", this));				
 		addProperty(new FloatPropertyInterface("Show NMS" ,"Show NMS", this));							
+	}
+
+	@Override
+	protected void initializeProperties() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void initializeParameters() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void changeProperty(String name, String value) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void propertyhasChanged(String name, String newvalue) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void parameterhasChanged(String label) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void shutDown() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public String getDescription() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

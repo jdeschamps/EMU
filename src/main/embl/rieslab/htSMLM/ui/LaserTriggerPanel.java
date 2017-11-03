@@ -296,4 +296,13 @@ public class LaserTriggerPanel extends PropertyPanel {
 	public void shutDown() {
 		// do nothing
 	}
+
+	@Override
+	public String getDescription() {
+		return "The "+getLabel()+" panel controls the triggering of laser thanks to the MicroMojo FPGA system. The triggering behaviour are either on/off, "
+				+ "or pulsing on rising/falling edge or simply by following the camera trigger. The pulse length can be set through a text area or a slider. "
+				+ "Finally, the laser can be triggered following a sequence of 0 (off) and 1 (triggered). The sequence is 16 bits long. If the sequence set"
+				+ "in the text area is made of 0 and 1, albeit with the wrong size, the text is colored in blue. When wrong characters are entered, the text"
+				+ "turns red.";
+	}
 }

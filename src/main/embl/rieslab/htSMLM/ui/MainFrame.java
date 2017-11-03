@@ -22,6 +22,7 @@ public class MainFrame extends PropertyMainFrame{
 	public FiltersPanel filterPanel;
 	public LaserPulsingPanel pulsePanel;
 	public LaserTriggerPanel triggerPanel;
+	public AdditionalControlsPanel addcontrolPanel;
     
     protected void initComponents() {
     	
@@ -48,7 +49,8 @@ public class MainFrame extends PropertyMainFrame{
         //qpdPanel = new QPDPanel("QPD");
         //filterPanel = new FiltersPanel("Filter wheel");
         //pulsePanel = new LaserPulsingPanel("UV pulse");
-        triggerPanel = new LaserTriggerPanel("Trigger");
+        //triggerPanel = new LaserTriggerPanel("Trigger");
+        addcontrolPanel = new AdditionalControlsPanel("Servos");
 
         JPanel mainpane = new JPanel();
         mainpane.setLayout(new BoxLayout(mainpane, BoxLayout.PAGE_AXIS));
@@ -57,7 +59,8 @@ public class MainFrame extends PropertyMainFrame{
         //mainpane.add(qpdPanel);
         //mainpane.add(filterPanel);
         //mainpane.add(pulsePanel);
-        mainpane.add(triggerPanel);
+        //mainpane.add(triggerPanel);
+        mainpane.add(addcontrolPanel);
         this.add(mainpane);
  
         this.pack(); // avoid packing when one can
@@ -71,6 +74,7 @@ public class MainFrame extends PropertyMainFrame{
         //registerPropertyPanel(qpdPanel);
         //registerPropertyPanel(filterPanel);
         //registerPropertyPanel(pulsePanel);
-        registerPropertyPanel(triggerPanel);
+        //registerPropertyPanel(triggerPanel);
+        registerPropertyPanel(addcontrolPanel);
 	}
 }

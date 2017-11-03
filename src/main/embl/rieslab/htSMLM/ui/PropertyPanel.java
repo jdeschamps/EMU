@@ -18,7 +18,7 @@ public abstract class PropertyPanel extends JPanel{
 
 	private HashMap<String, UIProperty> properties_; // find a faster way to access the props by name?
 	private HashMap<String, UIParameter> parameters_;
-	
+
 	private String label_;
 	
 	public PropertyPanel(String label){
@@ -97,5 +97,6 @@ public abstract class PropertyPanel extends JPanel{
 	public abstract void propertyhasChanged(String name, String newvalue);
 	public abstract void parameterhasChanged(String label);
 	public abstract void shutDown();
+	public abstract String getDescription();
 	
 }

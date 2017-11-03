@@ -20,7 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import main.embl.rieslab.htSMLM.threads.TimeChartUpdater;
+import main.embl.rieslab.htSMLM.threads.updaters.TimeChartUpdater;
 import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
 import main.embl.rieslab.htSMLM.ui.uiparameters.DoubleUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
@@ -438,5 +438,11 @@ public class FocusPanel extends PropertyPanel {
 	@Override
 	public void shutDown() {
 		updater_.stopUpdater();
+	}
+
+	@Override
+	public String getDescription() {
+		return "The "+getLabel()+" panel controls the Z stage of the microscope. It allows monitoring of the stage position. In addition, small and large steps buttons can move the stage up and down. "
+				+ "The locking property corresponds to focus stabilization and is very specific to certain stages.";
 	}
 }

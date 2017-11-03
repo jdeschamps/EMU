@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.threads;
+package main.embl.rieslab.htSMLM.threads.updaters;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

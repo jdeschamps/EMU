@@ -254,4 +254,10 @@ public class LaserPulsingPanel extends PropertyPanel {
 	public void shutDown() {
 		// do nothing
 	}
+
+	@Override
+	public String getDescription() {
+		return "The "+getLabel()+" panel is meant to control the pulse length of the activation laser. "
+				+ "The user can set a maximum to the slider by entering a value in the second text area. The pulse length can be set by entering a value in the first text area or by moving the slider.";
+	}
 }

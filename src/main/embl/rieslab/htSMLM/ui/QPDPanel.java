@@ -11,8 +11,8 @@ import javax.swing.JProgressBar;
 import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
-import main.embl.rieslab.htSMLM.threads.ChartUpdater;
-import main.embl.rieslab.htSMLM.threads.JProgressBarUpdater;
+import main.embl.rieslab.htSMLM.threads.updaters.ChartUpdater;
+import main.embl.rieslab.htSMLM.threads.updaters.JProgressBarUpdater;
 import main.embl.rieslab.htSMLM.ui.graph.Chart;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
@@ -173,5 +173,10 @@ public class QPDPanel extends PropertyPanel {
 	public void shutDown() {
 		chartupdater_.stopUpdater();
 		progressbarupdater_.stopUpdater();
+	}
+
+	@Override
+	public String getDescription() {
+		return "The "+getLabel()+" panel follows the values of a QPD. Three signals are displayed: X and Y in a 2D chart and Z in a progress bar. The maximum values of each component can be set in the parameters.";
 	}
 }
