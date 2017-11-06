@@ -18,6 +18,8 @@ public abstract class ComponentUpdater<T extends JComponent> {
 		component_ = component;
 		property_ = prop;
 		
+		idletime_ = idletime;
+		
 		initialised_ = sanityCheck(prop);
 	}
 	

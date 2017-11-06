@@ -58,7 +58,7 @@ public class SystemController {
 			uiproperties_.putAll(pan.getUIProperties());
 			uiparameters_.putAll(pan.getUIParameters());
 		}	
-
+			
 		// read out configuration
 		config = new Configuration(this);
 		boolean read = config.readDefaultConfiguration(uiproperties_, uiparameters_, mmproperties_);
@@ -126,7 +126,6 @@ public class SystemController {
 						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties_.get(uiprop);
 						int numpos = t.getNumberOfStates();
 						for(int j=0;j<numpos;j++){
-							System.out.println("-----  States : "+configprop.get(uiprop+MultiStateUIProperty.getStateName(j)));
 							t.setStateValue(j, configprop.get(uiprop+MultiStateUIProperty.getStateName(j)));
 						}
 					}

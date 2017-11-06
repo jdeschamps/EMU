@@ -119,7 +119,7 @@ public abstract class PropertyMainFrame extends JFrame {
 		PropertyPanel pan;
 		while(it.hasNext()){
 			pan = it.next();
-			System.out.println(pan.getLabel());
+
 			pan.updateAllProperties();
 			pan.updateAllParameters();
 		}

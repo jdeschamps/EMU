@@ -118,7 +118,6 @@ public class Configuration {
 		    while(it.hasNext()){
 		    	paramhash = it.next();
 		    	paramval = props.getProperty(KEY_UIPARAMETER+paramhash, uiparameterSet.get(paramhash).getStringValue());
-		    
 		    	uiparameters_.put(paramhash, paramval);
 		    }	 
 		    

@@ -55,7 +55,7 @@ public class QPDPanel extends PropertyPanel {
 	public void setupPanel() {
 		this.setLayout(new GridBagLayout());
 		
-		graph_ = new Chart("QPD","X","Y",1,270,270, xymax_);
+		newGraph();
 		chartupdater_ = new ChartUpdater(graph_,getUIProperty(QPD_X),getUIProperty(QPD_Y),idle_);
 		graphpanel_ = new JPanel();
 		graphpanel_.add(graph_.getChart());
@@ -115,6 +115,9 @@ public class QPDPanel extends PropertyPanel {
 		}
 	}
 
+	private void newGraph(){
+		graph_ = new Chart("QPD","X","Y",1,270,270, xymax_);
+	}
 
 	@Override
 	protected void initializeProperties() {
@@ -150,7 +153,7 @@ public class QPDPanel extends PropertyPanel {
 			if(((IntUIParameter) getUIParameter(PARAM_XYMAX)).getValue() != xymax_){
 				xymax_ = ((IntUIParameter) getUIParameter(PARAM_XYMAX)).getValue();
 				graphpanel_.remove(graph_.getChart());
-				graph_ =  new Chart("QPD","X","Y",1,270,270, xymax_);
+				newGraph();
 				graphpanel_.add(graph_.getChart());
 				graphpanel_.updateUI();
 				chartupdater_.changeChart(graph_);

@@ -1,6 +1,7 @@
 package main.embl.rieslab.htSMLM.ui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -61,9 +62,9 @@ public class LaserPulsingPanel extends PropertyPanel {
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
-		c.weighty = 0.9;
-		c.weightx = 0.7;
-		c.insets = new Insets(2,15,2,15);
+		c.gridheight = 1;
+		c.gridwidth = 1;
+		c.insets = new Insets(1,15,1,15);
 		
 		///////////////////////////////////////////////////////////////////////// User value text field
 		textfieldvalue_ = new JTextField();
@@ -110,7 +111,8 @@ public class LaserPulsingPanel extends PropertyPanel {
 		
 
 		///////////////////////////////////////////////////////////////////////// User max text field
-		textfieldmax_ = new JTextField();
+		textfieldmax_ = new JTextField("10000");
+		textfieldmax_.setPreferredSize(new Dimension(30,15));
 		c.fill = GridBagConstraints.BOTH;
 		c.gridy = 1;
 		this.add(textfieldmax_, c);
@@ -190,8 +192,8 @@ public class LaserPulsingPanel extends PropertyPanel {
 				  }  
 			}});
 		
+
 		c.gridy = 2;
-		c.gridheight = 8;
 		this.add(logslider_, c);
 	}
 	

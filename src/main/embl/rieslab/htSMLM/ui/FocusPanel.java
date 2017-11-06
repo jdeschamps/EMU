@@ -13,6 +13,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -80,10 +81,10 @@ public class FocusPanel extends PropertyPanel {
 	}
 	
 	public void setupPanel() {
-		graph_ = new TimeChart("position","time","position",npos_,300,200,false);
+		newGraph();
 		updater_ = new TimeChartUpdater(graph_,getUIProperty(FOCUS_POSITION),idle_);
 		
-		this.setLayout(new GridBagLayout());
+		this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
 		this.setBorder(BorderFactory.createTitledBorder(null, getLabel(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) this.getBorder()).setTitleFont(((TitledBorder) this.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 		
@@ -95,11 +96,35 @@ public class FocusPanel extends PropertyPanel {
 		initCentralPanel();
 		initRightPanel();
 		
+/*
+		GridBagConstraints c = new GridBagConstraints();
+
+		c.gridx = 0;
+		c.gridy = 0;
+		c.weightx = 0.05;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		this.add(panelLeftControl_,c);
+
+		c.gridx = 1;
+		c.gridwidth = 3;
+		c.weightx = 1.8;
+		c.gridheight = 1;
+		c.fill = GridBagConstraints.BOTH;
+		this.add(panelGraph_,c);
+
+		c.gridx = 4;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.weightx = 0.05;
+		c.fill = GridBagConstraints.NONE;
+		this.add(panelRightControl_,c);
+		*/
+
 		this.add(panelLeftControl_);
-		
 		this.add(panelGraph_);
-		
 		this.add(panelRightControl_);
+		
 	}
 
 	private void initLeftPanel(){
@@ -363,6 +388,10 @@ public class FocusPanel extends PropertyPanel {
 		}
 		return null;
 	}
+	
+	private void newGraph(){
+		graph_ = new TimeChart("position","time","position",npos_,310,150,false);
+	}
 
 	@Override
 	protected void initializeProperties() {
@@ -408,7 +437,7 @@ public class FocusPanel extends PropertyPanel {
 		}
 	}
 
-
+	
 
 	@Override
 	public void parameterhasChanged(String label) {
@@ -427,7 +456,7 @@ public class FocusPanel extends PropertyPanel {
 			if(((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue() != npos_){
 				npos_ = ((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue();
 				panelGraph_.remove(graph_.getChart());
-				graph_ = new TimeChart("position","time","position",npos_,300,200,false);
+				newGraph();
 				panelGraph_.add(graph_.getChart());
 				panelGraph_.updateUI();
 				updater_.changeChart(graph_);

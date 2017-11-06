@@ -22,6 +22,8 @@ public class ChartUpdater {
 		propertyX_ = xprop;
 		propertyY_ = yprop;
 		
+		idletime_ = idletime;
+		
 		// sanity check
 		if(utils.isNumeric(propertyX_.getPropertyValue()) && utils.isNumeric(propertyY_.getPropertyValue())){
 			initialised_ = true;

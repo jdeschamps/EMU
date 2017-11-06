@@ -339,7 +339,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	
 	public JPanel getgraphpanel(){
 		graphpane_  = new JPanel();
-		graph_ = new TimeChart("Number of locs","time","N",npos_,350,250, true);	
+		newGraph();
 		graphpane_.add(graph_.getChart());
 		return graphpane_;
 	}
@@ -468,6 +468,10 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 			im_.close();
 		}
 	}
+	
+	private void newGraph(){
+		graph_ = new TimeChart("Number of locs","time","N",npos_,350,250, true);	
+	}
 
 	@Override
 	protected void initializeProperties() {
@@ -516,7 +520,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 			if(((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue() != npos_){
 				npos_ = ((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue();
 				graphpane_.remove(graph_.getChart());
-				graph_ = new TimeChart("position","time","position",npos_,350,250,true);
+				newGraph();
 				graphpane_.add(graph_.getChart());
 				graphpane_.updateUI();
 			}

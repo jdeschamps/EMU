@@ -55,7 +55,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 	//////// Parameters
 	private static String PARAM_TITLE = "Title";
 	private static String PARAM_COLOR = "Color";
-	private static String PARAM_DEF_BEHAVIOUR = "Default trigger behaviour";
+	private static String PARAM_DEF_BEHAVIOUR = "Default trigger";
 	private String title_, behaviour_;
 	private boolean useseq_ = false;
 	private Color color_;

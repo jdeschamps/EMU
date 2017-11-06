@@ -73,9 +73,7 @@ public class ParameterComboTable extends JPanel{
 	
 
 	@SuppressWarnings("rawtypes")
-	public ParameterComboTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HelpWindow help) {
-		System.out.println("Change parameter configuration");
-		
+	public ParameterComboTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HelpWindow help) {		
 		help_ = help;
 		uiparameterSet_ = uiparameterSet; 
 		
@@ -100,8 +98,6 @@ public class ParameterComboTable extends JPanel{
 			if(configparam.containsKey(uiparamkeys_[i])){
 				model.addRow(new Object[] {uiparamkeys_[i], configparam.get(uiparamkeys_[i])});
 			} else {
-				System.out.println("Unknown: "+uiparamkeys_[i]);
-				System.out.println("Value: "+uiparameterSet_.get(uiparamkeys_[i]).getStringValue());
 				model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
 			}
 		}

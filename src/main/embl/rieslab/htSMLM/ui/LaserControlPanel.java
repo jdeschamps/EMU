@@ -190,9 +190,9 @@ public class LaserControlPanel extends PropertyPanel {
 		togglebuttonOnOff_.setBorder(null);
 		togglebuttonOnOff_.setFocusable(false);
 		togglebuttonOnOff_.setContentAreaFilled(false);
-		togglebuttonOnOff_.setIcon(new ImageIcon("images/off.png"));
-		togglebuttonOnOff_.setSelectedIcon(new ImageIcon("images/on.png"));
-		togglebuttonOnOff_.setDisabledIcon(new ImageIcon("images/off.png"));
+		togglebuttonOnOff_.setIcon(new ImageIcon("off.png"));
+		togglebuttonOnOff_.setSelectedIcon(new ImageIcon("on.png"));
+		togglebuttonOnOff_.setDisabledIcon(new ImageIcon("off.png"));
 		this.add(togglebuttonOnOff_, c);
 		
 	}
@@ -213,7 +213,7 @@ public class LaserControlPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeParameters() {
-		title_ = "UV";	
+		title_ = "Laser";	
 		color_ = Color.black;
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
