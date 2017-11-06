@@ -67,7 +67,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 
 	//////// Conveniance variables
 	private boolean activate_, shownms_, autocutoff_;
-	private double sdcoeff_, feedback_, dT_, N0_, cutoff_;
+	private double sdcoeff_, feedback_, dT_ = 1, N0_ = 0, cutoff_ = 100;
 	private int npos_, idletime_;
 	private ImagePlus im_;
 	private int counternms_ = 0;
@@ -87,21 +87,27 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.gridheight = 2;
+		c.gridheight = 4;
+		c.weightx = 0.2;
+		c.weighty = 0.9;
 		c.fill = GridBagConstraints.VERTICAL;
 		this.add(getleftpanel(),c);  
 		
 		c.gridx = 1;
 		c.gridy = 0;
-		c.gridwidth = 2;
-		c.gridheight = 2;
-		c.fill = GridBagConstraints.NONE;
+		c.gridwidth = 3;
+		c.gridheight = 3;
+		c.weightx = 0.8;
+		c.weighty = 0.8;
+		c.fill = GridBagConstraints.BOTH;
 		this.add(getgraphpanel(),c);
 		
 		c.gridx = 1;
-		c.gridy = 2;
+		c.gridy = 3;
 		c.gridwidth = 3;
 		c.gridheight = 1;
+		c.weighty = 0.03;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		this.add(getlowerpanel(),c);
 		
 	}
@@ -121,7 +127,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 		c.fill = GridBagConstraints.BOTH;
 		pane.add(labelsdcoeff_,c);
 		
-		textfieldsdcoeff_ = new JTextField();
+		textfieldsdcoeff_ = new JTextField(String.valueOf(sdcoeff_));
 		textfieldsdcoeff_.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {}
@@ -165,7 +171,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 		c.gridy = 2;
 		pane.add(labelfeeback_,c);
 		
-		textfieldfeedback_ = new JTextField();
+		textfieldfeedback_ = new JTextField(String.valueOf(feedback_));
 		textfieldfeedback_.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {}
@@ -209,7 +215,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 		c.gridy = 4;
 		pane.add(labeldT_,c);
 		
-		textfielddT_ = new JTextField();
+		textfielddT_ = new JTextField(String.valueOf(dT_));
 		textfielddT_.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {}
@@ -261,7 +267,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 		c.insets = new Insets(20,6,2,6);
 		pane.add(buttongetN_,c);	
 		
-		textfieldN0_ = new JTextField();
+		textfieldN0_ = new JTextField(String.valueOf(N0_));
 		textfieldN0_.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {}
@@ -347,20 +353,12 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	public JPanel getlowerpanel(){
 		JPanel pane = new JPanel();
 		pane.setLayout(new GridBagLayout());
-
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.insets = new Insets(2,4,2,4);
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.fill = GridBagConstraints.NONE;
 		
 //		labelcutoff_ = new JLabel("Cut-off:");
 //		c.gridx = 0;
 //		pane.add(labelcutoff_,c);
 		
-		textfieldcutoff_ = new JTextField("40000.000");
+		textfieldcutoff_ = new JTextField(String.valueOf(cutoff_));
 		textfieldcutoff_.addFocusListener(new FocusListener() {
 			@Override
 			public void focusGained(FocusEvent arg0) {}
@@ -397,9 +395,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 				}
         	}
         });
-		c.gridx = 0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		pane.add(textfieldcutoff_,c);	
+		
 
 		/*buttongetcutoff_ = new JButton("Get Cutoff");
 		buttongetcutoff_.addActionListener(new java.awt.event.ActionListener() {
@@ -422,17 +418,14 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 				}
 			}
         });
-		c.gridx = 2;
-		pane.add(togglebuttonautocutoff_,c);	
+
 		
 		buttonclear_ = new JButton("Clear");
 		buttonclear_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	graph_.clearChart();
             }
-        });
-		c.gridx = 3;
-		pane.add(buttonclear_,c);		
+        });	
 		
 		checkboxnms_ = new JCheckBox("NMS");
 		checkboxnms_.addItemListener(new ItemListener(){
@@ -445,7 +438,21 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 				}
 			}
         });
-		c.gridx = 4;
+		
+		//////////////////////////////// grid bag setup
+		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(2,4,2,4);
+		c.ipadx = 50;
+		pane.add(textfieldcutoff_,c);	
+		
+		c.gridx = 1;
+		c.ipadx = 0;
+		pane.add(togglebuttonautocutoff_,c);	
+		
+		c.gridx = 2;
+		pane.add(buttonclear_,c);	
+		
+		c.gridx = 3;
 		pane.add(checkboxnms_,c);	
 
 		return pane;
@@ -470,7 +477,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	}
 	
 	private void newGraph(){
-		graph_ = new TimeChart("Number of locs","time","N",npos_,350,250, true);	
+		graph_ = new TimeChart("Number of locs","time","N",npos_,300,240, true);	
 	}
 
 	@Override

@@ -115,6 +115,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 		textfieldmax_.setPreferredSize(new Dimension(30,15));
 		c.fill = GridBagConstraints.BOTH;
 		c.gridy = 1;
+		c.ipady = 7;
 		this.add(textfieldmax_, c);
 		
 		textfieldmax_.addActionListener(new java.awt.event.ActionListener() {
@@ -194,6 +195,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 		
 
 		c.gridy = 2;
+		c.ipady = 0;
 		this.add(logslider_, c);
 	}
 	

@@ -122,12 +122,6 @@ public class MainFrame extends PropertyMainFrame{
 		GridBagConstraints c3 = new GridBagConstraints();
 		lowerpanel.setLayout(new GridBagLayout());
 		JTabbedPane tab = new JTabbedPane();
-		c3.gridx = 0;
-		c3.gridy = 0;
-		c3.gridwidth = 3;
-		c3.gridheight = 3;
-		c3.fill = GridBagConstraints.HORIZONTAL;
-		lowerpanel.add(tab,c3);
 		
 		/////////// tab
 		qpdPanel = new QPDPanel("QPD");
@@ -145,6 +139,13 @@ public class MainFrame extends PropertyMainFrame{
 			lasertrigg.add(triggerPanels[i]);
 		}
 		tab.add("Trigger", lasertrigg);
+		
+		c3.gridx = 0;
+		c3.gridy = 0;
+		c3.gridwidth = 3;
+		c3.gridheight = 3;
+		c3.fill = GridBagConstraints.HORIZONTAL;
+		lowerpanel.add(tab,c3);
 
 		////////// rest of the lower panel
 		addcontrolPanel = new AdditionalControlsPanel("Servos");

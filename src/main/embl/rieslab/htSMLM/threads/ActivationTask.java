@@ -48,6 +48,9 @@ public class ActivationTask implements Task {
 		registerHolder(holder);
 		
 		output_ = new Double[3];
+		output_[0] = 0.;
+		output_[1] = 0.;
+		output_[2] = 0.;
 	}
 	
 	@Override
