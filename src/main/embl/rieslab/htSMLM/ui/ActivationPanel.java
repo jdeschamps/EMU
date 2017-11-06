@@ -1,5 +1,7 @@
 package main.embl.rieslab.htSMLM.ui;
 
+import ij.ImagePlus;
+
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -10,7 +12,6 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,9 +20,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import main.embl.rieslab.htSMLM.threads.ActivationTask;
+import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
+import main.embl.rieslab.htSMLM.ui.uiparameters.DoubleUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.util.utils;
+import mmcorej.CMMCore;
 
-public class ActivationPanel extends PropertyPanel {
+public class ActivationPanel extends PropertyPanel implements TaskHolder {
 
 	/**
 	 * 
@@ -40,11 +48,13 @@ public class ActivationPanel extends PropertyPanel {
 	private JToggleButton togglebuttonrun_;
 	private JToggleButton togglebuttonautocutoff_;
 	private JButton buttongetN_;
-	private JButton buttongetcutoff_;
+	//private JButton buttongetcutoff_;
 	private JButton buttonclear_;
 	private JCheckBox checkboxnms_;
 	private JCheckBox checkboxactivate_;
 	private TimeChart graph_;
+	private JPanel graphpane_;
+	private ActivationTask task_;
 	
 	//////// Properties
 	private static String LASER_PULSE = "Laser pulse length";
@@ -56,11 +66,17 @@ public class ActivationPanel extends PropertyPanel {
 	private static String PARAM_DEF_FB = "Default feedback";
 
 	//////// Conveniance variables
-	private boolean update_ = false;
+	private boolean activate_, shownms_, autocutoff_;
+	private double sdcoeff_, feedback_, dT_, N0_, cutoff_;
+	private int npos_, idletime_;
+	private ImagePlus im_;
+	private int counternms_ = 0;
 	
-	public ActivationPanel(String label) {
+	public ActivationPanel(String label, CMMCore core) {
 		super(label);
-		// TODO Auto-generated constructor stub
+		
+		task_ = new ActivationTask(this, core, idletime_);
+		im_ = new ImagePlus();
 	}
 	
 	@Override
@@ -118,7 +134,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("Standard deviation", typed);
+						sdcoeff_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -135,7 +151,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("Standard deviation", typed);
+						sdcoeff_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -162,7 +178,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("UV feedback", typed);
+						feedback_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -179,7 +195,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("UV feedback", typed);
+						feedback_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -206,7 +222,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("Time average", typed);
+						dT_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -223,7 +239,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("Time average", typed);
+						dT_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -238,7 +254,7 @@ public class ActivationPanel extends PropertyPanel {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String val = String.valueOf(graph_.getLastPoint());
             	textfieldN0_.setText(val);
-            	setProperty("N0",val);
+            	N0_ = Double.parseDouble(val);
             }
         });
 		c.gridy = 6;
@@ -258,7 +274,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("N0", typed);
+						N0_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -275,7 +291,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("N0", typed);
+						N0_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -291,9 +307,9 @@ public class ActivationPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Activate","1");
+					activate_ = true;
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					setProperty("Activate","0");
+					activate_ = false;
 				}
 			}
         });
@@ -306,9 +322,9 @@ public class ActivationPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Run activation","1");
+					runActivation(true);
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					setProperty("Run activation","0");
+					runActivation(false);
 				}
 			}
         });
@@ -322,8 +338,10 @@ public class ActivationPanel extends PropertyPanel {
 	}
 	
 	public JPanel getgraphpanel(){
-		graph_ = new TimeChart("Number of locs","time","N",800,350,250, true);		
-		return graph_.getChart();
+		graphpane_  = new JPanel();
+		graph_ = new TimeChart("Number of locs","time","N",npos_,350,250, true);	
+		graphpane_.add(graph_.getChart());
+		return graphpane_;
 	}
 	
 	public JPanel getlowerpanel(){
@@ -355,7 +373,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("Cutoff", typed);
+						cutoff_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -372,7 +390,7 @@ public class ActivationPanel extends PropertyPanel {
 				try {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
-						setProperty("Cutoff", typed);
+						cutoff_ = val;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -383,7 +401,7 @@ public class ActivationPanel extends PropertyPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		pane.add(textfieldcutoff_,c);	
 
-		buttongetcutoff_ = new JButton("Get Cutoff");
+		/*buttongetcutoff_ = new JButton("Get Cutoff");
 		buttongetcutoff_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	textfieldcutoff_.setText(getProperty("Cutoff").getValue());
@@ -391,16 +409,16 @@ public class ActivationPanel extends PropertyPanel {
         });
 		c.gridx = 1;
 		c.fill = GridBagConstraints.NONE;
-		pane.add(buttongetcutoff_,c);
+		pane.add(buttongetcutoff_,c);*/
 
 		togglebuttonautocutoff_ = new JToggleButton("Auto");
 		togglebuttonautocutoff_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Monitor cutoff","1");
+					autocutoff_ = true;
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					setProperty("Monitor cutoff","0");
+					autocutoff_ = false;
 				}
 			}
         });
@@ -421,96 +439,144 @@ public class ActivationPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					setProperty("Show NMS","1");
+					showNMS(true);
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					setProperty("Show NMS","0");
+					showNMS(false);
 				}
 			}
         });
 		c.gridx = 4;
 		pane.add(checkboxnms_,c);	
-		
 
 		return pane;
 	}
 
-	@Override
-	public HashMap<String, Parameter> buildDefaultParameters() {		
-		return new HashMap<String, Parameter>();
-	}
-
-	@Override
-	public boolean checkParameters(HashMap<String, Parameter> param) {
-		//TODO: default values for the parameters?
-		return true;
-	}
-	
-	@Override
-	public void propertyChanged(String index) {
-		if(index.equals("N")){
-				int n = ((IntPropertyInterface) getProperty(index)).getCastValue();
-				graph_.addPoint(n);
-		} else if(index.equals("Cutoff")){
-			if(togglebuttonautocutoff_.isSelected()){
-				textfieldcutoff_.setText(getProperty(index).getValue());
-			}
+	protected void runActivation(boolean b){
+		if(b){
+			task_.startTask();
+		} else {
+			task_.stopTask();
 		}
-	}	
+	}
 	
-	@Override
-	protected void createProperties() {
-		addProperty(new FloatPropertyInterface("Standard deviation" ,"Standard deviation", this)); 
-		addProperty(new FloatPropertyInterface("UV feedback" ,"UV feedback", this));		
-		addProperty(new FloatPropertyInterface("Time average" ,"Time average", this));				
-		addProperty(new FloatPropertyInterface("N0" ,"Target number of events", this));					
-		addProperty(new FloatPropertyInterface("N" ,"Number of events", this));							
-		addProperty(new FloatPropertyInterface("Monitor cutoff" ,"Monitor cutoff", this));			
-		addProperty(new FloatPropertyInterface("Cutoff" ,"Cutoff on the brightness", this));				
-		addProperty(new FloatPropertyInterface("Activate" ,"Activate: use UV or not", this));						
-		addProperty(new FloatPropertyInterface("Run activation" ,"Run activation", this));				
-		addProperty(new FloatPropertyInterface("Show NMS" ,"Show NMS", this));							
+	protected void showNMS(boolean b){
+		if(b){
+			shownms_ = true;
+			im_.show();
+		} else {
+			shownms_ = false;
+			im_.close();
+		}
 	}
 
 	@Override
 	protected void initializeProperties() {
-		// TODO Auto-generated method stub
-		
+		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length property of the activation laser"));		
 	}
 
 	@Override
 	protected void initializeParameters() {
-		// TODO Auto-generated method stub
+		sdcoeff_ = 1.5;
+		feedback_ = 0.4;
+		idletime_ = 100;
+		npos_ = 30; 
 		
+		addUIParameter(new DoubleUIParameter(this, PARAM_DEF_SD,"Default value of the cutoff coefficient.",sdcoeff_));
+		addUIParameter(new DoubleUIParameter(this, PARAM_DEF_FB,"Default value of the activation feedback coefficient.",feedback_));
+		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time of the stage position monitoring.",idletime_)); // thread idle time
+		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
 	}
 
 	@Override
 	protected void changeProperty(String name, String value) {
-		// TODO Auto-generated method stub
-		
+		if(name.equals(LASER_PULSE)){
+			getUIProperty(name).setPropertyValue(value);
+		}
 	}
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
-		// TODO Auto-generated method stub
-		
+		// do nothing
 	}
 
 	@Override
 	public void parameterhasChanged(String label) {
-		// TODO Auto-generated method stub
-		
+		if(label.equals(PARAM_DEF_SD)){
+			sdcoeff_ = ((DoubleUIParameter) getUIParameter(PARAM_DEF_SD)).getValue();
+			textfieldsdcoeff_.setText(String.valueOf(sdcoeff_));
+		} else if(label.equals(PARAM_DEF_FB)){
+			feedback_ = ((DoubleUIParameter) getUIParameter(PARAM_DEF_FB)).getValue();
+			textfieldfeedback_.setText(String.valueOf(feedback_));
+		}else if(label.equals(PARAM_IDLE)){
+			if(((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue() != idletime_){
+				idletime_ = ((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue();
+				task_.setIdleTime(idletime_);
+			}
+		}else if(label.equals(PARAM_NPOS)){
+			if(((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue() != npos_){
+				npos_ = ((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue();
+				graphpane_.remove(graph_.getChart());
+				graph_ = new TimeChart("position","time","position",npos_,350,250,true);
+				graphpane_.add(graph_.getChart());
+				graphpane_.updateUI();
+			}
+		}
 	}
 
 	@Override
 	public void shutDown() {
-		// TODO Auto-generated method stub
-		
+		task_.stopTask();
+		showNMS(false);
 	}
 
 	@Override
 	public String getDescription() {
-		// TODO Auto-generated method stub
-		return null;
+		return "This panel allows automated activation of a SMLM experiment.";
+	}
+
+	@Override
+	public void update(final Double[] output) {
+		graph_.addPoint(output[ActivationTask.OUTPUT_N]);
+		
+		textfieldcutoff_.setText(String.valueOf(output[ActivationTask.OUTPUT_NEWCUTOFF]));
+		
+		if(shownms_ && counternms_ % 10 == 0){
+			im_.setProcessor(task_.getNMSResult());
+			im_.updateAndRepaintWindow();
+			counternms_ ++;
+		}
+		
+		// run on non-EDT, but does it really take long?
+		Thread t = new Thread("Update pulse") {
+            public void run() {
+            	changeProperty(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
+            }
+
+        };
+        t.start();
+	}
+
+	@Override
+	public double[] retrieveAllParameters() {
+		double[] params = new double[ActivationTask.NUM_PARAMETERS];
+
+		params[ActivationTask.PARAM_ACTIVATE] = activate_ ? 1 : 0; 
+		params[ActivationTask.PARAM_AUTOCUTOFF] = autocutoff_ ? 1 : 0; 
+		params[ActivationTask.PARAM_CUTOFF] = cutoff_; 
+		params[ActivationTask.PARAM_dT] = dT_; 
+		params[ActivationTask.PARAM_FEEDBACK] = feedback_; 
+		params[ActivationTask.PARAM_MAXPULSE] = 100000; // what to do for this? 
+		params[ActivationTask.PARAM_N0] = N0_; 
+		
+		if(utils.isFloat(getUIProperty(LASER_PULSE).getPropertyValue())){
+			params[ActivationTask.PARAM_PULSE] = Double.parseDouble(getUIProperty(LASER_PULSE).getPropertyValue()); 
+		} else {
+			params[ActivationTask.PARAM_PULSE] = 0;
+		}
+		
+		params[ActivationTask.PARAM_SDCOEFF] = sdcoeff_; 
+		
+		return params;
 	}
 
 }
