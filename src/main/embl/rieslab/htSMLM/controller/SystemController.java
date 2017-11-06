@@ -61,7 +61,7 @@ public class SystemController {
 
 		// read out configuration
 		config = new Configuration(this);
-		boolean read = config.readConfiguration(uiproperties_, uiparameters_, mmproperties_);
+		boolean read = config.readDefaultConfiguration(uiproperties_, uiparameters_, mmproperties_);
 
 		if(read){ // if read a configuration
 			getConfiguration();
@@ -204,8 +204,14 @@ public class SystemController {
 		String message = "The following parameters have been set to a wrong value: \n\n";
 		Iterator<String> it = wrongvals.iterator();
 		message = message+it.next();
+		int count = 1;
 		while(it.hasNext()){
-			message = message+", "+it.next();
+			if(count % 5 == 0){
+				message = message+", \n"+it.next();
+			} else {
+				message = message+", "+it.next();
+			}
+			count ++;
 		}
 		message = message+". \n\n";
 		
@@ -223,12 +229,18 @@ public class SystemController {
 		String message = "The following properties from the UI have not been allocated: \n\n";
 		Iterator<String> it = unallocatedprop_.iterator();
 		message = message+it.next();
+		int count = 1;
 		while(it.hasNext()){
-			message = message+", "+it.next();
+			if(count % 5 == 0){
+				message = message+", \n"+it.next();
+			} else {
+				message = message+", "+it.next();
+			}
+			count ++;
 		}
 		message = message+". \n\n";
 		
-		message = message+"The UI components related to these properties will not function until these properties are allocated. \n Create or load configuration to allocate them.";
+		message = message+"The UI components related to these properties will not function until these properties are allocated. \nCreate or load configuration to allocate them.";
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -270,6 +282,10 @@ public class SystemController {
 			// throw error
 			return 0;
 		}
+	}
+	
+	public CMMCore getCore(){
+		return core_;
 	}
 
 }

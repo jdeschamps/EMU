@@ -41,6 +41,7 @@ public class ParameterComboTable extends JPanel{
 	public ParameterComboTable(HashMap<String, UIParameter> uiparameterSet, HelpWindow help) {
 		
 		uiparameterSet_ = uiparameterSet; 
+		help_ = help;
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
@@ -63,82 +64,19 @@ public class ParameterComboTable extends JPanel{
 			model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
 		}
 
-
-		table = new JTable(model) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -7528102943663023952L;
-
-			@Override
-			public TableCellRenderer getCellRenderer(int row, int column) {
-				switch (column) {
-				case 0:
-					return new BoldTableCellRenderer();
-				case 1:
-					String s = (String) table.getValueAt(row, 0);
-					if(uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.COLOUR.getTypeValue())){
-						return new IconTableRenderer();
-					} else {
-						return new DefaultTableCellRenderer(); 
-					}
-				default:
-					return super.getCellRenderer(row, column);
-				}
-			}
-
-			@Override
-			public TableCellEditor getCellEditor(int row, int column) {
-				switch (column) {
-				case 0:
-					return super.getCellEditor(row, column);
-				case 1:
-					String s = (String) table.getValueAt(row, 0);
-					if(uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.COLOUR.getTypeValue())){
-						return new DefaultCellEditor(color);
-					} else {
-						return new DefaultCellEditor(new JTextField()); 
-					}
-				default:
-					return super.getCellEditor(row, column);
-				}
-			}
-			
-			@Override
-	        public boolean isCellEditable(int row, int col) { // only second column is editable
-	            if (col < 1 ) {
-	                return false;
-	            } else {
-	                return true;
-	            }
-	        }
-		};
-		table.setAutoCreateRowSorter(false);
-		table.setRowHeight(23); 
-		//table.getColumnModel().getColumn(0).setMaxWidth(210);
-		//table.getColumnModel().getColumn(1).setMaxWidth(70);
-		
-		table.addMouseListener(new java.awt.event.MouseAdapter() {
-		    @Override
-		    public void mouseClicked(java.awt.event.MouseEvent evt) {
-		        int row = table.rowAtPoint(evt.getPoint());
-		        int col = table.columnAtPoint(evt.getPoint());
-		        if (col==0) {
-		            updateHelper(row);
-		        }
-		    }
-		});
-		
-		help_ = help;
+		createTable(model);
 
 		JScrollPane sc = new JScrollPane(table);
 		//sc.setPreferredSize(new Dimension(280,590));
 		this.add(sc);
 	}
 	
+
 	@SuppressWarnings("rawtypes")
 	public ParameterComboTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HelpWindow help) {
+		System.out.println("Change parameter configuration");
 		
+		help_ = help;
 		uiparameterSet_ = uiparameterSet; 
 		
 		// Color combobox
@@ -162,10 +100,20 @@ public class ParameterComboTable extends JPanel{
 			if(configparam.containsKey(uiparamkeys_[i])){
 				model.addRow(new Object[] {uiparamkeys_[i], configparam.get(uiparamkeys_[i])});
 			} else {
+				System.out.println("Unknown: "+uiparamkeys_[i]);
+				System.out.println("Value: "+uiparameterSet_.get(uiparamkeys_[i]).getStringValue());
 				model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
 			}
 		}
 
+		createTable(model);
+
+		JScrollPane sc = new JScrollPane(table);
+		//sc.setPreferredSize(new Dimension(280,590));
+		this.add(sc);
+	}
+	
+	private void createTable(DefaultTableModel model) {
 
 		table = new JTable(model) {
 			/**
@@ -218,8 +166,6 @@ public class ParameterComboTable extends JPanel{
 		};
 		table.setAutoCreateRowSorter(false);
 		table.setRowHeight(23); 
-		//table.getColumnModel().getColumn(0).setMaxWidth(210);
-		//table.getColumnModel().getColumn(1).setMaxWidth(70);
 		
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 		    @Override
@@ -231,12 +177,6 @@ public class ParameterComboTable extends JPanel{
 		        }
 		    }
 		});
-		
-		help_ = help;
-
-		JScrollPane sc = new JScrollPane(table);
-		//sc.setPreferredSize(new Dimension(280,590));
-		this.add(sc);
 	}
 	
 	public void showHelp(boolean b){

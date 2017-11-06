@@ -18,6 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.embl.rieslab.htSMLM.controller.Configuration;
 import main.embl.rieslab.htSMLM.controller.SystemController;
+import mmcorej.CMMCore;
 
 
 public abstract class PropertyMainFrame extends JFrame {
@@ -132,6 +133,10 @@ public abstract class PropertyMainFrame extends JFrame {
 			pan.shutDown();
 		}
 		this.dispose();
+	}
+	
+	public CMMCore getCore(){
+		return controller_.getCore();
 	}
 	
 	protected abstract void initComponents();

@@ -50,10 +50,25 @@ public class Configuration {
 	 * @return True if loading successful
 	 */
 	@SuppressWarnings("rawtypes")
-	public boolean readConfiguration(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
+	public boolean readDefaultConfiguration(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
 			MMProperties mmproperties){		
-		File configFile = new File(CONFIG_NAME);
-		 
+		return readConfiguration(uipropertySet,uiparameterSet,mmproperties,new File(CONFIG_NAME));
+	}
+	
+	/**
+	 * Reads a configuration in the Micro-manager folder.
+	 * 
+	 * @param uipropertySet UI properties 
+	 * @param uiparameterSet UI parameters
+	 * @param mmproperties Micro-manager device properties
+	 * @param f Configuration to be read
+	 * @return True if loading successful
+	 */
+	@SuppressWarnings("rawtypes")
+	public boolean readConfiguration(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
+			MMProperties mmproperties, File f){		
+		File configFile = f;
+		
 		try {
 		    Properties props = new Properties();
 		    FileReader reader = new FileReader(configFile);
@@ -62,6 +77,7 @@ public class Configuration {
 		 
 		    String mmhash, uihash, paramhash, paramval;
 		    
+		    // reads out properties, if not found in the configuration file then mark unallocated
 		    Iterator<String> it = uipropertySet.keySet().iterator();
 		    while(it.hasNext()){
 		    	uihash = it.next();
@@ -97,96 +113,14 @@ public class Configuration {
 
 		    }	 
 		    
+		    // Parameters
 		    it = uiparameterSet.keySet().iterator();
 		    while(it.hasNext()){
 		    	paramhash = it.next();
-		    	paramval = props.getProperty(KEY_UIPARAMETER+paramhash, KEY_UNALLOCATED);
+		    	paramval = props.getProperty(KEY_UIPARAMETER+paramhash, uiparameterSet.get(paramhash).getStringValue());
 		    
 		    	uiparameters_.put(paramhash, paramval);
 		    }	 
-		    
-		    reader.close();
-		} catch (FileNotFoundException ex) {			
-		    return false;
-		} catch (IOException ex) {
-			// show error message?
-		    return false;
-		}
-		return true;
-	}
-	
-	/**
-	 * Reads a configuration in the Micro-manager folder.
-	 * 
-	 * @param uipropertySet UI properties 
-	 * @param uiparameterSet UI parameters
-	 * @param mmproperties Micro-manager device properties
-	 * @param f Configuration to be read
-	 * @return True if loading successful
-	 */
-	@SuppressWarnings("rawtypes")
-	public boolean readConfiguration(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
-			MMProperties mmproperties, File f){		
-		File configFile = f;
-		
-		try {
-		    Properties props = new Properties();
-		    FileReader reader = new FileReader(configFile);
-
-		    props.load(reader);
-		    
-		    if(props.isEmpty()){
-		    	return false;
-		    } 
-		    
-		    uiproperties_.clear();
-		    uiparameters_.clear();
-		   
-		    String mmhash, uihash, paramhash, paramval;
-		    
-		    Iterator<String> it = uipropertySet.keySet().iterator();
-		    while(it.hasNext()){
-		    	uihash = it.next();
-		    	mmhash = props.getProperty(KEY_UIPROPERTY+uihash, KEY_UNALLOCATED);
-		    	
-		    	if(mmproperties.isProperty(mmhash)){
-		    		uiproperties_.put(uihash, mmhash);
-		    	} else {
-		    		uiproperties_.put(uihash, KEY_UNALLOCATED);
-		    	}
-		    	
-		    	if(uipropertySet.get(uihash).isTwoState()){
-		    		String onval = uihash+TwoStateUIProperty.getOnStateName();
-			    	mmhash = props.getProperty(KEY_UIPROPERTY+onval, KEY_UNALLOCATED);
-			    	uiproperties_.put(onval, mmhash);
-
-		    		String offval = uihash+TwoStateUIProperty.getOffStateName();
-			    	mmhash = props.getProperty(KEY_UIPROPERTY+offval, KEY_UNALLOCATED);
-			    	uiproperties_.put(offval, mmhash);
-		    	} else if (uipropertySet.get(uihash).isSingleState()){
-		    		String valname = uihash+SingleStateUIProperty.getValueName();
-			    	String val = props.getProperty(KEY_UIPROPERTY+valname, KEY_UNALLOCATED);
-		    		uiproperties_.put(valname, val);
-		    	} else if (uipropertySet.get(uihash).isMultiState()){
-		    		int numval = ((MultiStateUIProperty) uipropertySet.get(uihash)).getNumberOfStates();
-		    		String name, val;
-		    		for(int i=0;i<numval;i++){
-		    			name = uihash+MultiStateUIProperty.getStateName(i);
-		    			val =  props.getProperty(KEY_UIPROPERTY+name, KEY_UNALLOCATED);
-			    		uiproperties_.put(name, val);
-		    		}
-		    	}
-		    }	 
-		    
-		    it = uiparameterSet.keySet().iterator();
-		    while(it.hasNext()){
-		    	paramhash = it.next();
-		    	paramval = props.getProperty(KEY_UIPARAMETER+paramhash, KEY_UNALLOCATED);
-		    
-		    	uiparameters_.put(paramhash, paramval);
-		    }	 
-		    
-		    
 		    
 		    reader.close();
 		} catch (FileNotFoundException ex) {			
@@ -241,7 +175,6 @@ public class Configuration {
 	public boolean launchWizard(HashMap<String,UIProperty> uipropertySet, 
 			HashMap<String,UIParameter> uiparameterSet, MMProperties mmproperties){
 		if(!isWizardRunning()){	
-			System.out.println("Launch wizard");
 			wizard_ = new UIWizard(this);
 			wizard_.existingConfiguration(uipropertySet, uiparameterSet, mmproperties, uiproperties_, uiparameters_);
 			return true;

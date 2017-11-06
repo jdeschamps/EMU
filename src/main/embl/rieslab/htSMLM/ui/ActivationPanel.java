@@ -60,7 +60,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	private static String LASER_PULSE = "Laser pulse length";
 	
 	//////// Parameters
-	private static String PARAM_IDLE = "Idle ime";
+	private static String PARAM_IDLE = "Idle time";
 	private static String PARAM_NPOS = "Number of points";
 	private static String PARAM_DEF_SD = "Default sd coeff";
 	private static String PARAM_DEF_FB = "Default feedback";
