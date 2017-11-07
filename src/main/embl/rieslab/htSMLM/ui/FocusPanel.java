@@ -84,7 +84,7 @@ public class FocusPanel extends PropertyPanel {
 		newGraph();
 		updater_ = new TimeChartUpdater(graph_,getUIProperty(FOCUS_POSITION),idle_);
 		
-		this.setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
+		this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 		this.setBorder(BorderFactory.createTitledBorder(null, getLabel(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) this.getBorder()).setTitleFont(((TitledBorder) this.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 		
@@ -130,17 +130,9 @@ public class FocusPanel extends PropertyPanel {
 	private void initLeftPanel(){
 		panelLeftControl_.setLayout(new GridBagLayout());
 		
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.gridy = 0;
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(2,15,2,15);
-		c.gridwidth = 1;
 		poslabel_ = new JLabel("Position:");
-		panelLeftControl_.add(poslabel_, c);
 
-		c.gridy = 1;
-		c.insets = new Insets(2,15,40,15);
+		
 		textfieldPosition_ = new JTextField();
 		textfieldPosition_.addFocusListener(new FocusListener() {
 			@Override
@@ -182,10 +174,7 @@ public class FocusPanel extends PropertyPanel {
 				}
         	}
         });
-		panelLeftControl_.add(textfieldPosition_, c);
 
-		c.gridy = 4;
-		c.insets = new Insets(2,15,2,15);
 		togglebuttonMonitor_ = new JToggleButton("Monitor");
 		togglebuttonMonitor_.addItemListener(new ItemListener(){
 			@Override
@@ -197,9 +186,7 @@ public class FocusPanel extends PropertyPanel {
 				}
 			}
         });
-		panelLeftControl_.add(togglebuttonMonitor_, c);
-		
-		c.gridy = 5;
+
 		togglebuttonLock_ = new JToggleButton("Lock");
 		togglebuttonLock_.addItemListener(new ItemListener(){
 			@Override
@@ -211,7 +198,28 @@ public class FocusPanel extends PropertyPanel {
 				}
 			}
         });
+		
+		///// grid bag 
+		GridBagConstraints c = new GridBagConstraints();
+	
+		c.gridx = 0;
+		c.gridy = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(2,15,2,15);
+		c.gridwidth = 1;
+		panelLeftControl_.add(poslabel_, c);
+
+		c.gridy = 1;
+		c.insets = new Insets(2,15,40,15);
+		panelLeftControl_.add(textfieldPosition_, c);
+		
+		c.gridy = 4;
+		c.insets = new Insets(2,15,2,15);
+		panelLeftControl_.add(togglebuttonMonitor_, c);
+		
+		c.gridy = 5;
 		panelLeftControl_.add(togglebuttonLock_, c);
+		
 	}
 
 	private void initCentralPanel(){
@@ -221,40 +229,21 @@ public class FocusPanel extends PropertyPanel {
 	private void initRightPanel(){
 		panelRightControl_.setLayout(new GridBagLayout());
 		
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 1;
-		c.gridy = 0;
-		c.fill = GridBagConstraints.BOTH;
-		c.insets = new Insets(2,10,2,10);
-		c.gridwidth = 2;
 		buttonLargeStepsUp_ = new JButton("^^");
 		buttonLargeStepsUp_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	moveRelativePosition(largestep_);
             }
         });
-		panelRightControl_.add(buttonLargeStepsUp_, c);
-		
-		c.gridy = 1;
+
 		buttonSmallStepsUp_ = new JButton("^");
 		buttonSmallStepsUp_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	moveRelativePosition(smallstep_);
             }
         });
-		panelRightControl_.add(buttonSmallStepsUp_, c);
 
-		c.gridx = 0;
-		c.gridy = 2;
-		c.gridwidth = 1;
-		c.insets = new Insets(2,1,2,1);
 		largesteplabel_ = new JLabel(">>");
-		panelRightControl_.add(largesteplabel_, c);
-
-		c.gridx = 1;
-		c.gridy = 2;
-		c.gridwidth = 2;
-		c.insets = new Insets(2,10,2,10);
 		textfieldLargeStep_ = new JTextField(String.valueOf(largestep_));
 		textfieldLargeStep_.addFocusListener(new FocusListener() {
 			@Override
@@ -284,19 +273,7 @@ public class FocusPanel extends PropertyPanel {
 				}
         	}
         });
-		panelRightControl_.add(textfieldLargeStep_, c);
-		
-		c.gridx = 0;
-		c.gridy = 3;
-		c.gridwidth = 1;
-		c.insets = new Insets(2,1,2,1);
 		smallsteplabel_ = new JLabel(">");
-		panelRightControl_.add(smallsteplabel_, c);
-
-		c.gridx = 1;
-		c.gridy = 3;
-		c.gridwidth = 2;
-		c.insets = new Insets(2,10,2,10);
 		textfieldSmallStep_ = new JTextField(String.valueOf(smallstep_));
 		textfieldSmallStep_.addFocusListener(new FocusListener() {  
 			@Override
@@ -326,29 +303,65 @@ public class FocusPanel extends PropertyPanel {
 				}
         	}
         });
-		panelRightControl_.add(textfieldSmallStep_, c);
-		
-		c.gridx = 1;
-		c.gridy = 4;
-		c.gridwidth = 2;
-		c.insets = new Insets(2,10,2,10);
 		buttonSmallStepsDown_ = new JButton("v");
 		buttonSmallStepsDown_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	moveRelativePosition(-smallstep_);
             }
         });
-		panelRightControl_.add(buttonSmallStepsDown_, c);
-
-		c.gridx = 1;
-		c.gridy = 5;
-		c.gridwidth = 2;
 		buttonLargeStepsDown_ = new JButton("vv");
 		buttonLargeStepsDown_.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	moveRelativePosition(-largestep_);
             }
         });
+		
+		
+		// grid bag constraints
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 1;
+		c.gridy = 0;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.insets = new Insets(2,10,2,10);
+		c.gridwidth = 2;		
+		panelRightControl_.add(buttonLargeStepsUp_, c);
+		
+		c.gridy = 1;		
+		panelRightControl_.add(buttonSmallStepsUp_, c);
+
+		c.gridx = 0;
+		c.gridy = 2;
+		c.gridwidth = 1;
+		c.insets = new Insets(2,1,2,1);
+		panelRightControl_.add(largesteplabel_, c);
+
+		c.gridx = 1;
+		c.gridy = 2;
+		c.gridwidth = 2;
+		c.insets = new Insets(2,10,2,10);
+		panelRightControl_.add(textfieldLargeStep_, c);
+		
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		c.insets = new Insets(2,1,2,1);
+		panelRightControl_.add(smallsteplabel_, c);
+
+		c.gridx = 1;
+		c.gridy = 3;
+		c.gridwidth = 2;
+		c.insets = new Insets(2,10,2,10);
+		panelRightControl_.add(textfieldSmallStep_, c);
+		
+		c.gridx = 1;
+		c.gridy = 4;
+		c.gridwidth = 2;
+		c.insets = new Insets(2,10,2,10);
+		panelRightControl_.add(buttonSmallStepsDown_, c);
+
+		c.gridx = 1;
+		c.gridy = 5;
+		c.gridwidth = 2;
 		panelRightControl_.add(buttonLargeStepsDown_, c);
 	}
 	

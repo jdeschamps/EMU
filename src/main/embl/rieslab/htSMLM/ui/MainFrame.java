@@ -77,34 +77,40 @@ public class MainFrame extends PropertyMainFrame{
 
 		setLayout(new BoxLayout(getContentPane(),BoxLayout.PAGE_AXIS));
 		
-		JPanel contentpane = new JPanel();
-		contentpane.setLayout(new GridBagLayout());
+		JPanel upperpane = new JPanel();
+		upperpane.setLayout(new GridBagLayout());
 		GridBagConstraints c2 = new GridBagConstraints();
 		
 		c2.gridx = 0;
 		c2.gridy = 0;
 		c2.gridwidth = 1;
 		c2.gridheight = 3;
+		c2.weightx = 0.2;
+		c2.weighty = 0.8;
 		pulsePanel = new LaserPulsingPanel("UV pulse");
-		contentpane.add(pulsePanel,c2);
+		upperpane.add(pulsePanel,c2);
 
 		c2.gridx = 1;
 		c2.gridy = 0;
 		c2.gridwidth = 3;
 		c2.gridheight = 2;
+		c2.weightx = 0.8;
+		c2.weighty = 0.6;
 		c2.fill = GridBagConstraints.VERTICAL;
-		contentpane.add(lasers,c2);
+		upperpane.add(lasers,c2);
 		
 		filterPanel = new FiltersPanel("Filters");
 		c2.gridx = 1;
 		c2.gridy = 2;
 		c2.gridwidth = 3;
 		c2.gridheight = 1;
+		c2.weightx = 0.8;
+		c2.weighty = 0.2;
 		//c2.weighty = 0.1;
 		c2.fill = GridBagConstraints.HORIZONTAL;
-		contentpane.add(filterPanel,c2);
+		upperpane.add(filterPanel,c2);
 		
-		this.add(contentpane);
+		this.add(upperpane);
 		
 		focusPanel = new FocusPanel("Focus");
 	/*	c2.gridx = 0;
@@ -119,8 +125,8 @@ public class MainFrame extends PropertyMainFrame{
 		
 		///////////////////////////////////////////////////////////// lower panel
 		JPanel lowerpanel = new JPanel();
-		GridBagConstraints c3 = new GridBagConstraints();
-		lowerpanel.setLayout(new GridBagLayout());
+		//GridBagConstraints c3 = new GridBagConstraints();
+		lowerpanel.setLayout(new BoxLayout(lowerpanel,BoxLayout.LINE_AXIS));
 		JTabbedPane tab = new JTabbedPane();
 		
 		/////////// tab
@@ -140,21 +146,21 @@ public class MainFrame extends PropertyMainFrame{
 		}
 		tab.add("Trigger", lasertrigg);
 		
-		c3.gridx = 0;
+		/*c3.gridx = 0;
 		c3.gridy = 0;
 		c3.gridwidth = 3;
 		c3.gridheight = 3;
-		c3.fill = GridBagConstraints.HORIZONTAL;
-		lowerpanel.add(tab,c3);
+		c3.fill = GridBagConstraints.HORIZONTAL;*/
+		lowerpanel.add(tab);
 
 		////////// rest of the lower panel
 		addcontrolPanel = new AdditionalControlsPanel("Servos");
-		c3.gridx = 3;
+	/*	c3.gridx = 3;
 		c3.gridy = 0;
 		c3.gridwidth = 1;
-		c3.gridheight = 1;
+		c3.gridheight = 1;*/
 		//c3.fill = GridBagConstraints.BOTH;
-		lowerpanel.add(addcontrolPanel,c3);
+		lowerpanel.add(addcontrolPanel);
 		
 		/*c2.gridx = 0;
 		c2.gridy = 6;

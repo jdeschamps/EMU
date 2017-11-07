@@ -49,17 +49,17 @@ public class AdditionalControlsPanel extends PropertyPanel{
 		this.setLayout(new GridBagLayout());
 		this.setBorder(BorderFactory.createTitledBorder(null, getLabel(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) this.getBorder()).setTitleFont(((TitledBorder) this.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
-
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.weighty = 0.9;
-		c.weightx = 0.7;
-		c.gridx = 0;
-		c.insets = new Insets(2,0,2,0);
 	
 		ButtonGroup group=new ButtonGroup();
-	
 		togglebuttons_ = new JToggleButton[PARAM_NPOS];
+		
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridx = 0;
+		c.insets = new Insets(2,2,2,2);
+		c.ipady = 10;
+		c.weightx = 0.2;
+		
 		for(int i=0;i<togglebuttons_.length;i++){
 			togglebuttons_[i] = new JToggleButton();
 			

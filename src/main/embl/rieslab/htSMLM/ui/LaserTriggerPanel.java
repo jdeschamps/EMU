@@ -192,10 +192,10 @@ public class LaserTriggerPanel extends PropertyPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
 		c.gridy = 0;
-		c.weighty = 1;
-		c.weightx = 1;
 		c.gridheight = 1;
 		c.gridwidth = 1;
+		c.weightx = 1;
+		c.weighty = 1;
 		c.insets = new Insets(2,5,2,5);
 		
 		// 0,0

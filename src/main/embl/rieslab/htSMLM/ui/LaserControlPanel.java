@@ -33,7 +33,7 @@ public class LaserControlPanel extends PropertyPanel {
 	private JTextField textfieldUser_;
 	private JToggleButton togglebutton100_;
 	private JToggleButton togglebuttonUser_;
-	private JToggleButton togglebutton50_;
+	private JToggleButton togglebutton20_;
 	private JToggleButton togglebutton1_;
 	private JToggleButton togglebuttonOnOff_;	
 	private TitledBorder border_;
@@ -61,17 +61,9 @@ public class LaserControlPanel extends PropertyPanel {
 		this.setBorder(border_);
 		border_.setTitleFont(border_.getTitleFont().deriveFont(Font.BOLD, 12));
 		
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 0;
-		c.weighty = 0.9;
-		c.weightx = 0.7;
-		c.insets = new Insets(2,15,2,15);
 		
 		///////////////////////////////////////////////////////////////////////// User input text field
 		textfieldUser_ = new JTextField("20");
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 0;
-		this.add(textfieldUser_, c);
 
 		textfieldUser_.addFocusListener(new FocusListener() {
 			@Override
@@ -125,11 +117,9 @@ public class LaserControlPanel extends PropertyPanel {
 					changeProperty(LASER_PERCENTAGE,"100");
 				}
 			}
-        });
-		c.gridy = 1;
-		this.add(togglebutton100_, c);
+        });		
 
-		togglebuttonUser_ = new JToggleButton("20%");
+		togglebuttonUser_ = new JToggleButton("50%");
 		togglebuttonUser_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -138,20 +128,16 @@ public class LaserControlPanel extends PropertyPanel {
 				}
 			}
         });
-		c.gridy = 2;
-		this.add(togglebuttonUser_, c);
 		
-		togglebutton50_ = new JToggleButton("50%");
-		togglebutton50_.addItemListener(new ItemListener(){
+		togglebutton20_ = new JToggleButton("20%");
+		togglebutton20_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_PERCENTAGE,"50");
+					changeProperty(LASER_PERCENTAGE,"20");
 				}
 			}
         });
-		c.gridy = 3;
-		this.add(togglebutton50_, c);
 
 		togglebutton1_ = new JToggleButton("1%");
 		togglebutton1_.addItemListener(new ItemListener(){
@@ -162,13 +148,11 @@ public class LaserControlPanel extends PropertyPanel {
 				}
 			}
         });
-		c.gridy = 4;
-		this.add(togglebutton1_, c);
 
         ButtonGroup group=new ButtonGroup();
         group.add(togglebutton100_);
         group.add(togglebuttonUser_);
-        group.add(togglebutton50_);
+        group.add(togglebutton20_);
         group.add(togglebutton1_);
 		
 		///////////////////////////////////////////////////////////////////////// On/Off button
@@ -184,15 +168,36 @@ public class LaserControlPanel extends PropertyPanel {
 				}
 			}
         });
-		
-		c.gridy = 5;
+
 		togglebuttonOnOff_.setBorderPainted(false);
 		togglebuttonOnOff_.setBorder(null);
 		togglebuttonOnOff_.setFocusable(false);
 		togglebuttonOnOff_.setContentAreaFilled(false);
 		togglebuttonOnOff_.setIcon(new ImageIcon("off.png"));
 		togglebuttonOnOff_.setSelectedIcon(new ImageIcon("on.png"));
-		togglebuttonOnOff_.setDisabledIcon(new ImageIcon("off.png"));
+		togglebuttonOnOff_.setDisabledIcon(new ImageIcon("off.png"));	
+		
+		
+		////// grid bag layout
+		GridBagConstraints c = new GridBagConstraints();
+		c.gridx = 0;
+		c.weighty = 0.9;
+		c.weightx = 0.7;
+		c.insets = new Insets(2,15,2,15);
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 0;
+		this.add(textfieldUser_, c);
+		c.ipady = 8;
+		c.gridy = 1;
+		this.add(togglebuttonUser_, c);
+		c.gridy = 2;
+		this.add(togglebutton100_, c);
+		c.gridy = 3;
+		this.add(togglebutton20_, c);
+		c.gridy = 4;
+		this.add(togglebutton1_, c);
+		c.ipady = 0;
+		c.gridy = 5;
 		this.add(togglebuttonOnOff_, c);
 		
 	}
@@ -235,7 +240,7 @@ public class LaserControlPanel extends PropertyPanel {
 				if(val == 100){
 					togglebutton100_.setSelected(true);
 				} else if(val == 20){
-					togglebutton50_.setSelected(true);
+					togglebutton20_.setSelected(true);
 				} else if(val == 0){
 					togglebutton1_.setSelected(true);
 				} else {
