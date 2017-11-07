@@ -7,13 +7,16 @@ public class MultiStateUIProperty extends UIProperty{
 	public static String STATE = " state ";
 	
 	private String[] states_;
+	private String[] statesname_;
 	
 	public MultiStateUIProperty(PropertyPanel owner, String name, String description, int size) {
 		super(owner, name, description);
-		
+
 		states_ = new String[size];
+		statesname_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
+			statesname_[i] = "State"+i;
 		}
 	}
 
@@ -37,6 +40,20 @@ public class MultiStateUIProperty extends UIProperty{
 		}
 	}
 	
+	public void setStatesName(String[] vals){
+		if(vals.length == statesname_.length){
+			statesname_ = vals;
+		} else if (vals.length > statesname_.length){
+			for(int i=0; i<statesname_.length;i++){
+				statesname_[i] = vals[i];
+			}
+		} else {
+			for(int i=0; i<vals.length;i++){
+				statesname_[i] = vals[i];
+			}
+		}
+	}
+	
 	/**
 	 * Sets the value of a specific state.
 	 * 
@@ -46,6 +63,12 @@ public class MultiStateUIProperty extends UIProperty{
 	public void setStateValue(int state, String value){
 		if(state<states_.length){
 			states_[state] = value;
+		}
+	}
+	
+	public void setStateName(int state, String value){
+		if(state<statesname_.length){
+			statesname_[state] = value;
 		}
 	}
 	
@@ -109,7 +132,14 @@ public class MultiStateUIProperty extends UIProperty{
 	
 	public static String getGenericStateName(){
 		return ".*"+STATE+"\\d+";
-
+	}
+	
+	public String[] getStates(){
+		return states_;
+	}	
+	
+	public String[] getStatesName(){
+		return statesname_;
 	}
 }
 

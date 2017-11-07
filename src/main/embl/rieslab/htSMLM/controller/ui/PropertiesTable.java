@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller.uiwizard;
+package main.embl.rieslab.htSMLM.controller.ui;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -25,7 +25,7 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.StringSorting;
 
 
-public class PropertyComboTable extends JPanel {
+public class PropertiesTable extends JPanel {
 
     /**
 	 * 
@@ -47,7 +47,7 @@ public class PropertyComboTable extends JPanel {
 	 * @param mmproperties Object containing the device properties from the current Micro-manager session. 
 	 * @param help Help window.
 	 */
-	public PropertyComboTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HelpWindow help) {
+	public PropertiesTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HelpWindow help) {
 
 		uipropertySet_ = uipropertySet;
 		mmproperties_ = mmproperties;
@@ -96,6 +96,7 @@ public class PropertyComboTable extends JPanel {
 		createTable(model);
 
 		JScrollPane sc = new JScrollPane(table);
+
 		this.add(sc);
 	}
 
@@ -107,7 +108,7 @@ public class PropertyComboTable extends JPanel {
 	 * @param propertymapping Mapping of UI and MM properties as read from a configuration.
 	 * @param help Help window.
 	 */
-	public PropertyComboTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HashMap<String, String> propertymapping, HelpWindow help) {
+	public PropertiesTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HashMap<String, String> propertymapping, HelpWindow help) {
 
 		uipropertySet_ = uipropertySet;
 		mmproperties_ = mmproperties;

@@ -258,7 +258,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 		if(name.equals(getLabel()+" "+TRIGGER_BEHAVIOUR)){
 			combobehaviour_.setSelectedItem(newvalue);
 		} else if(name.equals(getLabel()+" "+TRIGGER_SEQUENCE)){
-			textfieldsequence_.setText(BinaryConverter.getBinary16bits(Integer.parseInt(newvalue)));
+			if(utils.isInteger(newvalue)){
+				textfieldsequence_.setText(BinaryConverter.getBinary16bits(Integer.parseInt(newvalue)));
+			}
 		} else if(name.equals(getLabel()+" "+PULSE_LENGTH)){
 			textfieldpulselength_.setText(newvalue);
 			if(utils.isInteger(newvalue)){
@@ -273,6 +275,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
 			border_.setTitle(title_);
 			this.repaint();
+			getUIProperty(getLabel()+" "+TRIGGER_BEHAVIOUR).setFriendlyName(title_+" "+TRIGGER_BEHAVIOUR);
+			getUIProperty(getLabel()+" "+TRIGGER_SEQUENCE).setFriendlyName(title_+" "+TRIGGER_SEQUENCE);
+			getUIProperty(getLabel()+" "+PULSE_LENGTH).setFriendlyName(title_+" "+PULSE_LENGTH);
 		} else if(label.equals(PARAM_COLOR)){
 			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
 			border_.setTitleColor(color_);

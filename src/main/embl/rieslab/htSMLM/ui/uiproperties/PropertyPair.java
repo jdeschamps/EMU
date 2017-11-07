@@ -20,7 +20,7 @@ public class PropertyPair {
 	}
 
 	public String getUIPropertyName(){
-		return uiprop_.getHash();
+		return uiprop_.getName();
 	}
 	
 	public String getMMPropertyName(){

@@ -154,7 +154,7 @@ public class MainFrame extends PropertyMainFrame{
 		lowerpanel.add(tab);
 
 		////////// rest of the lower panel
-		addcontrolPanel = new AdditionalControlsPanel("Servos");
+		addcontrolPanel = new AdditionalControlsPanel("Controls");
 	/*	c3.gridx = 3;
 		c3.gridy = 0;
 		c3.gridwidth = 1;

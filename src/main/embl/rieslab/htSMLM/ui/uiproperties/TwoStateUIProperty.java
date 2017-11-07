@@ -26,7 +26,7 @@ public class TwoStateUIProperty extends UIProperty{
 	public static String getOffStateName(){
 		return " "+OFF;
 	}
-	
+
 	public void setOnStateValue(String on){
 		onstate_ = on;
 	}
@@ -44,5 +44,15 @@ public class TwoStateUIProperty extends UIProperty{
 				getMMPoperty().setStringValue(offstate_);
 			}
 		}
+	}
+
+	public String[] getStates(){
+		String[] s = {offstate_,onstate_};
+		return s;
+	}
+	
+	public String[] getStatesName(){
+		String[] s = {OFF,ON};
+		return s;
 	}
 }

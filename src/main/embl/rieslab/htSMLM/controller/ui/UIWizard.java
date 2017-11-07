@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller.uiwizard;
+package main.embl.rieslab.htSMLM.controller.ui;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -24,8 +24,8 @@ public class UIWizard {
 
 	private HashMap<String, String> prop_;
 	private HashMap<String, String> param_;
-	private PropertyComboTable propertytable_;
-	private ParameterComboTable parametertable_;
+	private PropertiesTable propertytable_;
+	private ParametersTable parametertable_;
 	private HelpWindow help_;
 	private Configuration config_;
 	private JFrame frame_;
@@ -56,11 +56,11 @@ public class UIWizard {
 				help_ = new HelpWindow("Click on a row to display the description");
 				
 				// Table defining the properties
-				propertytable_ = new PropertyComboTable(uipropertySet, mmproperties, help_);
+				propertytable_ = new PropertiesTable(uipropertySet, mmproperties, help_);
 				propertytable_.setOpaque(true); 
 				
 				// and parameters
-				parametertable_ = new ParameterComboTable(uiparameterSet, help_);
+				parametertable_ = new ParametersTable(uiparameterSet, help_);
 				parametertable_.setOpaque(true); 
 				
 				frame_ = createFrame(propertytable_, parametertable_, help_);
@@ -89,11 +89,11 @@ public class UIWizard {
 				help_ = new HelpWindow("Click on a row to display the description");
 
 				// Table defining the properties using configuration
-				propertytable_ = new PropertyComboTable(uipropertySet, mmproperties, configprop, help_);
+				propertytable_ = new PropertiesTable(uipropertySet, mmproperties, configprop, help_);
 				propertytable_.setOpaque(true); 
 				
 				// now parameters
-				parametertable_ = new ParameterComboTable(uiparameterSet, configparam, help_);
+				parametertable_ = new ParametersTable(uiparameterSet, configparam, help_);
 				parametertable_.setOpaque(true); 
 				
 				frame_ = createFrame(propertytable_,parametertable_, help_);
@@ -101,7 +101,7 @@ public class UIWizard {
 		});
 	}
 	
-	private JFrame createFrame(final PropertyComboTable propertytable, final ParameterComboTable parametertable, final HelpWindow help){
+	private JFrame createFrame(final PropertiesTable propertytable, final ParametersTable parametertable, final HelpWindow help){
 		JFrame frame = new JFrame("UI properties wizard");
 		frame.addWindowListener(new WindowAdapter() {
 			@Override

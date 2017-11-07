@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller.uiwizard;
+package main.embl.rieslab.htSMLM.controller.ui;
 
 import java.awt.Component;
 

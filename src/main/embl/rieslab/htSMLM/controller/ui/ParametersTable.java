@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller.uiwizard;
+package main.embl.rieslab.htSMLM.controller.ui;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -24,7 +24,7 @@ import main.embl.rieslab.htSMLM.util.ColorRepository;
 import main.embl.rieslab.htSMLM.util.StringSorting;
 import main.embl.rieslab.htSMLM.util.utils;
 
-public class ParameterComboTable extends JPanel{
+public class ParametersTable extends JPanel{
 
 	/**
 	 * 
@@ -40,7 +40,7 @@ public class ParameterComboTable extends JPanel{
 	private HelpWindow help_;
 		
 	@SuppressWarnings("rawtypes")
-	public ParameterComboTable(HashMap<String, UIParameter> uiparameterSet, HelpWindow help) {
+	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HelpWindow help) {
 		
 		uiparameterSet_ = uiparameterSet; 
 		help_ = help;
@@ -79,7 +79,7 @@ public class ParameterComboTable extends JPanel{
 	
 
 	@SuppressWarnings("rawtypes")
-	public ParameterComboTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HelpWindow help) {		
+	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HelpWindow help) {		
 		help_ = help;
 		uiparameterSet_ = uiparameterSet; 
 		

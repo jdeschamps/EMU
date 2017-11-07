@@ -7,10 +7,11 @@ import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 public class UIProperty {
 
 	private String name_;
+	private String friendlyname_;
 	private String description_;
 	private PropertyPanel owner_;
 	private MMProperty mmproperty_;
-	private boolean initialised_ = false;
+	private boolean allocated_ = false;
 	
 	public UIProperty(PropertyPanel owner, String name, String description){
 		this.owner_ = owner;
@@ -18,7 +19,7 @@ public class UIProperty {
 		this.description_ = description;
 	}
 	
-	public String getHash(){
+	public String getName(){
 		return name_;
 	}
 	
@@ -27,14 +28,14 @@ public class UIProperty {
 	}
 	
 	public void setProperty(MMProperty prop){
-		if(!initialised_ && prop != null){
+		if(!allocated_ && prop != null){
 			mmproperty_ = prop;
-			initialised_ = true;
+			allocated_ = true;
 		}
 	}
 	
 	public boolean isInitialised(){
-		return initialised_;
+		return allocated_;
 	}
 	
 	public void mmPropertyHasChanged(String value){
@@ -42,20 +43,35 @@ public class UIProperty {
 	}
 	
 	public String getPropertyValue(){
-		if(initialised_){
+		if(allocated_){
 			return mmproperty_.getStringValue();
 		}
 		return "0";
 	}
 	
 	public void setPropertyValue(String val){
-		if(initialised_){
+		if(allocated_){
 			mmproperty_.setStringValue(val);
 		}  
 	}
 	
 	protected MMProperty getMMPoperty(){
 		return mmproperty_;
+	}
+	
+	public boolean isAllocated(){
+		return allocated_;
+	}
+	
+	public String getFriendlyName(){
+		if(friendlyname_ == null){
+			return name_;
+		}
+		return friendlyname_;
+	}
+	
+	public void setFriendlyName(String s){
+		friendlyname_ = s;
 	}
 	
 	public boolean isTwoState(){

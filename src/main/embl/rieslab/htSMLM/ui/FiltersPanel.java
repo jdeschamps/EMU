@@ -103,6 +103,7 @@ public class FiltersPanel extends PropertyPanel {
 		for(int i=0;i<maxind;i++){
 			togglebuttons_[i].setText(astr[i]);
 		}
+		((MultiStateUIProperty) getUIProperty(FW_POSITION)).setStatesName(astr);
 	}
 	
 	private void setColors(){

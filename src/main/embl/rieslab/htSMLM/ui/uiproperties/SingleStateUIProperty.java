@@ -12,8 +12,12 @@ public class SingleStateUIProperty extends UIProperty{
 		super(owner, name, description);
 	}
 
-	public void setConstantValue(String v){
+	public void setStateValue(String v){
 		state_ = v;
+	}
+	
+	public String getStateValue(){
+		return state_;
 	}
 	
 	@Override

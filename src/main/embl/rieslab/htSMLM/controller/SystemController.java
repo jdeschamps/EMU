@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import main.embl.rieslab.htSMLM.acquisitions.ui.PropertySettingsTable;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
 import main.embl.rieslab.htSMLM.ui.MainFrame;
@@ -69,6 +71,15 @@ public class SystemController {
 			// launch a new wizard
 			config.launchNewWizard(uiproperties_, uiparameters_, mmproperties_);
 		}
+		
+		// test
+		if(uiproperties_.size()>0){
+			JFrame test = new JFrame();
+			PropertySettingsTable pst = new PropertySettingsTable(uiproperties_);
+			test.add(pst);
+			test.pack();
+			test.setVisible(true);
+		}
 	}
 	
 	/**
@@ -121,7 +132,7 @@ public class SystemController {
 					} else if(uiproperties_.get(uiprop).isSingleState()){ // if single state property
 						// extract the state value
 						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties_.get(uiprop);
-						t.setConstantValue(configprop.get(uiprop+SingleStateUIProperty.getValueName()));
+						t.setStateValue(configprop.get(uiprop+SingleStateUIProperty.getValueName()));
 					} else if (uiproperties_.get(uiprop).isMultiState()) {// if it is a multistate property
 						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties_.get(uiprop);
 						int numpos = t.getNumberOfStates();

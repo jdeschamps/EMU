@@ -40,7 +40,7 @@ public class LaserControlPanel extends PropertyPanel {
 
 	//////// Properties
 	public static String LASER_PERCENTAGE = "power percentage";
-	public static String LASER_OPERATION = "on/off property";	
+	public static String LASER_OPERATION = "on/off";	
 	
 	//////// Parameters
 	public static String PARAM_TITLE = "Title";
@@ -266,6 +266,8 @@ public class LaserControlPanel extends PropertyPanel {
 			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
 			border_.setTitle(title_);
 			this.repaint();
+			getUIProperty(getLabel()+" "+LASER_PERCENTAGE).setFriendlyName(title_+" "+LASER_PERCENTAGE);
+			getUIProperty(getLabel()+" "+LASER_OPERATION).setFriendlyName(title_+" "+LASER_OPERATION);
 		} else if(label.equals(PARAM_COLOR)){
 			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
 			border_.setTitleColor(color_);
