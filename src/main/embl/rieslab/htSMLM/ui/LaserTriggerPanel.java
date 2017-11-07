@@ -10,13 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
@@ -41,7 +38,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 	private JLabel labelpulselength_;
 	private JLabel labelsequence_;
 	private JComboBox combobehaviour_;	
-	private JCheckBox usesequence_;
+	//private JCheckBox usesequence_;
 	private JTextField textfieldpulselength_;
 	private JTextField textfieldsequence_;
 	private JSlider sliderpulse_;
@@ -57,7 +54,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 	private static String PARAM_COLOR = "Color";
 	private static String PARAM_DEF_BEHAVIOUR = "Default trigger";
 	private String title_, behaviour_;
-	private boolean useseq_ = false;
+	//private boolean useseq_ = false;
 	private Color color_;
 	
 	public LaserTriggerPanel(String label) {
@@ -89,8 +86,8 @@ public class LaserTriggerPanel extends PropertyPanel {
 	    	}
         });
 
-		/////////////////////////////////////////////////////// use seuqnece checkbox
-		usesequence_ = new JCheckBox();
+		/////////////////////////////////////////////////////// use sequence checkbox
+		/*usesequence_ = new JCheckBox();
 		usesequence_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -100,7 +97,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 					useseq_ = false;
 				}
 			}
-        });
+        });*/
 
 		/////////////////////////////////////////////////////// pulse length
 		textfieldpulselength_ = new JTextField();
@@ -156,10 +153,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 				String s = textfieldsequence_.getText();
 				if (BinaryConverter.is16bits(s)) {
 					textfieldsequence_.setForeground(ColorRepository.getColor("black"));
-					if(useseq_){
-						String str = String.valueOf(BinaryConverter.getDecimal16bits(s));
-						changeProperty(TRIGGER_SEQUENCE,str);
-					}
+					String str = String.valueOf(BinaryConverter.getDecimal16bits(s));
+					changeProperty(TRIGGER_SEQUENCE,str);
+				
 				} else if(BinaryConverter.isBits(s)) {
 					textfieldsequence_.setForeground(ColorRepository.getColor("blue"));
 				} else {
@@ -173,18 +169,18 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 			@Override
 			public void focusLost(FocusEvent ex) {
-				String s = textfieldpulselength_.getText();
-				if (utils.isInteger(s)) {
-					if (Integer.parseInt(s) <= SystemConstants.FPGA_MAX_PULSE) {
-						sliderpulse_.setValue(Integer.parseInt(s));
-						changeProperty(PULSE_LENGTH, s);
-					} else {
-						sliderpulse_.setValue(SystemConstants.FPGA_MAX_PULSE);
-						textfieldpulselength_.setText(String.valueOf(SystemConstants.FPGA_MAX_PULSE));
-						changeProperty(PULSE_LENGTH,String.valueOf(SystemConstants.FPGA_MAX_PULSE));
-					}
+				String s = textfieldsequence_.getText();
+				if (BinaryConverter.is16bits(s)) {
+					textfieldsequence_.setForeground(ColorRepository.getColor("black"));
+					String str = String.valueOf(BinaryConverter.getDecimal16bits(s));
+					changeProperty(TRIGGER_SEQUENCE,str);
+				
+				} else if(BinaryConverter.isBits(s)) {
+					textfieldsequence_.setForeground(ColorRepository.getColor("blue"));
+				} else {
+					textfieldsequence_.setForeground(ColorRepository.getColor("red"));
 				}
-			}
+	         }
 		});
 		
 
@@ -194,9 +190,8 @@ public class LaserTriggerPanel extends PropertyPanel {
 		c.gridy = 0;
 		c.gridheight = 1;
 		c.gridwidth = 1;
-		c.weightx = 1;
-		c.weighty = 1;
-		c.insets = new Insets(2,5,2,5);
+		c.fill = GridBagConstraints.NONE;		
+		//c.insets = new Insets(2,5,2,5);
 		
 		// 0,0
 		c.gridwidth = 3;
@@ -206,31 +201,32 @@ public class LaserTriggerPanel extends PropertyPanel {
 		this.add(labelpulselength_,c);
 		
 		c.gridy = 2;
-		c.gridwidth = 9;
+		c.gridwidth = 6;		
+		c.fill = GridBagConstraints.HORIZONTAL;		
 		this.add(sliderpulse_,c);
 		
 		c.gridy = 3;
 		c.gridwidth = 3;
+		c.fill = GridBagConstraints.NONE;		
 		this.add(labelsequence_,c);
 
-		c.gridx = 5;
+		c.gridx = 3;
 		c.gridy = 0;
 		this.add(combobehaviour_,c);
 
 		c.gridy = 1;
 		this.add(textfieldpulselength_,c);
 
-		c.gridx = 4;
 		c.gridy = 3;
-		c.gridwidth = 4;
+		c.fill = GridBagConstraints.HORIZONTAL;
 		this.add(textfieldsequence_,c);
 
-		c.gridx = 3;
+	/*	c.gridx = 3;
 		c.gridy = 3;
 		c.weightx = 1;
 		c.gridwidth = 1;
 		this.add(usesequence_,c);
-			
+		*/	
 	}
 
 	@Override
@@ -256,9 +252,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 		if(name.equals(TRIGGER_BEHAVIOUR) || name.equals(PULSE_LENGTH)){
 			getUIProperty(name).setPropertyValue(value);
 		} else if(name.equals(TRIGGER_SEQUENCE)){
-			if(useseq_){
-				getUIProperty(name).setPropertyValue(value);
-			}
+			getUIProperty(name).setPropertyValue(value);
 		}
 	}
 
