@@ -63,7 +63,7 @@ public class PropertySettingsTable extends JPanel {
 				} else if (uipropertySet_.get(uipropkeys_[i]).isMultiState()) {
 					model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(), ((MultiStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStatesName()[0] });
 				} else{
-					model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(), "" });
+					model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),  uipropertySet_.get(uipropkeys_[i]).getPropertyValue()});
 				}
 			}
 		}
