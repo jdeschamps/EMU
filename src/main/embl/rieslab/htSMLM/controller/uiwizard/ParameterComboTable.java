@@ -120,6 +120,7 @@ public class ParameterComboTable extends JPanel{
 
 		JScrollPane sc = new JScrollPane(table);
 		//sc.setPreferredSize(new Dimension(280,590));
+		
 		this.add(sc);
 	}
 	

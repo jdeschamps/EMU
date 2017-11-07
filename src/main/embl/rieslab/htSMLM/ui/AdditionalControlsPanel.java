@@ -28,20 +28,20 @@ public class AdditionalControlsPanel extends PropertyPanel{
 	private JToggleButton[] togglebuttons_;
 
 	//////// Properties
-	public static String SERVO_1 = "Two-state servo 1";
-	public static String SERVO_2 = "Two-state servo 2";
-	public static String SERVO_3 = "Two-state servo 3";
-	public static String SERVO_4 = "Two-state servo 4";
+	public static String SERVO_1 = "Servo 1 position";
+	public static String SERVO_2 = "Servo 2 position";
+	public static String SERVO_3 = "Servo 3 position";
+	public static String SERVO_4 = "Servo 4 position";
 	
 	//////// Parameters
 	public static String PARAM_NAME1 = "Servo 1 name";
 	public static String PARAM_NAME2 = "Servo 2 name";
 	public static String PARAM_NAME3 = "Servo 3 name";
 	public static String PARAM_NAME4 = "Servo 4 name";
-	public static String PARAM_ENABLE1 = "Enable servo1";
-	public static String PARAM_ENABLE2 = "Enable servo2";
-	public static String PARAM_ENABLE3 = "Enable servo3";
-	public static String PARAM_ENABLE4 = "Enable servo4";
+	public static String PARAM_ENABLE1 = "Enable servo 1";
+	public static String PARAM_ENABLE2 = "Enable servo 2";
+	public static String PARAM_ENABLE3 = "Enable servo 3";
+	public static String PARAM_ENABLE4 = "Enable servo 4";
 	public static int PARAM_NPOS = 4;
 	
 	public AdditionalControlsPanel(String label) {

@@ -44,9 +44,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 	private TitledBorder border_;
 
 	//////// Properties
-	private static String TRIGGER_BEHAVIOUR = "Trigger behaviour";
-	private static String TRIGGER_SEQUENCE = "Trigger sequence";
-	private static String PULSE_LENGTH = "Pulse length";
+	private static String TRIGGER_BEHAVIOUR = "behaviour";
+	private static String TRIGGER_SEQUENCE = "sequence";
+	private static String PULSE_LENGTH = "pulse length";
 	
 	//////// Parameters
 	private static String PARAM_TITLE = "Title";
@@ -230,9 +230,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {	
-		addUIProperty(new UIProperty(this, TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing."));
-		addUIProperty(new UIProperty(this, TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered)."));
-		addUIProperty(new UIProperty(this, PULSE_LENGTH,"Pulse length of the laser."));
+		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing."));
+		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered)."));
+		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"Pulse length of the laser."));
 	}
 
 	@Override
@@ -248,20 +248,18 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 	@Override
 	protected void changeProperty(String name, String value) {
-		if(name.equals(TRIGGER_BEHAVIOUR) || name.equals(PULSE_LENGTH)){
-			getUIProperty(name).setPropertyValue(value);
-		} else if(name.equals(TRIGGER_SEQUENCE)){
-			getUIProperty(name).setPropertyValue(value);
-		}
+		if(name.equals(TRIGGER_BEHAVIOUR) || name.equals(PULSE_LENGTH) || name.equals(TRIGGER_SEQUENCE)){
+			getUIProperty(getLabel()+" "+name).setPropertyValue(value);
+		} 
 	}
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
-		if(name.equals(TRIGGER_BEHAVIOUR)){
+		if(name.equals(getLabel()+" "+TRIGGER_BEHAVIOUR)){
 			combobehaviour_.setSelectedItem(newvalue);
-		} else if(name.equals(TRIGGER_SEQUENCE)){
+		} else if(name.equals(getLabel()+" "+TRIGGER_SEQUENCE)){
 			textfieldsequence_.setText(BinaryConverter.getBinary16bits(Integer.parseInt(newvalue)));
-		} else if(name.equals(PULSE_LENGTH)){
+		} else if(name.equals(getLabel()+" "+PULSE_LENGTH)){
 			textfieldpulselength_.setText(newvalue);
 			if(utils.isInteger(newvalue)){
 				sliderpulse_.setValue(Integer.parseInt(newvalue));

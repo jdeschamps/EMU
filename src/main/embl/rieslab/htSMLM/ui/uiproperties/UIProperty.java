@@ -18,7 +18,7 @@ public class UIProperty {
 		this.description_ = description;
 	}
 	
-	public String getName(){
+	public String getHash(){
 		return name_;
 	}
 	

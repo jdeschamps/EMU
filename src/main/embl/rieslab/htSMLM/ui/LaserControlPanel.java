@@ -39,8 +39,8 @@ public class LaserControlPanel extends PropertyPanel {
 	private TitledBorder border_;
 
 	//////// Properties
-	public static String LASER_PERCENTAGE = "Laser power percentage";
-	public static String LASER_OPERATION = "Laser on/off property";	
+	public static String LASER_PERCENTAGE = "power percentage";
+	public static String LASER_OPERATION = "on/off property";	
 	
 	//////// Parameters
 	public static String PARAM_TITLE = "Title";
@@ -212,8 +212,8 @@ public class LaserControlPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, LASER_PERCENTAGE,"Power percentage of the laser."));
-		addUIProperty(new TwoStateUIProperty(this, LASER_OPERATION,"Laser On/Off operation property."));
+		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCENTAGE,"Power percentage of the laser."));
+		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_OPERATION,"Laser On/Off operation property."));
 	}
 
 	@Override
@@ -228,13 +228,13 @@ public class LaserControlPanel extends PropertyPanel {
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(LASER_PERCENTAGE) || name.equals(LASER_OPERATION)){
-			getUIProperty(name).setPropertyValue(value);
+			getUIProperty(getLabel()+" "+name).setPropertyValue(value);
 		}		
 	}
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
-		if(name.equals(LASER_PERCENTAGE)){
+		if(name.equals(getLabel()+" "+LASER_PERCENTAGE)){
 			if(utils.isNumeric(newvalue)){
 				double val = Double.parseDouble(newvalue) ;
 				if(val == 100){
@@ -251,7 +251,7 @@ public class LaserControlPanel extends PropertyPanel {
 					} 
 				}
 			}
-		} else if(name.equals(LASER_OPERATION)){
+		} else if(name.equals(getLabel()+" "+LASER_OPERATION)){
 			if(newvalue.equals(TwoStateUIProperty.ON)){
 				togglebuttonOnOff_.setSelected(true);
 			} else {

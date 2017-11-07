@@ -70,7 +70,7 @@ public class MainFrame extends PropertyMainFrame{
 		c.gridy = 0;
 		c.insets = new Insets(2,0,2,0);
 		for(int i=0;i<controlPanels.length;i++){
-			controlPanels[i] = new LaserControlPanel("LaserControl"+i);
+			controlPanels[i] = new LaserControlPanel("Laser "+i);
 			c.gridx = i;
 			lasers.add(controlPanels[i], c);
 		}
@@ -141,7 +141,7 @@ public class MainFrame extends PropertyMainFrame{
 		lasertrigg.setLayout(new GridLayout(2,2));
 		triggerPanels = new LaserTriggerPanel[4];
 		for(int i=0;i<triggerPanels.length;i++){
-			triggerPanels[i] = new LaserTriggerPanel("LaserTrigger"+i);
+			triggerPanels[i] = new LaserTriggerPanel("Laser "+i);
 			lasertrigg.add(triggerPanels[i]);
 		}
 		tab.add("Trigger", lasertrigg);

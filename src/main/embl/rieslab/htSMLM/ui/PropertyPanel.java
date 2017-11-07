@@ -63,7 +63,7 @@ public abstract class PropertyPanel extends JPanel{
 	}
 	
 	protected void addUIProperty(UIProperty p){
-		properties_.put(p.getName(),p);
+		properties_.put(p.getHash(),p);
 	}	
 	
 	protected void addUIParameter(UIParameter p){
