@@ -13,7 +13,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import main.embl.rieslab.htSMLM.controller.Configuration;
+import main.embl.rieslab.htSMLM.ui.uiparameters.BoolUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 
@@ -38,6 +38,10 @@ public class AdditionalControlsPanel extends PropertyPanel{
 	public static String PARAM_NAME2 = "Servo 2 name";
 	public static String PARAM_NAME3 = "Servo 3 name";
 	public static String PARAM_NAME4 = "Servo 4 name";
+	public static String PARAM_ENABLE1 = "Enable servo1";
+	public static String PARAM_ENABLE2 = "Enable servo2";
+	public static String PARAM_ENABLE3 = "Enable servo3";
+	public static String PARAM_ENABLE4 = "Enable servo4";
 	public static int PARAM_NPOS = 4;
 	
 	public AdditionalControlsPanel(String label) {
@@ -62,6 +66,10 @@ public class AdditionalControlsPanel extends PropertyPanel{
 		
 		for(int i=0;i<togglebuttons_.length;i++){
 			togglebuttons_[i] = new JToggleButton();
+			
+			if(i==togglebuttons_.length-1){
+				c.insets = new Insets(2,2,30,2);	
+			}
 			
 			c.gridy = i;
 			this.add(togglebuttons_[i], c);
@@ -128,10 +136,14 @@ public class AdditionalControlsPanel extends PropertyPanel{
 
 	@Override
 	protected void initializeParameters() {
-		addUIParameter(new StringUIParameter(this, PARAM_NAME1,"Servo 1 name.","Servo 1"));
-		addUIParameter(new StringUIParameter(this, PARAM_NAME2,"Servo 2 name.","Servo 2"));
-		addUIParameter(new StringUIParameter(this, PARAM_NAME3,"Servo 3 name.","Servo 3"));
-		addUIParameter(new StringUIParameter(this, PARAM_NAME4,"Servo 4 name.","Servo 4"));
+		addUIParameter(new StringUIParameter(this, PARAM_NAME1,"Servo 1 name, as dislayed in the UI.","BFP"));
+		addUIParameter(new StringUIParameter(this, PARAM_NAME2,"Servo 2 name, as dislayed in the UI.","3DA"));
+		addUIParameter(new StringUIParameter(this, PARAM_NAME3,"Servo 3 name, as dislayed in the UI.","Servo 3"));
+		addUIParameter(new StringUIParameter(this, PARAM_NAME4,"Servo 4 name, as dislayed in the UI.","Servo 4"));
+		addUIParameter(new BoolUIParameter(this, PARAM_ENABLE1,"Enable the button corresponding to the first servo.", true));
+		addUIParameter(new BoolUIParameter(this, PARAM_ENABLE2,"Enable the button corresponding to the second servo.",true));
+		addUIParameter(new BoolUIParameter(this, PARAM_ENABLE3,"Enable the button corresponding to the third servo.",false));
+		addUIParameter(new BoolUIParameter(this, PARAM_ENABLE4,"Enable the button corresponding to the fourth servo.",false));
 	}
 
 	@Override
@@ -144,44 +156,28 @@ public class AdditionalControlsPanel extends PropertyPanel{
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		if(name.equals(SERVO_1)){
-			if(newvalue.equals(Configuration.KEY_UNALLOCATED)){
-				togglebuttons_[0].setEnabled(false);
+			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+				togglebuttons_[0].setSelected(true);
 			} else {
-				if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
-					togglebuttons_[0].setSelected(true);
-				} else {
-					togglebuttons_[0].setSelected(false);
-				}
+				togglebuttons_[0].setSelected(false);
 			}
 		} else if(name.equals(SERVO_2)){
-			if(newvalue.equals(Configuration.KEY_UNALLOCATED)){
-				togglebuttons_[1].setEnabled(false);
+			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+				togglebuttons_[1].setSelected(true);
 			} else {
-				if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
-					togglebuttons_[1].setSelected(true);
-				} else {
-					togglebuttons_[1].setSelected(false);
-				}
+				togglebuttons_[1].setSelected(false);
 			}
 		} else if(name.equals(SERVO_3)){
-			if(newvalue.equals(Configuration.KEY_UNALLOCATED)){
-				togglebuttons_[2].setEnabled(false);
+			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+				togglebuttons_[2].setSelected(true);
 			} else {
-				if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
-					togglebuttons_[2].setSelected(true);
-				} else {
-					togglebuttons_[2].setSelected(false);
-				}
+				togglebuttons_[2].setSelected(false);
 			}
 		} else if(name.equals(SERVO_4)){
-			if(newvalue.equals(Configuration.KEY_UNALLOCATED)){
-				togglebuttons_[3].setEnabled(false);
+			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+				togglebuttons_[3].setSelected(true);
 			} else {
-				if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
-					togglebuttons_[3].setSelected(true);
-				} else {
-					togglebuttons_[3].setSelected(false);
-				}
+				togglebuttons_[3].setSelected(false);
 			}
 		}
 	}
@@ -200,6 +196,18 @@ public class AdditionalControlsPanel extends PropertyPanel{
 		} else if(label.equals(PARAM_NAME4)){
 			String s = ((StringUIParameter) getUIParameter(PARAM_NAME4)).getValue();
 			togglebuttons_[3].setText(s);
+		} else if(label.equals(PARAM_ENABLE1)){
+			boolean b = ((BoolUIParameter) getUIParameter(PARAM_ENABLE1)).getValue();
+			togglebuttons_[0].setEnabled(b);
+		} else if(label.equals(PARAM_ENABLE2)){
+			boolean b = ((BoolUIParameter) getUIParameter(PARAM_ENABLE2)).getValue();
+			togglebuttons_[1].setEnabled(b);
+		} else if(label.equals(PARAM_ENABLE3)){
+			boolean b = ((BoolUIParameter) getUIParameter(PARAM_ENABLE3)).getValue();
+			togglebuttons_[2].setEnabled(b);
+		} else if(label.equals(PARAM_ENABLE4)){
+			boolean b = ((BoolUIParameter) getUIParameter(PARAM_ENABLE4)).getValue();
+			togglebuttons_[3].setEnabled(b);
 		}
 	}
 

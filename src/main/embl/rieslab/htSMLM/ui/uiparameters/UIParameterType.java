@@ -1,7 +1,7 @@
 package main.embl.rieslab.htSMLM.ui.uiparameters;
 
 public enum UIParameterType { 
-	INTEGER("Integer"), DOUBLE("double"), FLOAT("Float"), STRING("String"), COLOUR("Color"); 
+	INTEGER("Integer"), DOUBLE("Double"), FLOAT("Float"), STRING("String"), COLOUR("Color"), BOOL("Boolean"); 
 	
 	private String value; 
 	

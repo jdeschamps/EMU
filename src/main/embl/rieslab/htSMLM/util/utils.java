@@ -96,4 +96,11 @@ public class utils {
 		}
 		return null;
 	}
+	
+	public static boolean convertStringToBool(String s){
+		if(s.equals("true")){
+			return true;
+		}
+		return false;
+	}
 }

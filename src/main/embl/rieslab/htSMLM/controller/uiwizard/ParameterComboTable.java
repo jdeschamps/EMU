@@ -17,10 +17,12 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+import main.embl.rieslab.htSMLM.ui.uiparameters.BoolUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameterType;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
 import main.embl.rieslab.htSMLM.util.StringSorting;
+import main.embl.rieslab.htSMLM.util.utils;
 
 public class ParameterComboTable extends JPanel{
 
@@ -61,7 +63,11 @@ public class ParameterComboTable extends JPanel{
 		// Define table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"UI parameter", "Value" }, 0);
 		for(int i=0;i<uiparamkeys_.length;i++){
-			model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
+			if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){
+				model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getValue()});
+			} else {
+				model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
+			}
 		}
 
 		createTable(model);
@@ -96,9 +102,17 @@ public class ParameterComboTable extends JPanel{
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"UI parameter", "Value" }, 0);
 		for(int i=0;i<uiparamkeys_.length;i++){
 			if(configparam.containsKey(uiparamkeys_[i])){
-				model.addRow(new Object[] {uiparamkeys_[i], configparam.get(uiparamkeys_[i])});
+				if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){
+					model.addRow(new Object[] {uiparamkeys_[i], utils.convertStringToBool(configparam.get(uiparamkeys_[i]))});
+				} else {
+					model.addRow(new Object[] {uiparamkeys_[i], configparam.get(uiparamkeys_[i])});
+				}
 			} else {
-				model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
+				if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){
+					model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getValue()});
+				} else {
+					model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
+				}
 			}
 		}
 
@@ -126,6 +140,8 @@ public class ParameterComboTable extends JPanel{
 					String s = (String) table.getValueAt(row, 0);
 					if(uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.COLOUR.getTypeValue())){
 						return new IconTableRenderer();
+					} else if (uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.BOOL.getTypeValue())) { // if checkbox
+						return super.getDefaultRenderer(Boolean.class);
 					} else {
 						return new DefaultTableCellRenderer(); 
 					}
@@ -143,6 +159,8 @@ public class ParameterComboTable extends JPanel{
 					String s = (String) table.getValueAt(row, 0);
 					if(uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.COLOUR.getTypeValue())){
 						return new DefaultCellEditor(color);
+					} else if (uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.BOOL.getTypeValue())) {
+						return super.getDefaultEditor(Boolean.class);
 					} else {
 						return new DefaultCellEditor(new JTextField()); 
 					}
@@ -192,7 +210,11 @@ public class ParameterComboTable extends JPanel{
 		int nrow = model.getRowCount();
 		
 		for(int i=0;i<nrow;i++){
-			settings.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 1));
+			if(model.getValueAt(i, 1) instanceof Boolean){		
+				settings.put((String) model.getValueAt(i, 0), Boolean.toString((Boolean) model.getValueAt(i, 1)));
+			} else {
+				settings.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 1));
+			}
 		}
 		
 		return settings;
