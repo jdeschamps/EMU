@@ -48,6 +48,9 @@ public class LaserControlPanel extends PropertyPanel {
 	private String title_;	
 	private Color color_;
 	
+	/////// Convenience variables
+	private String default_userinput = "50";
+	
 	public LaserControlPanel(String label) {
 		super(label);
 	}
@@ -63,7 +66,7 @@ public class LaserControlPanel extends PropertyPanel {
 		
 		
 		///////////////////////////////////////////////////////////////////////// User input text field
-		textfieldUser_ = new JTextField("20");
+		textfieldUser_ = new JTextField(default_userinput);
 
 		textfieldUser_.addFocusListener(new FocusListener() {
 			@Override
@@ -119,12 +122,16 @@ public class LaserControlPanel extends PropertyPanel {
 			}
         });		
 
-		togglebuttonUser_ = new JToggleButton("50%");
+		togglebuttonUser_ = new JToggleButton(default_userinput+"%");
 		togglebuttonUser_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_PERCENTAGE,getUserInput());
+					String typed = getUserInput();
+	        	    if(typed == null) {
+	        	        return;
+	        	    }
+					changeProperty(LASER_PERCENTAGE,typed);
 				}
 			}
         });

@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
@@ -189,6 +190,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 		c.gridy = 0;
 		c.gridheight = 1;
 		c.gridwidth = 1;
+		c.insets = new Insets(4,0,4,0);
 		c.fill = GridBagConstraints.NONE;		
 		//c.insets = new Insets(2,5,2,5);
 		
@@ -260,6 +262,8 @@ public class LaserTriggerPanel extends PropertyPanel {
 		} else if(name.equals(getLabel()+" "+TRIGGER_SEQUENCE)){
 			if(utils.isInteger(newvalue)){
 				textfieldsequence_.setText(BinaryConverter.getBinary16bits(Integer.parseInt(newvalue)));
+			} else {
+				textfieldsequence_.setText(BinaryConverter.getBinary16bits(SystemConstants.FPGA_MAX_SEQUENCE));
 			}
 		} else if(name.equals(getLabel()+" "+PULSE_LENGTH)){
 			textfieldpulselength_.setText(newvalue);

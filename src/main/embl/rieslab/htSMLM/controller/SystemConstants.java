@@ -4,6 +4,7 @@ public class SystemConstants {
 	
 	// Mojo FPGA
 	public static int FPGA_MAX_PULSE = 65535;
+	public static int FPGA_MAX_SEQUENCE = 65535;
 	public static int FPGA_BIT_DEPTH = 16;
 	public static String[] FPGA_BEHAVIOURS = {"Off","On","Rising","Falling","Camera"};
 	
