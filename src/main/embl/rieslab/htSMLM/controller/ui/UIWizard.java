@@ -110,6 +110,7 @@ public class UIWizard {
 				boolean b = true;
 				if(b){
 					help.disposeHelp();
+					running_ = false;
 					e.getWindow().dispose();
 				}
 			}

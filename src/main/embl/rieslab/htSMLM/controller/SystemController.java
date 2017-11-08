@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import main.embl.rieslab.htSMLM.acquisitions.ui.PropertySettingsTable;
+import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroupsRegistry;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
 import main.embl.rieslab.htSMLM.ui.MainFrame;
@@ -25,6 +26,7 @@ public class SystemController {
 
 	private CMMCore core_;
 	private MMProperties mmproperties_;
+	private ConfigurationGroupsRegistry configgroups_;
 	private Configuration config;
 	private MainFrame mainframe_;
 	private ArrayList<PropertyPair> pairs_;
@@ -48,6 +50,7 @@ public class SystemController {
 	public void start() {
 		// extract MM properties
 		mmproperties_ = new MMProperties(core_);
+		configgroups_ = new ConfigurationGroupsRegistry(core_);
 
 		// initiate UI
 		mainframe_ = new MainFrame("ht-SMLM control center", this);
