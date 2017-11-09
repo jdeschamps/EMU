@@ -14,8 +14,11 @@ public class IntInternalPropertyValue implements InternalPropertyValue<Integer>{
 	}
 	
 	@Override
-	public void setValue(Integer val, InternalProperty<Integer> source) {
-		value_.set(val);
+	public void setValue(Integer val, InternalProperty<Integer> source) {		
+		System.out.println("New value "+val);
+
+		value_.set(val);		
+		System.out.println("New value confirmation "+value_.get());
 		notifyListeners(source);
 	}
 

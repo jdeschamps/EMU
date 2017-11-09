@@ -298,6 +298,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 	}
 
 	private void changeMaxPulseProperty(int val){
+		System.out.println("Change internal property from panel "+getLabel());
 		((IntInternalProperty) getInternalProperty(INTERNAL_MAXPULSE)).setPropertyValue(val);
 	}
 	

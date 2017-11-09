@@ -145,33 +145,37 @@ public abstract class PropertyMainFrame extends JFrame {
 		return controller_.getCore();
 	}
 	
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void linkInternalProperties(){
-		Iterator<PropertyPanel> it = panels_.iterator();
+		Iterator<PropertyPanel> panelsIt = panels_.iterator();
 		HashMap<String, InternalProperty> internalproperties = new HashMap<String, InternalProperty>();
-		while(it.hasNext()){
-			internalproperties.putAll(it.next().getInternalProperties());
+		HashMap<String, InternalProperty> internalpropertiesCopy;
+		while(panelsIt.hasNext()){
+			internalproperties.putAll(panelsIt.next().getInternalProperties());
 		}
 		
-		Iterator<String> it2 = internalproperties.keySet().iterator();
-		Iterator<String> it3;
-		String s, s2;
-		while(it2.hasNext()){
-			s = it2.next();
-			if(!internalproperties.get(s).isAllocated()){
-				it3 = internalproperties.keySet().iterator();
-				while(it3.hasNext()){
-					s2 = it3.next();
-					if(internalproperties.get(s2).getName().equals(internalproperties.get(s).getName())){
-						String t1 = internalproperties.get(s).getType();
-						if(t1.equals(internalproperties.get(s2).getType())){
-							if(t1.equals(InternalPropertyType.INTEGER)){
-								IntInternalPropertyValue val = new IntInternalPropertyValue(((IntInternalProperty) internalproperties.get(s)).getDefaultValue());
-								((IntInternalProperty) internalproperties.get(s)).linkValue(val);
-								((IntInternalProperty) internalproperties.get(s2)).linkValue(val);
-							} else if(t1.equals(InternalPropertyType.DOUBLE)){
+		Iterator<String> propIt1 = internalproperties.keySet().iterator();
+		Iterator<String> propIt2;
+		String firstproperty, secondproperty;
+		while(propIt1.hasNext()){
+			firstproperty = propIt1.next();
+			if(!internalproperties.get(firstproperty).isAllocated()){
+				internalpropertiesCopy = (HashMap<String, InternalProperty>) internalproperties.clone();
+				internalpropertiesCopy.remove(firstproperty);
+				propIt2 = internalpropertiesCopy.keySet().iterator();
+				while(propIt2.hasNext()){
+					secondproperty = propIt2.next();
+					if(internalproperties.get(secondproperty).getName().equals(internalproperties.get(firstproperty).getName())){
+						String firstType = internalproperties.get(firstproperty).getType();
+						String secondType = internalproperties.get(secondproperty).getType();
+						if(firstType.equals(secondType)){
+							if(firstType.equals(InternalPropertyType.INTEGER.getTypeValue())){
+								IntInternalPropertyValue val = new IntInternalPropertyValue(((IntInternalProperty) internalproperties.get(firstproperty)).getDefaultValue());
+								((IntInternalProperty) internalproperties.get(firstproperty)).linkValue(val);
+								((IntInternalProperty) internalproperties.get(secondproperty)).linkValue(val);
+							} else if(firstType.equals(InternalPropertyType.DOUBLE)){
 								
-							} else if(t1.equals(InternalPropertyType.STRING)){
+							} else if(firstType.equals(InternalPropertyType.STRING)){
 								
 							}
 						}

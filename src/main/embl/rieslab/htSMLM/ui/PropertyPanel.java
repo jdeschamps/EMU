@@ -56,8 +56,8 @@ public abstract class PropertyPanel extends JPanel{
 	}	
 	
 	public InternalProperty getInternalProperty(String name){
-		if(internalprops_.containsKey(name)){
-			return internalprops_.get(name);
+		if(internalprops_.containsKey(getLabel()+" "+name)){
+			return internalprops_.get(getLabel()+" "+name);
 		}
 		return null;
 	}	

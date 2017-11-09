@@ -29,6 +29,7 @@ public abstract class InternalProperty<T> {
 	public void linkValue(InternalPropertyValue<T> prop){
 		if(!allocated_ && prop != null){
 			value_ = prop;
+			value_.registerListener(this);
 			allocated_ = true;
 		}
 	}
@@ -44,8 +45,10 @@ public abstract class InternalProperty<T> {
 		return null;
 	}
 	
-	public void setPropertyValue(T val){
+	public void setPropertyValue(T val){		
 		if(allocated_){
+			System.out.println("Is allocated");
+
 			value_.setValue(val, this);
 		}  
 	}

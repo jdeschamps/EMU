@@ -220,6 +220,8 @@ public class ActivationTask implements Task {
 			while(running_){
 				params = holder_.retrieveAllParameters();
 				
+				System.out.println("Max pulse is: "+params[PARAM_MAXPULSE]);
+				
 				// sanity checks here?
 				if(params[PARAM_AUTOCUTOFF] == 1){
 					getN(params[PARAM_SDCOEFF],params[PARAM_CUTOFF],params[PARAM_dT],true);
