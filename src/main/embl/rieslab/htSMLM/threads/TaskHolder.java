@@ -10,5 +10,8 @@ public interface TaskHolder {
 	public void pauseTask();
 	public void resumeTask();
 	public boolean isTaskRunning();
+	public String getTaskName();
+	public boolean isCriterionReached();
+	public void initialiseTask();
 	
 }

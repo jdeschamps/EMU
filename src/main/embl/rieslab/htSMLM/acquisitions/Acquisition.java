@@ -1,5 +1,6 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroup;
@@ -12,18 +13,17 @@ public abstract class Acquisition {
 	private AcquisitionType type_;
 	private String path_, name_;
 	private int numframes_, intervalframes_;
-	private boolean activate_ = false, useconfig_ = false;
+	private boolean useconfig_ = false;
 	private ConfigurationGroup group_;
 	private String configname_; 
 	private HashMap<String,String> propvalues_;
 	
 	public Acquisition(AcquisitionType type, String path, String name, ConfigurationGroup group, String configname, 
-			int numframes, int intervalframes, boolean activate, HashMap<String,String> propvalues){
+			int numframes, int intervalframes, HashMap<String,String> propvalues){
 		type_ = type;
 		path_ = path;
 		numframes_ = numframes;
 		intervalframes_ = intervalframes;
-		activate_ = activate;
 		name_ = name;
 		propvalues_ = propvalues;
 		
@@ -47,6 +47,10 @@ public abstract class Acquisition {
 		settings_.usePositionList = false;
 	}
 	
+	protected void setSlices(ArrayList<Double> slices){
+		settings_.slices = slices;
+	}
+	
 	public SequenceSettings getSettings(){
 		return settings_;
 	}
@@ -55,10 +59,6 @@ public abstract class Acquisition {
 		return type_.getTypeValue();
 	}
 	
-	public boolean useActivation(){
-		return activate_;
-	}
-
 	public String getName(){
 		return name_;
 	}
@@ -88,4 +88,10 @@ public abstract class Acquisition {
 	public HashMap<String,String> getPropertyValues(){
 		return propvalues_;
 	}
+
+	public abstract void preAcquisition();
+	public abstract void postAcquisition();
+	public abstract boolean stopCriterionReached();
+	public abstract String getFriendlyName();
+	
 }

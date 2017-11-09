@@ -47,8 +47,6 @@ public abstract class InternalProperty<T> {
 	
 	public void setPropertyValue(T val){		
 		if(allocated_){
-			System.out.println("Is allocated");
-
 			value_.setValue(val, this);
 		}  
 	}

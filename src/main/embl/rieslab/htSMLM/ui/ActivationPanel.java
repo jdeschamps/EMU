@@ -39,6 +39,9 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	 */
 	private static final long serialVersionUID = -517213311514918870L;
 
+	//////// Task
+	public static String TASK_NAME = "Activation task";
+	
 	//////// Components
 	private JLabel labelsdcoeff_;
 	private JLabel labelfeeback_;
@@ -699,6 +702,21 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	@Override
 	protected void changeInternalProperty(String name, String value) {
 		// Do nothing
+	}
+
+	@Override
+	public String getTaskName() {
+		return TASK_NAME;
+	}
+
+	@Override
+	public boolean isCriterionReached() {
+		return isActivationAtMax();
+	}
+
+	@Override
+	public void initialiseTask() {
+		changeProperty(LASER_PULSE,"0");
 	}
 
 }

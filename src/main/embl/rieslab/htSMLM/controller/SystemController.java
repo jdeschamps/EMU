@@ -12,6 +12,7 @@ import main.embl.rieslab.htSMLM.acquisitions.ui.PropertySettingsTable;
 import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroupsRegistry;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
+import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.MainFrame;
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
@@ -33,6 +34,7 @@ public class SystemController {
 	private HashMap<String,UIProperty> uiproperties_;
 	@SuppressWarnings("rawtypes")
 	private HashMap<String,UIParameter> uiparameters_;
+	private HashMap<String,TaskHolder> tasks_;
 	private ArrayList<String> unallocatedprop_; 
 		
 	@SuppressWarnings("rawtypes")
@@ -41,6 +43,7 @@ public class SystemController {
 		pairs_ = new ArrayList<PropertyPair>();
 		uiproperties_ = new HashMap<String,UIProperty>();
 		uiparameters_ = new HashMap<String,UIParameter>();
+		tasks_ = new HashMap<String,TaskHolder>();
 		unallocatedprop_ = new ArrayList<String>();
 	}
 	
@@ -62,6 +65,10 @@ public class SystemController {
 			pan = it.next();
 			uiproperties_.putAll(pan.getUIProperties());
 			uiparameters_.putAll(pan.getUIParameters());
+			
+			if(pan instanceof TaskHolder){
+				tasks_.put(((TaskHolder) pan).getTaskName(), (TaskHolder) pan);
+			}
 		}	
 			
 		// read out configuration
@@ -280,6 +287,10 @@ public class SystemController {
 		if(mainframe_ != null){
 			mainframe_.shutDown();
 		}
+	}
+	
+	public ConfigurationGroupsRegistry getConfigurationGroupsRegistry(){
+		return configgroups_;
 	}
 	
 	public void setUpSystem(HashMap<String, String> propvalues){
