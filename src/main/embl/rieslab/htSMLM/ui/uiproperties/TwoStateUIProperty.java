@@ -5,8 +5,8 @@ import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 
 public class TwoStateUIProperty extends UIProperty{
 	
-	public static String ON = "On";
-	public static String OFF = "Off";
+	public static String ON = "On value";
+	public static String OFF = "Off value";
 	private String onstate_ = "";
 	private String offstate_ = "";
 	

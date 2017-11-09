@@ -50,7 +50,7 @@ public class PropertySettingsTable extends JPanel {
 				friendlynames_.put(uipropertySet_.get(s).getFriendlyName(), s);
 			}
 		}
-		/*
+		
 		// Extracts uiproperties name from the map and sort them alphabetically
 		uipropkeys_ = StringSorting.sort(friendlynames_.values().toArray(uipropkeys_)); // gives a null exception
 
@@ -77,7 +77,7 @@ public class PropertySettingsTable extends JPanel {
 
 		JScrollPane sc = new JScrollPane(table);
 
-		this.add(sc);*/
+		this.add(sc);
 	}
 
 	
