@@ -59,13 +59,6 @@ public class UIProperty {
 		return mmproperty_;
 	}
 	
-	public boolean isMMPropertyReadOnly(){
-		if(allocated_){
-			return mmproperty_.isReadOnly();
-		}
-		return true;
-	}
-	
 	public String getFriendlyName(){
 		if(friendlyname_ == null){
 			return name_;
@@ -87,5 +80,41 @@ public class UIProperty {
 	
 	public boolean isMultiState(){
 		return false;
+	}
+	
+	public boolean isMMPropertyReadOnly(){
+		if(allocated_){
+			return mmproperty_.isReadOnly();
+		}
+		return true;
+	}
+	
+	public boolean hasMMPropertyAllowedValues(){
+		if(allocated_){
+			return mmproperty_.hasAllowedValues();
+		}
+		return false;
+	}
+	
+	public boolean hasMMPropertyLimits(){
+		if(allocated_){
+			return mmproperty_.hasLimits();
+		}
+		return false;
+	}
+	
+	public String[] getAllowedValues(){
+		if(hasMMPropertyAllowedValues()){
+			return mmproperty_.getStringAllowedValues() ;
+		}
+		return null;
+	}
+	
+	public String[] getLimits(){
+		if(hasMMPropertyAllowedValues()){
+			String[] lim = {mmproperty_.getMin(),mmproperty_.getMax()};
+			return lim;
+		}
+		return null;
 	}
 }

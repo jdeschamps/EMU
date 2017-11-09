@@ -36,6 +36,7 @@ public class SystemController {
 	private HashMap<String,UIParameter> uiparameters_;
 	private HashMap<String,TaskHolder> tasks_;
 	private ArrayList<String> unallocatedprop_; 
+	private boolean start_;
 		
 	@SuppressWarnings("rawtypes")
 	public SystemController(CMMCore core){
@@ -51,6 +52,8 @@ public class SystemController {
 	 * Collects Micro-manager device properties, creates the user interface and loads the configuration. 
 	 */
 	public void start() {
+		start_ = true;
+		
 		// extract MM properties
 		mmproperties_ = new MMProperties(core_);
 		configgroups_ = new ConfigurationGroupsRegistry(core_);
@@ -77,7 +80,9 @@ public class SystemController {
 
 		if(read){ // if read a configuration
 			getConfiguration();
+			start_ = false;
 		} else { // if failed
+			start_ = false;
 			// launch a new wizard
 			config.launchNewWizard(uiproperties_, uiparameters_, mmproperties_);
 		}
@@ -197,7 +202,7 @@ public class SystemController {
 		mainframe_.updateAll();
 
 		// if unallocated properties show message
-		if (unallocatedprop_.size() > 0) {
+		if (!start_ && unallocatedprop_.size() > 0) {
 			showUnallocatedMessage();
 		}
 	}

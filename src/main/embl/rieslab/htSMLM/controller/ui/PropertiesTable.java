@@ -280,9 +280,6 @@ public class PropertiesTable extends JPanel {
 		
 		table.setAutoCreateRowSorter(false);
 
-		table.getColumnModel().getColumn(1).setMaxWidth(150);
-		table.getColumnModel().getColumn(2).setMaxWidth(500);
-		
 		table.setRowHeight(23);
 
 		// adds mouse listener to update the helper window

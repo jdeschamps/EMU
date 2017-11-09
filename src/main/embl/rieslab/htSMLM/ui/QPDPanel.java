@@ -24,7 +24,7 @@ public class QPDPanel extends PropertyPanel {
 	private JProgressBarUpdater progressbarupdater_;
 	
 	//////// Properties
-	public static String QPD_X = "QPD Z";
+	public static String QPD_X = "QPD X";
 	public static String QPD_Y = "QPD Y";
 	public static String QPD_Z = "QPD Z";
 	

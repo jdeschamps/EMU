@@ -48,11 +48,12 @@ public class PropertySettingsTable extends JPanel {
 			
 			if(uipropertySet_.get(s).isAllocated() && !uipropertySet_.get(s).isMMPropertyReadOnly()){
 				friendlynames_.put(uipropertySet_.get(s).getFriendlyName(), s);
-			}
+			} 
 		}
 		
 		// Extracts uiproperties name from the map and sort them alphabetically
-		uipropkeys_ = StringSorting.sort(friendlynames_.values().toArray(uipropkeys_)); // gives a null exception
+		String[] temp = new String[friendlynames_.values().size()];
+		uipropkeys_ = StringSorting.sort(friendlynames_.values().toArray(temp)); // gives a null exception
 
 		// Defines table model
 		DefaultTableModel model = getDefaultModel();
@@ -111,6 +112,8 @@ public class PropertySettingsTable extends JPanel {
 						return new DefaultCellEditor(new JComboBox(((TwoStateUIProperty) uipropertySet_.get(friendlynames_.get(s))).getStatesName()));
 					} else if (uipropertySet_.get(friendlynames_.get(s)).isMultiState()) { 
 						return new DefaultCellEditor(new JComboBox(((MultiStateUIProperty) uipropertySet_.get(friendlynames_.get(s))).getStatesName()));
+					} else if (uipropertySet_.get(friendlynames_.get(s)).hasMMPropertyAllowedValues()){
+						return new DefaultCellEditor(new JComboBox(uipropertySet_.get(friendlynames_.get(s)).getAllowedValues()));
 					} else {
 						super.getCellEditor(row, column);
 					}
