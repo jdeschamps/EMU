@@ -182,4 +182,19 @@ public class QPDPanel extends PropertyPanel {
 	public String getDescription() {
 		return "The "+getLabel()+" panel follows the values of a QPD. Three signals are displayed: X and Y in a 2D chart and Z in a progress bar. The maximum values of each component can be set in the parameters.";
 	}
+
+	@Override
+	protected void initializeInternalProperties() {
+		// Do nothing
+	}
+
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		// Do nothing
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		// Do nothing
+	}
 }

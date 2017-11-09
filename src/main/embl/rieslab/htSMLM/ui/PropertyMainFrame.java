@@ -5,6 +5,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.AbstractAction;
@@ -18,6 +19,10 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.embl.rieslab.htSMLM.controller.Configuration;
 import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
+import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalPropertyValue;
+import main.embl.rieslab.htSMLM.ui.internalproperty.InternalProperty;
+import main.embl.rieslab.htSMLM.ui.internalproperty.InternalPropertyType;
 import mmcorej.CMMCore;
 
 
@@ -48,6 +53,7 @@ public abstract class PropertyMainFrame extends JFrame {
     	setUpMenuBar();
 		initComponents();
 		registerPropertyPanels();
+		linkInternalProperties();
 	}
 	
 	private void setUpMenuBar(){
@@ -137,6 +143,43 @@ public abstract class PropertyMainFrame extends JFrame {
 	
 	public CMMCore getCore(){
 		return controller_.getCore();
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private void linkInternalProperties(){
+		Iterator<PropertyPanel> it = panels_.iterator();
+		HashMap<String, InternalProperty> internalproperties = new HashMap<String, InternalProperty>();
+		while(it.hasNext()){
+			internalproperties.putAll(it.next().getInternalProperties());
+		}
+		
+		Iterator<String> it2 = internalproperties.keySet().iterator();
+		Iterator<String> it3;
+		String s, s2;
+		while(it2.hasNext()){
+			s = it2.next();
+			if(!internalproperties.get(s).isAllocated()){
+				it3 = internalproperties.keySet().iterator();
+				while(it3.hasNext()){
+					s2 = it3.next();
+					if(internalproperties.get(s2).getName().equals(internalproperties.get(s).getName())){
+						String t1 = internalproperties.get(s).getType();
+						if(t1.equals(internalproperties.get(s2).getType())){
+							if(t1.equals(InternalPropertyType.INTEGER)){
+								IntInternalPropertyValue val = new IntInternalPropertyValue(((IntInternalProperty) internalproperties.get(s)).getDefaultValue());
+								((IntInternalProperty) internalproperties.get(s)).linkValue(val);
+								((IntInternalProperty) internalproperties.get(s2)).linkValue(val);
+							} else if(t1.equals(InternalPropertyType.DOUBLE)){
+								
+							} else if(t1.equals(InternalPropertyType.STRING)){
+								
+							}
+						}
+					}
+				}
+			}
+		}
+		
 	}
 	
 	protected abstract void initComponents();

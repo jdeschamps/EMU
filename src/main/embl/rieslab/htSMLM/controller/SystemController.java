@@ -282,18 +282,14 @@ public class SystemController {
 		}
 	}
 	
-	/**
-	 * Returns the camera exposure value.
-	 * 
-	 * @return Camera exposure
-	 */
-	public double getExposure(){
-		try {
-			double exp = core_.getExposure();
-			return exp;
-		} catch (Exception e) {
-			// throw error
-			return 0;
+	public void setUpSystem(HashMap<String, String> propvalues){
+		Iterator<String> it = propvalues.keySet().iterator();
+		String s;
+		while(it.hasNext()){
+			s = it.next();
+			if(uiproperties_.containsKey(s)){
+				uiproperties_.get(s).setPropertyValue(propvalues.get(s));
+			}
 		}
 	}
 	

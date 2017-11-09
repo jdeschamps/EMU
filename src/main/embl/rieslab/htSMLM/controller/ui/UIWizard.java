@@ -106,7 +106,7 @@ public class UIWizard {
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				// show dialogue
+				// show dialogue  
 				boolean b = true;
 				if(b){
 					help.disposeHelp();
@@ -114,7 +114,7 @@ public class UIWizard {
 					e.getWindow().dispose();
 				}
 			}
-		});
+		});   
 		
 		
 		// Tab containing the tables

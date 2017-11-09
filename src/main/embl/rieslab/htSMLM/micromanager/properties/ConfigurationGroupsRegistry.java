@@ -23,7 +23,7 @@ public class ConfigurationGroupsRegistry {
 		
 		if(groups != null){
 			for(int i=0;i<groups.size();i++){
-				groups_.put(groups.get(i), new ConfigurationGroup(core_.getAvailableConfigs(groups.get(i))));
+				groups_.put(groups.get(i), new ConfigurationGroup(groups.get(i),core_.getAvailableConfigs(groups.get(i))));
 			}
 		}
 	}

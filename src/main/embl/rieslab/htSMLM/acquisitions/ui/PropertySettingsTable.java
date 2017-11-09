@@ -3,6 +3,7 @@ package main.embl.rieslab.htSMLM.acquisitions.ui;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -34,36 +35,40 @@ public class PropertySettingsTable extends JPanel {
 	private String[] uipropkeys_;
 	private HashMap<String,String> friendlynames_;
 
-
 	public PropertySettingsTable(HashMap<String, UIProperty> uipropertySet) {
 		
 		uipropertySet_ = uipropertySet;
 		friendlynames_ = new HashMap<String,String>();
 
-		// Extracts uiproperties name from the UI map and sort them alphabetically
-		String[] temp = new String[uipropertySet_.size()];
-		uipropkeys_ = StringSorting.sort(uipropertySet_.keySet().toArray(temp));
+		// Filter out non allocated and read-only
+		Iterator<String> it = uipropertySet_.keySet().iterator();
+		String s;
+		while(it.hasNext()){
+			s = it.next();
+			
+			if(uipropertySet_.get(s).isAllocated() && !uipropertySet_.get(s).isMMPropertyReadOnly()){
+				friendlynames_.put(uipropertySet_.get(s).getFriendlyName(), s);
+			}
+		}
+		
+		// Extracts uiproperties name from the map and sort them alphabetically
+		uipropkeys_ = StringSorting.sort(friendlynames_.values().toArray(uipropkeys_));
 
 		// Defines table model
 		DefaultTableModel model = getDefaultModel();
 
 		// For each property of the UI
 		for (int i = 0; i < uipropkeys_.length; i++) {	
-			if(uipropertySet_.get(uipropkeys_[i]).isAllocated()){	
-				friendlynames_.put(uipropertySet_.get(uipropkeys_[i]).getFriendlyName(), uipropkeys_[i]);
-				if (uipropertySet_.get(uipropkeys_[i]).isTwoState()) {
-					// if property is a toggle property, adds a line for the on and off values respectively.
-					model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(), ((TwoStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStatesName()[0] });
-					
-				} else if (uipropertySet_.get(uipropkeys_[i]).isSingleState()) {
-					// if property is a single value property, adds a line for the value the property must take
-					model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),  ((SingleStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStateValue() });
-					
-				} else if (uipropertySet_.get(uipropkeys_[i]).isMultiState()) {
-					model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(), ((MultiStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStatesName()[0] });
-				} else{
-					model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),  uipropertySet_.get(uipropkeys_[i]).getPropertyValue()});
-				}
+			if (uipropertySet_.get(uipropkeys_[i]).isTwoState()) {
+				// if property is a toggle property, adds a line for the on and off values respectively.
+				model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),((TwoStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStatesName()[0] });
+			} else if (uipropertySet_.get(uipropkeys_[i]).isSingleState()) {
+				// if property is a single value property, adds a line for the value the property must take
+				model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),((SingleStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStateValue() });
+			} else if (uipropertySet_.get(uipropkeys_[i]).isMultiState()) {
+				model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),((MultiStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStatesName()[0] });
+			} else {
+				model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),uipropertySet_.get(uipropkeys_[i]).getPropertyValue() });
 			}
 		}
 

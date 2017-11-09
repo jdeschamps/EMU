@@ -4,9 +4,11 @@ import mmcorej.StrVector;
 
 public class ConfigurationGroup {
 
-	StrVector configs_;
+	private StrVector configs_;
+	private String name_;
 	
-	public ConfigurationGroup(StrVector config){
+	public ConfigurationGroup(String name, StrVector config){
+		name_ = name;
 		configs_ = config;
 	}
 	
@@ -23,5 +25,18 @@ public class ConfigurationGroup {
 			return configs_.get(ind);
 		}
 		return null;
+	}
+	
+	public boolean hasConfiguration(String s){
+		for(int i=0;i<configs_.size();i++){
+			if(s.equals(configs_.get(i))){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public String getName(){
+		return name_;
 	}
 }

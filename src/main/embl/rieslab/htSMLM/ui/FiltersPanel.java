@@ -177,4 +177,19 @@ public class FiltersPanel extends PropertyPanel {
 		return "The "+getLabel()+" panel should be liked to te filterwheel and allows the contol of up to "+NUM_POS+" filters. The colors and names can bu customized from the configuration menu.";
 	}
 
+	@Override
+	protected void initializeInternalProperties() {
+		// Do nothing
+	}
+
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		// Do nothing
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		// Do nothing
+	}
+
 }

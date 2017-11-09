@@ -22,7 +22,7 @@ public class SingleStateUIProperty extends UIProperty{
 	
 	@Override
 	public void setPropertyValue(String val) {
-		if (isInitialised()) {
+		if (isAllocated()) {
 			getMMPoperty().setStringValue(state_);
 		}
 	}

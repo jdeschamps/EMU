@@ -247,4 +247,19 @@ public class ActivationTask implements Task {
 			}
 		}
 	}
+
+	@Override
+	public boolean isPausable() {
+		return false;
+	}
+
+	@Override
+	public void pauseTask() {
+		// do nothing
+	}
+
+	@Override
+	public void resumeTask() {
+		// do nothing
+	}
 }

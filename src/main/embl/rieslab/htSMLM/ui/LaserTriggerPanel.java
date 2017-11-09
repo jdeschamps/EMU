@@ -305,4 +305,19 @@ public class LaserTriggerPanel extends PropertyPanel {
 				+ "in the text area is made of 0 and 1, albeit with the wrong size, the text is colored in blue. When wrong characters are entered, the text"
 				+ "turns red.";
 	}
+
+	@Override
+	protected void initializeInternalProperties() {
+		// Do nothing
+	}
+
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		// Do nothing
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		// Do nothing
+	}
 }

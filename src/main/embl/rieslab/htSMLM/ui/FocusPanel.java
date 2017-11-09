@@ -487,4 +487,19 @@ public class FocusPanel extends PropertyPanel {
 		return "The "+getLabel()+" panel controls the Z stage of the microscope. It allows monitoring of the stage position. In addition, small and large steps buttons can move the stage up and down. "
 				+ "The locking property corresponds to focus stabilization and is very specific to certain stages.";
 	}
+
+	@Override
+	protected void initializeInternalProperties() {
+		// Do nothing
+	}
+
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		// Do nothing
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		// Do nothing
+	}
 }

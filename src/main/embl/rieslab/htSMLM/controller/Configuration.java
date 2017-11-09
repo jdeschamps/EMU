@@ -26,7 +26,7 @@ public class Configuration {
 	public static String KEY_UIPARAMETER = "UI Parameter: ";
 	
 	// Configuration
-	public static String CONFIG_NAME = "config.uicfg";
+	public static String CONFIG_NAME = "ht-SMLM/config.uicfg";
 	public static String CONFIG_EXT = "uicfg";
 
 	private HashMap<String,String> uiproperties_;

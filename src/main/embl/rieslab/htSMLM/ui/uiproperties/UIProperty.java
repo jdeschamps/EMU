@@ -34,7 +34,7 @@ public class UIProperty {
 		}
 	}
 	
-	public boolean isInitialised(){
+	public boolean isAllocated(){
 		return allocated_;
 	}
 	
@@ -59,8 +59,11 @@ public class UIProperty {
 		return mmproperty_;
 	}
 	
-	public boolean isAllocated(){
-		return allocated_;
+	public boolean isMMPropertyReadOnly(){
+		if(allocated_){
+			return mmproperty_.isReadOnly();
+		}
+		return true;
 	}
 	
 	public String getFriendlyName(){

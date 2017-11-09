@@ -18,6 +18,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.misc.LogarithmicJSlider;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
@@ -46,6 +47,12 @@ public class LaserPulsingPanel extends PropertyPanel {
 	public static String PARAM_COLOR = "Color";	
 	private String title_;	
 	private Color color_;
+	
+	//////// Internal property
+	private static String INTERNAL_MAXPULSE = "Maximum pulse";
+	
+	//////// Convenience variables
+	private int maxpulse_;
 	
 	public LaserPulsingPanel(String label) {
 		super(label);
@@ -139,6 +146,8 @@ public class LaserPulsingPanel extends PropertyPanel {
 							textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
 							changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
 						}
+						
+						changeMaxPulseProperty(max);
 					}
 	         }
 	    });
@@ -168,6 +177,8 @@ public class LaserPulsingPanel extends PropertyPanel {
 						textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
 						changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
 					}
+					
+					changeMaxPulseProperty(max);
 				}
 			}
 
@@ -263,5 +274,38 @@ public class LaserPulsingPanel extends PropertyPanel {
 	public String getDescription() {
 		return "The "+getLabel()+" panel is meant to control the pulse length of the activation laser. "
 				+ "The user can set a maximum to the slider by entering a value in the second text area. The pulse length can be set by entering a value in the first text area or by moving the slider.";
+	}
+
+	@Override
+	protected void initializeInternalProperties() {
+		maxpulse_  = 10000;
+		
+		addInternalProperty(new IntInternalProperty(this, INTERNAL_MAXPULSE, maxpulse_));
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		if(label.equals(INTERNAL_MAXPULSE)){
+			maxpulse_ = ((IntInternalProperty) getInternalProperty(label)).getPropertyValue();
+			logslider_.setMaxWithin(maxpulse_);
+			if (logslider_.getValue() > logslider_.getMaxWithin()) {
+				logslider_.setValueWithin(logslider_.getMaxWithin());
+				textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
+				changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
+			}
+			textfieldmax_.setText(String.valueOf(maxpulse_));
+		}
+	}
+
+	private void changeMaxPulseProperty(int val){
+		((IntInternalProperty) getInternalProperty(INTERNAL_MAXPULSE)).setPropertyValue(val);
+	}
+	
+	// chose not to use this in order to avoid parsing...
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		if(name.equals(INTERNAL_MAXPULSE) && utils.isNumeric(value)){
+			((IntInternalProperty) getInternalProperty(name)).setPropertyValue(Integer.parseInt(value));
+		}
 	}
 }

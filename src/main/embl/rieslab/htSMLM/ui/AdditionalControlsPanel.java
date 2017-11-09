@@ -231,4 +231,19 @@ public class AdditionalControlsPanel extends PropertyPanel{
 	public String getDescription() {
 		return "The "+getLabel()+" panel makes use of two-state buttons to control servos.";
 	}
+
+	@Override
+	protected void initializeInternalProperties() {
+		// Do nothing
+	}
+
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		// Do nothing
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		// Do nothing
+	}
 }

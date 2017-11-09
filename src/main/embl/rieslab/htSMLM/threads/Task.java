@@ -7,4 +7,7 @@ public interface Task {
 	public void stopTask();
 	public boolean isRunning();
 	public void notifyHolder(Double[] outputs);
+	public boolean isPausable();
+	public void pauseTask();
+	public void resumeTask();
 }

@@ -3,6 +3,7 @@ package main.embl.rieslab.htSMLM.ui;
 import ij.ImagePlus;
 
 import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -19,10 +20,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 
 import main.embl.rieslab.htSMLM.threads.ActivationTask;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
+import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.uiparameters.DoubleUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
@@ -59,6 +62,9 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	//////// Properties
 	private static String LASER_PULSE = "Laser pulse length";
 	
+	//////// Internal properties
+	private static String INTERNAL_MAXPULSE = "Maximum pulse";
+	
 	//////// Parameters
 	private static String PARAM_IDLE = "Idle time";
 	private static String PARAM_NPOS = "Number of points";
@@ -68,7 +74,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	//////// Conveniance variables
 	private boolean activate_, shownms_, autocutoff_;
 	private double sdcoeff_, feedback_, dT_ = 1, N0_ = 0, cutoff_ = 100;
-	private int npos_, idletime_;
+	private int npos_, idletime_, maxpulse_;
 	private ImagePlus im_;
 	private int counternms_ = 0;
 	
@@ -457,7 +463,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 
 		return pane;
 	}
-
+	
 	protected void runActivation(boolean b){
 		if(b){
 			task_.startTask();
@@ -557,14 +563,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 			counternms_ ++;
 		}
 		
-		// run on non-EDT, but does it really take long?
-		Thread t = new Thread("Update pulse") {
-            public void run() {
-            	changeProperty(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
-            }
-
-        };
-        t.start();
+		changeProperty(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
 	}
 
 	@Override
@@ -576,10 +575,10 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 		params[ActivationTask.PARAM_CUTOFF] = cutoff_; 
 		params[ActivationTask.PARAM_dT] = dT_; 
 		params[ActivationTask.PARAM_FEEDBACK] = feedback_; 
-		params[ActivationTask.PARAM_MAXPULSE] = 100000; // what to do for this? 
+		params[ActivationTask.PARAM_MAXPULSE] = maxpulse_; // what to do for this? 
 		params[ActivationTask.PARAM_N0] = N0_; 
 		
-		if(utils.isFloat(getUIProperty(LASER_PULSE).getPropertyValue())){
+		if(utils.isNumeric(getUIProperty(LASER_PULSE).getPropertyValue())){
 			params[ActivationTask.PARAM_PULSE] = Double.parseDouble(getUIProperty(LASER_PULSE).getPropertyValue()); 
 		} else {
 			params[ActivationTask.PARAM_PULSE] = 0;
@@ -588,6 +587,118 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 		params[ActivationTask.PARAM_SDCOEFF] = sdcoeff_; 
 		
 		return params;
+	}
+
+	@Override
+	public void startTask() {
+		if(task_.isRunning()){ // if task is running 
+			if(!activate_){ // but not changing the pulse
+				 Runnable checkactivate = new Runnable() {
+					 public void run() {
+						 checkboxactivate_.setSelected(true);
+					 }
+				 };
+				 if (SwingUtilities.isEventDispatchThread()) {
+					 checkactivate.run();
+				 } else {
+					  EventQueue.invokeLater(checkactivate);
+				 }
+				 activate_ = true;
+			}
+		} else { // task not running
+			runActivation(true); // then run
+			if(!activate_){ // task not changing the pulse
+				 Runnable checkactivate = new Runnable() {
+					 public void run() {
+						 togglebuttonrun_.setSelected(true);
+						 checkboxactivate_.setSelected(true);
+					 }
+				 };
+				 if (SwingUtilities.isEventDispatchThread()) {
+					 checkactivate.run();
+				 } else {
+					  EventQueue.invokeLater(checkactivate);
+				 }
+				 activate_ = true;
+			} else {
+				 Runnable checkactivate = new Runnable() {
+					 public void run() {
+						 togglebuttonrun_.setSelected(true);
+					 }
+				 };
+				 if (SwingUtilities.isEventDispatchThread()) {
+					 checkactivate.run();
+				 } else {
+					  EventQueue.invokeLater(checkactivate);
+				 }
+			}
+		} 
+	}
+
+	@Override
+	public void stopTask() {
+		// do nothing
+	}
+
+	@Override
+	public boolean isPausable() {
+		return true;
+	}
+
+	@Override
+	public void pauseTask() {
+		if(activate_){ 
+			 Runnable checkactivate = new Runnable() {
+				 public void run() {
+					 checkboxactivate_.setSelected(false);
+				 }
+			 };
+			 if (SwingUtilities.isEventDispatchThread()) {
+				 checkactivate.run();
+			 } else {
+				  EventQueue.invokeLater(checkactivate);
+			 }
+			 activate_ = false;
+		}		
+	}
+
+	@Override
+	public void resumeTask() {
+		startTask();	
+	}
+
+	@Override
+	public boolean isTaskRunning() {
+		return task_.isRunning();
+	}
+	
+	public boolean isActivationAtMax(){
+		String val = getUIProperty(LASER_PULSE).getPropertyValue();
+		if(utils.isNumeric(val)){
+			if(Double.parseDouble(val)<maxpulse_){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	protected void initializeInternalProperties() {
+		maxpulse_ = 10000;
+		
+		addInternalProperty(new IntInternalProperty(this, INTERNAL_MAXPULSE, maxpulse_));
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		if(label.equals(INTERNAL_MAXPULSE)){
+			maxpulse_ = ((IntInternalProperty) getInternalProperty(label)).getPropertyValue();
+		}
+	}
+
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		// Do nothing
 	}
 
 }

@@ -37,7 +37,7 @@ public class TwoStateUIProperty extends UIProperty{
 	
 	@Override
 	public void setPropertyValue(String val) {
-		if(isInitialised()) {
+		if(isAllocated()) {
 			if (val.equals(ON)) {
 				getMMPoperty().setStringValue(onstate_);
 			} else {

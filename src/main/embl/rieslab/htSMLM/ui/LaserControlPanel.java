@@ -291,4 +291,19 @@ public class LaserControlPanel extends PropertyPanel {
 	public String getDescription() {
 		return "The "+getLabel()+" panel controls a single laser and allows for rapid on/off and power percentage changes.";
 	}
+
+	@Override
+	protected void initializeInternalProperties() {
+		// Do nothing
+	}
+
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		// Do nothing
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		// Do nothing
+	}
 }
