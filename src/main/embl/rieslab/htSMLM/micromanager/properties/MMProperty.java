@@ -1,5 +1,8 @@
 package main.embl.rieslab.htSMLM.micromanager.properties;
 
+import java.util.ArrayList;
+
+import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
 public abstract class MMProperty<T> {
@@ -19,6 +22,7 @@ public abstract class MMProperty<T> {
 	protected T[] allowedValues;
 	protected T value;
 	protected T maxValue, minValue;
+	private ArrayList<UIProperty> listeners_;
 	
 	public MMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly){
 		this.core_ = core;
@@ -30,6 +34,8 @@ public abstract class MMProperty<T> {
 		this.hasAllowedValues = false;
 
 		hash_ = devicelabel_+"-"+label_;
+		
+		listeners_ = new ArrayList<UIProperty>();
 		
 		getValue();
 	}
@@ -50,6 +56,8 @@ public abstract class MMProperty<T> {
 		this.minValue = convertToValue(downLimit);
 
 		hash_ = devicelabel_+"-"+label_;
+		
+		listeners_ = new ArrayList<UIProperty>();
 				
 		getValue();
 	}
@@ -66,6 +74,8 @@ public abstract class MMProperty<T> {
 		this.hasAllowedValues = true;
 
 		hash_ = devicelabel_+"-"+label_;
+		
+		listeners_ = new ArrayList<UIProperty>();
 				
 		getValue();
 	}
@@ -94,7 +104,7 @@ public abstract class MMProperty<T> {
 		return val;
 	}
 
-	public void setStringValue(String stringval){
+	public void setStringValue(String stringval, UIProperty source){
 		if(!isReadOnly()){
 			T val = convertToValue(stringval);
 			if(isAllowed(val)){
@@ -102,6 +112,7 @@ public abstract class MMProperty<T> {
 					// set value
 					value = val;
 					core_.setProperty(devicelabel_,label_,stringval);
+					notifyListeners(source, stringval);
 				} catch (Exception e){
 					e.printStackTrace(); 
 				}
@@ -181,10 +192,21 @@ public abstract class MMProperty<T> {
 		return isAllowed(val);
 	}
 
-
 	protected boolean isInRange(String strval){
 		T val = convertToValue(strval);
 		return isInRange(val);
+	}
+	
+	public void addListener(UIProperty listener){
+		listeners_.add(listener);
+	}
+	
+	private void notifyListeners(UIProperty source, String value){
+		for(int i=0;i<listeners_.size();i++){
+			if(listeners_.get(i) != source){
+				listeners_.get(i).mmPropertyHasChanged(value);
+			}
+		}
 	}
 	
 	protected abstract T convertToValue(String s);

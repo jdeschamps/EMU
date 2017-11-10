@@ -12,5 +12,6 @@ public class SystemConstants {
 	public static int gaussianMaskSize = 3;
 	public static double gaussianMaskPrecision = 0.02;
 	public static int nmsMaskSize = 7;
+
 	
 }

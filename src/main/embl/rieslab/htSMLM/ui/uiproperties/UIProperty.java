@@ -51,7 +51,7 @@ public class UIProperty {
 	
 	public void setPropertyValue(String val){
 		if(allocated_){
-			mmproperty_.setStringValue(val);
+			mmproperty_.setStringValue(val, this);
 		}  
 	}
 	

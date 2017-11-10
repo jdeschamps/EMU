@@ -40,7 +40,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 
 	//////// Properties
 	public static String CAMERA_EXPOSURE = "Camera exposure";
-	public static String LASER_PULSE = "Laser pulse length";	
+	public static String LASER_PULSE = "Laser pulse";	
 	
 	//////// Parameters
 	public static String PARAM_TITLE = "Title";
@@ -248,6 +248,8 @@ public class LaserPulsingPanel extends PropertyPanel {
 					logslider_.setValueWithin(val);
 					textfieldvalue_.setText(newvalue);
 				}
+			} else {
+				System.out.println("Not integer");
 			}
 		}
 	}

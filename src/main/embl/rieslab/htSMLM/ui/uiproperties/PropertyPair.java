@@ -17,6 +17,7 @@ public class PropertyPair {
 	
 	public void pair(){
 		uiprop_.setProperty(mmprop_);
+		mmprop_.addListener(uiprop_);
 	}
 
 	public String getUIPropertyName(){

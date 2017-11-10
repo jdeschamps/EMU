@@ -115,7 +115,7 @@ public class MultiStateUIProperty extends UIProperty{
 		if (isAllocated()) {
 			for(int i=0;i<states_.length;i++){
 				if(states_[i].equals(val)){
-					getMMPoperty().setStringValue(val);
+					getMMPoperty().setStringValue(val, this);
 				}
 			}
 		}
