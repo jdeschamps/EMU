@@ -14,6 +14,7 @@ import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.ui.uiparameters.BoolUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 
 public class AdditionalControlsPanel extends PropertyPanel{
@@ -127,10 +128,10 @@ public class AdditionalControlsPanel extends PropertyPanel{
 	
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new TwoStateUIProperty(this, DEVICE_1,"Position property of the first two-state device."));
-		addUIProperty(new TwoStateUIProperty(this, DEVICE_2,"Position property of the second two-state device."));
-		addUIProperty(new TwoStateUIProperty(this, DEVICE_3,"Position property of the third two-state device."));
-		addUIProperty(new TwoStateUIProperty(this, DEVICE_4,"Position property of the fourth two-state device."));
+		addUIProperty(new TwoStateUIProperty(this, DEVICE_1,"Position property of the first two-state device.", PropertyFlag.TWOSTATE));
+		addUIProperty(new TwoStateUIProperty(this, DEVICE_2,"Position property of the second two-state device.", PropertyFlag.TWOSTATE));
+		addUIProperty(new TwoStateUIProperty(this, DEVICE_3,"Position property of the third two-state device.", PropertyFlag.TWOSTATE));
+		addUIProperty(new TwoStateUIProperty(this, DEVICE_4,"Position property of the fourth two-state device.", PropertyFlag.TWOSTATE));
 	}
 
 	@Override

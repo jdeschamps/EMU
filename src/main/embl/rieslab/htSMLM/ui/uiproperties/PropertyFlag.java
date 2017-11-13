@@ -1,7 +1,7 @@
 package main.embl.rieslab.htSMLM.ui.uiproperties;
 
 public enum PropertyFlag { 
-	FOCUS("Focus"), LASER("Laser"), TWOSTATE("Two-state device"), FILTERWHEEL("FilterWheel"), Camera ("Camera"), OTHERS("Others"); 
+	FOCUSSTAB("FocusStabilization"), LASER("Laser"), TWOSTATE("Two-state device"), FILTERWHEEL("FilterWheel"), CAMERA("Camera"), OTHERS("Others"); 
 	
 	private String value; 
 	

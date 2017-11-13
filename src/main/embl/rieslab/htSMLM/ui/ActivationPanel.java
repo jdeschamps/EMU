@@ -28,6 +28,7 @@ import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.uiparameters.DoubleUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.utils;
 import mmcorej.CMMCore;
@@ -512,7 +513,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length property of the activation laser"));		
+		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length property of the activation laser", PropertyFlag.OTHERS));		
 	}
 
 	@Override

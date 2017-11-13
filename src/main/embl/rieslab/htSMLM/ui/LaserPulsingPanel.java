@@ -22,6 +22,7 @@ import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.misc.LogarithmicJSlider;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.utils;
 
@@ -213,8 +214,8 @@ public class LaserPulsingPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, CAMERA_EXPOSURE,"Camera exposure in ms."));
-		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length of the activation laser."));
+		addUIProperty(new UIProperty(this, CAMERA_EXPOSURE,"Camera exposure in ms.", PropertyFlag.CAMERA));
+		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length of the activation laser.", PropertyFlag.OTHERS));
 	}
 
 	@Override

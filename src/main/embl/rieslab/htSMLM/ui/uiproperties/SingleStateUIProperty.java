@@ -8,8 +8,8 @@ public class SingleStateUIProperty extends UIProperty{
 	
 	private String state_ = "";
 	
-	public SingleStateUIProperty(PropertyPanel owner, String name, String description) {
-		super(owner, name, description);
+	public SingleStateUIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag) {
+		super(owner, name, description, flag);
 	}
 
 	public void setStateValue(String v){

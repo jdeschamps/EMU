@@ -15,6 +15,7 @@ import main.embl.rieslab.htSMLM.threads.updaters.ChartUpdater;
 import main.embl.rieslab.htSMLM.threads.updaters.JProgressBarUpdater;
 import main.embl.rieslab.htSMLM.ui.graph.Chart;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 
 public class QPDPanel extends PropertyPanel {
@@ -121,9 +122,9 @@ public class QPDPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, QPD_X,"Read-out property of the QPD x signal."));
-		addUIProperty(new UIProperty(this, QPD_Y,"Read-out property of the QPD y signal."));
-		addUIProperty(new UIProperty(this, QPD_Z,"Read-out property of the QPD z signal."));
+		addUIProperty(new UIProperty(this, QPD_X,"Read-out property of the QPD x signal.", PropertyFlag.OTHERS));
+		addUIProperty(new UIProperty(this, QPD_Y,"Read-out property of the QPD y signal.", PropertyFlag.OTHERS));
+		addUIProperty(new UIProperty(this, QPD_Z,"Read-out property of the QPD z signal.", PropertyFlag.OTHERS));
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
 
 public class FiltersPanel extends PropertyPanel {
@@ -121,7 +122,7 @@ public class FiltersPanel extends PropertyPanel {
 	
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new MultiStateUIProperty(this, FW_POSITION,"Filter wheel position property.",NUM_POS));		
+		addUIProperty(new MultiStateUIProperty(this, FW_POSITION,"Filter wheel position property.", PropertyFlag.FILTERWHEEL,NUM_POS));		
 	}
 
 	@Override

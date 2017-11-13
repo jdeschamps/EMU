@@ -10,8 +10,8 @@ public class TwoStateUIProperty extends UIProperty{
 	private String onstate_ = "";
 	private String offstate_ = "";
 	
-	public TwoStateUIProperty(PropertyPanel owner, String name, String description) {
-		super(owner, name, description);
+	public TwoStateUIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag) {
+		super(owner, name, description, flag);
 	}
 
 	@Override

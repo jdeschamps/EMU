@@ -23,6 +23,7 @@ import javax.swing.border.TitledBorder;
 import main.embl.rieslab.htSMLM.controller.SystemConstants;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.BinaryConverter;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
@@ -232,9 +233,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {	
-		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing."));
-		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered)."));
-		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"Pulse length of the laser."));
+		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing.", PropertyFlag.LASER));
+		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered).", PropertyFlag.LASER));
+		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"Pulse length of the laser.", PropertyFlag.LASER));
 	}
 
 	@Override

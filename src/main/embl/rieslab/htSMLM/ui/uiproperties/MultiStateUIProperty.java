@@ -9,8 +9,8 @@ public class MultiStateUIProperty extends UIProperty{
 	private String[] states_;
 	private String[] statesname_;
 	
-	public MultiStateUIProperty(PropertyPanel owner, String name, String description, int size) {
-		super(owner, name, description);
+	public MultiStateUIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag, int size) {
+		super(owner, name, description, flag);
 
 		states_ = new String[size];
 		statesname_ = new String[size];

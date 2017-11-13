@@ -11,12 +11,14 @@ public class UIProperty {
 	private String description_;
 	private PropertyPanel owner_;
 	private MMProperty mmproperty_;
+	private PropertyFlag flag_;
 	private boolean allocated_ = false;
 	
-	public UIProperty(PropertyPanel owner, String name, String description){
+	public UIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag){
 		this.owner_ = owner;
 		this.name_ = name;
 		this.description_ = description;
+		this.flag_ = flag;
 	}
 	
 	public String getName(){
@@ -116,5 +118,9 @@ public class UIProperty {
 			return lim;
 		}
 		return null;
+	}
+	
+	public String getFlag(){
+		return flag_.getDeviceType();
 	}
 }
