@@ -139,9 +139,9 @@ public class ParametersTable extends JPanel{
 					return new BoldTableCellRenderer();
 				case 1:
 					String s = (String) table.getValueAt(row, 0);
-					if(uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.COLOUR.getTypeValue())){
+					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){
 						return new IconTableRenderer();
-					} else if (uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.BOOL.getTypeValue())) { // if checkbox
+					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) { // if checkbox
 						return super.getDefaultRenderer(Boolean.class);
 					} else {
 						return new DefaultTableCellRenderer(); 
@@ -158,9 +158,9 @@ public class ParametersTable extends JPanel{
 					return super.getCellEditor(row, column);
 				case 1:
 					String s = (String) table.getValueAt(row, 0);
-					if(uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.COLOUR.getTypeValue())){
+					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){
 						return new DefaultCellEditor(color);
-					} else if (uiparameterSet_.get(s).getType().getTypeValue().equals(UIParameterType.BOOL.getTypeValue())) {
+					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) {
 						return super.getDefaultEditor(Boolean.class);
 					} else {
 						return new DefaultCellEditor(new JTextField()); 

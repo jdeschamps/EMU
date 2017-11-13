@@ -49,7 +49,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 	private Color color_;
 	
 	//////// Internal property
-	private static String INTERNAL_MAXPULSE = "Maximum pulse";
+	public static String INTERNAL_MAXPULSE = "Maximum pulse";
 	
 	//////// Convenience variables
 	private int maxpulse_;
@@ -237,6 +237,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		if(name.equals(LASER_PULSE)){
+			System.out.println("Property pulse has changed");
 			if(utils.isInteger(newvalue)){
 				int val = Integer.parseInt(newvalue);
 				

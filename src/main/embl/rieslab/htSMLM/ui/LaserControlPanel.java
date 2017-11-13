@@ -23,6 +23,7 @@ import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.util.ColorRepository;
 import main.embl.rieslab.htSMLM.util.utils;
 
 public class LaserControlPanel extends PropertyPanel {
@@ -180,9 +181,9 @@ public class LaserControlPanel extends PropertyPanel {
 		togglebuttonOnOff_.setBorder(null);
 		togglebuttonOnOff_.setFocusable(false);
 		togglebuttonOnOff_.setContentAreaFilled(false);
-		togglebuttonOnOff_.setIcon(new ImageIcon("off.png"));
-		togglebuttonOnOff_.setSelectedIcon(new ImageIcon("on.png"));
-		togglebuttonOnOff_.setDisabledIcon(new ImageIcon("off.png"));	
+		togglebuttonOnOff_.setIcon(new ImageIcon("ht-SMLM/off.png"));
+		togglebuttonOnOff_.setSelectedIcon(new ImageIcon("ht-SMLM/on.png"));
+		togglebuttonOnOff_.setDisabledIcon(new ImageIcon("ht-SMLM/off.png"));	
 		
 		
 		////// grid bag layout
@@ -269,6 +270,7 @@ public class LaserControlPanel extends PropertyPanel {
 
 	@Override
 	public void parameterhasChanged(String label) {
+		System.out.println("Param has changed, name: "+label);
 		if(label.equals(PARAM_TITLE)){
 			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
 			border_.setTitle(title_);
@@ -276,7 +278,10 @@ public class LaserControlPanel extends PropertyPanel {
 			getUIProperty(getLabel()+" "+LASER_PERCENTAGE).setFriendlyName(title_+" "+LASER_PERCENTAGE);
 			getUIProperty(getLabel()+" "+LASER_OPERATION).setFriendlyName(title_+" "+LASER_OPERATION);
 		} else if(label.equals(PARAM_COLOR)){
+			System.out.println("Colour it is!! ");
+
 			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
+			System.out.println("New colour is "+ColorRepository.getStringColor(color_));
 			border_.setTitleColor(color_);
 			this.repaint();
 		}

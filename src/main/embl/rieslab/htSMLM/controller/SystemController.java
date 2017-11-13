@@ -62,17 +62,7 @@ public class SystemController {
 		mainframe_ = new MainFrame("ht-SMLM control center", this);
 
 		// extract UI properties and parameters
-		Iterator<PropertyPanel> it = mainframe_.getPropertyPanels().iterator();
-		PropertyPanel pan;
-		while (it.hasNext()) {
-			pan = it.next();
-			uiproperties_.putAll(pan.getUIProperties());
-			uiparameters_.putAll(pan.getUIParameters());
-			
-			if(pan instanceof TaskHolder){
-				tasks_.put(((TaskHolder) pan).getTaskName(), (TaskHolder) pan);
-			}
-		}	
+		extractPropertiesAndParameters();
 			
 		// read out configuration
 		config = new Configuration(this);
@@ -97,6 +87,39 @@ public class SystemController {
 		}
 	}
 	
+	private void extractPropertiesAndParameters() {
+		Iterator<PropertyPanel> it = mainframe_.getPropertyPanels().iterator();
+		PropertyPanel pan;
+		while (it.hasNext()) {
+			pan = it.next();
+			
+			uiproperties_.putAll(pan.getUIProperties());
+			
+			@SuppressWarnings("rawtypes")
+			HashMap<String,UIParameter> panparam = pan.getUIParameters();
+			Iterator<String> paramit = panparam.keySet().iterator();
+			ArrayList<String> subst = new ArrayList<String>();
+			while(paramit.hasNext()){
+				String param = paramit.next();
+				
+				if(!uiparameters_.containsKey(param)){
+					uiparameters_.put(param, panparam.get(param));
+				} else if(uiparameters_.get(param).getType().equals(panparam.get(param).getType())){
+					subst.add(param);
+				} 
+			}
+			// avoid concurrent modification of the hashmap
+			for(int i=0;i<subst.size();i++){
+				pan.substituteParameter(subst.get(i), uiparameters_.get(subst.get(i)));
+			}
+			//uiparameters_.putAll(pan.getUIParameters());
+			
+			if(pan instanceof TaskHolder){
+				tasks_.put(((TaskHolder) pan).getTaskName(), (TaskHolder) pan);
+			}
+		}	
+	}
+
 	/**
 	 * Loads new configuration.
 	 * 

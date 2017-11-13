@@ -87,7 +87,7 @@ public class MainFrame extends PropertyMainFrame{
 		c2.gridheight = 3;
 		c2.weightx = 0.2;
 		c2.weighty = 0.8;
-		pulsePanel = new LaserPulsingPanel("UV pulse");
+		pulsePanel = new LaserPulsingPanel("Laser 0");
 		upperpane.add(pulsePanel,c2);
 
 		c2.gridx = 1;

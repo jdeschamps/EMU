@@ -8,22 +8,22 @@ public abstract class UIParameter<T> {
 	private String description_;
 	protected UIParameterType type_;
 	private T value_;
-	private PropertyPanel owner_;
+	private String ownername_;
 	
 	public UIParameter(PropertyPanel owner, String label, String description){
-		owner_ = owner;
+		ownername_ = owner.getLabel();
 		label_ = label;
 		description_ = description;
 		
 		setType();
 	}
 	
-	public UIParameterType getType(){
-		return type_;
+	public String getType(){
+		return type_.getTypeValue();
 	}
 
 	public String getHash(){
-		return owner_.getLabel()+" - "+label_;
+		return ownername_+" - "+label_;
 	}
 	
 	public String getLabel(){

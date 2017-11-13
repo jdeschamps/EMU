@@ -9,7 +9,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
@@ -57,7 +56,6 @@ public class AdditionalControlsPanel extends PropertyPanel{
 		this.setBorder(border_);
 		border_.setTitleFont(((TitledBorder) this.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 	
-		ButtonGroup group=new ButtonGroup();
 		togglebuttons_ = new JToggleButton[PARAM_NPOS];
 		
 		GridBagConstraints c = new GridBagConstraints();
@@ -76,9 +74,7 @@ public class AdditionalControlsPanel extends PropertyPanel{
 			
 			c.gridy = i;
 			this.add(togglebuttons_[i], c);
-			
-			group.add(togglebuttons_[i]);
-			
+						
 			togglebuttons_[i].addItemListener(new ItemListener(){
 				@Override
 				public void itemStateChanged(ItemEvent e) {

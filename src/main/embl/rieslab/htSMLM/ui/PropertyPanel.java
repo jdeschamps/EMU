@@ -110,6 +110,12 @@ public abstract class PropertyPanel extends JPanel{
 		return label_;
 	}
 
+	public void substituteParameter(String param, UIParameter uiParameter) {
+		parameters_.remove(param);
+		parameters_.put(param, uiParameter);
+	}
+	
+	
 	protected abstract void initializeProperties();
 	protected abstract void initializeInternalProperties();
 	protected abstract void initializeParameters();
@@ -121,5 +127,5 @@ public abstract class PropertyPanel extends JPanel{
 	public abstract void internalpropertyhasChanged(String label);
 	public abstract void shutDown();
 	public abstract String getDescription();
-	
+
 }

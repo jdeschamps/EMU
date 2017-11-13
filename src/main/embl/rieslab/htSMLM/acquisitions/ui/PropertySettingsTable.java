@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.DefaultCellEditor;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,7 +19,6 @@ import javax.swing.table.TableModel;
 
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
-import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.StringSorting;
 
@@ -61,10 +61,8 @@ public class PropertySettingsTable extends JPanel {
 		// For each property of the UI
 		for (int i = 0; i < uipropkeys_.length; i++) {	
 			if (uipropertySet_.get(uipropkeys_[i]).isTwoState()) {
-				// if property is a toggle property, adds a line for the on and off values respectively.
-				model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),((TwoStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStatesName()[0] });
+				model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(), false });
 			} else if (uipropertySet_.get(uipropkeys_[i]).isSingleState()) {
-				// if property is a single value property, adds a line for the value the property must take
 				model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),((SingleStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStateValue() });
 			} else if (uipropertySet_.get(uipropkeys_[i]).isMultiState()) {
 				model.addRow(new Object[] {uipropertySet_.get(uipropkeys_[i]).getFriendlyName(),((MultiStateUIProperty) uipropertySet_.get(uipropkeys_[i])).getStatesName()[0] });
@@ -97,6 +95,9 @@ public class PropertySettingsTable extends JPanel {
 				case 0:
 					return new BoldTableCellRenderer(); // first column is written in bold font
 				case 1:
+					if(getValueAt(row, column) instanceof Boolean){
+						return super.getDefaultRenderer(Boolean.class);
+					}
 					return new DefaultTableCellRenderer(); // column 1 takes a default renderer 
 				default:
 					return super.getCellRenderer(row, column);
@@ -108,8 +109,8 @@ public class PropertySettingsTable extends JPanel {
 				String s = (String) table.getValueAt(row, 0);
 				
 				if(column == 1){
-					if (uipropertySet_.get(friendlynames_.get(s)).isTwoState()) {
-						return new DefaultCellEditor(new JComboBox(((TwoStateUIProperty) uipropertySet_.get(friendlynames_.get(s))).getStatesName()));
+					if (getValueAt(row, column) instanceof Boolean) {
+						return super.getDefaultEditor(Boolean.class);
 					} else if (uipropertySet_.get(friendlynames_.get(s)).isMultiState()) { 
 						return new DefaultCellEditor(new JComboBox(((MultiStateUIProperty) uipropertySet_.get(friendlynames_.get(s))).getStatesName()));
 					} else if (uipropertySet_.get(friendlynames_.get(s)).hasMMPropertyAllowedValues()){
