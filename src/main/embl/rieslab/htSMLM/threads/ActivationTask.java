@@ -16,7 +16,7 @@ import main.embl.rieslab.htSMLM.controller.SystemConstants;
 import mmcorej.CMMCore;
 import mmcorej.TaggedImage;
 
-public class ActivationTask implements Task {
+public class ActivationTask implements Task<Double> {
 
 	public static int PARAM_SDCOEFF = 0;
 	public static int PARAM_FEEDBACK = 1;
@@ -34,14 +34,14 @@ public class ActivationTask implements Task {
 	public static int NUM_OUTPUTS = 3;
 	
 	private CMMCore core_;
-	private TaskHolder holder_;
+	private TaskHolder<Double> holder_;
 	private int idletime_;
 	private AutomatedActivation worker_;
 	private boolean running_ = false;  
 	private Double[] output_;
 	private ImageProcessor ip_;
 	
-	public ActivationTask(TaskHolder holder, CMMCore core, int idle){
+	public ActivationTask(TaskHolder<Double> holder, CMMCore core, int idle){
 		core_ = core;
 		idletime_ = idle;
 		
@@ -54,7 +54,7 @@ public class ActivationTask implements Task {
 	}
 	
 	@Override
-	public void registerHolder(TaskHolder holder) {
+	public void registerHolder(TaskHolder<Double> holder) {
 		holder_ = holder;
 	}
 
@@ -215,7 +215,7 @@ public class ActivationTask implements Task {
 		
 		@Override
 		protected Integer doInBackground() throws Exception {
-			double[] params;
+			Double[] params;
 			
 			while(running_){
 				params = holder_.retrieveAllParameters();

@@ -1,9 +1,9 @@
 package main.embl.rieslab.htSMLM.threads;
 
-public interface TaskHolder {
+public interface TaskHolder<T> {
 
-	public void update(Double[] output);
-	public double[] retrieveAllParameters();
+	public void update(T[] output);
+	public T[] retrieveAllParameters();
 	public void startTask();
 	public void stopTask();
 	public boolean isPausable();
@@ -12,6 +12,11 @@ public interface TaskHolder {
 	public boolean isTaskRunning();
 	public String getTaskName();
 	public boolean isCriterionReached();
-	public void initialiseTask();
+	
+	/**
+	 * To be called before starting the task.
+	 * 
+	 */
+	public void initializeTask();
 	
 }

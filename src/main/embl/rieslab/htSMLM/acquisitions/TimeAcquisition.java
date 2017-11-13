@@ -8,9 +8,9 @@ public class TimeAcquisition extends Acquisition {
 
 	private static String FRIENDLY_NAME = "Time stack";
 	
-	public TimeAcquisition(AcquisitionType type, String path, String name, ConfigurationGroup group, String configname, 
+	public TimeAcquisition(ConfigurationGroup group, String configname, 
 			int numframes, int intervalframes, HashMap<String, String> propvalues) {
-		super(type, path, name, group, configname, numframes, intervalframes,propvalues);
+		super(AcquisitionType.TIME, group, configname, numframes, intervalframes,propvalues);
 	}
 
 	@Override

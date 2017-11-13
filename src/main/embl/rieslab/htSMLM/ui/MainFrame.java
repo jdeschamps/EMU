@@ -31,6 +31,7 @@ public class MainFrame extends PropertyMainFrame{
 	public LaserTriggerPanel[] triggerPanels;
 	public ActivationPanel activationPanel;
 	public AdditionalControlsPanel addcontrolPanel;
+	public AcquisitionPanel acqPanel;
     
     protected void initComponents() {
     	
@@ -145,6 +146,10 @@ public class MainFrame extends PropertyMainFrame{
 			lasertrigg.add(triggerPanels[i]);
 		}
 		tab.add("Trigger", lasertrigg);
+		
+		acqPanel = new AcquisitionPanel(getController());
+		tab.add("Acquisition", acqPanel);
+
 		
 		/*c3.gridx = 0;
 		c3.gridy = 0;

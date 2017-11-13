@@ -140,9 +140,13 @@ public abstract class PropertyMainFrame extends JFrame {
 		}
 		this.dispose();
 	}
-	
+
 	public CMMCore getCore(){
 		return controller_.getCore();
+	}
+	
+	public SystemController getController(){
+		return controller_;
 	}
 	
 	@SuppressWarnings({ "rawtypes", "unchecked" })

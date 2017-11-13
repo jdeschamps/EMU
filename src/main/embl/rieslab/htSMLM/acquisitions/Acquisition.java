@@ -18,13 +18,11 @@ public abstract class Acquisition {
 	private String configname_; 
 	private HashMap<String,String> propvalues_;
 	
-	public Acquisition(AcquisitionType type, String path, String name, ConfigurationGroup group, String configname, 
+	public Acquisition(AcquisitionType type, ConfigurationGroup group, String configname, 
 			int numframes, int intervalframes, HashMap<String,String> propvalues){
 		type_ = type;
-		path_ = path;
 		numframes_ = numframes;
 		intervalframes_ = intervalframes;
-		name_ = name;
 		propvalues_ = propvalues;
 		
 		if(group != null && group.hasConfiguration(configname)){
@@ -61,6 +59,14 @@ public abstract class Acquisition {
 	
 	public String getName(){
 		return name_;
+	}	
+	
+	public void setName(String name){
+		name_ = name;
+	}	
+	
+	public void setPath(String path){
+		path_ = path;
 	}
 	
 	public String getPath(){

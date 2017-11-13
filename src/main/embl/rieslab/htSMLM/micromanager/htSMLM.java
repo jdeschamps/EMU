@@ -49,7 +49,6 @@ public class htSMLM implements MMPlugin {
 	@Override
 	public void setApp(ScriptInterface app) {
 	      gui_ = app;
-	      core_ = gui_.getMMCore();
 	}
 
 	@Override
@@ -57,7 +56,7 @@ public class htSMLM implements MMPlugin {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				controller_ = new SystemController(core_);
+				controller_ = new SystemController(gui_);
 				controller_.start();
 			}
 		});

@@ -32,7 +32,7 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.utils;
 import mmcorej.CMMCore;
 
-public class ActivationPanel extends PropertyPanel implements TaskHolder {
+public class ActivationPanel extends PropertyPanel implements TaskHolder<Double> {
 
 	/**
 	 * 
@@ -467,6 +467,12 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 		return pane;
 	}
 	
+	/////////////////////////////////////////////////////////////////////////////
+	//////
+	////// Convenience methods
+	//////
+	
+	
 	protected void runActivation(boolean b){
 		if(b){
 			task_.startTask();
@@ -488,7 +494,22 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	private void newGraph(){
 		graph_ = new TimeChart("Number of locs","time","N",npos_,300,240, true);	
 	}
+	
+	public boolean isActivationAtMax(){
+		String val = getUIProperty(LASER_PULSE).getPropertyValue();
+		if(utils.isNumeric(val)){
+			if(Double.parseDouble(val)<maxpulse_){
+				return true;
+			}
+		}
+		return false;
+	}
 
+	/////////////////////////////////////////////////////////////////////////////
+	//////
+	////// PropertyPanel methods
+	//////
+	
 	@Override
 	protected void initializeProperties() {
 		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length property of the activation laser"));		
@@ -555,6 +576,31 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	}
 
 	@Override
+	protected void initializeInternalProperties() {
+		maxpulse_ = 10000;
+		
+		addInternalProperty(new IntInternalProperty(this, INTERNAL_MAXPULSE, maxpulse_));
+	}
+
+	@Override
+	public void internalpropertyhasChanged(String label) {
+		if(label.equals(INTERNAL_MAXPULSE)){
+			maxpulse_ = ((IntInternalProperty) getInternalProperty(label)).getPropertyValue();
+		}
+	}
+
+	@Override
+	protected void changeInternalProperty(String name, String value) {
+		// Do nothing
+	}
+
+
+	/////////////////////////////////////////////////////////////////////////////
+	//////
+	////// TaskHolder methods
+	//////
+	
+	@Override
 	public void update(final Double[] output) {
 		graph_.addPoint(output[ActivationTask.OUTPUT_N]);
 		
@@ -570,21 +616,21 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	}
 
 	@Override
-	public double[] retrieveAllParameters() {
-		double[] params = new double[ActivationTask.NUM_PARAMETERS];
+	public Double[] retrieveAllParameters() {
+		Double[] params = new Double[ActivationTask.NUM_PARAMETERS];
 
-		params[ActivationTask.PARAM_ACTIVATE] = activate_ ? 1 : 0; 
-		params[ActivationTask.PARAM_AUTOCUTOFF] = autocutoff_ ? 1 : 0; 
+		params[ActivationTask.PARAM_ACTIVATE] = activate_ ? 1. : 0.; 
+		params[ActivationTask.PARAM_AUTOCUTOFF] = autocutoff_ ? 1. : 0.; 
 		params[ActivationTask.PARAM_CUTOFF] = cutoff_; 
 		params[ActivationTask.PARAM_dT] = dT_; 
 		params[ActivationTask.PARAM_FEEDBACK] = feedback_; 
-		params[ActivationTask.PARAM_MAXPULSE] = maxpulse_; // what to do for this? 
+		params[ActivationTask.PARAM_MAXPULSE] = (double) maxpulse_; // what to do for this? 
 		params[ActivationTask.PARAM_N0] = N0_; 
 		
 		if(utils.isNumeric(getUIProperty(LASER_PULSE).getPropertyValue())){
 			params[ActivationTask.PARAM_PULSE] = Double.parseDouble(getUIProperty(LASER_PULSE).getPropertyValue()); 
 		} else {
-			params[ActivationTask.PARAM_PULSE] = 0;
+			params[ActivationTask.PARAM_PULSE] = 0.;
 		}
 		
 		params[ActivationTask.PARAM_SDCOEFF] = sdcoeff_; 
@@ -674,35 +720,6 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	public boolean isTaskRunning() {
 		return task_.isRunning();
 	}
-	
-	public boolean isActivationAtMax(){
-		String val = getUIProperty(LASER_PULSE).getPropertyValue();
-		if(utils.isNumeric(val)){
-			if(Double.parseDouble(val)<maxpulse_){
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Override
-	protected void initializeInternalProperties() {
-		maxpulse_ = 10000;
-		
-		addInternalProperty(new IntInternalProperty(this, INTERNAL_MAXPULSE, maxpulse_));
-	}
-
-	@Override
-	public void internalpropertyhasChanged(String label) {
-		if(label.equals(INTERNAL_MAXPULSE)){
-			maxpulse_ = ((IntInternalProperty) getInternalProperty(label)).getPropertyValue();
-		}
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
-		// Do nothing
-	}
 
 	@Override
 	public String getTaskName() {
@@ -715,7 +732,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	}
 
 	@Override
-	public void initialiseTask() {
+	public void initializeTask() {
 		changeProperty(LASER_PULSE,"0");
 	}
 

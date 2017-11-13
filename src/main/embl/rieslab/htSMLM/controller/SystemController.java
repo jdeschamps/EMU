@@ -8,6 +8,8 @@ import java.util.Iterator;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import org.micromanager.api.ScriptInterface;
+
 import main.embl.rieslab.htSMLM.acquisitions.ui.PropertySettingsTable;
 import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroupsRegistry;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
@@ -25,6 +27,7 @@ import mmcorej.CMMCore;
 
 public class SystemController {
 
+	private ScriptInterface script_;
 	private CMMCore core_;
 	private MMProperties mmproperties_;
 	private ConfigurationGroupsRegistry configgroups_;
@@ -34,13 +37,15 @@ public class SystemController {
 	private HashMap<String,UIProperty> uiproperties_;
 	@SuppressWarnings("rawtypes")
 	private HashMap<String,UIParameter> uiparameters_;
+	@SuppressWarnings("rawtypes")
 	private HashMap<String,TaskHolder> tasks_;
 	private ArrayList<String> unallocatedprop_; 
 	private boolean start_;
 		
 	@SuppressWarnings("rawtypes")
-	public SystemController(CMMCore core){
-		core_ = core;
+	public SystemController(ScriptInterface script){
+		script_ = script;
+		core_ = script_.getMMCore();
 		pairs_ = new ArrayList<PropertyPair>();
 		uiproperties_ = new HashMap<String,UIProperty>();
 		uiparameters_ = new HashMap<String,UIParameter>();
@@ -78,15 +83,16 @@ public class SystemController {
 		}
 		
 		// test
-		if(uiproperties_.size()>0){
+	/*	if(uiproperties_.size()>0){
 			JFrame test = new JFrame();
 			PropertySettingsTable pst = new PropertySettingsTable(uiproperties_);
 			test.add(pst);
 			test.pack();
 			test.setVisible(true);
-		}
+		}*/
 	}
 	
+	@SuppressWarnings("rawtypes")
 	private void extractPropertiesAndParameters() {
 		Iterator<PropertyPanel> it = mainframe_.getPropertyPanels().iterator();
 		PropertyPanel pan;
@@ -95,7 +101,6 @@ public class SystemController {
 			
 			uiproperties_.putAll(pan.getUIProperties());
 			
-			@SuppressWarnings("rawtypes")
 			HashMap<String,UIParameter> panparam = pan.getUIParameters();
 			Iterator<String> paramit = panparam.keySet().iterator();
 			ArrayList<String> subst = new ArrayList<String>();
@@ -331,9 +336,13 @@ public class SystemController {
 			}
 		}
 	}
-	
+
 	public CMMCore getCore(){
 		return core_;
+	}
+
+	public ScriptInterface getScriptInterface(){
+		return script_;
 	}
 
 }
