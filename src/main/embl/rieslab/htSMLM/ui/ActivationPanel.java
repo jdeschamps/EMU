@@ -63,7 +63,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder {
 	private ActivationTask task_;
 	
 	//////// Properties
-	private static String LASER_PULSE = "Laser pulse length";
+	private static String LASER_PULSE = "Activation pulse length (script)";
 	
 	//////// Internal properties
 	private static String INTERNAL_MAXPULSE = LaserPulsingPanel.INTERNAL_MAXPULSE;

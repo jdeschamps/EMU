@@ -40,7 +40,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 
 	//////// Properties
 	public static String CAMERA_EXPOSURE = "Camera exposure";
-	public static String LASER_PULSE = "Laser pulse";	
+	public static String LASER_PULSE = "Activation pulse length (UI)";	
 	
 	//////// Parameters
 	public static String PARAM_TITLE = "Title";

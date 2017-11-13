@@ -47,7 +47,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 	//////// Properties
 	private static String TRIGGER_BEHAVIOUR = "behaviour";
 	private static String TRIGGER_SEQUENCE = "sequence";
-	private static String PULSE_LENGTH = "pulse length";
+	private static String PULSE_LENGTH = "pulse length (trig)";
 	
 	//////// Parameters
 	private static String PARAM_TITLE = "Title";
