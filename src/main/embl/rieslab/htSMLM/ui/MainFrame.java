@@ -4,6 +4,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
+import java.awt.Point;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -23,16 +24,18 @@ public class MainFrame extends PropertyMainFrame{
 	 */
 	private static final long serialVersionUID = -7647811940748674013L;
 
-	public FocusPanel focusPanel;
-	public QPDPanel qpdPanel;
-	public FiltersPanel filterPanel;
-	public LaserControlPanel[] controlPanels;
-	public LaserPulsingPanel pulsePanel;
-	public LaserTriggerPanel[] triggerPanels;
-	public ActivationPanel activationPanel;
-	public AdditionalControlsPanel addcontrolPanel;
-	public AcquisitionPanel acqPanel;
-    
+	private FocusPanel focusPanel;
+	private QPDPanel qpdPanel;
+	private FiltersPanel filterPanel;
+	private LaserControlPanel[] controlPanels;
+	private LaserPulsingPanel pulsePanel;
+	private LaserTriggerPanel[] triggerPanels;
+	private ActivationPanel activationPanel;
+	private AdditionalControlsPanel addcontrolPanel;
+	private AcquisitionPanel acqPanel;
+	private JPanel lowerpanel;
+	private JTabbedPane tab;
+	
     protected void initComponents() {
     	
     	System.out.println("Is the MainFrame setting up running on the EDT: "+SwingUtilities.isEventDispatchThread());
@@ -125,10 +128,10 @@ public class MainFrame extends PropertyMainFrame{
 		this.add(focusPanel);	
 		
 		///////////////////////////////////////////////////////////// lower panel
-		JPanel lowerpanel = new JPanel();
+		lowerpanel = new JPanel();
 		//GridBagConstraints c3 = new GridBagConstraints();
 		lowerpanel.setLayout(new BoxLayout(lowerpanel,BoxLayout.LINE_AXIS));
-		JTabbedPane tab = new JTabbedPane();
+		tab = new JTabbedPane();
 		
 		/////////// tab
 		qpdPanel = new QPDPanel("QPD");
@@ -147,7 +150,7 @@ public class MainFrame extends PropertyMainFrame{
 		}
 		tab.add("Trigger", lasertrigg);
 		
-		acqPanel = new AcquisitionPanel(getController());
+		acqPanel = new AcquisitionPanel(getController(), this);
 		tab.add("Acquisition", acqPanel);
 
 		
@@ -178,6 +181,14 @@ public class MainFrame extends PropertyMainFrame{
 		this.add(lowerpanel);
     }
     
+    public Point getAcquisitionPanelLocation(){
+    	Point loc = this.getLocation();
+    	loc.x += tab.getLocation().x+lowerpanel.getLocation().x+acqPanel.getLocation().x;
+    	loc.y += tab.getLocation().y+lowerpanel.getLocation().y+acqPanel.getLocation().y;
+    	
+    	return loc;
+    }
+    
 	@Override
 	protected void registerPropertyPanels() {
         registerPropertyPanel(focusPanel);
@@ -190,5 +201,6 @@ public class MainFrame extends PropertyMainFrame{
         }
         registerPropertyPanel(addcontrolPanel);
         registerPropertyPanel(activationPanel);
+        registerPropertyPanel(acqPanel);
 	}
 }

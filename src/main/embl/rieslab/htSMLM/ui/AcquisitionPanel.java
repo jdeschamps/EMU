@@ -1,24 +1,38 @@
 package main.embl.rieslab.htSMLM.ui;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Iterator;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
+import javax.swing.border.TitledBorder;
+import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.micromanager.utils.MMScriptException;
 
@@ -27,6 +41,7 @@ import main.embl.rieslab.htSMLM.acquisitions.AcquisitionEngine;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionWizard;
 import main.embl.rieslab.htSMLM.controller.SystemController;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
+import main.embl.rieslab.htSMLM.util.StringSorting;
 
 public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Integer>{
 
@@ -38,14 +53,15 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	private SystemController controller_;
 	private ArrayList<Acquisition> acqlist_;
     private AcquisitionWizard wizard_;
+    private MainFrame owner_;
     
 	///// Task
 	private static String TASK_NAME = "Unsupervised acquisitions";
 	private AcquisitionEngine acqengine_;
 	
     ///// Convenience variables
-    private File folder;
     private boolean ready_;
+    private JFrame summaryframe_;
 
     private final static String TEXT_INIT = "No configured acquisition list.\n";
     private final static String TEXT_START = "Starting acquisition.\n";
@@ -65,11 +81,57 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     private JTextField jTextField_path;
     private JTextPane jTextPane_progress;
     	
-	public AcquisitionPanel(SystemController controller){
+	public AcquisitionPanel(SystemController controller, MainFrame owner){
 		super("Acquisitions");
-		
 		controller_ = controller;
 		ready_ = false;
+		
+		owner_ = owner;
+		owner_.addComponentListener(new ComponentAdapter() {
+            public void componentMoved(ComponentEvent evt) {
+				Point newLoc = getSummaryButtonLocation();
+				if (summaryframe_ != null) {
+					summaryframe_.setLocation(newLoc);
+					summaryframe_.toFront();
+					summaryframe_.repaint();
+				}
+
+            }
+          });
+		
+		owner_.addWindowListener(new WindowAdapter() {
+
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+				if (summaryframe_ != null) {
+					summaryframe_.setAlwaysOnTop(false);
+				}
+            }
+
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+				if (summaryframe_ != null) {
+					summaryframe_.setAlwaysOnTop(true);
+				}
+            }
+            
+            @Override
+            public void windowIconified(WindowEvent e) {
+            	System.out.println("FrameChange");
+            	if ((owner_.getExtendedState() & Frame.ICONIFIED) != 0) {
+                    System.out.println("Frame was minimized");
+					if (summaryframe_ != null) {
+						summaryframe_.setAlwaysOnTop(false);
+						summaryframe_.toBack();
+					}
+                  }
+             }
+
+        });
+       
+		
 	}
 	
 	private void initiPanel() {
@@ -119,10 +181,16 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
         });
 
         jButton_showSummary = new JToggleButton(">>");
-        jButton_showSummary.addActionListener(new ActionListener(){
+        jButton_showSummary.addItemListener(new ItemListener(){
 			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				showSummary();
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					showSummary(true);
+					jButton_showSummary.setText("<<");
+				} else if(e.getStateChange()==ItemEvent.DESELECTED){
+					showSummary(false);
+					jButton_showSummary.setText(">>");
+				}
 			}
         });
         
@@ -238,6 +306,15 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		return 0.1;
 	}
 	
+	private Point getSummaryButtonLocation(){
+		Point newLoc = jButton_showSummary.getLocation();
+
+		newLoc.x += owner_.getAcquisitionPanelLocation().getX()+68;
+		newLoc.y += owner_.getAcquisitionPanelLocation().getY()+48;
+		
+		return newLoc;
+	}
+	
 	private void showSelectPath(){
     	JFileChooser fc = new JFileChooser();
     	fc.setCurrentDirectory(new java.io.File(".")); 
@@ -249,8 +326,79 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     	}
 	}
 	
-	private void showSummary(){
-		
+	private void showSummary(boolean b){
+		if(b){
+			summaryframe_ = new JFrame();
+			DefaultMutableTreeNode top = new DefaultMutableTreeNode("List of experiments to be performed at each stage position:");
+			createNodes(top);
+			JTree tree = new JTree(top);
+			JScrollPane treeView = new JScrollPane(tree);
+			JPanel pane = new JPanel();
+			pane.setBorder(BorderFactory.createTitledBorder(null, "Summary", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black));
+			pane.add(treeView);
+			summaryframe_.setLocation(getSummaryButtonLocation());
+			summaryframe_.setUndecorated(true);
+			summaryframe_.setContentPane(pane);
+			summaryframe_.pack();
+			summaryframe_.setVisible(true);
+			
+		} else {
+			if(summaryframe_ != null){
+				summaryframe_.dispose();
+			}
+		}
+	}
+	
+	private void createNodes(DefaultMutableTreeNode top) {
+	    DefaultMutableTreeNode exp = null;
+	    DefaultMutableTreeNode setting = null;
+	    
+	    exp = new DefaultMutableTreeNode("BFP");
+        top.add(exp);
+
+        //original Tutorial
+        setting = new DefaultMutableTreeNode("sadasdsadsada");
+        exp.add(setting);
+
+        //Tutorial Continued
+        setting = new DefaultMutableTreeNode("vsdfsdfdsfdsfsd");
+        exp.add(setting);
+
+	    exp = new DefaultMutableTreeNode("Localization");
+        top.add(exp);
+        
+        //original Tutorial
+        setting = new DefaultMutableTreeNode("sadasdsadsada");
+        exp.add(setting);
+
+        //Tutorial Continued
+        setting = new DefaultMutableTreeNode("vsdfsdfdsfdsfsd");
+        exp.add(setting);
+	    
+	    if(ready_){
+	    	Acquisition acq;
+	    	String s;
+	    	String[] propval;
+	    	for(int i=0;i<acqlist_.size();i++){
+	    		acq = acqlist_.get(i);
+	    	    exp = new DefaultMutableTreeNode(acq.getFriendlyName());
+	    	    
+	    	    propval = new String[acq.getPropertyValues().size()];
+	    	    Iterator<String> it = acq.getPropertyValues().keySet().iterator();
+	    	    int j=0;
+	    	    while(it.hasNext()){
+	    	    	s = it.next();
+	    	    	propval[j] = s+": "+acq.getPropertyValues().get(s);
+	    	    	j++;
+	    	    }
+	    	    
+	    	    propval = StringSorting.sort(propval);
+	    	    for(j=0;j<propval.length;j++){
+	    	    	setting = new DefaultMutableTreeNode(propval[j]);
+	    	    	exp.add(setting);
+	    	    }
+	    	}
+	    }
 	}
 	
 	private void showAcquisitionConfiguration(){
@@ -273,6 +421,10 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	private void setStartText(){
 		addText(TEXT_START);
+	}
+	
+	private void setFinishedText(){
+		addText(TEXT_FINISHED);
 	}
 	
 	private void saveAcquisitionList(){
@@ -301,6 +453,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		s = s + message;
 		jTextPane_progress.setText(s);
 	}
+	
 	
 	/////////////////////////////////////////////////////////////////////////////
 	//////
@@ -441,6 +594,9 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	@Override
 	public void shutDown() {
 		stopTask();
+		if(summaryframe_ != null){
+			summaryframe_.dispose();
+		}
 	}
 
 	@Override
