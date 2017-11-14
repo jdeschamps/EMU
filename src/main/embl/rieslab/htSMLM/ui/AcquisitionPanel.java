@@ -585,6 +585,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		// Do nothing
 	}
 
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Task getTask() {
 		return acqengine_;

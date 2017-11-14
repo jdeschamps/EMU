@@ -17,9 +17,12 @@ public abstract class Acquisition {
 	private ConfigurationGroup group_;
 	private String configname_; 
 	private HashMap<String,String> propvalues_;
+	private String name_;
 	
 	public Acquisition(AcquisitionType type){
 		type_ = type;
+		
+		name_ = "";
 		
 		settings_ = new SequenceSettings();
 		settings_.save = true;
@@ -94,4 +97,16 @@ public abstract class Acquisition {
 	public abstract boolean stopCriterionReached();
 	public abstract JPanel getPanel();
 	public abstract void readOutParameters(JPanel pane);
+
+	public String getPath() {
+		return settings_.root;
+	}
+
+	public String getName() {
+		return name_;
+	}	
+	
+	public void setName(String name) {
+		name_ = name;
+	}
 }
