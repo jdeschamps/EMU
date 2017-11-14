@@ -1,7 +1,6 @@
 package main.embl.rieslab.htSMLM.ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -37,10 +36,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.micromanager.utils.MMScriptException;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
-import main.embl.rieslab.htSMLM.acquisitions.AcquisitionEngine;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionWizard;
 import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.threads.AcquisitionEngine;
+import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
+import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
 import main.embl.rieslab.htSMLM.util.StringSorting;
 
 public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Integer>{
@@ -55,13 +56,23 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     private AcquisitionWizard wizard_;
     private MainFrame owner_;
     
+    ///// Parameters
+    private final static String PARAM_3D = "3D lens";
+    private final static String PARAM_LOCKING = "Focus stabilization";
+    private final static String PARAM_BFP = "BFP lens";
+    private final static String PARAM_WHITELIGHT = "White light";
+    
 	///// Task
 	private static String TASK_NAME = "Unsupervised acquisitions";
 	private AcquisitionEngine acqengine_;
 	
     ///// Convenience variables
+	private String param3D_, paramBFP_, paramLocking_, paramWhiteLight_;
+	
     private boolean ready_;
     private JFrame summaryframe_;
+    
+    private int waitingtime_ = 0;
 
     private final static String TEXT_INIT = "No configured acquisition list.\n";
     private final static String TEXT_START = "Starting acquisition.\n";
@@ -100,15 +111,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
           });
 		
 		owner_.addWindowListener(new WindowAdapter() {
-
-
             @Override
             public void windowDeactivated(WindowEvent e) {
 				if (summaryframe_ != null) {
 					summaryframe_.setAlwaysOnTop(false);
 				}
             }
-
 
             @Override
             public void windowActivated(WindowEvent e) {
@@ -128,7 +136,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 					}
                   }
              }
-
         });
        
 		
@@ -306,15 +313,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		return 0.1;
 	}
 	
-	private Point getSummaryButtonLocation(){
-		Point newLoc = jButton_showSummary.getLocation();
-
-		newLoc.x += owner_.getAcquisitionPanelLocation().getX()+68;
-		newLoc.y += owner_.getAcquisitionPanelLocation().getY()+48;
 		
-		return newLoc;
-	}
-	
 	private void showSelectPath(){
     	JFileChooser fc = new JFileChooser();
     	fc.setCurrentDirectory(new java.io.File(".")); 
@@ -326,27 +325,90 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     	}
 	}
 	
-	private void showSummary(boolean b){
+	
+	/////////////////////////////////////////////////////////////////////////////
+	//////
+	////// Acquisition configuration methods
+	//////
+	
+	private void showAcquisitionConfiguration(){
+		wizard_ = new AcquisitionWizard(controller_, this);
+	}
+	
+	public void setAcquisitionList(ArrayList<Acquisition> acqlist, int waitingtime){
+		acqlist_ = acqlist;
+		waitingtime_ = waitingtime;
+		if(!acqlist_.isEmpty()){
+			ready_ = true;
+			setSummaryText();
+		} else {
+			ready_ = false;
+		}
+	}
+	
+	private void saveAcquisitionList(){
+		wizard_.saveAcquisitionList();
+	}
+	
+	private void loadAcquisitionList(){
+		wizard_.loadAcquisitionList();		
+		addText(TEXT_LOADED);
+	}
+
+	public String get3DPropertyName(){
+		return param3D_;
+	}
+	
+	public String getBFPPropertyName(){
+		return paramBFP_;
+	}
+	
+	public String getLockingPropertyName(){
+		return paramLocking_;
+	}
+	
+	public String getWhiteLightPropertyName(){
+		return paramWhiteLight_;
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////
+	//////
+	////// Summary methods
+	//////
+	
+	private Point getSummaryButtonLocation(){
+		Point newLoc = jButton_showSummary.getLocation();
+
+		newLoc.x += owner_.getAcquisitionPanelLocation().getX()+68;
+		newLoc.y += owner_.getAcquisitionPanelLocation().getY()+48;
+		
+		return newLoc;
+	}
+	
+		private void showSummary(boolean b){
 		if(b){
-			summaryframe_ = new JFrame();
-			DefaultMutableTreeNode top = new DefaultMutableTreeNode("List of experiments to be performed at each stage position:");
-			createNodes(top);
-			JTree tree = new JTree(top);
-			JScrollPane treeView = new JScrollPane(tree);
-			JPanel pane = new JPanel();
-			pane.setBorder(BorderFactory.createTitledBorder(null, "Summary", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black));
-			pane.add(treeView);
+			summaryframe_ = new JFrame("Acquisitions summary");
 			summaryframe_.setLocation(getSummaryButtonLocation());
 			summaryframe_.setUndecorated(true);
-			summaryframe_.setContentPane(pane);
+			summaryframe_.setContentPane(getPropertiesTree());
 			summaryframe_.pack();
 			summaryframe_.setVisible(true);
-			
 		} else {
 			if(summaryframe_ != null){
 				summaryframe_.dispose();
 			}
 		}
+	}
+	
+	private JPanel getPropertiesTree(){
+		DefaultMutableTreeNode top = new DefaultMutableTreeNode("List of experiments to be performed at each stage position:");
+		createNodes(top);
+		JTree tree = new JTree(top);
+		JScrollPane treeView = new JScrollPane(tree);
+		JPanel pane = new JPanel();
+		pane.setBorder(BorderFactory.createTitledBorder(null, "Summary", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black));
+		pane.add(treeView);
+		return pane;
 	}
 	
 	private void createNodes(DefaultMutableTreeNode top) {
@@ -381,7 +443,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	String[] propval;
 	    	for(int i=0;i<acqlist_.size();i++){
 	    		acq = acqlist_.get(i);
-	    	    exp = new DefaultMutableTreeNode(acq.getFriendlyName());
+	    	    exp = new DefaultMutableTreeNode(acq.getType());
 	    	    
 	    	    propval = new String[acq.getPropertyValues().size()];
 	    	    Iterator<String> it = acq.getPropertyValues().keySet().iterator();
@@ -401,19 +463,10 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    }
 	}
 	
-	private void showAcquisitionConfiguration(){
-		wizard_ = new AcquisitionWizard();
-	}
-	
-	public void getAcquisitionList(){
-		acqlist_ = wizard_.getAcquisitionList();
-		if(!acqlist_.isEmpty()){
-			ready_ = true;
-			setSummaryText();
-		} else {
-			ready_ = false;
-		}
-	}
+	/////////////////////////////////////////////////////////////////////////////
+	//////
+	////// Progress methods
+	//////
 
 	private void setStopText(){
 		addText(TEXT_STOP);
@@ -423,17 +476,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		addText(TEXT_START);
 	}
 	
-	private void setFinishedText(){
+	public void setFinishedText(){
 		addText(TEXT_FINISHED);
-	}
-	
-	private void saveAcquisitionList(){
-		wizard_.saveAcquisitionList();
-	}
-	
-	private void loadAcquisitionList(){
-		wizard_.loadAcquisitionList();		
-		addText(TEXT_LOADED);
 	}
 	
 	private void setSummaryText(){
@@ -441,9 +485,9 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			addText(TEXT_SUMMARY);
 			String s = "Experiments: ";
 			for(int i=0;i<acqlist_.size()-1;i++){
-				s = s+acqlist_.get(i).getFriendlyName()+", ";
+				s = s+acqlist_.get(i).getType()+", ";
 			}
-			s = s+acqlist_.get(acqlist_.size()-1).getFriendlyName()+".\n";
+			s = s+acqlist_.get(acqlist_.size()-1).getType()+".\n";
 			addText(s);
 		}
 	}
@@ -468,7 +512,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	public Integer[] retrieveAllParameters() {
-		return null;
+		Integer[] i = {waitingtime_};
+		return i;
 	}
 
 	@Override
@@ -540,6 +585,11 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		// Do nothing
 	}
 
+	@Override
+	public Task getTask() {
+		return acqengine_;
+	}
+	
 	/////////////////////////////////////////////////////////////////////////////
 	//////
 	////// PropertyPanel methods
@@ -558,7 +608,15 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	protected void initializeParameters() {
-		// Do nothing
+		param3D_ = UIPropertyParameter.NO_PROPERTY;
+		paramBFP_ = UIPropertyParameter.NO_PROPERTY;
+		paramLocking_ = UIPropertyParameter.NO_PROPERTY;
+		paramWhiteLight_ = UIPropertyParameter.NO_PROPERTY;	
+		
+		addUIParameter(new UIPropertyParameter(this, PARAM_3D,"UIProperty corresponding to the insertion of the 3D lens."));
+		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens."));
+		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.")); 
+		addUIParameter(new UIPropertyParameter(this, PARAM_WHITELIGHT,"UIProperty corresponding to the triggering of the white light illumination.")); 
 	}
 
 	@Override
@@ -583,7 +641,15 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	public void parameterhasChanged(String label) {
-		// Do nothing
+		if(label.equals(PARAM_3D)){
+			param3D_ = ((UIPropertyParameter) getUIParameter(PARAM_3D)).getValue();
+		} else if(label.equals(PARAM_BFP)){
+			paramBFP_ = ((UIPropertyParameter) getUIParameter(PARAM_BFP)).getValue();
+		} else if(label.equals(PARAM_LOCKING)){
+			paramLocking_ = ((UIPropertyParameter) getUIParameter(PARAM_LOCKING)).getValue();
+		} else if(label.equals(PARAM_WHITELIGHT)){
+			paramWhiteLight_ = ((UIPropertyParameter) getUIParameter(PARAM_WHITELIGHT)).getValue();
+		}
 	}
 	
 	@Override
@@ -597,6 +663,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		if(summaryframe_ != null){
 			summaryframe_.dispose();
 		}
+		wizard_.shutDown();
 	}
 
 	@Override

@@ -1,13 +1,12 @@
-package main.embl.rieslab.htSMLM.acquisitions;
+package main.embl.rieslab.htSMLM.threads;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.controller.SystemController;
-import main.embl.rieslab.htSMLM.threads.Task;
-import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import mmcorej.CMMCore;
 
 import org.micromanager.api.IAcquisitionEngine2010;
@@ -97,6 +96,8 @@ public class AcquisitionEngine implements Task<Integer>{
 		}
 
 		public Integer runAcquisitions() {
+			Integer[] param = holder_.retrieveAllParameters();
+			
 			if (acqlist_.size() > 0) {
 				try {
 					// clear all previous acquisitions
@@ -116,7 +117,7 @@ public class AcquisitionEngine implements Task<Integer>{
 						core_.setXYPosition(xystage, currPos.get(0).x,currPos.get(0).y);
 
 						// let time for the stage to move to position
-						Thread.sleep(1000);
+						Thread.sleep(param[0]);
 
 						// perform each acquisition sequentially
 						for (int k = 0; k < acqlist_.size(); k++) {

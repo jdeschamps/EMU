@@ -51,7 +51,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 	private static String PULSE_LENGTH = "pulse length (trig)";
 	
 	//////// Parameters
-	private static String PARAM_TITLE = "Title";
+	private static String PARAM_TITLE = "Name";
 	private static String PARAM_COLOR = "Color";
 	private static String PARAM_DEF_BEHAVIOUR = "Default trigger";
 	private String title_, behaviour_;

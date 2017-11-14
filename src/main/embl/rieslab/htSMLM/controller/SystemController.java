@@ -5,24 +5,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import org.micromanager.api.ScriptInterface;
 
-import main.embl.rieslab.htSMLM.acquisitions.ui.PropertySettingsTable;
 import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroupsRegistry;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
+import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.MainFrame;
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyPair;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.util.StringSorting;
 import mmcorej.CMMCore;
 
 public class SystemController {
@@ -81,15 +82,6 @@ public class SystemController {
 			// launch a new wizard
 			config.launchNewWizard(uiproperties_, uiparameters_, mmproperties_);
 		}
-		
-		// test
-	/*	if(uiproperties_.size()>0){
-			JFrame test = new JFrame();
-			PropertySettingsTable pst = new PropertySettingsTable(uiproperties_);
-			test.add(pst);
-			test.pack();
-			test.setVisible(true);
-		}*/
 	}
 	
 	@SuppressWarnings("rawtypes")
@@ -345,5 +337,25 @@ public class SystemController {
 		return script_;
 	}
 	
+	public String[] getTwoStateProperties(){
+		ArrayList<String> props = new ArrayList<String>();
+		
+		props.add(UIPropertyParameter.NO_PROPERTY);
+		Iterator<String> it = uiproperties_.keySet().iterator();
+		String s;
+		while(it.hasNext()){
+			s = it.next();
+			if(uiproperties_.get(s).isTwoState()){
+				props.add(s);
+			}
+		}
+		
+		return StringSorting.sort(props.toArray(new String[0]));
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Task getTask(String holdername){
+		return tasks_.get(holdername).getTask();
+	}
 
 }

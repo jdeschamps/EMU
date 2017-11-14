@@ -44,7 +44,7 @@ public class LaserControlPanel extends PropertyPanel {
 	public static String LASER_OPERATION = "on/off";	
 	
 	//////// Parameters
-	public static String PARAM_TITLE = "Title";
+	public static String PARAM_TITLE = "Name";
 	public static String PARAM_COLOR = "Color";	
 	private String title_;	
 	private Color color_;

@@ -23,6 +23,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import main.embl.rieslab.htSMLM.threads.ActivationTask;
+import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
@@ -81,12 +82,15 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	private int npos_, idletime_, maxpulse_;
 	private ImagePlus im_;
 	private int counternms_ = 0;
+	private Double[] params;
 	
 	public ActivationPanel(String label, CMMCore core) {
 		super(label);
 		
 		task_ = new ActivationTask(this, core, idletime_);
 		im_ = new ImagePlus();
+		
+		params = new Double[ActivationTask.NUM_PARAMETERS];
 	}
 	
 	@Override
@@ -618,8 +622,6 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 
 	@Override
 	public Double[] retrieveAllParameters() {
-		Double[] params = new Double[ActivationTask.NUM_PARAMETERS];
-
 		params[ActivationTask.PARAM_ACTIVATE] = activate_ ? 1. : 0.; 
 		params[ActivationTask.PARAM_AUTOCUTOFF] = autocutoff_ ? 1. : 0.; 
 		params[ActivationTask.PARAM_CUTOFF] = cutoff_; 
@@ -735,6 +737,12 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	@Override
 	public void initializeTask() {
 		changeProperty(LASER_PULSE,"0");
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public Task getTask() {
+		return task_;
 	}
 
 }

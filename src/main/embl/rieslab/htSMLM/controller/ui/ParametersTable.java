@@ -38,12 +38,14 @@ public class ParametersTable extends JPanel{
 	private HashMap<String, UIParameter> uiparameterSet_;
 	private String[] uiparamkeys_;
 	private HelpWindow help_;
+	private String[] twostateprops_;
 		
 	@SuppressWarnings("rawtypes")
-	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HelpWindow help) {
+	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, String[] twostateprops, HelpWindow help) {
 		
 		uiparameterSet_ = uiparameterSet; 
 		help_ = help;
+		twostateprops_ = twostateprops;
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
@@ -79,9 +81,10 @@ public class ParametersTable extends JPanel{
 	
 
 	@SuppressWarnings("rawtypes")
-	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HelpWindow help) {		
+	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, String[] twostateprops, HelpWindow help) {		
 		help_ = help;
 		uiparameterSet_ = uiparameterSet; 
+		twostateprops_ = twostateprops;
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
@@ -101,13 +104,13 @@ public class ParametersTable extends JPanel{
 		// Define table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"UI parameter", "Value" }, 0);
 		for(int i=0;i<uiparamkeys_.length;i++){
-			if(configparam.containsKey(uiparamkeys_[i])){
+			if(configparam.containsKey(uiparamkeys_[i])){ // if the parameter is found in the configuration, then put its value
 				if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){
 					model.addRow(new Object[] {uiparamkeys_[i], utils.convertStringToBool(configparam.get(uiparamkeys_[i]))});
 				} else {
 					model.addRow(new Object[] {uiparamkeys_[i], configparam.get(uiparamkeys_[i])});
 				}
-			} else {
+			} else { // else put default value
 				if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){
 					model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getValue()});
 				} else {
@@ -162,6 +165,8 @@ public class ParametersTable extends JPanel{
 						return new DefaultCellEditor(color);
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) {
 						return super.getDefaultEditor(Boolean.class);
+					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.UIPROPERTY.getTypeValue())) {
+						return new DefaultCellEditor(new JComboBox(twostateprops_));
 					} else {
 						return new DefaultCellEditor(new JTextField()); 
 					}

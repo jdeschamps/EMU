@@ -212,4 +212,8 @@ public class Configuration {
 			wizard_.shutDown();
 		}
 	}
+	
+	public String[] getTwoStateProperties(){
+		return controller_.getTwoStateProperties();
+	}
 }

@@ -97,7 +97,6 @@ public class ActivationTask implements Task<Double> {
 			height = (int) core_.getImageHeight();
 
 			int buffsize = core_.getImageBufferSize();
-			System.out.println("[buffer] buffer size is: " + buffsize);
 
 			if (buffsize > SystemConstants.FPGA_BIT_DEPTH) {
 				try {
@@ -219,9 +218,7 @@ public class ActivationTask implements Task<Double> {
 			
 			while(running_){
 				params = holder_.retrieveAllParameters();
-				
-				System.out.println("Max pulse is: "+params[PARAM_MAXPULSE]);
-				
+								
 				// sanity checks here?
 				if(params[PARAM_AUTOCUTOFF] == 1){
 					getN(params[PARAM_SDCOEFF],params[PARAM_CUTOFF],params[PARAM_dT],true);

@@ -44,7 +44,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 	public static String LASER_PULSE = "Activation pulse length (UI)";	
 	
 	//////// Parameters
-	public static String PARAM_TITLE = "Title";
+	public static String PARAM_TITLE = "Name";
 	public static String PARAM_COLOR = "Color";	
 	private String title_;	
 	private Color color_;
@@ -214,7 +214,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, CAMERA_EXPOSURE,"Camera exposure in ms.", PropertyFlag.CAMERA));
+		addUIProperty(new UIProperty(this, CAMERA_EXPOSURE,"Camera exposure in ms.", PropertyFlag.CAMERAEXP));
 		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length of the activation laser.", PropertyFlag.OTHERS));
 	}
 
@@ -238,9 +238,19 @@ public class LaserPulsingPanel extends PropertyPanel {
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		if(name.equals(LASER_PULSE)){
-			System.out.println("Property pulse has changed");
 			if(utils.isInteger(newvalue)){
 				int val = Integer.parseInt(newvalue);
+				
+				if(val>logslider_.getMaxWithin()){
+					logslider_.setValueWithin(logslider_.getMaxWithin());
+					textfieldvalue_.setText(String.valueOf(logslider_.getMaxWithin()));
+					changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
+				} else {
+					logslider_.setValueWithin(val);
+					textfieldvalue_.setText(newvalue);
+				}
+			} else if(utils.isFloat(newvalue)){
+				int val = Math.round(Float.parseFloat(newvalue));
 				
 				if(val>logslider_.getMaxWithin()){
 					logslider_.setValueWithin(logslider_.getMaxWithin());
@@ -302,7 +312,6 @@ public class LaserPulsingPanel extends PropertyPanel {
 	}
 
 	private void changeMaxPulseProperty(int val){
-		System.out.println("Change internal property from panel "+getLabel());
 		((IntInternalProperty) getInternalProperty(INTERNAL_MAXPULSE)).setPropertyValue(val);
 	}
 	

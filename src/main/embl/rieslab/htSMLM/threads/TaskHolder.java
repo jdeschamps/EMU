@@ -12,6 +12,8 @@ public interface TaskHolder<T> {
 	public boolean isTaskRunning();
 	public String getTaskName();
 	public boolean isCriterionReached();
+	@SuppressWarnings("rawtypes")
+	public Task getTask();
 	
 	/**
 	 * To be called before starting the task.

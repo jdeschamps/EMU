@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.DefaultCellEditor;
-import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
