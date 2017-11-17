@@ -21,7 +21,7 @@ public class AcquisitionFactory {
 			
 		} else if(type.equals(AcquisitionType.LOCALIZATION3D.getTypeValue())){
 			
-		} else if(type.equals(AcquisitionType.SZSTACK.getTypeValue())){
+		} else if(type.equals(AcquisitionType.ZSTACK3D.getTypeValue())){
 			
 		} else if(type.equals(AcquisitionType.TIME.getTypeValue())){
 			return new TimeAcquisition(controller_);
