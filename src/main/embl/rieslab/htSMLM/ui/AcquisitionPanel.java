@@ -36,15 +36,17 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.micromanager.utils.MMScriptException;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
+import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionUI;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionWizard;
 import main.embl.rieslab.htSMLM.controller.SystemController;
 import main.embl.rieslab.htSMLM.threads.AcquisitionEngine;
 import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.util.StringSorting;
 
-public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Integer>{
+public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Integer>, AcquisitionUI{
 
 	/**
 	 * 
@@ -57,17 +59,17 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     private MainFrame owner_;
     
     ///// Parameters
-    private final static String PARAM_3D = "3D lens";
-    private final static String PARAM_LOCKING = "Focus stabilization";
-    private final static String PARAM_BFP = "BFP lens";
-    private final static String PARAM_WHITELIGHT = "White light";
+    public final static String PARAM_3D = "3D lens";
+    public final static String PARAM_LOCKING = "Focus stabilization";
+    public final static String PARAM_BFP = "BFP lens";
+    public final static String PARAM_BRIGHTFIELD = "Bright field";
     
 	///// Task
 	private static String TASK_NAME = "Unsupervised acquisitions";
 	private AcquisitionEngine acqengine_;
 	
     ///// Convenience variables
-	private String param3D_, paramBFP_, paramLocking_, paramWhiteLight_;
+	private String param3D_, paramBFP_, paramLocking_, paramBrightField_;
 	
     private boolean ready_;
     private JFrame summaryframe_;
@@ -325,16 +327,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     	}
 	}
 	
-	
 	/////////////////////////////////////////////////////////////////////////////
 	//////
-	////// Acquisition configuration methods
+	////// AcquisitionUI methods
 	//////
 	
-	private void showAcquisitionConfiguration(){
-		wizard_ = new AcquisitionWizard(controller_, this);
-	}
-	
+	@Override
 	public void setAcquisitionList(ArrayList<Acquisition> acqlist, int waitingtime){
 		acqlist_ = acqlist;
 		waitingtime_ = waitingtime;
@@ -345,6 +343,30 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			ready_ = false;
 		}
 	}
+	
+	@Override
+	public String getUIPropertyName(String acqtype) {
+		if(acqtype.equals(PARAM_3D)){
+			return param3D_;
+		} else if(acqtype.equals(PARAM_BFP)){
+			return paramBFP_;
+		} else if(acqtype.equals(PARAM_LOCKING)){
+			return paramLocking_;
+		} else if(acqtype.equals(PARAM_BRIGHTFIELD)){
+			return paramBrightField_;
+		}
+		return "";
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////
+	//////
+	////// Acquisition configuration methods
+	//////
+	
+	private void showAcquisitionConfiguration(){
+		wizard_ = new AcquisitionWizard(controller_, this);
+	}
+	
 	
 	private void saveAcquisitionList(){
 		wizard_.saveAcquisitionList();
@@ -368,7 +390,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	}
 	
 	public String getWhiteLightPropertyName(){
-		return paramWhiteLight_;
+		return paramBrightField_;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////
@@ -612,12 +634,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		param3D_ = UIPropertyParameter.NO_PROPERTY;
 		paramBFP_ = UIPropertyParameter.NO_PROPERTY;
 		paramLocking_ = UIPropertyParameter.NO_PROPERTY;
-		paramWhiteLight_ = UIPropertyParameter.NO_PROPERTY;	
+		paramBrightField_ = UIPropertyParameter.NO_PROPERTY;	
 		
-		addUIParameter(new UIPropertyParameter(this, PARAM_3D,"UIProperty corresponding to the insertion of the 3D lens."));
-		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens."));
-		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.")); 
-		addUIParameter(new UIPropertyParameter(this, PARAM_WHITELIGHT,"UIProperty corresponding to the triggering of the white light illumination.")); 
+		addUIParameter(new UIPropertyParameter(this, PARAM_3D,"UIProperty corresponding to the insertion of the 3D lens.", PropertyFlag.TWOSTATE.getDeviceType()));
+		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens.", PropertyFlag.TWOSTATE.getDeviceType()));
+		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.", PropertyFlag.FOCUSSTAB.getDeviceType())); 
+		addUIParameter(new UIPropertyParameter(this, PARAM_BRIGHTFIELD,"UIProperty corresponding to the triggering of the white light illumination.", PropertyFlag.TWOSTATE.getDeviceType())); 
 	}
 
 	@Override
@@ -648,8 +670,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			paramBFP_ = ((UIPropertyParameter) getUIParameter(PARAM_BFP)).getValue();
 		} else if(label.equals(PARAM_LOCKING)){
 			paramLocking_ = ((UIPropertyParameter) getUIParameter(PARAM_LOCKING)).getValue();
-		} else if(label.equals(PARAM_WHITELIGHT)){
-			paramWhiteLight_ = ((UIPropertyParameter) getUIParameter(PARAM_WHITELIGHT)).getValue();
+		} else if(label.equals(PARAM_BRIGHTFIELD)){
+			paramBrightField_ = ((UIPropertyParameter) getUIParameter(PARAM_BRIGHTFIELD)).getValue();
 		}
 	}
 	
@@ -664,7 +686,9 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		if(summaryframe_ != null){
 			summaryframe_.dispose();
 		}
-		wizard_.shutDown();
+		if(wizard_ != null){
+			wizard_.shutDown();
+		}
 	}
 
 	@Override

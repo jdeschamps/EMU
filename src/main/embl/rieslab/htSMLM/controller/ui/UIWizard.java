@@ -60,7 +60,7 @@ public class UIWizard {
 				propertytable_.setOpaque(true); 
 				
 				// and parameters
-				parametertable_ = new ParametersTable(uiparameterSet, config_.getTwoStateProperties(), help_);
+				parametertable_ = new ParametersTable(uiparameterSet, uipropertySet, help_);
 				parametertable_.setOpaque(true); 
 				
 				frame_ = createFrame(propertytable_, parametertable_, help_);
@@ -93,7 +93,7 @@ public class UIWizard {
 				propertytable_.setOpaque(true); 
 				
 				// now parameters
-				parametertable_ = new ParametersTable(uiparameterSet, configparam, config_.getTwoStateProperties(), help_);
+				parametertable_ = new ParametersTable(uiparameterSet, configparam, uipropertySet, help_);
 				parametertable_.setOpaque(true); 
 				
 				frame_ = createFrame(propertytable_,parametertable_, help_);

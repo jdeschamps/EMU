@@ -14,20 +14,20 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
+import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
 import main.embl.rieslab.htSMLM.controller.SystemController;
-import main.embl.rieslab.htSMLM.ui.AcquisitionPanel;
 import main.embl.rieslab.htSMLM.util.utils;
 
 public class AcquisitionWizard {
 
-	private AcquisitionPanel owner_;
+	private AcquisitionUI owner_;
 	private JFrame frame_;
 	private ArrayList<AcquisitionTab> tabs_;
-	private JTabbedPane rightpane_;
+	private JTabbedPane tabbedpane_;
 	private JTextField waitfield;
 	private SystemController controller_;
 	
-	public AcquisitionWizard(SystemController controller, AcquisitionPanel owner){
+	public AcquisitionWizard(SystemController controller, AcquisitionUI owner){
 		owner_ = owner;
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
@@ -98,7 +98,7 @@ public class AcquisitionWizard {
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(2,4,2,4);
-		c.fill = GridBagConstraints.HORIZONTAL;
+		c.fill = GridBagConstraints.BOTH;
 
 		c.gridx = 1;
 		c.gridy = 0;
@@ -135,49 +135,75 @@ public class AcquisitionWizard {
 	}
 
 	private JTabbedPane setUpRightPanel() {
-		rightpane_ = new JTabbedPane();
+		tabbedpane_ = new JTabbedPane();
 		
-		AcquisitionTab acqtab = new AcquisitionTab(controller_, owner_);
-		rightpane_.add(AcquisitionTab.DEFAULT_NAME, acqtab);
+		AcquisitionTab acqtab = new AcquisitionTab(this, new AcquisitionFactory(owner_, controller_));
+		tabbedpane_.add(acqtab.getTypeName(), acqtab);
 		
-		return rightpane_;
+		return tabbedpane_;
 	}
 	
 	protected void moveTabLeft() {
     	if(tabs_.size()>1){
-    		int i = rightpane_.getSelectedIndex();
+    		int i = tabbedpane_.getSelectedIndex()-1;
 
     		if(i>0){
         		AcquisitionTab tab = tabs_.get(i);
 
-        		rightpane_.remove(i);
+        		tabbedpane_.remove(i);
         		tabs_.remove(i);
         		
         		tabs_.add(i-1, tab);
-        		rightpane_.add(tab, i-1);
-        		rightpane_.setSelectedIndex(i-1);
+        		tabbedpane_.add(tab, i-1);
+        		tabbedpane_.setSelectedIndex(i-1);
     		}
     	} 		
 	}
 
 	protected void moveTabRight() {
     	if(tabs_.size()>1){
-    		int i = rightpane_.getSelectedIndex();
+    		int i = tabbedpane_.getSelectedIndex();
 
     		if(i<tabs_.size()-1){
     			AcquisitionTab tab = tabs_.get(i);
 
-    			rightpane_.remove(i);
+    			tabbedpane_.remove(i);
         		tabs_.remove(i);
         		
         		tabs_.add(i+1, tab);
-        		rightpane_.add(tab, i+1);
-        		rightpane_.setSelectedIndex(i+1);
+        		tabbedpane_.add(tab, i+1);
+        		tabbedpane_.setSelectedIndex(i+1);
     		}
     	} 
 	}
 
-	protected void saveAcqList() {
+	protected void removeTab() {
+    	if(tabs_.size()>1){
+    		int i = tabbedpane_.getSelectedIndex();
+
+    		tabbedpane_.remove(i);
+    		tabs_.remove(i);
+    	} 
+	}
+
+	protected void createNewTab() {
+       	tabs_.add(new AcquisitionTab(this, new AcquisitionFactory(owner_, controller_)));
+        tabbedpane_.add(tabs_.get(tabs_.size()-1), tabs_.size()-1);
+        tabbedpane_.setSelectedIndex(tabs_.size()-1);	
+	}
+	
+	public void changeName(AcquisitionTab acquisitionTab) {
+		setNameTab(acquisitionTab.getTypeName());
+	}
+	
+    private void setNameTab(String name){
+       	int i = tabbedpane_.getSelectedIndex();
+       	if(i>=0 && i<tabbedpane_.getTabCount()){
+           	tabbedpane_.setTitleAt(i, name);
+       	}
+    }
+    	
+    protected void saveAcqList() {
 		owner_.setAcquisitionList(getAcquisitionList(), getWaitingTime());
 		saveAcquisitionList();		
 	}
@@ -189,18 +215,6 @@ public class AcquisitionWizard {
 		}
 		return 5000;
 	}
-
-	protected void removeTab() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	protected void createNewTab() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
 	private ArrayList<Acquisition> getAcquisitionList() {
 		ArrayList<Acquisition> acqlist = new ArrayList<Acquisition>();
 		
@@ -221,7 +235,12 @@ public class AcquisitionWizard {
 		
 	}
 	
+	public SystemController getController(){
+		return controller_;
+	}
+	
 	public void shutDown() {
 		frame_.dispose();
 	}
+
 }

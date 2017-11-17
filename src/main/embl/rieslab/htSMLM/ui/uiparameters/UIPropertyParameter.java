@@ -5,9 +5,14 @@ import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 public class UIPropertyParameter extends UIParameter<String>{
 	
 	public static String NO_PROPERTY = "None";
+	
+	private String propertyflag_;
 
-	public UIPropertyParameter(PropertyPanel owner, String name, String description) {
+	public UIPropertyParameter(PropertyPanel owner, String name, String description, String propertyflag) {
 		super(owner, name, description);
+		
+		propertyflag_ = propertyflag;
+		
 		setValue(NO_PROPERTY);
 	}
 	
@@ -31,4 +36,7 @@ public class UIPropertyParameter extends UIParameter<String>{
 		return getValue();
 	}
 	
+	public String getPropertyFlag(){
+		return propertyflag_;
+	}
 }

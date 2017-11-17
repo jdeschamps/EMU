@@ -2,7 +2,9 @@ package main.embl.rieslab.htSMLM.controller.ui;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.DefaultCellEditor;
@@ -20,6 +22,8 @@ import javax.swing.table.TableModel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.BoolUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameterType;
+import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
 import main.embl.rieslab.htSMLM.util.StringSorting;
 import main.embl.rieslab.htSMLM.util.utils;
@@ -38,14 +42,14 @@ public class ParametersTable extends JPanel{
 	private HashMap<String, UIParameter> uiparameterSet_;
 	private String[] uiparamkeys_;
 	private HelpWindow help_;
-	private String[] twostateprops_;
+	private HashMap<String, UIProperty> uipropertySet_;
 		
 	@SuppressWarnings("rawtypes")
-	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, String[] twostateprops, HelpWindow help) {
+	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, UIProperty> uipropertySet, HelpWindow help) {
 		
 		uiparameterSet_ = uiparameterSet; 
 		help_ = help;
-		twostateprops_ = twostateprops;
+		uipropertySet_ = uipropertySet;
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
@@ -81,10 +85,10 @@ public class ParametersTable extends JPanel{
 	
 
 	@SuppressWarnings("rawtypes")
-	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, String[] twostateprops, HelpWindow help) {		
+	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HashMap<String, UIProperty>  uipropertySet, HelpWindow help) {		
 		help_ = help;
 		uiparameterSet_ = uiparameterSet; 
-		twostateprops_ = twostateprops;
+		uipropertySet_ = uipropertySet;
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
@@ -166,7 +170,7 @@ public class ParametersTable extends JPanel{
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) {
 						return super.getDefaultEditor(Boolean.class);
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.UIPROPERTY.getTypeValue())) {
-						return new DefaultCellEditor(new JComboBox(twostateprops_));
+						return new DefaultCellEditor(new JComboBox(getAvailableProperties((UIPropertyParameter) uiparameterSet_.get(s))));
 					} else {
 						return new DefaultCellEditor(new JTextField()); 
 					}
@@ -199,6 +203,28 @@ public class ParametersTable extends JPanel{
 		});
 	}
 	
+	protected String[] getAvailableProperties(UIPropertyParameter param) {
+		ArrayList<String> props = new ArrayList<String>();
+		
+		Iterator<String> it = uipropertySet_.keySet().iterator();
+		String s;
+		while(it.hasNext()){
+			s = it.next();
+			if(uipropertySet_.get(s).getFlag().equals(param.getPropertyFlag())){
+				props.add(s);
+			}
+		}
+		String[] stot = StringSorting.sort(props.toArray(new String[0]));
+		String[] sfin = new String[stot.length+1];
+		sfin[0] = UIPropertyParameter.NO_PROPERTY;
+		for(int i=0;i<stot.length;i++){
+			sfin[i+1] = stot[i];
+		}
+		
+		return sfin;
+	}
+
+
 	public void showHelp(boolean b){
 		help_.showHelp(b);
 		updateHelper(table.getSelectedRow());

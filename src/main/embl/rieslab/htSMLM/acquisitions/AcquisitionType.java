@@ -1,7 +1,7 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
 public enum AcquisitionType { 
-	TIME("Time"), BFP("BFP"), WHITELIGHT("WhiteLight"), LOCALIZATION("Localization"), LOCALIZATION3D("3D Localization"), SZSTACK("Simple Zstack"), ZSTACK("Zstack"), CUSTOM("Custom"); 
+	TIME("Time"), BFP("BFP"), BRIGHTFIELD("Bright-field"), LOCALIZATION("Localization"), LOCALIZATION3D("3D Localization"), SZSTACK("Simple Z-stack"), ZSTACK("Z-stack"), CUSTOM("Custom"); 
 	
 	private String value; 
 	
@@ -15,7 +15,7 @@ public enum AcquisitionType {
 	
 	public static String[] getList(){
 		String[] s = {AcquisitionType.LOCALIZATION.getTypeValue(),AcquisitionType.LOCALIZATION3D.getTypeValue(),AcquisitionType.BFP.getTypeValue(),
-				AcquisitionType.ZSTACK.getTypeValue(),AcquisitionType.WHITELIGHT.getTypeValue(),AcquisitionType.TIME.getTypeValue(),AcquisitionType.SZSTACK.getTypeValue()};
+				AcquisitionType.ZSTACK.getTypeValue(),AcquisitionType.BRIGHTFIELD.getTypeValue(),AcquisitionType.TIME.getTypeValue(),AcquisitionType.SZSTACK.getTypeValue()};
 		return s;
 	}
 }; 

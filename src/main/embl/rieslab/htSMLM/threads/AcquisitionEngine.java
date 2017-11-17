@@ -197,11 +197,11 @@ public class AcquisitionEngine implements Task<Integer>{
 		public String createAcqName(Acquisition acq, int i){
 			String acqname;
 			if (i < 10) {
-				acqname = "00" + i + "_" + acq.getName() + "_"+ acq.getType();
+				acqname = "00" + i + "_" + acq.getExperimentName() + "_"+ acq.getType();
 			} else if (i < 100) {
-				acqname = "0" + i + "_" + acq.getName() + "_"+ acq.getType();
+				acqname = "0" + i + "_" + acq.getExperimentName() + "_"+ acq.getType();
 			} else {
-				acqname = i + "_" + acq.getName() + "_"+ acq.getType();
+				acqname = i + "_" + acq.getExperimentName() + "_"+ acq.getType();
 			}
 			return acqname;
 		}

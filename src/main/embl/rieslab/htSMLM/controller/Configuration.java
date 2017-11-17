@@ -12,7 +12,9 @@ import java.util.Properties;
 import main.embl.rieslab.htSMLM.controller.ui.UIWizard;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
@@ -213,7 +215,4 @@ public class Configuration {
 		}
 	}
 	
-	public String[] getTwoStateProperties(){
-		return controller_.getTwoStateProperties();
-	}
 }

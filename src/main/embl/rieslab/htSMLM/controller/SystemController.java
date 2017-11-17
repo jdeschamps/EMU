@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import org.micromanager.api.ScriptInterface;
 
+import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroup;
 import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroupsRegistry;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
@@ -17,7 +18,6 @@ import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.MainFrame;
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
-import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyPair;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
@@ -314,8 +314,25 @@ public class SystemController {
 		}
 	}
 	
-	public ConfigurationGroupsRegistry getConfigurationGroupsRegistry(){
-		return configgroups_;
+	public String[] getMMConfigGroups(){
+		String[] groups = configgroups_.getConfigurationGroups().keySet().toArray(new String[0]);
+		
+		return StringSorting.sort(groups);
+	}	
+	
+	public ConfigurationGroup getMMConfigGroup(String groupname){
+		if(configgroups_.getConfigurationGroups().containsKey(groupname)){
+			return configgroups_.getConfigurationGroups().get(groupname);
+		}		
+		return null;
+	}
+	
+	public String[] getMMConfigNames(String groupname){
+		if(configgroups_.getConfigurationGroups().containsKey(groupname)){
+			return configgroups_.getConfigurationGroups().get(groupname).getConfigurations().toArray();
+		} 
+		String[] s = {"Empty"}; 
+		return s;
 	}
 	
 	public void setUpSystem(HashMap<String, String> propvalues){
@@ -337,15 +354,18 @@ public class SystemController {
 		return script_;
 	}
 	
-	public String[] getTwoStateProperties(){
+	public UIProperty getProperty(String name){ 
+		return uiproperties_.get(name);
+	}
+	
+	public String[] getFilteredProperties(String filterflag){
 		ArrayList<String> props = new ArrayList<String>();
 		
-		props.add(UIPropertyParameter.NO_PROPERTY);
 		Iterator<String> it = uiproperties_.keySet().iterator();
 		String s;
 		while(it.hasNext()){
 			s = it.next();
-			if(uiproperties_.get(s).isTwoState()){
+			if(uiproperties_.get(s).getFlag().equals(filterflag)){
 				props.add(s);
 			}
 		}
