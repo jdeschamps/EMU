@@ -19,6 +19,8 @@ import javax.swing.border.TitledBorder;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
 public class BFPAcquisition extends Acquisition {
 
@@ -120,7 +122,7 @@ public class BFPAcquisition extends Acquisition {
 		channelgroup.setPreferredSize(exposurespin.getPreferredSize());
 		channelname.setPreferredSize(exposurespin.getPreferredSize());
 		
-		int nrow = 3;
+		int nrow = 2;
 		int ncol = 4;
 		JPanel[][] panelHolder = new JPanel[nrow][ncol];    
 		pane.setLayout(new GridLayout(nrow,ncol));
@@ -133,45 +135,13 @@ public class BFPAcquisition extends Acquisition {
 		}
 
 		panelHolder[0][0].add(exposurelab);
-		panelHolder[2][0].add(waitinglab);
+		panelHolder[1][0].add(waitinglab);
 		panelHolder[0][1].add(exposurespin);
-		panelHolder[2][1].add(waitingspin);
+		panelHolder[1][1].add(waitingspin);
 		panelHolder[0][2].add(channellab);
 		panelHolder[0][3].add(channelgroup);
 		panelHolder[1][3].add(channelname);
 		
-		/*
-		// gridbag constriants
-		GridBagConstraints c = new GridBagConstraints();
-
-		c.gridx = 0;
-		c.gridy = 0;
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(2,15,2,15);
-		c.gridwidth = 1;
-		pane.add(exposurelab, c);
-		
-		c.gridy = 1;
-		pane.add(waitinglab, c);
-
-		c.gridx = 1;
-		c.gridy = 0;
-		pane.add(exposurespin, c);
-		
-		c.gridy = 1;
-		pane.add(waitingspin, c);
-		
-		c.gridx = 2;
-		c.gridy = 0;
-		pane.add(channellab, c);
-		
-		c.gridx = 3;
-		c.gridy = 0;
-		pane.add(channelgroup, c);
-
-		c.gridy = 1;
-		pane.add(channelname, c);
-		*/
 		return pane;
 	}
 
@@ -195,6 +165,11 @@ public class BFPAcquisition extends Acquisition {
 			}	
 			this.setConfigurationGroup(getSystemController().getMMConfigGroup(groupname), groupmember);
 		}
+	}
+
+	@Override
+	public PropertyFilter getPropertyFilter() {
+		return new SinglePropertyFilter(bfpprop_.getName());
 	}
 
 }

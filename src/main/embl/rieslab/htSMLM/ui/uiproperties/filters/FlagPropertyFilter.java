@@ -10,6 +10,12 @@ public class FlagPropertyFilter extends PropertyFilter {
 	public FlagPropertyFilter(PropertyFlag flag){
 		flag_ = flag;
 	}
+
+	public FlagPropertyFilter(PropertyFlag flag, PropertyFilter additionalfilter){
+		super(additionalfilter);
+		
+		flag_ = flag;
+	}
 	
 	@Override
 	public boolean filterOut(UIProperty property) {

@@ -22,6 +22,7 @@ import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.threads.updaters.TimeChartUpdater;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
 import main.embl.rieslab.htSMLM.ui.uiparameters.DoubleUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
@@ -63,14 +64,14 @@ public class FocusPanel extends PropertyPanel {
 	private TimeChartUpdater updater_;
 
 	//////// Properties
-	public static String FOCUS_POSITION = "Z stage position";
-	public static String FOCUS_STABILIZATION = "Z stage focus locking";
+	public final static String FOCUS_POSITION = "Z stage position";
+	public final static String FOCUS_STABILIZATION = "Z stage focus locking";
 	
 	//////// Parameters
-	public static String PARAM_LARGESTEP = "Large step";
-	public static String PARAM_SMALLSTEP = "Small step";
-	public static String PARAM_IDLE = "Idle time";
-	public static String PARAM_NPOS = "Number of points";
+	public final static String PARAM_LARGESTEP = "Large step";
+	public final static String PARAM_SMALLSTEP = "Small step";
+	public final static String PARAM_IDLE = "Idle time";
+	public final static String PARAM_NPOS = "Number of points";
 	
 	//////// Default parameters
 	private double smallstep_, largestep_;

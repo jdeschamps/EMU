@@ -1,6 +1,5 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -18,35 +17,48 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.configuration.SystemController;
-import main.embl.rieslab.htSMLM.ui.uiproperties.filters.NoPropertyFilter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
-public class TimeAcquisition extends Acquisition {
+public class BrightFieldAcquisition extends Acquisition {
 
 	public final static String[] EMPTY = {"Empty"};
 	
 	// Convenience constants		
-	private final static String PANE_NAME = "Time panel";
+	private final static String PANE_NAME = "Bright field panel";
 	private final static String LABEL_GROUP = "Group:";
+	private final static String LABEL_GROUPNAME = "GroupName";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
-	private final static String LABEL_NUMFRAME = "Number of frames:";
-	private final static String LABEL_GROUPNAME = "GroupName";
-	private final static String LABEL_INTERVAL = "Interval (ms):";
 	
-	public TimeAcquisition(SystemController controller) {
-		super(AcquisitionType.TIME, controller);
+	// UI property
+	private TwoStateUIProperty bfprop_;
 
+	public BrightFieldAcquisition(SystemController controller, String bfprop) {
+		super(AcquisitionType.BRIGHTFIELD, controller);
+		
+		UIProperty prop = getSystemController().getProperty(bfprop);
+		if(prop instanceof TwoStateUIProperty){
+			bfprop_ = (TwoStateUIProperty) prop;
+		} else {
+			bfprop_ = null;
+		}
 	}
 
 	@Override
 	public void preAcquisition() {
-		// Do nothing
+		if(bfprop_ != null){
+			bfprop_.setPropertyValue(TwoStateUIProperty.ON);
+		}
 	}
 
 	@Override
 	public void postAcquisition() {
-		// Do nothing
+		if(bfprop_ != null){
+			bfprop_.setPropertyValue(TwoStateUIProperty.OFF);
+		}
 	}
 
 	@Override
@@ -54,25 +66,26 @@ public class TimeAcquisition extends Acquisition {
 		return false;
 	}
 
+	public String getPanelName(){
+		return PANE_NAME;
+	}
+	
 	@Override
 	public JPanel getPanel() {
 		JPanel pane = new JPanel();
-		
+		pane.setName(getPanelName());
+
 		pane.setBorder(BorderFactory.createTitledBorder(null, ACQ_SETTINGS, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
-		
-		pane.setName(PANE_NAME);
-		
-		JLabel channellab, exposurelab, waitinglab, numframelab, intervallab;
+				
+		JLabel channellab, exposurelab, waitinglab;
 		JComboBox channelgroup;
 		final JComboBox channelname;
-		JSpinner exposurespin, waitingspin, numframespin, intervalspin;
+		JSpinner exposurespin, waitingspin;
 		
 		channellab = new JLabel(LABEL_GROUP);
 		exposurelab = new JLabel(LABEL_EXPOSURE);
 		waitinglab = new JLabel(LABEL_PAUSE);
-		numframelab = new JLabel(LABEL_NUMFRAME);
-		intervallab = new JLabel(LABEL_INTERVAL);
 		
 		String[] s = getSystemController().getMMConfigGroups();
 		String[] s2 = new String[s.length+1];
@@ -103,16 +116,11 @@ public class TimeAcquisition extends Acquisition {
 		exposurespin.setName(LABEL_EXPOSURE);
 		waitingspin = new JSpinner(new SpinnerNumberModel(0, 0, 10000000, 0.5)); 
 		waitingspin.setName(LABEL_PAUSE);
-		numframespin = new JSpinner(new SpinnerNumberModel(50000, 1, 10000000, 1)); 
-		numframespin.setName(LABEL_NUMFRAME);
-		intervalspin = new JSpinner(new SpinnerNumberModel(0, 0, 10000000, 1));
-		intervalspin.setName(LABEL_INTERVAL);
-		
 
-		channelgroup.setPreferredSize(intervalspin.getPreferredSize());
-		channelname.setPreferredSize(intervalspin.getPreferredSize());
+		channelgroup.setPreferredSize(exposurespin.getPreferredSize());
+		channelname.setPreferredSize(exposurespin.getPreferredSize());
 		
-		int nrow = 3;
+		int nrow = 2;
 		int ncol = 4;
 		JPanel[][] panelHolder = new JPanel[nrow][ncol];    
 		pane.setLayout(new GridLayout(nrow,ncol));
@@ -125,24 +133,19 @@ public class TimeAcquisition extends Acquisition {
 		}
 
 		panelHolder[0][0].add(exposurelab);
-		panelHolder[1][0].add(numframelab);
-		panelHolder[2][0].add(waitinglab);
+		panelHolder[1][0].add(waitinglab);
 		panelHolder[0][1].add(exposurespin);
-		panelHolder[1][1].add(numframespin);
-		panelHolder[2][1].add(waitingspin);
+		panelHolder[1][1].add(waitingspin);
 		panelHolder[0][2].add(channellab);
-		panelHolder[2][2].add(intervallab);
 		panelHolder[0][3].add(channelgroup);
 		panelHolder[1][3].add(channelname);
-		panelHolder[2][3].add(intervalspin);
 		
-
 		return pane;
 	}
 
 	@Override
 	public void readOutParameters(JPanel pane) {
-		if(pane.getName().equals(PANE_NAME)){
+		if(pane.getName().equals(getPanelName())){
 			Component[] comp = pane.getComponents();
 			String groupname = "", groupmember = "";
 			for(int i=0;i<comp.length;i++){
@@ -155,10 +158,6 @@ public class TimeAcquisition extends Acquisition {
 						this.setExposureTime((Integer) ((JSpinner) comp[i]).getValue());
 					}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
 						this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_NUMFRAME) && comp[i] instanceof JSpinner){
-						this.setNumberFrames((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_INTERVAL) && comp[i] instanceof JSpinner){
-						this.setIntervalMs((Integer) ((JSpinner) comp[i]).getValue());
 					}
 				}
 			}	
@@ -168,7 +167,7 @@ public class TimeAcquisition extends Acquisition {
 
 	@Override
 	public PropertyFilter getPropertyFilter() {
-		return new NoPropertyFilter();
+		return new SinglePropertyFilter(bfprop_.getName());
 	}
 
 }

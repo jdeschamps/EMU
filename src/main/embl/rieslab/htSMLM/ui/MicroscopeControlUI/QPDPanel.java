@@ -13,6 +13,7 @@ import javax.swing.SwingConstants;
 
 import main.embl.rieslab.htSMLM.threads.updaters.ChartUpdater;
 import main.embl.rieslab.htSMLM.threads.updaters.JProgressBarUpdater;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.graph.Chart;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
@@ -25,14 +26,14 @@ public class QPDPanel extends PropertyPanel {
 	private JProgressBarUpdater progressbarupdater_;
 	
 	//////// Properties
-	public static String QPD_X = "QPD X";
-	public static String QPD_Y = "QPD Y";
-	public static String QPD_Z = "QPD Z";
+	public final static String QPD_X = "QPD X";
+	public final static String QPD_Y = "QPD Y";
+	public final static String QPD_Z = "QPD Z";
 	
 	//////// Parameters
-	public static String PARAM_XYMAX = "XY max";
-	public static String PARAM_ZMAX = "Z max";
-	public static String PARAM_IDLE = "Idle time";
+	public final static String PARAM_XYMAX = "XY max";
+	public final static String PARAM_ZMAX = "Z max";
+	public final static String PARAM_IDLE = "Idle time";
 	
 	//////// Default parameters
 	private int idle_, xymax_, zmax_; 

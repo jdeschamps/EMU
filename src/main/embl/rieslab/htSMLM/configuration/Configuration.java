@@ -12,9 +12,7 @@ import java.util.Properties;
 import main.embl.rieslab.htSMLM.configuration.ui.UIWizard;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
-import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
-import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
@@ -22,14 +20,14 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 public class Configuration {
 
 	// Keys
-	public static String KEY_UNALLOCATED = "Unallocated";
-	public static String KEY_ENTERVALUE = "Enter value";
-	public static String KEY_UIPROPERTY = "UI Property: ";
-	public static String KEY_UIPARAMETER = "UI Parameter: ";
+	public final static String KEY_UNALLOCATED = "Unallocated";
+	public final static String KEY_ENTERVALUE = "Enter value";
+	public final static String KEY_UIPROPERTY = "UI Property: ";
+	public final static String KEY_UIPARAMETER = "UI Parameter: ";
 	
 	// Configuration
-	public static String CONFIG_NAME = "ht-SMLM/config.uicfg";
-	public static String CONFIG_EXT = "uicfg";
+	public final static String CONFIG_NAME = "ht-SMLM/config.uicfg";
+	public final static String CONFIG_EXT = "uicfg";
 
 	private HashMap<String,String> uiproperties_;
 	private HashMap<String,String> uiparameters_;

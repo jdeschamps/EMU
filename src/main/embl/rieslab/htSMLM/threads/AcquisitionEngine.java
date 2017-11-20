@@ -60,7 +60,6 @@ public class AcquisitionEngine implements Task<Integer>{
 		t.stop();
 	}
 
-	@Override
 	public void notifyHolder(Integer[] outputs) {
 		holder_.update(outputs);
 	}

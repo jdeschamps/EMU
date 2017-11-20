@@ -12,6 +12,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
 import main.embl.rieslab.htSMLM.configuration.SystemController;
+import main.embl.rieslab.htSMLM.ui.PropertyMainFrame;
 
 public class MainFrame extends PropertyMainFrame{
 	

@@ -199,8 +199,6 @@ public class ActivationTask implements Task<Double> {
 		output_[OUTPUT_NEWPULSE] = Math.floor(npulse);
 	}
 	
-	
-	@Override
 	public void notifyHolder(Double[] outputs) {
 		holder_.update(outputs);
 	}

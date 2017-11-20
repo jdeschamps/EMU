@@ -13,6 +13,7 @@ import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
@@ -32,13 +33,13 @@ public class FiltersPanel extends PropertyPanel {
 	public static String FW_POSITION = "Filter wheel position";
 	
 	//////// Parameters
-	public static String PARAM_NAMES = "Filters name";
-	public static String PARAM_COLORS = "Filters color";
+	public final static String PARAM_NAMES = "Filters name";
+	public final static String PARAM_COLORS = "Filters color";
 	
 	//////// Initial parameters
-	public static int NUM_POS = 6;
-	public static String NAME_EMPTY = "None";
-	public static String COLOR_EMPTY = ColorRepository.strgray;
+	public final static int NUM_POS = 6;
+	public final static String NAME_EMPTY = "None";
+	public final static String COLOR_EMPTY = ColorRepository.strgray;
 	String names_, colors_; 
 
 

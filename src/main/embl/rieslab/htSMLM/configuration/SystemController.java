@@ -13,10 +13,9 @@ import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroup;
 import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroupsRegistry;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
-import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.MainFrame;
-import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyPair;
@@ -358,24 +357,13 @@ public class SystemController {
 		return uiproperties_.get(name);
 	}
 	
-	public String[] getFilteredProperties(String filterflag){
-		ArrayList<String> props = new ArrayList<String>();
-		
-		Iterator<String> it = uiproperties_.keySet().iterator();
-		String s;
-		while(it.hasNext()){
-			s = it.next();
-			if(uiproperties_.get(s).getFlag().equals(filterflag)){
-				props.add(s);
-			}
-		}
-		
-		return StringSorting.sort(props.toArray(new String[0]));
+	public HashMap<String, UIProperty> getPropertiesMap(){
+		return uiproperties_;
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public Task getTask(String holdername){
-		return tasks_.get(holdername).getTask();
+	public TaskHolder getTaskHolder(String taskname){
+		return tasks_.get(taskname);
 	}
 
 }

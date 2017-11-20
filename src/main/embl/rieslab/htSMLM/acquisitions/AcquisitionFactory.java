@@ -18,17 +18,13 @@ public class AcquisitionFactory {
 		if(type.equals(AcquisitionType.BFP.getTypeValue())){
 			return new BFPAcquisition(controller_, acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BFP));
 		} else if(type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
-			
-		} else if(type.equals(AcquisitionType.LOCALIZATION3D.getTypeValue())){
-			
-		} else if(type.equals(AcquisitionType.ZSTACK3D.getTypeValue())){
-			
+			return new LocalizationAcquisition(controller_);
 		} else if(type.equals(AcquisitionType.TIME.getTypeValue())){
 			return new TimeAcquisition(controller_);
 		} else if(type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
-			
+			return new BrightFieldAcquisition(controller_, acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BRIGHTFIELD));
 		} else if(type.equals(AcquisitionType.ZSTACK.getTypeValue())){
-			
+			return new ZStackAcquisition(controller_, acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING));
 		}
 			
 		return getDefaultAcquisition();

@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroup;
+import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 
 import org.micromanager.api.SequenceSettings;
 
@@ -45,6 +46,14 @@ public abstract class Acquisition {
 	}
 	
 	protected void setSlices(ArrayList<Double> slices){
+		settings_.slices = slices;
+	}	
+	
+	protected void setSlices(double zstart, double zend, double zstep){
+		ArrayList<Double> slices = new ArrayList<Double>();
+		for(double z=zstart;z<=zend;z=z+zstep){
+			slices.add(z);
+		}	
 		settings_.slices = slices;
 	}
 	
@@ -138,6 +147,6 @@ public abstract class Acquisition {
 	public abstract boolean stopCriterionReached();
 	public abstract JPanel getPanel();
 	public abstract void readOutParameters(JPanel pane);
-
+	public abstract PropertyFilter getPropertyFilter();
 
 }

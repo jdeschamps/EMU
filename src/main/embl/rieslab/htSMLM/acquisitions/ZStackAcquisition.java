@@ -1,6 +1,5 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
@@ -18,35 +17,51 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.configuration.SystemController;
-import main.embl.rieslab.htSMLM.ui.uiproperties.filters.NoPropertyFilter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
-public class TimeAcquisition extends Acquisition {
+public class ZStackAcquisition extends Acquisition {
 
 	public final static String[] EMPTY = {"Empty"};
 	
 	// Convenience constants		
-	private final static String PANE_NAME = "Time panel";
+	private final static String PANE_NAME = "Zstack panel";
 	private final static String LABEL_GROUP = "Group:";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
-	private final static String LABEL_NUMFRAME = "Number of frames:";
+	private final static String LABEL_ZSTART = "Z start/end/step (um):";
+	private final static String LABEL_ZEND = "Z end (um):";
+	private final static String LABEL_ZSTEP = "Z step (um):";
 	private final static String LABEL_GROUPNAME = "GroupName";
-	private final static String LABEL_INTERVAL = "Interval (ms):";
 	
-	public TimeAcquisition(SystemController controller) {
-		super(AcquisitionType.TIME, controller);
+	// UI property
+	private TwoStateUIProperty stabprop_;
+	
+	public ZStackAcquisition(SystemController controller, String stabprop) {
+		super(AcquisitionType.ZSTACK, controller);
 
+		UIProperty prop = getSystemController().getProperty(stabprop);
+		if(prop instanceof TwoStateUIProperty){
+			stabprop_ = (TwoStateUIProperty) prop;
+		} else {
+			stabprop_ = null;
+		}
 	}
 
 	@Override
 	public void preAcquisition() {
-		// Do nothing
+		if(stabprop_ != null){
+			stabprop_.setPropertyValue(TwoStateUIProperty.OFF);
+		}
 	}
 
 	@Override
 	public void postAcquisition() {
-		// Do nothing
+		if(stabprop_ != null){
+			stabprop_.setPropertyValue(TwoStateUIProperty.ON);
+		}
 	}
 
 	@Override
@@ -63,16 +78,15 @@ public class TimeAcquisition extends Acquisition {
 		
 		pane.setName(PANE_NAME);
 		
-		JLabel channellab, exposurelab, waitinglab, numframelab, intervallab;
+		JLabel channellab, exposurelab, waitinglab, zstartlab;
 		JComboBox channelgroup;
 		final JComboBox channelname;
-		JSpinner exposurespin, waitingspin, numframespin, intervalspin;
+		JSpinner exposurespin, waitingspin, zstartspin, zendspin, zstepspin;
 		
 		channellab = new JLabel(LABEL_GROUP);
 		exposurelab = new JLabel(LABEL_EXPOSURE);
 		waitinglab = new JLabel(LABEL_PAUSE);
-		numframelab = new JLabel(LABEL_NUMFRAME);
-		intervallab = new JLabel(LABEL_INTERVAL);
+		zstartlab = new JLabel(LABEL_ZSTART);
 		
 		String[] s = getSystemController().getMMConfigGroups();
 		String[] s2 = new String[s.length+1];
@@ -103,14 +117,16 @@ public class TimeAcquisition extends Acquisition {
 		exposurespin.setName(LABEL_EXPOSURE);
 		waitingspin = new JSpinner(new SpinnerNumberModel(0, 0, 10000000, 0.5)); 
 		waitingspin.setName(LABEL_PAUSE);
-		numframespin = new JSpinner(new SpinnerNumberModel(50000, 1, 10000000, 1)); 
-		numframespin.setName(LABEL_NUMFRAME);
-		intervalspin = new JSpinner(new SpinnerNumberModel(0, 0, 10000000, 1));
-		intervalspin.setName(LABEL_INTERVAL);
+		zstartspin = new JSpinner(new SpinnerNumberModel(-2, -1000, 1000, 0.05)); 
+		zstartspin.setName(LABEL_ZSTART);
+		zendspin = new JSpinner(new SpinnerNumberModel(2, -1000, 1000, 1)); 
+		zendspin.setName(LABEL_ZEND);
+		zstepspin = new JSpinner(new SpinnerNumberModel(0.02, -1000, 1000, 0.01));
+		zstepspin.setName(LABEL_ZSTEP);
 		
 
-		channelgroup.setPreferredSize(intervalspin.getPreferredSize());
-		channelname.setPreferredSize(intervalspin.getPreferredSize());
+		channelgroup.setPreferredSize(zstepspin.getPreferredSize());
+		channelname.setPreferredSize(zstepspin.getPreferredSize());
 		
 		int nrow = 3;
 		int ncol = 4;
@@ -125,16 +141,16 @@ public class TimeAcquisition extends Acquisition {
 		}
 
 		panelHolder[0][0].add(exposurelab);
-		panelHolder[1][0].add(numframelab);
-		panelHolder[2][0].add(waitinglab);
+		panelHolder[1][0].add(waitinglab);
+		panelHolder[2][0].add(zstartlab);
 		panelHolder[0][1].add(exposurespin);
-		panelHolder[1][1].add(numframespin);
-		panelHolder[2][1].add(waitingspin);
+		panelHolder[1][1].add(waitingspin);
+		panelHolder[2][1].add(zstartspin);
 		panelHolder[0][2].add(channellab);
-		panelHolder[2][2].add(intervallab);
+		panelHolder[2][2].add(zendspin);
 		panelHolder[0][3].add(channelgroup);
 		panelHolder[1][3].add(channelname);
-		panelHolder[2][3].add(intervalspin);
+		panelHolder[2][3].add(zstepspin);
 		
 
 		return pane;
@@ -145,6 +161,7 @@ public class TimeAcquisition extends Acquisition {
 		if(pane.getName().equals(PANE_NAME)){
 			Component[] comp = pane.getComponents();
 			String groupname = "", groupmember = "";
+			double zstart=0, zend=0, zstep=0;
 			for(int i=0;i<comp.length;i++){
 				if(!(comp[i] instanceof JLabel)){
 					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
@@ -155,20 +172,23 @@ public class TimeAcquisition extends Acquisition {
 						this.setExposureTime((Integer) ((JSpinner) comp[i]).getValue());
 					}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
 						this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_NUMFRAME) && comp[i] instanceof JSpinner){
-						this.setNumberFrames((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_INTERVAL) && comp[i] instanceof JSpinner){
-						this.setIntervalMs((Integer) ((JSpinner) comp[i]).getValue());
+					}else if(comp[i].getName().equals(LABEL_ZSTART) && comp[i] instanceof JSpinner){
+						zstart = ((Double) ((JSpinner) comp[i]).getValue());
+					}else if(comp[i].getName().equals(LABEL_ZEND) && comp[i] instanceof JSpinner){
+						zend = ((Double) ((JSpinner) comp[i]).getValue());
+					}else if(comp[i].getName().equals(LABEL_ZSTEP) && comp[i] instanceof JSpinner){
+						zstep = ((Double) ((JSpinner) comp[i]).getValue());
 					}
 				}
 			}	
+			this.setSlices(zstart, zend, zstep);
 			this.setConfigurationGroup(getSystemController().getMMConfigGroup(groupname), groupmember);
 		}
 	}
 
 	@Override
 	public PropertyFilter getPropertyFilter() {
-		return new NoPropertyFilter();
+		return new SinglePropertyFilter(stabprop_.getName());
 	}
 
 }

@@ -2,7 +2,7 @@ package main.embl.rieslab.htSMLM.ui.uiparameters;
 
 import java.awt.Color;
 
-import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.PropertyPanel;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
 
 public class ColorUIParameter extends UIParameter<Color>{

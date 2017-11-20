@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.configuration.SystemConstants;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
@@ -46,14 +47,14 @@ public class LaserTriggerPanel extends PropertyPanel {
 	private TitledBorder border_;
 
 	//////// Properties
-	private static String TRIGGER_BEHAVIOUR = "behaviour";
-	private static String TRIGGER_SEQUENCE = "sequence";
-	private static String PULSE_LENGTH = "pulse length (trig)";
+	private final static String TRIGGER_BEHAVIOUR = "behaviour";
+	private final static String TRIGGER_SEQUENCE = "sequence";
+	private final static String PULSE_LENGTH = "pulse length (trig)";
 	
 	//////// Parameters
-	private static String PARAM_TITLE = "Name";
-	private static String PARAM_COLOR = "Color";
-	private static String PARAM_DEF_BEHAVIOUR = "Default trigger";
+	private final static String PARAM_TITLE = "Name";
+	private final static String PARAM_COLOR = "Color";
+	private final static String PARAM_DEF_BEHAVIOUR = "Default trigger";
 	private String title_, behaviour_;
 	//private boolean useseq_ = false;
 	private Color color_;

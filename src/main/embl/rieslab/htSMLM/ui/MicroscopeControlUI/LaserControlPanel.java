@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
@@ -40,17 +41,17 @@ public class LaserControlPanel extends PropertyPanel {
 	private TitledBorder border_;
 
 	//////// Properties
-	public static String LASER_PERCENTAGE = "power percentage";
-	public static String LASER_OPERATION = "on/off";	
+	public final static String LASER_PERCENTAGE = "power percentage";
+	public final static String LASER_OPERATION = "on/off";	
 	
 	//////// Parameters
-	public static String PARAM_TITLE = "Name";
-	public static String PARAM_COLOR = "Color";	
+	public final static String PARAM_TITLE = "Name";
+	public final static String PARAM_COLOR = "Color";	
 	private String title_;	
 	private Color color_;
 	
 	/////// Convenience variables
-	private static String DEFAULT_USERINPUT = "50";
+	private final static String DEFAULT_USERINPUT = "50";
 	
 	public LaserControlPanel(String label) {
 		super(label);

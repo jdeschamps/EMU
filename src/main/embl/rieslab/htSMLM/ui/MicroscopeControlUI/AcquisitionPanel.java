@@ -42,6 +42,7 @@ import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.threads.AcquisitionEngine;
 import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.util.StringSorting;
@@ -65,7 +66,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     public final static String PARAM_BRIGHTFIELD = "Bright field";
     
 	///// Task
-	private static String TASK_NAME = "Unsupervised acquisitions";
+	private final static String TASK_NAME = "Unsupervised acquisitions";
 	private AcquisitionEngine acqengine_;
 	
     ///// Convenience variables

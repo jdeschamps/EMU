@@ -18,6 +18,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.misc.LogarithmicJSlider;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
@@ -40,17 +41,17 @@ public class LaserPulsingPanel extends PropertyPanel {
 	private TitledBorder border_;
 
 	//////// Properties
-	public static String CAMERA_EXPOSURE = "Camera exposure";
-	public static String LASER_PULSE = "Activation pulse length (UI)";	
+	public final static String CAMERA_EXPOSURE = "Camera exposure";
+	public final static String LASER_PULSE = "Activation pulse length (UI)";	
 	
 	//////// Parameters
-	public static String PARAM_TITLE = "Name";
-	public static String PARAM_COLOR = "Color";	
+	public final static String PARAM_TITLE = "Name";
+	public final static String PARAM_COLOR = "Color";	
 	private String title_;	
 	private Color color_;
 	
 	//////// Internal property
-	public static String INTERNAL_MAXPULSE = "Maximum pulse";
+	public final static String INTERNAL_MAXPULSE = "Maximum pulse";
 	
 	//////// Convenience variables
 	private int maxpulse_;

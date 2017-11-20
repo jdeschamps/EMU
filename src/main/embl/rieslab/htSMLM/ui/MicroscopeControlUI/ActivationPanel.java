@@ -25,6 +25,7 @@ import javax.swing.SwingUtilities;
 import main.embl.rieslab.htSMLM.threads.ActivationTask;
 import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.graph.TimeChart;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.uiparameters.DoubleUIParameter;
@@ -42,7 +43,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	private static final long serialVersionUID = -517213311514918870L;
 
 	//////// Task
-	public static String TASK_NAME = "Activation task";
+	public final static String TASK_NAME = "Activation task";
 	
 	//////// Components
 	private JLabel labelsdcoeff_;
@@ -65,16 +66,16 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	private ActivationTask task_;
 	
 	//////// Properties
-	private static String LASER_PULSE = "Activation pulse length (script)";
+	private final static String LASER_PULSE = "Activation pulse length (script)";
 	
 	//////// Internal properties
-	private static String INTERNAL_MAXPULSE = LaserPulsingPanel.INTERNAL_MAXPULSE;
+	private final static String INTERNAL_MAXPULSE = LaserPulsingPanel.INTERNAL_MAXPULSE;
 	
 	//////// Parameters
-	private static String PARAM_IDLE = "Idle time";
-	private static String PARAM_NPOS = "Number of points";
-	private static String PARAM_DEF_SD = "Default sd coeff";
-	private static String PARAM_DEF_FB = "Default feedback";
+	private final static String PARAM_IDLE = "Idle time";
+	private final static String PARAM_NPOS = "Number of points";
+	private final static String PARAM_DEF_SD = "Default sd coeff";
+	private final static String PARAM_DEF_FB = "Default feedback";
 
 	//////// Conveniance variables
 	private boolean activate_, shownms_, autocutoff_;

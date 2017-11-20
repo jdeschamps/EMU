@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
+package main.embl.rieslab.htSMLM.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;

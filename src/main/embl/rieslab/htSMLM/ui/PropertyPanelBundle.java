@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
+package main.embl.rieslab.htSMLM.ui;
 
 import java.util.ArrayList;
 import javax.swing.JPanel;

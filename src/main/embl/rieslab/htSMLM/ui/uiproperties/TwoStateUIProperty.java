@@ -1,12 +1,12 @@
 package main.embl.rieslab.htSMLM.ui.uiproperties;
 
-import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.PropertyPanel;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 
 
 public class TwoStateUIProperty extends UIProperty{
 	
-	public static String ON = "On value";
-	public static String OFF = "Off value";
+	public final static String ON = "On value";
+	public final static String OFF = "Off value";
 	private String onstate_ = "";
 	private String offstate_ = "";
 	

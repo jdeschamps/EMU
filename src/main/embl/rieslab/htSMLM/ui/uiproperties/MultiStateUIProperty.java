@@ -1,10 +1,10 @@
 package main.embl.rieslab.htSMLM.ui.uiproperties;
 
-import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.PropertyPanel;
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 
 public class MultiStateUIProperty extends UIProperty{
 
-	public static String STATE = " state ";
+	public final static String STATE = " state ";
 	
 	private String[] states_;
 	private String[] statesname_;

@@ -12,6 +12,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
+import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.BoolUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
@@ -29,22 +30,22 @@ public class AdditionalControlsPanel extends PropertyPanel{
 	private TitledBorder border_;
 
 	//////// Properties
-	public static String DEVICE_1 = "Two-state device 1";
-	public static String DEVICE_2 = "Two-state device 2";
-	public static String DEVICE_3 = "Two-state device 3";
-	public static String DEVICE_4 = "Two-state device 4";
+	public final static String DEVICE_1 = "Two-state device 1";
+	public final static String DEVICE_2 = "Two-state device 2";
+	public final static String DEVICE_3 = "Two-state device 3";
+	public final static String DEVICE_4 = "Two-state device 4";
 	
 	//////// Parameters
-	public static String PARAM_TITLE = "Title";
-	public static String PARAM_NAME1 = "Two-state device 1 name";
-	public static String PARAM_NAME2 = "Two-state device 2 name";
-	public static String PARAM_NAME3 = "Two-state device 3 name";
-	public static String PARAM_NAME4 = "Two-state device 4 name";
-	public static String PARAM_ENABLE1 = "Enable two-state device 1";
-	public static String PARAM_ENABLE2 = "Enable two-state device 2";
-	public static String PARAM_ENABLE3 = "Enable two-state device 3";
-	public static String PARAM_ENABLE4 = "Enable two-state device 4";
-	public static int PARAM_NPOS = 4;
+	public final static String PARAM_TITLE = "Title";
+	public final static String PARAM_NAME1 = "Two-state device 1 name";
+	public final static String PARAM_NAME2 = "Two-state device 2 name";
+	public final static String PARAM_NAME3 = "Two-state device 3 name";
+	public final static String PARAM_NAME4 = "Two-state device 4 name";
+	public final static String PARAM_ENABLE1 = "Enable two-state device 1";
+	public final static String PARAM_ENABLE2 = "Enable two-state device 2";
+	public final static String PARAM_ENABLE3 = "Enable two-state device 3";
+	public final static String PARAM_ENABLE4 = "Enable two-state device 4";
+	public final static int PARAM_NPOS = 4;
 	
 	public AdditionalControlsPanel(String label) {
 		super(label);
