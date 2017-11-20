@@ -1,6 +1,6 @@
 package main.embl.rieslab.htSMLM.ui.uiproperties;
 
-import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.PropertyPanel;
 
 
 public class TwoStateUIProperty extends UIProperty{

@@ -6,7 +6,7 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
-import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.configuration.SystemController;
 import mmcorej.CMMCore;
 
 import org.micromanager.api.IAcquisitionEngine2010;

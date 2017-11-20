@@ -1,8 +1,8 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionUI;
-import main.embl.rieslab.htSMLM.controller.SystemController;
-import main.embl.rieslab.htSMLM.ui.AcquisitionPanel;
+import main.embl.rieslab.htSMLM.configuration.SystemController;
+import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.AcquisitionPanel;
 
 public class AcquisitionFactory {
 

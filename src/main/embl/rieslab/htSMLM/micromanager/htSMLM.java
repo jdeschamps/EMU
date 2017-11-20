@@ -3,8 +3,7 @@ package main.embl.rieslab.htSMLM.micromanager;
 
 import javax.swing.SwingUtilities;
 
-import main.embl.rieslab.htSMLM.controller.SystemController;
-
+import main.embl.rieslab.htSMLM.configuration.SystemController;
 import mmcorej.CMMCore;
 
 import org.micromanager.api.MMPlugin;

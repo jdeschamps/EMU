@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.ui;
+package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -17,8 +17,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import main.embl.rieslab.htSMLM.controller.Configuration;
-import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.configuration.Configuration;
+import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalPropertyValue;
 import main.embl.rieslab.htSMLM.ui.internalproperty.InternalProperty;

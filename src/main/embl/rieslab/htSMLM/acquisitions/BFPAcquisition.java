@@ -16,7 +16,7 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
-import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 

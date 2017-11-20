@@ -1,7 +1,7 @@
 package main.embl.rieslab.htSMLM.ui.uiproperties;
 
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
-import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.PropertyPanel;
 
 @SuppressWarnings("rawtypes")
 public class UIProperty {

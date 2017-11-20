@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller;
+package main.embl.rieslab.htSMLM.configuration;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -15,8 +15,8 @@ import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperty;
 import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
-import main.embl.rieslab.htSMLM.ui.MainFrame;
-import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.MainFrame;
+import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyPair;

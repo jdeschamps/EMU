@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.ui;
+package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

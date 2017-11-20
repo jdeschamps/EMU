@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.ui;
+package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 
-import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.configuration.SystemController;
 
 public class MainFrame extends PropertyMainFrame{
 	

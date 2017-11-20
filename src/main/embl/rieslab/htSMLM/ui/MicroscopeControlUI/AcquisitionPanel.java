@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.ui;
+package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
 
 import java.awt.Color;
 import java.awt.Frame;
@@ -38,7 +38,7 @@ import org.micromanager.utils.MMScriptException;
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionUI;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionWizard;
-import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.threads.AcquisitionEngine;
 import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;

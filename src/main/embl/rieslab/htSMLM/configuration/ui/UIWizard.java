@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller.ui;
+package main.embl.rieslab.htSMLM.configuration.ui;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 
-import main.embl.rieslab.htSMLM.controller.Configuration;
+import main.embl.rieslab.htSMLM.configuration.Configuration;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;

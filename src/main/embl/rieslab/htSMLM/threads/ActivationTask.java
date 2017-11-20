@@ -11,8 +11,7 @@ import java.util.List;
 import javax.swing.SwingWorker;
 
 import main.embl.rieslab.htSMLM.algorithms.NMS;
-import main.embl.rieslab.htSMLM.controller.SystemConstants;
-
+import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import mmcorej.CMMCore;
 import mmcorej.TaggedImage;
 

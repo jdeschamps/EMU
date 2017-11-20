@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller.ui;
+package main.embl.rieslab.htSMLM.configuration.ui;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -16,7 +16,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import main.embl.rieslab.htSMLM.controller.Configuration;
+import main.embl.rieslab.htSMLM.configuration.Configuration;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;

@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
-import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.util.utils;
 
 public class AcquisitionWizard {

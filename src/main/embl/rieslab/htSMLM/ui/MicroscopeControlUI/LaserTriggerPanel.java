@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.ui;
+package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -20,7 +20,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import main.embl.rieslab.htSMLM.controller.SystemConstants;
+import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;

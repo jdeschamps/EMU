@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller;
+package main.embl.rieslab.htSMLM.configuration;
 
 public class SystemConstants {
 	

@@ -1,4 +1,4 @@
-package main.embl.rieslab.htSMLM.controller;
+package main.embl.rieslab.htSMLM.configuration;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 
-import main.embl.rieslab.htSMLM.controller.ui.UIWizard;
+import main.embl.rieslab.htSMLM.configuration.ui.UIWizard;
 import main.embl.rieslab.htSMLM.micromanager.properties.MMProperties;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;

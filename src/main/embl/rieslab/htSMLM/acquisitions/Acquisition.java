@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-import main.embl.rieslab.htSMLM.controller.SystemController;
+import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroup;
 
 import org.micromanager.api.SequenceSettings;

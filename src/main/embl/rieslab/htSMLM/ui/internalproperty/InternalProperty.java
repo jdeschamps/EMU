@@ -1,6 +1,6 @@
 package main.embl.rieslab.htSMLM.ui.internalproperty;
 
-import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.PropertyPanel;
 
 public abstract class InternalProperty<T> {
 	private String name_;
