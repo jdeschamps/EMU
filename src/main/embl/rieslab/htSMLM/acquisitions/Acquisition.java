@@ -72,9 +72,13 @@ public abstract class Acquisition {
 	public void setProperties(HashMap<String,String> propvalues){
 		propvalues_ = propvalues;
 	}
-	
+
 	protected void setNumberFrames(int numframes){
 		settings_.numFrames = numframes;
+	}
+
+	public int getNumberFrames(){
+		return settings_.numFrames;
 	}
 	
 	protected void setIntervalMs(int interval){
@@ -148,5 +152,6 @@ public abstract class Acquisition {
 	public abstract JPanel getPanel();
 	public abstract void readOutParameters(JPanel pane);
 	public abstract PropertyFilter getPropertyFilter();
+	public abstract String[] getCharacteristicSettings();
 
 }

@@ -139,13 +139,14 @@ public class AcquisitionWizard {
 		
 		AcquisitionTab acqtab = new AcquisitionTab(this, new AcquisitionFactory(owner_, controller_));
 		tabbedpane_.add(acqtab.getTypeName(), acqtab);
+		tabs_.add(acqtab);
 		
 		return tabbedpane_;
 	}
 	
 	protected void moveTabLeft() {
     	if(tabs_.size()>1){
-    		int i = tabbedpane_.getSelectedIndex()-1;
+    		int i = tabbedpane_.getSelectedIndex();
 
     		if(i>0){
         		AcquisitionTab tab = tabs_.get(i);
@@ -232,7 +233,7 @@ public class AcquisitionWizard {
 
 	public void saveAcquisitionList() {
 		// TODO Auto-generated method stub
-		
+		shutDown();
 	}
 	
 	public SystemController getController(){

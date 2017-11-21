@@ -408,7 +408,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		return newLoc;
 	}
 	
-		private void showSummary(boolean b){
+	private void showSummary(boolean b){
 		if(b){
 			summaryframe_ = new JFrame("Acquisitions summary");
 			summaryframe_.setLocation(getSummaryButtonLocation());
@@ -437,37 +437,22 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	private void createNodes(DefaultMutableTreeNode top) {
 	    DefaultMutableTreeNode exp = null;
 	    DefaultMutableTreeNode setting = null;
-	    
-	    exp = new DefaultMutableTreeNode("BFP");
-        top.add(exp);
 
-        //original Tutorial
-        setting = new DefaultMutableTreeNode("sadasdsadsada");
-        exp.add(setting);
-
-        //Tutorial Continued
-        setting = new DefaultMutableTreeNode("vsdfsdfdsfdsfsd");
-        exp.add(setting);
-
-	    exp = new DefaultMutableTreeNode("Localization");
-        top.add(exp);
-        
-        //original Tutorial
-        setting = new DefaultMutableTreeNode("sadasdsadsada");
-        exp.add(setting);
-
-        //Tutorial Continued
-        setting = new DefaultMutableTreeNode("vsdfsdfdsfdsfsd");
-        exp.add(setting);
-	    
 	    if(ready_){
 	    	Acquisition acq;
 	    	String s;
-	    	String[] propval;
+	    	String[] propval, specificsettings;
 	    	for(int i=0;i<acqlist_.size();i++){
 	    		acq = acqlist_.get(i);
 	    	    exp = new DefaultMutableTreeNode(acq.getType());
-	    	    
+	            top.add(exp);
+
+	            specificsettings = acq.getCharacteristicSettings();
+	    	    for(int j=0;j<specificsettings.length;j++){
+	   	    		setting = new DefaultMutableTreeNode(specificsettings[j]);
+	   	    		exp.add(setting);
+	    	    }
+	            
 	    	    propval = new String[acq.getPropertyValues().size()];
 	    	    Iterator<String> it = acq.getPropertyValues().keySet().iterator();
 	    	    int j=0;
@@ -479,10 +464,13 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    
 	    	    propval = StringSorting.sort(propval);
 	    	    for(j=0;j<propval.length;j++){
-	    	    	setting = new DefaultMutableTreeNode(propval[j]);
-	    	    	exp.add(setting);
+	   	    		setting = new DefaultMutableTreeNode(propval[j]);
+	   	    		exp.add(setting);
 	    	    }
 	    	}
+	    } else {
+    	    exp = new DefaultMutableTreeNode("No acquisition defined");
+            top.add(exp);
 	    }
 	}
 	
@@ -505,13 +493,13 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	
 	private void setSummaryText(){
 		if(ready_){
-			addText(TEXT_SUMMARY);
-			String s = "Experiments: ";
+			String s = TEXT_SUMMARY;
+			s += "Experiments: ";
 			for(int i=0;i<acqlist_.size()-1;i++){
 				s = s+acqlist_.get(i).getType()+", ";
 			}
 			s = s+acqlist_.get(acqlist_.size()-1).getType()+".\n";
-			addText(s);
+			jTextPane_progress.setText(s);
 		}
 	}
 

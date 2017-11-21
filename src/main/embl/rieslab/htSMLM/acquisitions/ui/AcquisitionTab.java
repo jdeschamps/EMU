@@ -31,6 +31,7 @@ import main.embl.rieslab.htSMLM.acquisitions.AcquisitionType;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.AllocatedPropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.FlagPropertyFilter;
@@ -48,7 +49,7 @@ public class AcquisitionTab extends JPanel {
 	private AcquisitionWizard wizard_;
 	private AcquisitionFactory factory_;
 	private JPanel acqcard_;
-	private JPanel[] acqpanes_;
+	private JPanel[] acqpanes_, acqpanels_;
 	private JComboBox acqtype_;
 	private String[] acqtypes_;
 	private int currind;
@@ -81,11 +82,12 @@ public class AcquisitionTab extends JPanel {
 		
 	    acqcard_ = new JPanel(new CardLayout());
 		acqpanes_ = new JPanel[acqtypes_.length];
+		acqpanels_ = new JPanel[acqtypes_.length];
 		for(int i=0;i<acqtypes_.length;i++){
-			acqpanes_[i] = createPanel(factory_.getAcquisition(acqtypes_[i]).getPanel(),factory_.getAcquisition(acqtypes_[i]).getPropertyFilter());
+			acqpanels_[i] = factory_.getAcquisition(acqtypes_[i]).getPanel();
+			acqpanes_[i] = createPanel(acqpanels_[i],factory_.getAcquisition(acqtypes_[i]).getPropertyFilter());
 			acqcard_.add(acqpanes_[i],acqtypes_[i]);			
 		}
-		
 		
 		setUpPanel();
 	}
@@ -176,6 +178,8 @@ public class AcquisitionTab extends JPanel {
 			pane.add(others);
 		}*/
 		
+		pane.add(new JPanel());
+		
 		return pane;
 	}
 
@@ -261,6 +265,7 @@ public class AcquisitionTab extends JPanel {
 				}
 				return true;
 			}
+
 		};
 		
 		table.setAutoCreateRowSorter(false);	
@@ -277,17 +282,25 @@ public class AcquisitionTab extends JPanel {
 	private HashMap<String, String> getProperties(JPanel pane){
 		HashMap<String, String> props = new HashMap<String, String>();
 		
-		// find panels within et tables
+		// find panels within and tables
 		Component[] comps = pane.getComponents();
 		for(int i=0;i<comps.length;i++){
-			if(comps[i] instanceof JPanel){
+			if(comps[i] instanceof JPanel && comps[i].getName() == null){
 				Component[] subcomps = ((JPanel) comps[i]).getComponents();
 				for(int j=0;j<subcomps.length;j++){
 					if(subcomps[j] instanceof JTable){
 						TableModel model = ((JTable) subcomps[j]).getModel();
 						int nrow = model.getRowCount(); 
 						for(int k=0;k<nrow;k++){
-							props.put((String) model.getValueAt(k, 0), (String) model.getValueAt(k, 1)); 
+							if(!(model.getValueAt(k, 1) instanceof Boolean)){
+								props.put((String) model.getValueAt(k, 0), (String) model.getValueAt(k, 1)); 
+							} else {
+								if((Boolean) model.getValueAt(k, 1)){
+									props.put((String) model.getValueAt(k, 0), TwoStateUIProperty.ON); 
+								} else {
+									props.put((String) model.getValueAt(k, 0), TwoStateUIProperty.OFF);
+								}
+							}
 						}
 					}
 				}
@@ -323,13 +336,15 @@ public class AcquisitionTab extends JPanel {
 	
 	
 	public Acquisition getAcquisition() {
+		// get acquisition from factory with the right type
 		Acquisition acq = factory_.getAcquisition(acqtypes_[currind]);
 		
-		HashMap<String, String> props = new HashMap<String, String>();
-		for(int i=0)
+		// set properties value in the acquisition
+		acq.setProperties(getProperties(acqpanes_[currind]));
 		
-		acq.setProperties(getProperties());
-		acq.readOutParameters(acqpanes_[currind]);
+		// read out the JPanel related to the acquisition
+		acq.readOutParameters(acqpanels_[currind]);
+		
 		return acq;
 	}
 

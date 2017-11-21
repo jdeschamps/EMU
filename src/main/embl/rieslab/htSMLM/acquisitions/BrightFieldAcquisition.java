@@ -45,6 +45,9 @@ public class BrightFieldAcquisition extends Acquisition {
 		} else {
 			bfprop_ = null;
 		}
+		
+		this.setNumberFrames(1);
+		this.setIntervalMs(0);
 	}
 
 	@Override
@@ -149,7 +152,7 @@ public class BrightFieldAcquisition extends Acquisition {
 			Component[] comp = pane.getComponents();
 			String groupname = "", groupmember = "";
 			for(int i=0;i<comp.length;i++){
-				if(!(comp[i] instanceof JLabel)){
+				if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
 					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
 						groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
 					}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
@@ -168,6 +171,13 @@ public class BrightFieldAcquisition extends Acquisition {
 	@Override
 	public PropertyFilter getPropertyFilter() {
 		return new SinglePropertyFilter(bfprop_.getName());
+	}
+
+	@Override
+	public String[] getCharacteristicSettings() {
+		String[] s = new String[1];
+		s[0] = "Exposure = "+this.getExposure();
+		return s;
 	}
 
 }

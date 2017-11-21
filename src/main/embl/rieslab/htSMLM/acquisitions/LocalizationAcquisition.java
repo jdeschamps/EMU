@@ -202,7 +202,7 @@ public class LocalizationAcquisition extends Acquisition {
 			Component[] comp = pane.getComponents();
 			String groupname = "", groupmember = "";
 			for(int i=0;i<comp.length;i++){
-				if(!(comp[i] instanceof JLabel)){
+				if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
 					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
 						groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
 					}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
@@ -231,6 +231,17 @@ public class LocalizationAcquisition extends Acquisition {
 	@Override
 	public PropertyFilter getPropertyFilter() {
 		return new NoPropertyFilter();
+	}
+
+	@Override
+	public String[] getCharacteristicSettings() {
+		String[] s = new String[5];
+		s[0] = "Exposure = "+this.getExposure();
+		s[1] = "Number of frames = "+this.getNumberFrames();
+		s[2] = "Use activation = "+useactivation_;
+		s[3] = "Stop on max UV = "+stoponmax_;
+		s[4] = "Stop on max delay = "+stoponmaxdelay_;
+		return s;
 	}
 
 }

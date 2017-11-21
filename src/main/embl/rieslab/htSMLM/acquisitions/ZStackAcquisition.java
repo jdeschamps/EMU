@@ -39,6 +39,8 @@ public class ZStackAcquisition extends Acquisition {
 	// UI property
 	private TwoStateUIProperty stabprop_;
 	
+	private double zstart, zend, zstep;
+	
 	public ZStackAcquisition(SystemController controller, String stabprop) {
 		super(AcquisitionType.ZSTACK, controller);
 
@@ -48,6 +50,13 @@ public class ZStackAcquisition extends Acquisition {
 		} else {
 			stabprop_ = null;
 		}
+		
+		this.setNumberFrames(1);
+		this.setIntervalMs(0);
+		
+		zstart=0;
+		zend=0;
+		zstep=0;
 	}
 
 	@Override
@@ -161,9 +170,8 @@ public class ZStackAcquisition extends Acquisition {
 		if(pane.getName().equals(PANE_NAME)){
 			Component[] comp = pane.getComponents();
 			String groupname = "", groupmember = "";
-			double zstart=0, zend=0, zstep=0;
 			for(int i=0;i<comp.length;i++){
-				if(!(comp[i] instanceof JLabel)){
+				if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
 					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
 						groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
 					}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
@@ -189,6 +197,16 @@ public class ZStackAcquisition extends Acquisition {
 	@Override
 	public PropertyFilter getPropertyFilter() {
 		return new SinglePropertyFilter(stabprop_.getName());
+	}
+
+	@Override
+	public String[] getCharacteristicSettings() {
+		String[] s = new String[4];
+		s[0] = "Exposure = "+this.getExposure();
+		s[1] = "Zstart = "+zstart;
+		s[2] = "Zend = "+zend;
+		s[3] = "Zstep = "+zstep;
+		return s;
 	}
 
 }
