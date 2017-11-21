@@ -88,7 +88,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     ///// UI
     private JButton jButton_setpath;
     private JToggleButton jToggle_startstop,jButton_showSummary;
-    private JButton jButton_load,jButton_save,jButton_configAcq;
+    private JButton jButton_load,jButton_configAcq;
     private JLabel jLabel_expname, jLabel_path, jLabel_progress;
     private JProgressBar jProgressBar_progress;
     private JTextField jTextField_expname;
@@ -163,14 +163,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 					stopTask();
 					jToggle_startstop.setText("Start");
 				}
-			}
-        });
-        
-        jButton_save = new JButton("Save");
-        jButton_save.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				saveAcquisitionList();
 			}
         });
         
@@ -254,7 +246,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		c.gridx = 3;
 		c.gridy = 0;
 		c.gridwidth = 1;
-		c.weightx = getWeightX(3);
+		c.weightx =0.1;
 		this.add(jButton_setpath, c);	
 		
 		// progress 
@@ -270,7 +262,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		c.gridx = 3;
 		c.gridy = 3;
 		c.gridwidth = 1;
-		c.weightx = getWeightX(3);
+		c.weightx =0.1;
 		this.add(jButton_showSummary, c);	 
 
 		c.gridx = 0;
@@ -293,29 +285,14 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		this.add(jToggle_startstop, c);	 
 		
 		c.gridx = 1;
-		c.weightx = getWeightX(1);
+		//c.weightx = getWeightX(1);
 		this.add(jButton_configAcq, c);	 
 
-		c.gridx = 2;
-		c.weightx = getWeightX(1);
-		this.add(jButton_save, c);	 
-
 		c.gridx = 3;
-		c.weightx = getWeightX(3);
+		c.weightx =0.1;
 		this.add(jButton_load, c);	  
 		
 	}
-	
-	private double getWeightX(int col){
-		switch(col){
-		case 0:
-			return 0.4;
-		case 1:
-			return 0.4;
-		}
-		return 0.1;
-	}
-	
 		
 	private void showSelectPath(){
     	JFileChooser fc = new JFileChooser();
@@ -366,11 +343,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	
 	private void showAcquisitionConfiguration(){
 		wizard_ = new AcquisitionWizard(controller_, this);
-	}
-	
-	
-	private void saveAcquisitionList(){
-		wizard_.saveAcquisitionList();
 	}
 	
 	private void loadAcquisitionList(){

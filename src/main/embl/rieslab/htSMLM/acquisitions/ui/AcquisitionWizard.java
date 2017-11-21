@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -94,7 +95,8 @@ public class AcquisitionWizard {
 		
 	    /////////////////////////////////////////////////
 	    /// Grid bag layout
-		leftpane.setLayout(new GridBagLayout());
+		JPanel pane = new JPanel();
+		pane.setLayout(new GridBagLayout());
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(2,4,2,4);
@@ -103,34 +105,42 @@ public class AcquisitionWizard {
 		c.gridx = 1;
 		c.gridy = 0;
 		c.gridwidth = 3;
-		leftpane.add(add, c);	
+		pane.add(add, c);	
 
 		c.gridx = 1;
 		c.gridy = 1;
-		leftpane.add(remove, c);	
+		pane.add(remove, c);	
 
 		c.gridx = 1;
 		c.gridy = 3;
 		c.gridwidth = 1;
-		leftpane.add(left, c);
+		pane.add(left, c);
 		
 		c.gridx = 3;
 		c.gridy = 3;
-		leftpane.add(right, c);	
+		pane.add(right, c);	
 
 		c.gridx = 1;
+		c.gridy = 3;
+		c.gridwidth = 1;
+		pane.add(Box.createHorizontalStrut(10), c);	
+		
+		c.gridx = 1;
 		c.gridy = 5;
-		leftpane.add(wait, c);	
+		pane.add(wait, c);	
 		
 		c.gridx = 2;
 		c.gridy = 5;
 		c.gridwidth = 2;
-		leftpane.add(waitfield, c);	
+		pane.add(waitfield, c);	
 		
 		c.gridx = 1;
 		c.gridy = 8;
-		leftpane.add(save, c);	
+		pane.add(save, c);	
 
+		leftpane.add(pane);
+		leftpane.add(new JPanel());
+		
 		return leftpane;
 	}
 
