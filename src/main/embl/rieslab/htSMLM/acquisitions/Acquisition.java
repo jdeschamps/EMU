@@ -94,7 +94,7 @@ public abstract class Acquisition {
 		return settings_.intervalMs;
 	}
 	
-	protected void setExposureTime(int exp){
+	protected void setExposureTime(double exp){
 		exposure_ = exp;
 	}	
 	

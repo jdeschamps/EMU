@@ -129,6 +129,7 @@ public class AcquisitionTab extends JPanel {
 		acqpanels_ = new JPanel[acqtypes_.length];
 		for(int i=0;i<acqtypes_.length;i++){
 			if(i==currind){
+				System.out.println("currind = "+i);
 				acqpanels_[i] = acquisition.getPanel();
 				acqpanes_[i] = createPanel(acqpanels_[i],acquisition.getPropertyFilter(),acquisition.getPropertyValues());
 				acqcard_.add(acqpanes_[i],acqtypes_[i]);
