@@ -69,7 +69,7 @@ public class AcquisitionTab extends JPanel {
 	    });
 		
 		currind = 0;
-		this.setName(acqtypes_[0]);
+		this.setName(acqtypes_[currind]);
 		
 		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getController().getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
@@ -92,6 +92,55 @@ public class AcquisitionTab extends JPanel {
 		setUpPanel();
 	}
 
+
+	public AcquisitionTab(AcquisitionWizard wizard, AcquisitionFactory factory, Acquisition acquisition) {
+		factory_ = factory;
+		wizard_ = wizard;
+		
+		acqtypes_ = AcquisitionType.getList();
+		acqtype_ = new JComboBox(acqtypes_);
+		acqtype_.addActionListener(new ActionListener(){
+	    	public void actionPerformed(ActionEvent e){
+	            changeAcquisition((String) acqtype_.getSelectedItem());
+	    	}
+	    });
+		
+		currind = 0;
+		for(int i=0;i<acqtypes_.length;i++){
+			if(acqtypes_[i].equals(acquisition.getType())){
+				currind = i;
+				break;
+			}
+		}
+		this.setName(acqtypes_[currind]);
+		acqtype_.setSelectedIndex(currind);
+		
+		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getController().getPropertiesMap());
+		propsfriendlyname_ = new HashMap<String, String>();
+		Iterator<String> it = props_.keySet().iterator();
+		String s;
+		while(it.hasNext()){
+			s = it.next();
+			propsfriendlyname_.put(props_.get(s).getFriendlyName(), s);
+		}
+		
+	    acqcard_ = new JPanel(new CardLayout());
+		acqpanes_ = new JPanel[acqtypes_.length];
+		acqpanels_ = new JPanel[acqtypes_.length];
+		for(int i=0;i<acqtypes_.length;i++){
+			if(i==currind){
+				acqpanels_[i] = acquisition.getPanel();
+				acqpanes_[i] = createPanel(acqpanels_[i],acquisition.getPropertyFilter(),acquisition.getPropertyValues());
+				acqcard_.add(acqpanes_[i],acqtypes_[i]);
+			} else {
+				acqpanels_[i] = factory_.getAcquisition(acqtypes_[i]).getPanel();
+				acqpanes_[i] = createPanel(acqpanels_[i],factory_.getAcquisition(acqtypes_[i]).getPropertyFilter());
+				acqcard_.add(acqpanes_[i],acqtypes_[i]);	
+			}
+		}
+		
+		setUpPanel();
+	}
 
 	private JPanel createPanel(JPanel acqpane, PropertyFilter filter) {
 		JPanel pane = new JPanel();
@@ -183,6 +232,95 @@ public class AcquisitionTab extends JPanel {
 		return pane;
 	}
 
+	private JPanel createPanel(JPanel acqpane, PropertyFilter filter, HashMap<String, String> propertyValues) {
+		JPanel pane = new JPanel();
+		pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+
+		pane.add(Box.createVerticalStrut(10));
+		
+		// acquisition panel
+		pane.add(acqpane);
+		
+		pane.add(Box.createVerticalStrut(10));
+
+		
+		// get properties
+		HashMap<String, UIProperty> props = filter.filterProperties(props_);
+		String[] temp;
+		PropertyFilter filt;
+		
+		// focus stabilization
+		filt = new FlagPropertyFilter(PropertyFlag.FOCUSSTAB);
+		temp = filt.filterStringProperties(props);
+		props = filt.filteredProperties(props);
+		
+		if(temp.length>0){
+		    JPanel focstab = createTable(temp,true,propertyValues);
+		    focstab.setBorder(BorderFactory.createTitledBorder(null, "Focus stabilization", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+			((TitledBorder) focstab.getBorder()).setTitleFont(((TitledBorder) focstab.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+			pane.add(focstab);
+			
+			pane.add(Box.createVerticalStrut(10));
+		}
+
+		// filterwheel
+		filt = new FlagPropertyFilter(PropertyFlag.FILTERWHEEL);
+		temp = filt.filterStringProperties(props);
+		props = filt.filteredProperties(props);
+		
+
+		if(temp.length>0){
+		    JPanel fw = createTable(temp,false,propertyValues);
+		    fw.setBorder(BorderFactory.createTitledBorder(null, "Filter wheel", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+			((TitledBorder) fw.getBorder()).setTitleFont(((TitledBorder) fw.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+			pane.add(fw);	
+	
+			pane.add(Box.createVerticalStrut(10));
+		}
+
+		// lasers
+		filt = new FlagPropertyFilter(PropertyFlag.LASER);
+		temp = filt.filterStringProperties(props);
+		props = filt.filteredProperties(props);
+		
+		if(temp.length>0){
+		    JPanel lasertab = createTable(temp,false,propertyValues);
+		    lasertab.setBorder(BorderFactory.createTitledBorder(null, "Lasers", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+			((TitledBorder) lasertab.getBorder()).setTitleFont(((TitledBorder) lasertab.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+			pane.add(lasertab);
+
+			pane.add(Box.createVerticalStrut(10));
+		}
+
+		// Two-state
+		filt = new TwoStatePropertyFilter();
+		temp = filt.filterStringProperties(props);
+		props = filt.filteredProperties(props);
+		
+		if(temp.length>0){
+		    JPanel twostate = createTable(temp,false,propertyValues);
+		    twostate.setBorder(BorderFactory.createTitledBorder(null, "Two-state", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+			((TitledBorder) twostate.getBorder()).setTitleFont(((TitledBorder) twostate.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+			pane.add(twostate);
+
+			pane.add(Box.createVerticalStrut(10));
+		}
+
+		// others
+		/*filt = new NoPropertyFilter();
+		temp = filt.filterStringProperties(props);
+		
+		if(temp.length>0){
+		    JPanel others = createTable(temp,false);
+		    others.setBorder(BorderFactory.createTitledBorder(null, "Other", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+			((TitledBorder) others.getBorder()).setTitleFont(((TitledBorder) others.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+			pane.add(others);
+		}*/
+		
+		pane.add(new JPanel());
+		
+		return pane;
+	}
 
 	private void setUpPanel() {
 		JPanel contentpane = new JPanel();
@@ -278,6 +416,99 @@ public class AcquisitionTab extends JPanel {
 		return pane;
 	}
 
+	private JPanel createTable(String[] filteredProperties, boolean twostatedefault_, HashMap<String, String> propertyValues) {
+		JPanel pane = new JPanel();
+		
+		// Defines table model
+		DefaultTableModel model = new DefaultTableModel(new Object[] {"Property", "Value" }, 0);
+
+		// For each property of the UI
+		for (int i = 0; i < filteredProperties.length; i++) {	
+			UIProperty prop = props_.get(filteredProperties[i]);
+			if(propertyValues.containsKey(prop.getFriendlyName())){
+				if (prop.isTwoState()) {
+					if(propertyValues.get(prop.getFriendlyName()).equals(TwoStateUIProperty.ON)){
+						model.addRow(new Object[] {prop.getFriendlyName(), true });
+					} else {
+						model.addRow(new Object[] {prop.getFriendlyName(), false });
+					}
+				} else if (prop.isSingleState()) {
+					model.addRow(new Object[] {prop.getFriendlyName(), propertyValues.get(prop.getFriendlyName()) });
+				} else if (prop.isMultiState()) {
+					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName()) });
+				} else {
+					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName())});
+				}
+			} else {
+				if (prop.isTwoState()) {
+					model.addRow(new Object[] {prop.getFriendlyName(), twostatedefault_ });
+				} else if (prop.isSingleState()) {
+					model.addRow(new Object[] {prop.getFriendlyName(),((SingleStateUIProperty) prop).getStateValue() });
+				} else if (prop.isMultiState()) {
+					model.addRow(new Object[] {prop.getFriendlyName(),((MultiStateUIProperty) prop).getStatesName()[0] });
+				} else {
+					model.addRow(new Object[] {prop.getFriendlyName(),prop.getPropertyValue() });
+				}
+			}
+		}
+				
+		JTable table = new JTable(model) {
+			private static final long serialVersionUID = -7528102943663023952L;
+
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				switch (column) {
+				case 0:
+					return new BoldTableCellRenderer(); // first column is written in bold font
+				case 1:
+					if(getValueAt(row, column) instanceof Boolean){
+						return super.getDefaultRenderer(Boolean.class);
+					}
+					return new DefaultTableCellRenderer(); // column 1 takes a default renderer 
+				default:
+					return super.getCellRenderer(row, column);
+				}
+			}
+
+			@Override
+			public TableCellEditor getCellEditor(int row, int column) {
+				String s = (String) this.getValueAt(row, 0);
+				
+				if(column == 1){
+					if (getValueAt(row, column) instanceof Boolean) {
+						return super.getDefaultEditor(Boolean.class);
+					} else if (props_.get(propsfriendlyname_.get(s)).isMultiState()) { 
+						return new DefaultCellEditor(new JComboBox(((MultiStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
+					} else if (props_.get(propsfriendlyname_.get(s)).hasMMPropertyAllowedValues()){
+						return new DefaultCellEditor(new JComboBox(props_.get(propsfriendlyname_.get(s)).getAllowedValues()));
+					} else {
+						super.getCellEditor(row, column);
+					}
+				} 
+
+				return super.getCellEditor(row, column);
+			}
+
+			@Override
+			public boolean isCellEditable(int row, int col) { // first column is non-editable and second as well if it is a field value row
+				if(col == 0){
+					return false;
+				}
+				return true;
+			}
+
+		};
+		
+		table.setAutoCreateRowSorter(false);	
+		table.setRowHeight(23);
+		table.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		table.setRowSelectionAllowed(false);
+		pane.setLayout(new GridLayout());
+		pane.add(table);
+		
+		return pane;
+	}
+	
 
 	private HashMap<String, String> getProperties(JPanel pane){
 		HashMap<String, String> props = new HashMap<String, String>();

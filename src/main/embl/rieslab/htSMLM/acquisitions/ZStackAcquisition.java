@@ -23,8 +23,6 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
 public class ZStackAcquisition extends Acquisition {
-
-	public final static String[] EMPTY = {"Empty"};
 	
 	// Convenience constants		
 	private final static String PANE_NAME = "Zstack panel";
@@ -54,9 +52,9 @@ public class ZStackAcquisition extends Acquisition {
 		this.setNumberFrames(1);
 		this.setIntervalMs(0);
 		
-		zstart=0;
-		zend=0;
-		zstep=0;
+		zstart=-2;
+		zend=2;
+		zstep=0.05;
 	}
 
 	@Override
@@ -102,8 +100,12 @@ public class ZStackAcquisition extends Acquisition {
 		String[] s3 = new String[1];
 		s2[0] = EMPTY[0];
 		s3[0] = s2[0];
+		int ind=0;
 		for(int i=0;i<s.length;i++){
 			s2[i+1] = s[i];
+			if(this.getConfigGroup()!= null && s[i].equals(this.getConfigGroup())){
+				ind = i;
+			}
 		}
 		channelgroup = new JComboBox(s2);
 		channelgroup.setName(LABEL_GROUP);
@@ -122,15 +124,25 @@ public class ZStackAcquisition extends Acquisition {
                 }            
         );
 		
-		exposurespin = new JSpinner(new SpinnerNumberModel(10, 1, 10000000, 1));
+		channelgroup.setSelectedIndex(ind);
+		if(ind != 0){
+			DefaultComboBoxModel model = new DefaultComboBoxModel(getSystemController().getMMConfigNames(this.getConfigGroup()));
+	        channelname.setModel(model);
+	        
+	        int ind2  = model.getIndexOf(this.getConfigName());
+	        channelname.setSelectedIndex(ind2);
+		}
+		
+		
+		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(0, 0, 10000000, 0.5)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 0.5)); 
 		waitingspin.setName(LABEL_PAUSE);
-		zstartspin = new JSpinner(new SpinnerNumberModel(-2, -1000, 1000, 0.05)); 
+		zstartspin = new JSpinner(new SpinnerNumberModel(zstart, -1000, 1000, 0.05)); 
 		zstartspin.setName(LABEL_ZSTART);
-		zendspin = new JSpinner(new SpinnerNumberModel(2, -1000, 1000, 1)); 
+		zendspin = new JSpinner(new SpinnerNumberModel(zend, -1000, 1000, 1)); 
 		zendspin.setName(LABEL_ZEND);
-		zstepspin = new JSpinner(new SpinnerNumberModel(0.02, -1000, 1000, 0.01));
+		zstepspin = new JSpinner(new SpinnerNumberModel(zstep, -1000, 1000, 0.01));
 		zstepspin.setName(LABEL_ZSTEP);
 		
 
@@ -202,10 +214,10 @@ public class ZStackAcquisition extends Acquisition {
 	@Override
 	public String[] getCharacteristicSettings() {
 		String[] s = new String[4];
-		s[0] = "Exposure = "+this.getExposure();
-		s[1] = "Zstart = "+zstart;
-		s[2] = "Zend = "+zend;
-		s[3] = "Zstep = "+zstep;
+		s[0] = "Exposure = "+this.getExposure()+" ms";
+		s[1] = "Zstart = "+zstart+" um";
+		s[2] = "Zend = "+zend+" um";
+		s[3] = "Zstep = "+zstep+" um";
 		return s;
 	}
 

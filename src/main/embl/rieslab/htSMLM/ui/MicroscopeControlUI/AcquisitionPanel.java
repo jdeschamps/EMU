@@ -100,6 +100,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		controller_ = controller;
 		ready_ = false;
 		
+		acqlist_ = new ArrayList<Acquisition>();
+		
 		owner_ = owner;
 		owner_.addComponentListener(new ComponentAdapter() {
             public void componentMoved(ComponentEvent evt) {
@@ -342,7 +344,11 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	//////
 	
 	private void showAcquisitionConfiguration(){
-		wizard_ = new AcquisitionWizard(controller_, this);
+		if(!acqlist_.isEmpty()){
+			wizard_ = new AcquisitionWizard(controller_, this, acqlist_);
+		} else {
+			wizard_ = new AcquisitionWizard(controller_, this);
+		}
 	}
 	
 	private void loadAcquisitionList(){
@@ -374,7 +380,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	private Point getSummaryButtonLocation(){
 		Point newLoc = jButton_showSummary.getLocation();
 
-		newLoc.x += owner_.getAcquisitionPanelLocation().getX()+68;
+		newLoc.x += owner_.getAcquisitionPanelLocation().getX()+100;
 		newLoc.y += owner_.getAcquisitionPanelLocation().getY()+48;
 		
 		return newLoc;

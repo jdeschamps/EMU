@@ -36,6 +36,15 @@ public class AcquisitionWizard {
 		setUpFrame();
 	}
 	
+	public AcquisitionWizard(SystemController controller, AcquisitionUI owner, ArrayList<Acquisition> acqlist_) {
+		owner_ = owner;
+		controller_ = controller;
+		tabs_ = new ArrayList<AcquisitionTab>();
+
+		setUpFrame();
+		setAcquisitions(acqlist_);
+	}
+
 	private void setUpFrame() {
 		frame_ = new JFrame("Acquisition wizard");
 		JPanel contentpane = new JPanel();
@@ -203,6 +212,17 @@ public class AcquisitionWizard {
         tabbedpane_.setSelectedIndex(tabs_.size()-1);	
 	}
 	
+	public void setAcquisitions(ArrayList<Acquisition> acqlist) {
+		tabbedpane_.removeAll();
+		tabs_.clear();
+		
+		for(int i=0;i<acqlist.size();i++){
+			tabs_.add(new AcquisitionTab(this, new AcquisitionFactory(owner_, controller_), acqlist.get(i)));
+	        tabbedpane_.add(tabs_.get(i), i);
+		}
+		tabbedpane_.setSelectedIndex(0);	
+	}
+	
 	public void changeName(AcquisitionTab acquisitionTab) {
 		setNameTab(acquisitionTab.getTypeName());
 	}
@@ -236,6 +256,10 @@ public class AcquisitionWizard {
 		return acqlist;
 	}
 
+	public boolean isRunning(){
+		return frame_.isActive();
+	}
+	
 	public void loadAcquisitionList() {
 		// TODO Auto-generated method stub
 		
@@ -253,5 +277,6 @@ public class AcquisitionWizard {
 	public void shutDown() {
 		frame_.dispose();
 	}
+
 
 }

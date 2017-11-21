@@ -23,8 +23,6 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
 public class BFPAcquisition extends Acquisition {
-
-	public final static String[] EMPTY = {"Empty"};
 	
 	// Convenience constants		
 	private final static String PANE_NAME = "BFP panel";
@@ -35,6 +33,7 @@ public class BFPAcquisition extends Acquisition {
 	
 	// UI property
 	private TwoStateUIProperty bfpprop_;
+	
 
 	public BFPAcquisition(SystemController controller, String bfpprop) {
 		super(AcquisitionType.BFP, controller);
@@ -97,13 +96,19 @@ public class BFPAcquisition extends Acquisition {
 		String[] s3 = new String[1];
 		s2[0] = EMPTY[0];
 		s3[0] = s2[0];
+		int ind = 0;
 		for(int i=0;i<s.length;i++){
 			s2[i+1] = s[i];
+			if(this.getConfigGroup()!=null && s[i].equals(this.getConfigGroup())){
+				ind = i;
+			}
 		}
 		channelgroup = new JComboBox(s2);
-		channelgroup.setName(LABEL_GROUP);
 		channelname = new JComboBox(s3);
+
+		channelgroup.setName(LABEL_GROUP);
 		channelname.setName(LABEL_GROUPNAME);
+		
 		channelgroup.addActionListener(
                 new ActionListener(){
 					@Override
@@ -117,9 +122,18 @@ public class BFPAcquisition extends Acquisition {
                 }            
         );
 		
-		exposurespin = new JSpinner(new SpinnerNumberModel(10, 1, 10000000, 1));
+		channelgroup.setSelectedIndex(ind);
+		if(ind != 0){
+			DefaultComboBoxModel model = new DefaultComboBoxModel(getSystemController().getMMConfigNames(this.getConfigGroup()));
+	        channelname.setModel(model);
+	        
+	        int ind2  = model.getIndexOf(this.getConfigName());
+	        channelname.setSelectedIndex(ind2);
+		}
+		
+		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(0, 0, 10000000, 0.5)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 0.5)); 
 		waitingspin.setName(LABEL_PAUSE);
 
 		channelgroup.setPreferredSize(exposurespin.getPreferredSize());
@@ -152,7 +166,7 @@ public class BFPAcquisition extends Acquisition {
 	public void readOutParameters(JPanel pane) {
 		if(pane.getName().equals(getPanelName())){
 			Component[] comp = pane.getComponents();
-			String groupname = "", groupmember = "";
+			String groupname="", groupmember="";
 			for(int i=0;i<comp.length;i++){
 				if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
 					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
@@ -178,7 +192,7 @@ public class BFPAcquisition extends Acquisition {
 	@Override
 	public String[] getCharacteristicSettings() {
 		String[] s = new String[1];
-		s[0] = "Exposure = "+this.getExposure();
+		s[0] = "Exposure = "+this.getExposure()+" ms";
 		return s;
 	}
 

@@ -130,7 +130,7 @@ public class AcquisitionEngine implements Task<Integer>{
 
 							// set configuration channel
 							if (acq.useConfig()) {
-								core_.setConfig(acq.getConfigurationGroup(),acq.getConfigurationName());
+								core_.setConfig(acq.getConfigGroup(),acq.getConfigName());
 							}
 
 							// set-up system

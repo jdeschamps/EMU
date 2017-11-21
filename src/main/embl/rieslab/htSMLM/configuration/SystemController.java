@@ -345,6 +345,17 @@ public class SystemController {
 		}
 	}
 
+	public double getExposure(){
+		double i = 10;
+		try {
+			i = core_.getExposure();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return i;
+	}
+	
 	public CMMCore getCore(){
 		return core_;
 	}

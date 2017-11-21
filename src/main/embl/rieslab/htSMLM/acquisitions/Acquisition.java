@@ -13,8 +13,11 @@ import org.micromanager.api.SequenceSettings;
 
 public abstract class Acquisition {
 
+	public final static String[] EMPTY = {"Empty"};
+
 	private SequenceSettings settings_;
-	private int exposure_, waitingtime_;
+	private double exposure_;
+	private int waitingtime_;
 	private AcquisitionType type_;
 	private boolean useconfig_ = false;
 	private ConfigurationGroup group_;
@@ -30,10 +33,12 @@ public abstract class Acquisition {
 		
 		expname_ = "";
 		
-		exposure_ = 10;
+		exposure_ = controller.getExposure();
 		waitingtime_ = 0;
 		
 		controller_ = controller;
+		
+		configname_ = EMPTY[0];
 		
 		settings_ = new SequenceSettings();
 		settings_.save = true;
@@ -80,16 +85,20 @@ public abstract class Acquisition {
 	public int getNumberFrames(){
 		return settings_.numFrames;
 	}
-	
+
 	protected void setIntervalMs(int interval){
 		settings_.intervalMs = interval;
+	}
+
+	public double getIntervalMs(){
+		return settings_.intervalMs;
 	}
 	
 	protected void setExposureTime(int exp){
 		exposure_ = exp;
 	}	
 	
-	public int getExposure(){
+	public double getExposure(){
 		return exposure_;
 	}
 	
@@ -113,20 +122,6 @@ public abstract class Acquisition {
 		}
 	}
 	
-	public String getConfigurationGroup(){
-		if(useconfig_){
-			return group_.getName();
-		}
-		return null;
-	}
-	
-	public String getConfigurationName(){
-		if(useconfig_){
-			return configname_;
-		}
-		return null;
-	}
-	
 	public HashMap<String,String> getPropertyValues(){
 		return propvalues_;
 	}
@@ -144,6 +139,17 @@ public abstract class Acquisition {
 	
 	public void setName(String name) {
 		expname_ = name;
+	}
+	
+	public String getConfigGroup(){
+		if(group_ != null){
+			return group_.getName();
+		}
+		return EMPTY[0];
+	}
+	
+	public String getConfigName(){
+		return configname_;
 	}
 	
 	public abstract void preAcquisition();
