@@ -141,6 +141,9 @@ public class AcquisitionTab extends JPanel {
 		}
 		
 		setUpPanel();
+		
+	    CardLayout cl = (CardLayout)(acqcard_.getLayout());
+	    cl.show(acqcard_, acqtypes_[currind]);
 	}
 
 	private JPanel createPanel(JPanel acqpane, PropertyFilter filter) {
