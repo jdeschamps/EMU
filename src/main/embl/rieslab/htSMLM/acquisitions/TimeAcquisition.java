@@ -59,7 +59,7 @@ public class TimeAcquisition extends Acquisition {
 		pane.setBorder(BorderFactory.createTitledBorder(null, ACQ_SETTINGS, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 		
-		pane.setName(PANE_NAME);
+		pane.setName(getPanelName());
 		
 		JLabel channellab, exposurelab, waitinglab, numframelab, intervallab;
 		JComboBox channelgroup;
@@ -81,7 +81,7 @@ public class TimeAcquisition extends Acquisition {
 		for(int i=0;i<s.length;i++){
 			s2[i+1] = s[i];
 			if(this.getConfigGroup() != null && s[i].equals(this.getConfigGroup())){
-				ind = i;
+				ind = i+1;
 			}
 		}
 		channelgroup = new JComboBox(s2);
@@ -112,7 +112,7 @@ public class TimeAcquisition extends Acquisition {
 		
 		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 0.5)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 1)); 
 		waitingspin.setName(LABEL_PAUSE);
 		numframespin = new JSpinner(new SpinnerNumberModel(this.getNumberFrames(), 1, 10000000, 1)); 
 		numframespin.setName(LABEL_NUMFRAME);
@@ -153,23 +153,28 @@ public class TimeAcquisition extends Acquisition {
 
 	@Override
 	public void readOutParameters(JPanel pane) {
-		if(pane.getName().equals(PANE_NAME)){
-			Component[] comp = pane.getComponents();
+		if(pane.getName().equals(getPanelName())){
+			Component[] pancomp = pane.getComponents();
 			String groupname="", groupmember="";
-			for(int i=0;i<comp.length;i++){
-				if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
-					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
-						groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
-					}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
-						groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
-					}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
-						this.setExposureTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
-						this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_NUMFRAME) && comp[i] instanceof JSpinner){
-						this.setNumberFrames((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_INTERVAL) && comp[i] instanceof JSpinner){
-						this.setIntervalMs((Integer) ((JSpinner) comp[i]).getValue());
+			for(int j=0;j<pancomp.length;j++){
+				if(pancomp[j] instanceof JPanel){
+					Component[] comp = ((JPanel) pancomp[j]).getComponents();
+					for(int i=0;i<comp.length;i++){
+						if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
+							if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
+								groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
+							}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
+								groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
+							}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
+								this.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
+								this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_NUMFRAME) && comp[i] instanceof JSpinner){
+								this.setNumberFrames((Integer) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_INTERVAL) && comp[i] instanceof JSpinner){
+								this.setIntervalMs((Double) ((JSpinner) comp[i]).getValue());
+							}
+						}
 					}
 				}
 			}	
@@ -189,6 +194,11 @@ public class TimeAcquisition extends Acquisition {
 		s[1] = "Number of frames = "+this.getNumberFrames();
 		s[2] = "Interval = "+this.getIntervalMs()+" ms";
 		return s;
+	}
+
+	@Override
+	public String getPanelName() {
+		return PANE_NAME;
 	}
 
 }

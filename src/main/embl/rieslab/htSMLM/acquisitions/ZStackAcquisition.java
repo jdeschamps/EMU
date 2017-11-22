@@ -83,7 +83,7 @@ public class ZStackAcquisition extends Acquisition {
 		pane.setBorder(BorderFactory.createTitledBorder(null, ACQ_SETTINGS, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 		
-		pane.setName(PANE_NAME);
+		pane.setName(getPanelName());
 		
 		JLabel channellab, exposurelab, waitinglab, zstartlab;
 		JComboBox channelgroup;
@@ -104,7 +104,7 @@ public class ZStackAcquisition extends Acquisition {
 		for(int i=0;i<s.length;i++){
 			s2[i+1] = s[i];
 			if(this.getConfigGroup()!= null && s[i].equals(this.getConfigGroup())){
-				ind = i;
+				ind = i+1;
 			}
 		}
 		channelgroup = new JComboBox(s2);
@@ -133,10 +133,9 @@ public class ZStackAcquisition extends Acquisition {
 	        channelname.setSelectedIndex(ind2);
 		}
 		
-		
 		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 0.5)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 1)); 
 		waitingspin.setName(LABEL_PAUSE);
 		zstartspin = new JSpinner(new SpinnerNumberModel(zstart, -1000, 1000, 0.05)); 
 		zstartspin.setName(LABEL_ZSTART);
@@ -145,7 +144,6 @@ public class ZStackAcquisition extends Acquisition {
 		zstepspin = new JSpinner(new SpinnerNumberModel(zstep, -1000, 1000, 0.01));
 		zstepspin.setName(LABEL_ZSTEP);
 		
-
 		channelgroup.setPreferredSize(zstepspin.getPreferredSize());
 		channelname.setPreferredSize(zstepspin.getPreferredSize());
 		
@@ -172,32 +170,36 @@ public class ZStackAcquisition extends Acquisition {
 		panelHolder[0][3].add(channelgroup);
 		panelHolder[1][3].add(channelname);
 		panelHolder[2][3].add(zstepspin);
-		
 
 		return pane;
 	}
 
 	@Override
 	public void readOutParameters(JPanel pane) {
-		if(pane.getName().equals(PANE_NAME)){
-			Component[] comp = pane.getComponents();
-			String groupname = "", groupmember = "";
-			for(int i=0;i<comp.length;i++){
-				if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
-					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
-						groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
-					}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
-						groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
-					}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
-						this.setExposureTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
-						this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_ZSTART) && comp[i] instanceof JSpinner){
-						zstart = ((Double) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_ZEND) && comp[i] instanceof JSpinner){
-						zend = ((Double) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_ZSTEP) && comp[i] instanceof JSpinner){
-						zstep = ((Double) ((JSpinner) comp[i]).getValue());
+		if(pane.getName().equals(getPanelName())){
+			Component[] pancomp = pane.getComponents();
+			String groupname="", groupmember="";
+			for(int j=0;j<pancomp.length;j++){
+				if(pancomp[j] instanceof JPanel){
+					Component[] comp = ((JPanel) pancomp[j]).getComponents();
+					for(int i=0;i<comp.length;i++){
+						if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
+							if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
+								groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
+							}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
+								groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
+							}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
+								this.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
+								this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_ZSTART) && comp[i] instanceof JSpinner){
+								zstart = ((Double) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_ZEND) && comp[i] instanceof JSpinner){
+								zend = ((Double) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_ZSTEP) && comp[i] instanceof JSpinner){
+								zstep = ((Double) ((JSpinner) comp[i]).getValue());
+							}
+						}
 					}
 				}
 			}	
@@ -219,6 +221,11 @@ public class ZStackAcquisition extends Acquisition {
 		s[2] = "Zend = "+zend+" um";
 		s[3] = "Zstep = "+zstep+" um";
 		return s;
+	}
+
+	@Override
+	public String getPanelName() {
+		return PANE_NAME;
 	}
 
 }

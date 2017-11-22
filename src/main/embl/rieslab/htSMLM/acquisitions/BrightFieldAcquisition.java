@@ -32,7 +32,7 @@ public class BrightFieldAcquisition extends Acquisition {
 	private final static String LABEL_PAUSE = "Pause (s):";
 	
 	// UI property
-	private TwoStateUIProperty bfprop_;
+	private TwoStateUIProperty bfprop_; 
 	
 
 	public BrightFieldAcquisition(SystemController controller, String bfprop) {
@@ -98,7 +98,7 @@ public class BrightFieldAcquisition extends Acquisition {
 		for(int i=0;i<s.length;i++){
 			s2[i+1] = s[i];
 			if(this.getConfigGroup() != null && s[i].equals(this.getConfigGroup())){
-				ind = i;
+				ind = i+1;
 			}
 		}
 		channelgroup = new JComboBox(s2);
@@ -130,7 +130,7 @@ public class BrightFieldAcquisition extends Acquisition {
 		
 		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 0.5)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 1)); 
 		waitingspin.setName(LABEL_PAUSE);
 
 		channelgroup.setPreferredSize(exposurespin.getPreferredSize());
@@ -162,18 +162,21 @@ public class BrightFieldAcquisition extends Acquisition {
 	@Override
 	public void readOutParameters(JPanel pane) {
 		if(pane.getName().equals(getPanelName())){
-			Component[] comp = pane.getComponents();
+			Component[] pancomp = pane.getComponents();
 			String groupname="", groupmember="";
-			for(int i=0;i<comp.length;i++){
-				if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
-					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
-						groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
-					}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
-						groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
-					}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
-						this.setExposureTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
-						this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
+			for(int j=0;j<pancomp.length;j++){
+				Component[] comp = ((JPanel) pancomp[j]).getComponents();
+				for(int i=0;i<comp.length;i++){
+					if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
+						if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
+							groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
+						}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
+							groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
+						}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
+							this.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
+						}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
+							this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
+						}
 					}
 				}
 			}	

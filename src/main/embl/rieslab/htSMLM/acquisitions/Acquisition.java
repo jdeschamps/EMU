@@ -86,7 +86,7 @@ public abstract class Acquisition {
 		return settings_.numFrames;
 	}
 
-	protected void setIntervalMs(int interval){
+	protected void setIntervalMs(double interval){
 		settings_.intervalMs = interval;
 	}
 
@@ -156,6 +156,7 @@ public abstract class Acquisition {
 	public abstract void postAcquisition();
 	public abstract boolean stopCriterionReached();
 	public abstract JPanel getPanel();
+	public abstract String getPanelName();
 	public abstract void readOutParameters(JPanel pane);
 	public abstract PropertyFilter getPropertyFilter();
 	public abstract String[] getCharacteristicSettings();

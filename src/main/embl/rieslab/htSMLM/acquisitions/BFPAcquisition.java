@@ -68,6 +68,7 @@ public class BFPAcquisition extends Acquisition {
 		return false;
 	}
 
+	@Override
 	public String getPanelName(){
 		return PANE_NAME;
 	}
@@ -79,9 +80,7 @@ public class BFPAcquisition extends Acquisition {
 
 		pane.setBorder(BorderFactory.createTitledBorder(null, ACQ_SETTINGS, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
-		
-		//pane.setLayout(new GridBagLayout());
-		
+				
 		JLabel channellab, exposurelab, waitinglab;
 		JComboBox channelgroup;
 		final JComboBox channelname;
@@ -185,8 +184,6 @@ public class BFPAcquisition extends Acquisition {
 					}
 				}
 			}	
-			System.out.println("group name: "+groupname+"  --- "+groupmember);
-
 			this.setConfigurationGroup(getSystemController().getMMConfigGroup(groupname), groupmember);
 		}
 	}

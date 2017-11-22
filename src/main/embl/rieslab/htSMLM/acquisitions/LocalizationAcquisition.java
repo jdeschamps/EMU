@@ -92,7 +92,7 @@ public class LocalizationAcquisition extends Acquisition {
 		pane.setBorder(BorderFactory.createTitledBorder(null, ACQ_SETTINGS, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 		
-		pane.setName(PANE_NAME);
+		pane.setName(getPanelName());
 		
 		JLabel channellab, exposurelab, waitinglab, numframelab, intervallab,waitonmaxlab;
 		JComboBox channelgroup;
@@ -117,7 +117,7 @@ public class LocalizationAcquisition extends Acquisition {
 		for(int i=0;i<s.length;i++){
 			s2[i+1] = s[i];
 			if(this.getConfigGroup()!=null && s[i].equals(this.getConfigGroup())){
-				ind = i;
+				ind = i+1;
 			}
 		}
 		channelgroup = new JComboBox(s2);
@@ -149,7 +149,7 @@ public class LocalizationAcquisition extends Acquisition {
 		
 		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 0.5)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 1)); 
 		waitingspin.setName(LABEL_PAUSE);
 		numframespin = new JSpinner(new SpinnerNumberModel(this.getNumberFrames(), 1, 10000000, 1)); 
 		numframespin.setName(LABEL_NUMFRAME);
@@ -214,29 +214,34 @@ public class LocalizationAcquisition extends Acquisition {
 	
 	@Override
 	public void readOutParameters(JPanel pane) {
-		if(pane.getName().equals(PANE_NAME)){
-			Component[] comp = pane.getComponents();
-			String groupname = "", groupmember = "";
-			for(int i=0;i<comp.length;i++){
-				if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
-					if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
-						groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
-					}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
-						groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
-					}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
-						this.setExposureTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
-						this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_NUMFRAME) && comp[i] instanceof JSpinner){
-						this.setNumberFrames((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_INTERVAL) && comp[i] instanceof JSpinner){
-						this.setIntervalMs((Integer) ((JSpinner) comp[i]).getValue());
-					}else if(comp[i].getName().equals(LABEL_USEACTIVATION) && comp[i] instanceof JCheckBox){
-						this.setUseActivation(((JCheckBox) comp[i]).isSelected());
-					}else if(comp[i].getName().equals(LABEL_USESTOPONMAXUV) && comp[i] instanceof JCheckBox){
-						this.setUseStopOnMaxUV(((JCheckBox) comp[i]).isSelected());
-					}else if(comp[i].getName().equals(LABEL_MAXUVTIME) && comp[i] instanceof JSpinner){
-						this.setUseStopOnMaxUVDelay((Integer) ((JSpinner) comp[i]).getValue());
+		if(pane.getName().equals(getPanelName())){
+			Component[] pancomp = pane.getComponents();
+			String groupname="", groupmember="";
+			for(int j=0;j<pancomp.length;j++){
+				if(pancomp[j] instanceof JPanel){
+					Component[] comp = ((JPanel) pancomp[j]).getComponents();
+					for(int i=0;i<comp.length;i++){
+						if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
+							if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
+								groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
+							}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
+								groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
+							}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
+								this.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
+								this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_NUMFRAME) && comp[i] instanceof JSpinner){
+								this.setNumberFrames((Integer) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_INTERVAL) && comp[i] instanceof JSpinner){
+								this.setIntervalMs((Double) ((JSpinner) comp[i]).getValue());
+							}else if(comp[i].getName().equals(LABEL_USEACTIVATION) && comp[i] instanceof JCheckBox){
+								this.setUseActivation(((JCheckBox) comp[i]).isSelected());
+							}else if(comp[i].getName().equals(LABEL_USESTOPONMAXUV) && comp[i] instanceof JCheckBox){
+								this.setUseStopOnMaxUV(((JCheckBox) comp[i]).isSelected());
+							}else if(comp[i].getName().equals(LABEL_MAXUVTIME) && comp[i] instanceof JSpinner){
+								this.setUseStopOnMaxUVDelay((Integer) ((JSpinner) comp[i]).getValue());
+							}
+						}
 					}
 				}
 			}	
@@ -251,13 +256,19 @@ public class LocalizationAcquisition extends Acquisition {
 
 	@Override
 	public String[] getCharacteristicSettings() {
-		String[] s = new String[5];
+		String[] s = new String[6];
 		s[0] = "Exposure = "+this.getExposure()+" ms";
-		s[1] = "Number of frames = "+this.getNumberFrames();
-		s[2] = "Use activation = "+useactivation_;
-		s[3] = "Stop on max UV = "+stoponmax_;
-		s[4] = "Stop on max delay = "+stoponmaxdelay_+" s";
+		s[1] = "Interval = "+this.getIntervalMs()+" ms";
+		s[2] = "Number of frames = "+this.getNumberFrames();
+		s[3] = "Use activation = "+useactivation_;
+		s[4] = "Stop on max UV = "+stoponmax_;
+		s[5] = "Stop on max delay = "+stoponmaxdelay_+" s";
 		return s;
+	}
+
+	@Override
+	public String getPanelName() {
+		return PANE_NAME;
 	}
 
 }
