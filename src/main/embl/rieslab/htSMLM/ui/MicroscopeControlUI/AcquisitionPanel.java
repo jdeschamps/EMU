@@ -60,7 +60,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     private MainFrame owner_;
     
     ///// Parameters
-    public final static String PARAM_3D = "3D lens";
     public final static String PARAM_LOCKING = "Focus stabilization";
     public final static String PARAM_BFP = "BFP lens";
     public final static String PARAM_BRIGHTFIELD = "Bright field";
@@ -70,7 +69,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	private AcquisitionEngine acqengine_;
 	
     ///// Convenience variables
-	private String param3D_, paramBFP_, paramLocking_, paramBrightField_;
+	private String paramBFP_, paramLocking_, paramBrightField_;
 	
     private boolean ready_;
     private JFrame summaryframe_;
@@ -326,9 +325,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	
 	@Override
 	public String getUIPropertyName(String acqtype) {
-		if(acqtype.equals(PARAM_3D)){
-			return param3D_;
-		} else if(acqtype.equals(PARAM_BFP)){
+		if(acqtype.equals(PARAM_BFP)){
 			return paramBFP_;
 		} else if(acqtype.equals(PARAM_LOCKING)){
 			return paramLocking_;
@@ -354,10 +351,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	private void loadAcquisitionList(){
 		wizard_.loadAcquisitionList();		
 		addText(TEXT_LOADED);
-	}
-
-	public String get3DPropertyName(){
-		return param3D_;
 	}
 	
 	public String getBFPPropertyName(){
@@ -422,7 +415,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	String[] propval, specificsettings;
 	    	for(int i=0;i<acqlist_.size();i++){
 	    		acq = acqlist_.get(i);
-	    	    exp = new DefaultMutableTreeNode(acq.getType());
+	    	    exp = new DefaultMutableTreeNode((i+1)+": "+acq.getType());
 	            top.add(exp);
 
 	            specificsettings = acq.getCharacteristicSettings();
@@ -598,12 +591,10 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	protected void initializeParameters() {
-		param3D_ = UIPropertyParameter.NO_PROPERTY;
 		paramBFP_ = UIPropertyParameter.NO_PROPERTY;
 		paramLocking_ = UIPropertyParameter.NO_PROPERTY;
 		paramBrightField_ = UIPropertyParameter.NO_PROPERTY;	
 		
-		addUIParameter(new UIPropertyParameter(this, PARAM_3D,"UIProperty corresponding to the insertion of the 3D lens.", PropertyFlag.TWOSTATE.getDeviceType()));
 		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens.", PropertyFlag.TWOSTATE.getDeviceType()));
 		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.", PropertyFlag.FOCUSSTAB.getDeviceType())); 
 		addUIParameter(new UIPropertyParameter(this, PARAM_BRIGHTFIELD,"UIProperty corresponding to the triggering of the white light illumination.", PropertyFlag.TWOSTATE.getDeviceType())); 
@@ -631,9 +622,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	public void parameterhasChanged(String label) {
-		if(label.equals(PARAM_3D)){
-			param3D_ = ((UIPropertyParameter) getUIParameter(PARAM_3D)).getValue();
-		} else if(label.equals(PARAM_BFP)){
+		if(label.equals(PARAM_BFP)){
 			paramBFP_ = ((UIPropertyParameter) getUIParameter(PARAM_BFP)).getValue();
 		} else if(label.equals(PARAM_LOCKING)){
 			paramLocking_ = ((UIPropertyParameter) getUIParameter(PARAM_LOCKING)).getValue();

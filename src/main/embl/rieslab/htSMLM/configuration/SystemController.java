@@ -376,5 +376,9 @@ public class SystemController {
 	public TaskHolder getTaskHolder(String taskname){
 		return tasks_.get(taskname);
 	}
+	
+	public HashMap<String, String[]> getConfigurationGroups(){
+		return configgroups_.getConfigurationChannelsMap();
+	}
 
 }

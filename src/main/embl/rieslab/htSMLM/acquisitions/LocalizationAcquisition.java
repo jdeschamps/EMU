@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -17,14 +18,13 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
-import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.NoPropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 
 public class LocalizationAcquisition extends Acquisition {
 
-	public final static String TASK_NAME = "Activation task";
+
 	
 	private final static String PANE_NAME = "Localization panel";
 	private final static String LABEL_GROUP = "Group:";
@@ -42,10 +42,11 @@ public class LocalizationAcquisition extends Acquisition {
 	private boolean useactivation_, stoponmax_, activationtask_;
 	private int stoponmaxdelay_;
 	
-	public LocalizationAcquisition(SystemController controller) {
-		super(AcquisitionType.LOCALIZATION, controller);
+	@SuppressWarnings("rawtypes")
+	public LocalizationAcquisition(TaskHolder activationtask, double exposure, HashMap<String,String[]> configgroups) {
+		super(AcquisitionType.LOCALIZATION, exposure,configgroups);
 
-		activation_ = controller.getTaskHolder(TASK_NAME);
+		activation_ = activationtask;
 		if(activation_ != null){
 			activationtask_ = true;
 		} else {
@@ -107,22 +108,11 @@ public class LocalizationAcquisition extends Acquisition {
 		intervallab = new JLabel(LABEL_INTERVAL);
 		waitonmaxlab = new JLabel(LABEL_MAXUVTIME);
 		
-		
-		String[] s = getSystemController().getMMConfigGroups();
-		String[] s2 = new String[s.length+1];
-		String[] s3 = new String[1];
-		s2[0] = EMPTY[0];
-		s3[0] = s2[0];
-		int ind=0;
-		for(int i=0;i<s.length;i++){
-			s2[i+1] = s[i];
-			if(this.getConfigGroup()!=null && s[i].equals(this.getConfigGroup())){
-				ind = i+1;
-			}
-		}
-		channelgroup = new JComboBox(s2);
+		channelgroup = new JComboBox(this.getConfigGroupList());
 		channelgroup.setName(LABEL_GROUP);
-		channelname = new JComboBox(s3);
+		channelgroup.getModel().setSelectedItem(this.getConfigGroup());
+		
+		channelname = new JComboBox(this.getConfigGroupNames(this.getConfigGroup()));
 		channelname.setName(LABEL_GROUPNAME);
 		channelgroup.addActionListener(
 	            new ActionListener(){
@@ -131,21 +121,13 @@ public class LocalizationAcquisition extends Acquisition {
 	                    JComboBox combo = (JComboBox)e.getSource();
 	                    String current = (String)combo.getSelectedItem();
 	
-	                    DefaultComboBoxModel model = new DefaultComboBoxModel(getSystemController().getMMConfigNames(current));
+	                    DefaultComboBoxModel model = new DefaultComboBoxModel(getConfigGroupNames(current));
 	                    channelname.setModel( model );
 					}
 	            }            
 	    );
 		
-		channelgroup.setSelectedIndex(ind);
-		if(ind != 0){
-			DefaultComboBoxModel model = new DefaultComboBoxModel(getSystemController().getMMConfigNames(this.getConfigGroup()));
-	        channelname.setModel(model);
-	        
-	        int ind2  = model.getIndexOf(this.getConfigName());
-	        channelname.setSelectedIndex(ind2);
-		}
-		
+		channelname.getModel().setSelectedItem(this.getConfigName());		
 		
 		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
@@ -245,7 +227,7 @@ public class LocalizationAcquisition extends Acquisition {
 					}
 				}
 			}	
-			this.setConfigurationGroup(getSystemController().getMMConfigGroup(groupname), groupmember);
+			this.setConfigurationGroup(groupname, groupmember);
 		}
 	}
 

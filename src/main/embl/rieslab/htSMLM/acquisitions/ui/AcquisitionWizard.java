@@ -236,7 +236,7 @@ public class AcquisitionWizard {
     	
     protected void saveAcqList() {
 		owner_.setAcquisitionList(getAcquisitionList(), getWaitingTime());
-		saveAcquisitionList();		
+		shutDown();		
 	}
 
 	private int getWaitingTime() {
@@ -265,9 +265,8 @@ public class AcquisitionWizard {
 		
 	}
 
-	public void saveAcquisitionList() {
-		// TODO Auto-generated method stub
-		shutDown();
+	public void saveAcquisitionList(String path) {
+		
 	}
 	
 	public SystemController getController(){

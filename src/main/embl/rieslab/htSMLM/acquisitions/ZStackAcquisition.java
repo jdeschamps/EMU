@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
@@ -16,13 +17,13 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
-import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
 public class ZStackAcquisition extends Acquisition {
+	
 	
 	// Convenience constants		
 	private final static String PANE_NAME = "Zstack panel";
@@ -39,12 +40,11 @@ public class ZStackAcquisition extends Acquisition {
 	
 	private double zstart, zend, zstep;
 	
-	public ZStackAcquisition(SystemController controller, String stabprop) {
-		super(AcquisitionType.ZSTACK, controller);
+	public ZStackAcquisition(double exposure, HashMap<String,String[]> configgroups, UIProperty stabprop) {
+		super(AcquisitionType.ZSTACK, exposure, configgroups);
 
-		UIProperty prop = getSystemController().getProperty(stabprop);
-		if(prop instanceof TwoStateUIProperty){
-			stabprop_ = (TwoStateUIProperty) prop;
+		if(stabprop instanceof TwoStateUIProperty){
+			stabprop_ = (TwoStateUIProperty) stabprop;
 		} else {
 			stabprop_ = null;
 		}
@@ -95,43 +95,26 @@ public class ZStackAcquisition extends Acquisition {
 		waitinglab = new JLabel(LABEL_PAUSE);
 		zstartlab = new JLabel(LABEL_ZSTART);
 		
-		String[] s = getSystemController().getMMConfigGroups();
-		String[] s2 = new String[s.length+1];
-		String[] s3 = new String[1];
-		s2[0] = EMPTY[0];
-		s3[0] = s2[0];
-		int ind=0;
-		for(int i=0;i<s.length;i++){
-			s2[i+1] = s[i];
-			if(this.getConfigGroup()!= null && s[i].equals(this.getConfigGroup())){
-				ind = i+1;
-			}
-		}
-		channelgroup = new JComboBox(s2);
+		channelgroup = new JComboBox(this.getConfigGroupList());
 		channelgroup.setName(LABEL_GROUP);
-		channelname = new JComboBox(s3);
+		channelgroup.getModel().setSelectedItem(this.getConfigGroup());
+		
+		channelname = new JComboBox(this.getConfigGroupNames(this.getConfigGroup()));
 		channelname.setName(LABEL_GROUPNAME);
 		channelgroup.addActionListener(
-                new ActionListener(){
+	            new ActionListener(){
 					@Override
 					public void actionPerformed(ActionEvent e) {
-                        JComboBox combo = (JComboBox)e.getSource();
-                        String current = (String)combo.getSelectedItem();
-
-                        DefaultComboBoxModel model = new DefaultComboBoxModel(getSystemController().getMMConfigNames(current));
-                        channelname.setModel( model );
+	                    JComboBox combo = (JComboBox)e.getSource();
+	                    String current = (String)combo.getSelectedItem();
+	
+	                    DefaultComboBoxModel model = new DefaultComboBoxModel(getConfigGroupNames(current));
+	                    channelname.setModel( model );
 					}
-                }            
-        );
+	            }            
+	    );
 		
-		channelgroup.setSelectedIndex(ind);
-		if(ind != 0){
-			DefaultComboBoxModel model = new DefaultComboBoxModel(getSystemController().getMMConfigNames(this.getConfigGroup()));
-	        channelname.setModel(model);
-	        
-	        int ind2  = model.getIndexOf(this.getConfigName());
-	        channelname.setSelectedIndex(ind2);
-		}
+		channelname.getModel().setSelectedItem(this.getConfigName());	
 		
 		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
@@ -204,7 +187,7 @@ public class ZStackAcquisition extends Acquisition {
 				}
 			}	
 			this.setSlices(zstart, zend, zstep);
-			this.setConfigurationGroup(getSystemController().getMMConfigGroup(groupname), groupmember);
+			this.setConfigurationGroup(groupname, groupmember);
 		}
 	}
 

@@ -1,6 +1,7 @@
 package main.embl.rieslab.htSMLM.micromanager.properties;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 import mmcorej.CMMCore;
 import mmcorej.StrVector;
@@ -30,6 +31,18 @@ public class ConfigurationGroupsRegistry {
 	
 	public HashMap<String, ConfigurationGroup> getConfigurationGroups(){
 		return groups_;
+	}
+	
+	public HashMap<String, String[]> getConfigurationChannelsMap(){
+		HashMap<String, String[]> map = new HashMap<String, String[]>();
+		
+		Iterator<String> it = groups_.keySet().iterator();
+		String s;
+		while(it.hasNext()){
+			s=it.next();
+			map.put(s, groups_.get(s).getConfigurations().toArray());
+		}
+		return map;
 	}
 }
   

@@ -5,13 +5,13 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
-import main.embl.rieslab.htSMLM.configuration.SystemController;
-import main.embl.rieslab.htSMLM.micromanager.properties.ConfigurationGroup;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
+import main.embl.rieslab.htSMLM.util.StringSorting;
 
 import org.micromanager.api.SequenceSettings;
 
 public abstract class Acquisition {
+
 
 	public final static String[] EMPTY = {"Empty"};
 
@@ -20,36 +20,32 @@ public abstract class Acquisition {
 	private int waitingtime_;
 	private AcquisitionType type_;
 	private boolean useconfig_ = false;
-	private ConfigurationGroup group_;
-	private String configname_; 
+	private String group_, configname_; 
 	private HashMap<String,String> propvalues_;
+	private HashMap<String,String[]> configgroups_;
 	private String expname_;
-	private SystemController controller_;
 	
 	public static final String ACQ_SETTINGS = "Acquisition settings";
 	
-	public Acquisition(AcquisitionType type, SystemController controller){
+	public Acquisition(AcquisitionType type, double exposure, HashMap<String,String[]> configgroups){
 		type_ = type;
 		
 		expname_ = "";
 		
-		exposure_ = controller.getExposure();
+		exposure_ = exposure;
 		waitingtime_ = 0;
 		
-		controller_ = controller;
+		configgroups_ = configgroups;
 		
 		configname_ = EMPTY[0];
+		group_ = EMPTY[0];
 		
 		settings_ = new SequenceSettings();
 		settings_.save = true;
 		settings_.timeFirst = true;
 		settings_.usePositionList = false;
 	}
-	
-	protected SystemController getSystemController(){
-		return controller_;
-	}
-	
+
 	protected void setSlices(ArrayList<Double> slices){
 		settings_.slices = slices;
 	}	
@@ -114,8 +110,8 @@ public abstract class Acquisition {
 		return useconfig_;
 	}
 	
-	public void setConfigurationGroup(ConfigurationGroup group, String configname){
-		if(group != null && group.hasConfiguration(configname)){
+	public void setConfigurationGroup(String group, String configname){
+		if(group != null && configgroups_.containsKey(group)){
 			group_ = group;
 			configname_  = configname;
 			useconfig_ = true;
@@ -143,13 +139,32 @@ public abstract class Acquisition {
 	
 	public String getConfigGroup(){
 		if(group_ != null){
-			return group_.getName();
+			return group_;
 		}
 		return EMPTY[0];
 	}
 	
 	public String getConfigName(){
 		return configname_;
+	}
+	
+	public String[] getConfigGroupList(){
+		int size = configgroups_.size();
+		String[] s = new String[size+1];
+		String[] temp = StringSorting.sort(configgroups_.keySet().toArray(new String[0]));
+		s[0] = EMPTY[0];
+		for(int i=0;i<size;i++){
+			s[i+1] = temp[i];
+		}
+		return s;
+	}
+	
+	public String[] getConfigGroupNames(String group){
+		if(!configgroups_.containsKey(group)){
+			return EMPTY;
+		}
+		
+		return StringSorting.sort(configgroups_.get(group));
 	}
 	
 	public abstract void preAcquisition();
