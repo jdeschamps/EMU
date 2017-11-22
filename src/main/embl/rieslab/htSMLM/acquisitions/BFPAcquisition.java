@@ -100,7 +100,7 @@ public class BFPAcquisition extends Acquisition {
 		for(int i=0;i<s.length;i++){
 			s2[i+1] = s[i];
 			if(this.getConfigGroup()!=null && s[i].equals(this.getConfigGroup())){
-				ind = i;
+				ind = i+1;
 			}
 		}
 		channelgroup = new JComboBox(s2);
@@ -130,7 +130,7 @@ public class BFPAcquisition extends Acquisition {
 	        int ind2  = model.getIndexOf(this.getConfigName());
 	        channelname.setSelectedIndex(ind2);
 		}
-		System.out.println("exposure "+this.getExposure());
+
 		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
 		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 1)); 
@@ -168,18 +168,15 @@ public class BFPAcquisition extends Acquisition {
 			Component[] pancomp = pane.getComponents();
 			String groupname="", groupmember="";
 			for(int j=0;j<pancomp.length;j++){
-				System.out.println("Comp name: "+ pancomp[j].getName()+"  ");
 				if(pancomp[j] instanceof JPanel){
 					Component[] comp = ((JPanel) pancomp[j]).getComponents();
 					for(int i=0;i<comp.length;i++){
 						if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
-							System.out.println(" compo under revision");
 							if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
 								groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
 							}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
 								groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
 							}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
-								System.out.println("change exposure in bfp");
 								this.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
 								this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
@@ -188,6 +185,8 @@ public class BFPAcquisition extends Acquisition {
 					}
 				}
 			}	
+			System.out.println("group name: "+groupname+"  --- "+groupmember);
+
 			this.setConfigurationGroup(getSystemController().getMMConfigGroup(groupname), groupmember);
 		}
 	}
