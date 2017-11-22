@@ -3,19 +3,23 @@ package main.embl.rieslab.htSMLM.acquisitions.ui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
+import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.util.utils;
 
@@ -260,13 +264,20 @@ public class AcquisitionWizard {
 		return frame_.isActive();
 	}
 	
-	public void loadAcquisitionList() {
-		// TODO Auto-generated method stub
-		
+	public ArrayList<Acquisition> loadAcquisitionList() {		
+		JFileChooser fileChooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Acquisition list", SystemConstants.ACQ_EXT);
+		fileChooser.setFileFilter(filter);
+		int result = fileChooser.showOpenDialog(new JFrame());
+		if (result == JFileChooser.APPROVE_OPTION) {
+		    File selectedFile = fileChooser.getSelectedFile();
+	    	return (new AcquisitionFactory(owner_, controller_)).readAcquisitionList(selectedFile.getAbsolutePath());
+	    }
+    	return null;
 	}
 
-	public void saveAcquisitionList(String path) {
-		
+	public boolean saveAcquisitionList(ArrayList<Acquisition> acqlist_, String path) {
+		return (new AcquisitionFactory(owner_, controller_)).writeAcquisitionList(acqlist_, path);
 	}
 	
 	public SystemController getController(){

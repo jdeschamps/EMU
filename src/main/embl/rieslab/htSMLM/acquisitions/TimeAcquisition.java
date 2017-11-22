@@ -22,7 +22,11 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.NoPropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 
 public class TimeAcquisition extends Acquisition {
-
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8735576033335730948L;
 	
 	// Convenience constants		
 	private final static String PANE_NAME = "Time panel";
@@ -172,7 +176,7 @@ public class TimeAcquisition extends Acquisition {
 	}
 
 	@Override
-	public String[] getCharacteristicSettings() {
+	public String[] getSpecialSettings() {
 		String[] s = new String[3];
 		s[0] = "Exposure = "+this.getExposure()+" ms";
 		s[1] = "Number of frames = "+this.getNumberFrames();

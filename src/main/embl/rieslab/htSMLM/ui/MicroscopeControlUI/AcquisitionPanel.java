@@ -23,6 +23,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
@@ -36,6 +37,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import org.micromanager.utils.MMScriptException;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
+import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionUI;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionWizard;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
@@ -158,11 +160,25 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					startTask();
+					String path = jTextField_path.getText();
+
+					if(!ready_ || acqlist_ == null || acqlist_.isEmpty()){
+						showNoAcqMessage();
+						jToggle_startstop.setSelected(false);
+						return;
+					}
+					
+					if(path == null || path.equals("")){
+						showNoPathMessage();
+						jToggle_startstop.setSelected(false);
+						return;
+					}
+					
 					jToggle_startstop.setText("Stop");
+					startTask();
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					stopTask();
 					jToggle_startstop.setText("Start");
+					stopTask();
 				}
 			}
         });
@@ -317,6 +333,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		waitingtime_ = waitingtime;
 		if(!acqlist_.isEmpty()){
 			ready_ = true;
+			addText(TEXT_LOADED);	
 			setSummaryText();
 		} else {
 			ready_ = false;
@@ -349,8 +366,13 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	}
 	
 	private void loadAcquisitionList(){
-		wizard_.loadAcquisitionList();		
-		addText(TEXT_LOADED);
+		ArrayList<Acquisition> acqlist = wizard_.loadAcquisitionList();		
+		if(acqlist != null){
+			acqlist_ = acqlist;
+			ready_ = true;
+			addText(TEXT_LOADED);	
+			setSummaryText();
+		}
 	}
 	
 	public String getBFPPropertyName(){
@@ -418,7 +440,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    exp = new DefaultMutableTreeNode((i+1)+": "+acq.getType());
 	            top.add(exp);
 
-	            specificsettings = acq.getCharacteristicSettings();
+	            specificsettings = acq.getSpecialSettings();
 	    	    for(int j=0;j<specificsettings.length;j++){
 	   	    		setting = new DefaultMutableTreeNode(specificsettings[j]);
 	   	    		exp.add(setting);
@@ -500,13 +522,26 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	public void startTask() {
-		if(ready_){			
+		if(ready_){	
 			// set path and experiment name in acquisition
 			String path = jTextField_path.getText();
 			String name = jTextField_expname.getText();
+			
 			for(int i=0;i<acqlist_.size();i++){
 				acqlist_.get(i).setName(name);
 				acqlist_.get(i).setPath(path);
+			}
+			
+			// save the acquisition list to the destination folder
+			boolean b = true;
+			if(wizard_ != null){
+				b = wizard_.saveAcquisitionList(acqlist_,path+"/");
+			} else {
+				b = (new AcquisitionFactory(this, controller_)).writeAcquisitionList(acqlist_, path+"/");
+			}
+			
+			if(!b){
+				// report problem saving
 			}
 			
 			acqengine_ = new AcquisitionEngine(this, controller_);
@@ -522,6 +557,18 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 				// Do nothing
 			}
 		}
+	}
+
+	private void showNoPathMessage() {
+		String title = "No path";
+		String message = "The path has not been specified.";
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}	
+	
+	private void showNoAcqMessage() {
+		String title = "No Acquisition";
+		String message = "The acquisition list is empty.";
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@Override

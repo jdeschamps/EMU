@@ -13,5 +13,10 @@ public class SystemConstants {
 	public final static double gaussianMaskPrecision = 0.02;
 	public final static int nmsMaskSize = 7;
 
-	
+	// Write/read
+	public final static String HOME = "ht-SMLM/";
+	public final static String CONFIG_EXT = "uicfg";
+	public final static String ACQ_EXT = "uiacq";
+	public final static String ACQ_NAME = "AcqList."+ACQ_EXT;
+	public final static String CONFIG_NAME = HOME+"config."+CONFIG_EXT;
 }

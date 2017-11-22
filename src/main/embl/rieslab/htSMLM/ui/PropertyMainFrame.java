@@ -17,7 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import main.embl.rieslab.htSMLM.configuration.Configuration;
+import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalPropertyValue;
@@ -98,7 +98,7 @@ public abstract class PropertyMainFrame extends JFrame {
 	
 	private boolean getConfigurationFile(){
 		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("UI Configuration", Configuration.CONFIG_EXT);
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("UI Configuration", SystemConstants.CONFIG_EXT);
 		fileChooser.setFileFilter(filter);
 		int result = fileChooser.showOpenDialog(this);
 		if (result == JFileChooser.APPROVE_OPTION) {

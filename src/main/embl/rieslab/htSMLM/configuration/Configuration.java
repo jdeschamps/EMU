@@ -24,10 +24,6 @@ public class Configuration {
 	public final static String KEY_ENTERVALUE = "Enter value";
 	public final static String KEY_UIPROPERTY = "UI Property: ";
 	public final static String KEY_UIPARAMETER = "UI Parameter: ";
-	
-	// Configuration
-	public final static String CONFIG_NAME = "ht-SMLM/config.uicfg";
-	public final static String CONFIG_EXT = "uicfg";
 
 	private HashMap<String,String> uiproperties_;
 	private HashMap<String,String> uiparameters_;
@@ -52,7 +48,7 @@ public class Configuration {
 	@SuppressWarnings("rawtypes")
 	public boolean readDefaultConfiguration(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
 			MMProperties mmproperties){		
-		return readConfiguration(uipropertySet,uiparameterSet,mmproperties,new File(CONFIG_NAME));
+		return readConfiguration(uipropertySet,uiparameterSet,mmproperties,new File(SystemConstants.CONFIG_NAME));
 	}
 	
 	/**
@@ -132,7 +128,7 @@ public class Configuration {
 	}
 
 	public boolean saveConfiguration(HashMap<String,String> uipropertySet, HashMap<String,String> uiparameterSet){
-		File configFile = new File(CONFIG_NAME);
+		File configFile = new File(SystemConstants.CONFIG_NAME);
 		 
 		try {
 		    Properties props = new Properties();

@@ -13,17 +13,21 @@ import org.micromanager.api.SequenceSettings;
 public abstract class Acquisition {
 
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6202170116272400442L;
+
 	public final static String[] EMPTY = {"Empty"};
 
-	private SequenceSettings settings_;
-	private double exposure_;
-	private int waitingtime_;
+	private double exposure_, intervalMs_;
+	private int waitingtime_, numFrames_;
+	private ArrayList<Double> slices_;
 	private AcquisitionType type_;
 	private boolean useconfig_ = false;
-	private String group_, configname_; 
+	private String group_, configname_, expname_, path_; 
 	private HashMap<String,String> propvalues_;
 	private HashMap<String,String[]> configgroups_;
-	private String expname_;
 	
 	public static final String ACQ_SETTINGS = "Acquisition settings";
 	
@@ -34,32 +38,41 @@ public abstract class Acquisition {
 		
 		exposure_ = exposure;
 		waitingtime_ = 0;
+		intervalMs_ = 0;
+		numFrames_ = 1;
 		
 		configgroups_ = configgroups;
-		
 		configname_ = EMPTY[0];
 		group_ = EMPTY[0];
 		
-		settings_ = new SequenceSettings();
-		settings_.save = true;
-		settings_.timeFirst = true;
-		settings_.usePositionList = false;
+		path_ = "";
+		expname_ = "";
 	}
 
-	protected void setSlices(ArrayList<Double> slices){
-		settings_.slices = slices;
-	}	
-	
+
 	protected void setSlices(double zstart, double zend, double zstep){
-		ArrayList<Double> slices = new ArrayList<Double>();
+		slices_ = new ArrayList<Double>();
 		for(double z=zstart;z<=zend;z=z+zstep){
-			slices.add(z);
+			slices_.add(z);
 		}	
-		settings_.slices = slices;
 	}
 	
 	public SequenceSettings getSettings(){
-		return settings_;
+		SequenceSettings settings = new SequenceSettings();
+		
+		settings.save = true;
+		settings.timeFirst = true;
+		settings.usePositionList = false;
+		
+		if(slices_ != null){
+			settings.slices = slices_;
+		}
+
+		settings.root = path_;
+		settings.numFrames = numFrames_;
+		settings.intervalMs = intervalMs_;
+		
+		return settings;
 	}
 	
 	public String getType(){
@@ -67,7 +80,7 @@ public abstract class Acquisition {
 	}
 	
 	public void setPath(String path){
-		settings_.root = path;
+		path_ = path;
 	}
 
 	public void setProperties(HashMap<String,String> propvalues){
@@ -75,19 +88,19 @@ public abstract class Acquisition {
 	}
 
 	protected void setNumberFrames(int numframes){
-		settings_.numFrames = numframes;
+		numFrames_ = numframes;
 	}
 
 	public int getNumberFrames(){
-		return settings_.numFrames;
+		return numFrames_;
 	}
 
 	protected void setIntervalMs(double interval){
-		settings_.intervalMs = interval;
+		intervalMs_ = interval;
 	}
 
 	public double getIntervalMs(){
-		return settings_.intervalMs;
+		return intervalMs_;
 	}
 	
 	protected void setExposureTime(double exp){
@@ -126,7 +139,7 @@ public abstract class Acquisition {
 		type_ = type;
 	}
 	public String getPath() {
-		return settings_.root;
+		return path_;
 	}
 
 	public String getExperimentName() {
@@ -174,6 +187,7 @@ public abstract class Acquisition {
 	public abstract String getPanelName();
 	public abstract void readOutParameters(JPanel pane);
 	public abstract PropertyFilter getPropertyFilter();
-	public abstract String[] getCharacteristicSettings();
+	public abstract String[] getSpecialSettings();
+	
 
 }

@@ -25,6 +25,10 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 public class BFPAcquisition extends Acquisition {
 	
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8832876597796340921L;
 	// Convenience constants		
 	private final static String PANE_NAME = "BFP panel";
 	private final static String LABEL_GROUP = "Group:";
@@ -175,7 +179,7 @@ public class BFPAcquisition extends Acquisition {
 	}
 
 	@Override
-	public String[] getCharacteristicSettings() {
+	public String[] getSpecialSettings() {
 		String[] s = new String[1];
 		s[0] = "Exposure = "+this.getExposure()+" ms";
 		return s;

@@ -25,6 +25,10 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 public class BrightFieldAcquisition extends Acquisition {
 	
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7628556826106611109L;
 	// Convenience constants		
 	private final static String PANE_NAME = "Bright field panel";
 	private final static String LABEL_GROUP = "Group:";
@@ -172,7 +176,7 @@ public class BrightFieldAcquisition extends Acquisition {
 	}
 
 	@Override
-	public String[] getCharacteristicSettings() {
+	public String[] getSpecialSettings() {
 		String[] s = new String[1];
 		s[0] = "Exposure = "+this.getExposure()+" ms";
 		return s;

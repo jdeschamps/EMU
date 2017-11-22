@@ -25,6 +25,11 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 public class ZStackAcquisition extends Acquisition {
 	
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5144120498797279261L;
+	
 	// Convenience constants		
 	private final static String PANE_NAME = "Zstack panel";
 	private final static String LABEL_GROUP = "Group:";
@@ -197,7 +202,7 @@ public class ZStackAcquisition extends Acquisition {
 	}
 
 	@Override
-	public String[] getCharacteristicSettings() {
+	public String[] getSpecialSettings() {
 		String[] s = new String[4];
 		s[0] = "Exposure = "+this.getExposure()+" ms";
 		s[1] = "Zstart = "+zstart+" um";

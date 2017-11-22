@@ -26,6 +26,10 @@ public class LocalizationAcquisition extends Acquisition {
 
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5251828871642327905L;
 	private final static String PANE_NAME = "Localization panel";
 	private final static String LABEL_GROUP = "Group:";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
@@ -237,7 +241,7 @@ public class LocalizationAcquisition extends Acquisition {
 	}
 
 	@Override
-	public String[] getCharacteristicSettings() {
+	public String[] getSpecialSettings() {
 		String[] s = new String[6];
 		s[0] = "Exposure = "+this.getExposure()+" ms";
 		s[1] = "Interval = "+this.getIntervalMs()+" ms";
