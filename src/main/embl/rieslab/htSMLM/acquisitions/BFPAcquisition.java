@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -17,6 +18,10 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
@@ -24,18 +29,13 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
 public class BFPAcquisition extends Acquisition {
 	
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8832876597796340921L;
 	// Convenience constants		
 	private final static String PANE_NAME = "BFP panel";
 	private final static String LABEL_GROUP = "Group:";
 	private final static String LABEL_GROUPNAME = "GroupName";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
-	
+		
 	// UI property
 	private TwoStateUIProperty bfpprop_;
 	
@@ -185,4 +185,8 @@ public class BFPAcquisition extends Acquisition {
 		return s;
 	}
 
+	@Override
+	public String[][] getAdditionalJSONParameters() {
+		return null;
+	}
 }

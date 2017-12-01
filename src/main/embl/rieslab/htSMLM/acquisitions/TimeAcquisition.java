@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -18,16 +19,14 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.NoPropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 
 public class TimeAcquisition extends Acquisition {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8735576033335730948L;
-	
+
 	// Convenience constants		
 	private final static String PANE_NAME = "Time panel";
 	private final static String LABEL_GROUP = "Group:";
@@ -39,7 +38,6 @@ public class TimeAcquisition extends Acquisition {
 	
 	public TimeAcquisition(double exposure, HashMap<String,String[]> configgroups) {
 		super(AcquisitionType.TIME, exposure, configgroups);
-
 	}
 
 	@Override
@@ -187,6 +185,11 @@ public class TimeAcquisition extends Acquisition {
 	@Override
 	public String getPanelName() {
 		return PANE_NAME;
+	}
+
+	@Override
+	public String[][] getAdditionalJSONParameters() {
+		return null;
 	}
 
 }

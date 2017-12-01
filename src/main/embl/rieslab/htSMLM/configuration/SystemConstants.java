@@ -17,6 +17,6 @@ public class SystemConstants {
 	public final static String HOME = "ht-SMLM/";
 	public final static String CONFIG_EXT = "uicfg";
 	public final static String ACQ_EXT = "uiacq";
-	public final static String ACQ_NAME = "AcqList."+ACQ_EXT;
+	public final static String ACQ_NAME = "AcquisitionList."+ACQ_EXT;
 	public final static String CONFIG_NAME = HOME+"config."+CONFIG_EXT;
 }

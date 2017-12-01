@@ -25,11 +25,6 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 public class LocalizationAcquisition extends Acquisition {
 
 
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5251828871642327905L;
 	private final static String PANE_NAME = "Localization panel";
 	private final static String LABEL_GROUP = "Group:";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
@@ -40,6 +35,10 @@ public class LocalizationAcquisition extends Acquisition {
 	private final static String LABEL_USEACTIVATION = "Use activation";
 	private final static String LABEL_USESTOPONMAXUV = "Stop on max";
 	private final static String LABEL_MAXUVTIME = "Stop on max delay (s):";
+	
+	public final static String KEY_USEACT = "Use activation?";
+	public final static String KEY_STOPONMAX = "Stop on max?";
+	public final static String KEY_STOPDELAY = "Stop on max delay";
 	
 	@SuppressWarnings("rawtypes")
 	private TaskHolder activation_;
@@ -186,15 +185,15 @@ public class LocalizationAcquisition extends Acquisition {
 		return pane;
 	}
 
-	private void setUseActivation(boolean b){
+	public void setUseActivation(boolean b){
 		useactivation_  = b;
 	}
 
-	private void setUseStopOnMaxUV(boolean b){
+	public void setUseStopOnMaxUV(boolean b){
 		stoponmax_ = b;
 	}
 	
-	private void setUseStopOnMaxUVDelay(int delay){
+	public void setUseStopOnMaxUVDelay(int delay){
 		stoponmaxdelay_ = delay;
 	}
 	
@@ -255,6 +254,20 @@ public class LocalizationAcquisition extends Acquisition {
 	@Override
 	public String getPanelName() {
 		return PANE_NAME;
+	}
+	
+	@Override
+	public String[][] getAdditionalJSONParameters() {
+		String[][] s = new String[2][3];
+
+		s[0][0] = KEY_USEACT;
+		s[0][1] = String.valueOf(useactivation_);
+		s[1][0] = KEY_STOPONMAX;
+		s[1][1] = String.valueOf(stoponmax_);
+		s[2][0] = KEY_STOPDELAY;
+		s[2][1] = String.valueOf(stoponmaxdelay_);
+		
+		return s;
 	}
 
 }

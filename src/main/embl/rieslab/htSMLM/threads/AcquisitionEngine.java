@@ -105,83 +105,86 @@ public class AcquisitionEngine implements Task<Integer>{
 
 					PositionList poslist = script_.getPositionList();
 					int numPosition = poslist.getNumberOfPositions();
-					MultiStagePosition currPos;
-
-					String xystage = script_.getXYStageName();
-
-					for (int i = 0; i < numPosition; i++) {
-
-						// move to next stage position
-						currPos = poslist.getPosition(i);
-						core_.setXYPosition(xystage, currPos.get(0).x,currPos.get(0).y);
-
-						// let time for the stage to move to position
-						Thread.sleep(param[0]);
-
-						// perform each acquisition sequentially
-						for (int k = 0; k < acqlist_.size(); k++) {
-							final Acquisition acq = acqlist_.get(k);
-
-							// set acquisition settings
-							script_.setAcquisitionSettings(acq.getSettings());
-
-							// set acquisition name
-							final String acqname = createAcqName(acq, i);
-
-							// set configuration channel
-							if (acq.useConfig()) {
-								core_.setConfig(acq.getConfigGroup(),acq.getConfigName());
-							}
-
-							// set-up system
-							system_.setUpSystem(acq.getPropertyValues());
-
-							// set-up special acquisition state
-							acq.preAcquisition();
-
-							// let time for the system to adjust
-							Thread.sleep(1000);
-
-							// run acquisition
-							Thread t = new Thread() {
-								public void run() {
-									try {
-										currAcq = script_.runAcquisition(acqname, acq.getPath());
-									} catch (MMScriptException e) {
-										e.printStackTrace();
+					
+					if(numPosition>0){
+						MultiStagePosition currPos;
+	
+						String xystage = script_.getXYStageName();
+	
+						for (int i = 0; i < numPosition; i++) {
+	
+							// move to next stage position
+							currPos = poslist.getPosition(i);
+							core_.setXYPosition(xystage, currPos.get(0).x,currPos.get(0).y);
+	
+							// let time for the stage to move to position
+							Thread.sleep(param[0]);
+	
+							// perform each acquisition sequentially
+							for (int k = 0; k < acqlist_.size(); k++) {
+								final Acquisition acq = acqlist_.get(k);
+	
+								// set acquisition settings
+								script_.setAcquisitionSettings(acq.getSettings());
+	
+								// set acquisition name
+								final String acqname = createAcqName(acq, i);
+	
+								// set configuration channel
+								if (acq.useConfig()) {
+									core_.setConfig(acq.getConfigGroup(),acq.getConfigName());
+								}
+	
+								// set-up system
+								system_.setUpSystem(acq.getPropertyValues());
+	
+								// set-up special acquisition state
+								acq.preAcquisition();
+	
+								// let time for the system to adjust
+								Thread.sleep(acq.getWaitingTime());
+	
+								// run acquisition
+								Thread t = new Thread() {
+									public void run() {
+										try {
+											currAcq = script_.runAcquisition(acqname, acq.getPath());
+										} catch (MMScriptException e) {
+											e.printStackTrace();
+										}
+									}
+								};
+								t.start();
+	
+								while (t.isAlive()) {
+									Thread.sleep(1000);
+									if (acq.stopCriterionReached()) {
+										interruptAcquistion();
 									}
 								}
-							};
-							t.start();
-
-							while (t.isAlive()) {
-								Thread.sleep(1000);
-								if (acq.stopCriterionReached()) {
-									interruptAcquistion();
+	
+								// set-up special post-acquisition state
+								acq.postAcquisition();
+	
+								// close acq window
+								try {
+									script_.closeAcquisitionWindow(currAcq);
+								} catch (MMScriptException e) {
+									// ?
+								}
+	
+								if (stop_) {
+									break;
 								}
 							}
-
-							// set-up special post-acquisition state
-							acq.postAcquisition();
-
-							// close acq window
-							try {
-								script_.closeAcquisitionWindow(currAcq);
-							} catch (MMScriptException e) {
-								// ?
-							}
-
+	
 							if (stop_) {
 								break;
 							}
+	
+							// show progress
+							publish(i);
 						}
-
-						if (stop_) {
-							break;
-						}
-
-						// show progress
-						publish(i);
 					}
 
 				} catch (MMScriptException e) {
@@ -190,6 +193,9 @@ public class AcquisitionEngine implements Task<Integer>{
 					e.printStackTrace();
 				}
 			}
+			
+			publish(-1);
+			
 			return 0;
 		}
 
@@ -225,8 +231,13 @@ public class AcquisitionEngine implements Task<Integer>{
 		@Override
 		protected void process(List<Integer> chunks) {
 			for(Integer result : chunks){
-				Integer[] results = {result};
-				notifyHolder(results);
+				if(result>0){
+					Integer[] results = {result};
+					notifyHolder(results);
+				} else if(result == -1){
+					running_ = false;
+					holder_.taskDone();
+				}
 			}
 		}
 	}

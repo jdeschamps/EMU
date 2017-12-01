@@ -1,5 +1,6 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,13 +11,11 @@ import main.embl.rieslab.htSMLM.util.StringSorting;
 
 import org.micromanager.api.SequenceSettings;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+
 public abstract class Acquisition {
 
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 6202170116272400442L;
 
 	public final static String[] EMPTY = {"Empty"};
 
@@ -50,7 +49,7 @@ public abstract class Acquisition {
 	}
 
 
-	protected void setSlices(double zstart, double zend, double zstep){
+	public void setSlices(double zstart, double zend, double zstep){
 		slices_ = new ArrayList<Double>();
 		for(double z=zstart;z<=zend;z=z+zstep){
 			slices_.add(z);
@@ -87,7 +86,7 @@ public abstract class Acquisition {
 		propvalues_ = propvalues;
 	}
 
-	protected void setNumberFrames(int numframes){
+	public void setNumberFrames(int numframes){
 		numFrames_ = numframes;
 	}
 
@@ -95,7 +94,7 @@ public abstract class Acquisition {
 		return numFrames_;
 	}
 
-	protected void setIntervalMs(double interval){
+	public void setIntervalMs(double interval){
 		intervalMs_ = interval;
 	}
 
@@ -103,7 +102,7 @@ public abstract class Acquisition {
 		return intervalMs_;
 	}
 	
-	protected void setExposureTime(double exp){
+	public void setExposureTime(double exp){
 		exposure_ = exp;
 	}	
 	
@@ -115,7 +114,7 @@ public abstract class Acquisition {
 		return waitingtime_;
 	}
 	
-	protected void setWaitingTime(int waiting){
+	public void setWaitingTime(int waiting){
 		waitingtime_ = waiting;
 	}
 	
@@ -138,6 +137,7 @@ public abstract class Acquisition {
 	protected void setType(AcquisitionType type){
 		type_ = type;
 	}
+	
 	public String getPath() {
 		return path_;
 	}
@@ -188,6 +188,7 @@ public abstract class Acquisition {
 	public abstract void readOutParameters(JPanel pane);
 	public abstract PropertyFilter getPropertyFilter();
 	public abstract String[] getSpecialSettings();
+	public abstract String[][] getAdditionalJSONParameters();
 	
 
 }

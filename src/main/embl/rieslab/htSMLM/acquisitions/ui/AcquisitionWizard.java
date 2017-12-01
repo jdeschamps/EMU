@@ -3,23 +3,19 @@ package main.embl.rieslab.htSMLM.acquisitions.ui;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
-import java.io.File;
 import java.util.ArrayList;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
-import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.util.utils;
 
@@ -36,8 +32,6 @@ public class AcquisitionWizard {
 		owner_ = owner;
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
-		
-		setUpFrame();
 	}
 	
 	public AcquisitionWizard(SystemController controller, AcquisitionUI owner, ArrayList<Acquisition> acqlist_) {
@@ -45,10 +39,18 @@ public class AcquisitionWizard {
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
 
+		startWizard(acqlist_);
+	}
+
+	public void startWizard(){
+		setUpFrame();
+	}	
+	
+	public void startWizard(ArrayList<Acquisition> acqlist_){
 		setUpFrame();
 		setAcquisitions(acqlist_);
 	}
-
+	
 	private void setUpFrame() {
 		frame_ = new JFrame("Acquisition wizard");
 		JPanel contentpane = new JPanel();
@@ -242,7 +244,7 @@ public class AcquisitionWizard {
 		owner_.setAcquisitionList(getAcquisitionList(), getWaitingTime());
 		shutDown();		
 	}
-
+    
 	private int getWaitingTime() {
 		String s = waitfield.getText();
 		if(utils.isInteger(s)){
@@ -264,20 +266,12 @@ public class AcquisitionWizard {
 		return frame_.isActive();
 	}
 	
-	public ArrayList<Acquisition> loadAcquisitionList() {		
-		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Acquisition list", SystemConstants.ACQ_EXT);
-		fileChooser.setFileFilter(filter);
-		int result = fileChooser.showOpenDialog(new JFrame());
-		if (result == JFileChooser.APPROVE_OPTION) {
-		    File selectedFile = fileChooser.getSelectedFile();
-	    	return (new AcquisitionFactory(owner_, controller_)).readAcquisitionList(selectedFile.getAbsolutePath());
-	    }
-    	return null;
+	public ArrayList<Acquisition> loadAcquisitionList(String path) {		
+    	return (new AcquisitionFactory(owner_, controller_)).readAcquisitionList(path);
 	}
 
-	public boolean saveAcquisitionList(ArrayList<Acquisition> acqlist_, String path) {
-		return (new AcquisitionFactory(owner_, controller_)).writeAcquisitionList(acqlist_, path);
+	public boolean saveAcquisitionList(ArrayList<Acquisition> acqlist_, int waitingtime, String path) {
+		return (new AcquisitionFactory(owner_, controller_)).writeAcquisitionList(acqlist_, waitingtime, path);
 	}
 	
 	public SystemController getController(){
@@ -285,7 +279,9 @@ public class AcquisitionWizard {
 	}
 	
 	public void shutDown() {
-		frame_.dispose();
+		if(frame_ != null){
+			frame_.dispose();
+		}
 	}
 
 

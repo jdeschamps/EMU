@@ -14,6 +14,7 @@ public interface TaskHolder<T> {
 	public boolean isCriterionReached();
 	@SuppressWarnings("rawtypes")
 	public Task getTask();
+	public void taskDone();
 	
 	/**
 	 * To be called before starting the task.

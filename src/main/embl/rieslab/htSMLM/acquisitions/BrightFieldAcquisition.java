@@ -23,19 +23,14 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
 public class BrightFieldAcquisition extends Acquisition {
-	
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -7628556826106611109L;
+		
 	// Convenience constants		
 	private final static String PANE_NAME = "Bright field panel";
 	private final static String LABEL_GROUP = "Group:";
 	private final static String LABEL_GROUPNAME = "GroupName";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
-	
+		
 	// UI property
 	private TwoStateUIProperty bfprop_; 
 	
@@ -180,6 +175,12 @@ public class BrightFieldAcquisition extends Acquisition {
 		String[] s = new String[1];
 		s[0] = "Exposure = "+this.getExposure()+" ms";
 		return s;
+	}
+
+
+	@Override
+	public String[][] getAdditionalJSONParameters() {
+		return null;
 	}
 
 }

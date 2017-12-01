@@ -9,7 +9,6 @@ import javax.swing.table.TableCellRenderer;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
 
 public class IconTableRenderer implements TableCellRenderer{
-
 	@Override
 	public Component getTableCellRendererComponent(JTable table,
 			Object value, boolean isSelected, boolean hasFocus, int row,

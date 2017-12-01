@@ -1,13 +1,17 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionUI;
 import main.embl.rieslab.htSMLM.configuration.SystemConstants;
@@ -45,63 +49,170 @@ public class AcquisitionFactory {
 		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getConfigurationGroups());
 	}
 
-	public boolean writeAcquisitionList(ArrayList<Acquisition> acqlist, String path){
+	public boolean writeAcquisitionList(ArrayList<Acquisition> acqlist, int waitingtime, String path){
+
+		ArrayList<AcquisitionWrapper> aqwlist = new ArrayList<AcquisitionWrapper>();
+		for(int i=0;i<acqlist.size();i++){
+			aqwlist.add(new AcquisitionWrapper(acqlist.get(i)));
+		}
+		
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+		
+		String name;
+		if(!path.endsWith("/")){
+			name = path+"/"+SystemConstants.ACQ_NAME;
+		} else {
+			name = path+SystemConstants.ACQ_NAME;
+		}
+		
 		try {
-			String filepath = path;
-			
-			if(!filepath.endsWith("/")){
-				filepath += "/";
-			}
-
-			FileOutputStream f = new FileOutputStream(new File(filepath+SystemConstants.ACQ_NAME));
-			ObjectOutputStream o = new ObjectOutputStream(f);
-
-			// Write objects to file
-			o.writeObject(acqlist);
-
-			o.close();
-			f.close();
+			objectMapper.writeValue(new FileOutputStream(name), aqwlist);
 			
 			return true;
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Error initializing stream");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public ArrayList<Acquisition> readAcquisitionList(String path){	
 		ArrayList<Acquisition> acqlist = new ArrayList<Acquisition>();
-		String filepath = path;
-		
-		if(!filepath.endsWith("/")){
-			filepath += "/";
-		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
 		try {
-			FileInputStream fi = new FileInputStream(new File(filepath));
-			ObjectInputStream oi = new ObjectInputStream(fi);
+			ArrayList<AcquisitionWrapper> acqwlist = objectMapper.readValue(new FileInputStream(path), new TypeReference<ArrayList<AcquisitionWrapper>>(){});			
+			
+			if(acqwlist != null && !acqwlist.isEmpty()){
+				for(int i=0;i<acqwlist.size();i++){
+					AcquisitionWrapper acqw = acqwlist.get(i);
+					if(acqw.type.equals(AcquisitionType.BFP.getTypeValue())){
+						BFPAcquisition acq = (BFPAcquisition) getAcquisition(acqw.type);
+						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
+						acq.setExposureTime(acqw.exposure);
+						acq.setWaitingTime(acqw.waitingTime);
+						
+						HashMap<String,String> props = new HashMap<String,String>();
+						if(acqw.props != null){
+							for(int j=0;j<acqw.props.length;j++){
+								props.put(acqw.props[j][0], acqw.props[j][1]);
+							}
+						}
+						acq.setProperties(props);
+						
+						acqlist.add(acq);
+						
+					} else if(acqw.type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
+						BrightFieldAcquisition acq = (BrightFieldAcquisition) getAcquisition(acqw.type);
+						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
+						acq.setExposureTime(acqw.exposure);
+						acq.setWaitingTime(acqw.waitingTime);
+						
+						HashMap<String,String> props = new HashMap<String,String>();
+						if(acqw.props != null){
+							for(int j=0;j<acqw.props.length;j++){
+								props.put(acqw.props[j][0], acqw.props[j][1]);
+							}
+						}
+						acq.setProperties(props);
+						
+						acqlist.add(acq);
+						
+					} else if(acqw.type.equals(AcquisitionType.ZSTACK.getTypeValue())){
+						ZStackAcquisition acq = (ZStackAcquisition) getAcquisition(acqw.type);
+						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
+						acq.setExposureTime(acqw.exposure);
+						acq.setWaitingTime(acqw.waitingTime);	
+						
+						HashMap<String,String> props = new HashMap<String,String>();
+						if(acqw.props != null){
+							for(int j=0;j<acqw.props.length;j++){
+								props.put(acqw.props[j][0], acqw.props[j][1]);
+							}
+						}
+						acq.setProperties(props);
+						
+						acq.setSlices(Double.parseDouble(acqw.additionalParams[0][1]), Double.parseDouble(acqw.additionalParams[1][1]), Double.parseDouble(acqw.additionalParams[2][1]));
+						acq.setZStart(Double.parseDouble(acqw.additionalParams[0][1]));
+						acq.setZEnd(Double.parseDouble(acqw.additionalParams[1][1]));
+						acq.setZStep(Double.parseDouble(acqw.additionalParams[2][1]));
+						
+						acq.setNumberFrames(acqw.numFrames);
+						acq.setIntervalMs(acqw.interval);
+						
+						acqlist.add(acq);
 
-			// Read objects
-			acqlist = (ArrayList<Acquisition>) oi.readObject();
+					} else if(acqw.type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
+						LocalizationAcquisition acq = (LocalizationAcquisition) getAcquisition(acqw.type);
+						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
+						acq.setExposureTime(acqw.exposure);
+						acq.setWaitingTime(acqw.waitingTime);	
+						
+						HashMap<String,String> props = new HashMap<String,String>();
+						if(acqw.props != null){
+							for(int j=0;j<acqw.props.length;j++){
+								props.put(acqw.props[j][0], acqw.props[j][1]);
+							}
+						}
+						acq.setProperties(props);
+						
+						acq.setUseActivation(Boolean.parseBoolean(acqw.additionalParams[0][1]));
+						acq.setUseStopOnMaxUV(Boolean.parseBoolean(acqw.additionalParams[1][1]));
+						acq.setUseStopOnMaxUVDelay(Integer.parseInt(acqw.additionalParams[2][1]));
 
-			oi.close();
-			fi.close();
+						acq.setNumberFrames(acqw.numFrames);
+						acq.setIntervalMs(acqw.interval);
+						
+						acqlist.add(acq);
 
+					} else if(acqw.type.equals(AcquisitionType.TIME.getTypeValue())){
+						TimeAcquisition acq = (TimeAcquisition) getAcquisition(acqw.type);
+						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
+						acq.setExposureTime(acqw.exposure);
+						acq.setWaitingTime(acqw.waitingTime);
+			
+						HashMap<String,String> props = new HashMap<String,String>();
+						if(acqw.props != null){
+							for(int j=0;j<acqw.props.length;j++){
+								props.put(acqw.props[j][0], acqw.props[j][1]);
+							}
+						}
+						acq.setProperties(props);
+						
+						acq.setNumberFrames(acqw.numFrames);
+						acq.setIntervalMs(acqw.interval);		
+						
+						acqlist.add(acq);
+					}
+				}
+			}
+			
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("Error initializing stream");
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+			
 		return acqlist;
 	}
 }

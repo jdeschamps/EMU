@@ -746,4 +746,9 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		return task_;
 	}
 
+	@Override
+	public void taskDone() {
+		// Do nothing
+	}
+
 }

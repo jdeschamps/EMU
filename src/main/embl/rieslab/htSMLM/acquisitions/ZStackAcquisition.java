@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.HashMap;
 
 import javax.swing.BorderFactory;
@@ -17,6 +18,9 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
@@ -24,11 +28,6 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
 public class ZStackAcquisition extends Acquisition {
 	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5144120498797279261L;
 	
 	// Convenience constants		
 	private final static String PANE_NAME = "Zstack panel";
@@ -39,6 +38,10 @@ public class ZStackAcquisition extends Acquisition {
 	private final static String LABEL_ZEND = "Z end (um):";
 	private final static String LABEL_ZSTEP = "Z step (um):";
 	private final static String LABEL_GROUPNAME = "GroupName";
+		
+	public final static String KEY_ZSTART = "Z start";
+	public final static String KEY_ZEND = "Z end";
+	public final static String KEY_ZSTEP = "Z step";
 	
 	// UI property
 	private TwoStateUIProperty stabprop_;
@@ -216,4 +219,30 @@ public class ZStackAcquisition extends Acquisition {
 		return PANE_NAME;
 	}
 
+	
+	public void setZStart(double val){
+		zstart = val;
+	}
+	
+	public void setZEnd(double val){
+		zend = val;
+	}
+	
+	public void setZStep(double val){
+		zstep = val;
+	}
+	
+	@Override
+	public String[][] getAdditionalJSONParameters() {
+		String[][] s = new String[3][2];
+
+		s[0][0] = KEY_ZSTART;
+		s[0][1] = String.valueOf(zstart);
+		s[1][0] = KEY_ZEND;
+		s[1][1] = String.valueOf(zend);
+		s[2][0] = KEY_ZSTEP;
+		s[2][1] = String.valueOf(zstep);
+		
+		return s;
+	}
 }

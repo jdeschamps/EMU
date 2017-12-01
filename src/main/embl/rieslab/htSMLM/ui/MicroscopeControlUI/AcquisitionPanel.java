@@ -31,7 +31,9 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
+import javax.swing.SwingUtilities;
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.micromanager.utils.MMScriptException;
@@ -40,6 +42,7 @@ import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionUI;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionWizard;
+import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.threads.AcquisitionEngine;
 import main.embl.rieslab.htSMLM.threads.Task;
@@ -326,7 +329,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	//////
 	////// AcquisitionUI methods
 	//////
-	
+
 	@Override
 	public void setAcquisitionList(ArrayList<Acquisition> acqlist, int waitingtime){
 		acqlist_ = acqlist;
@@ -338,6 +341,11 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		} else {
 			ready_ = false;
 		}
+	}
+	
+	@Override
+	public ArrayList<Acquisition> getAcquisitionList(){
+		return acqlist_;
 	}
 	
 	@Override
@@ -362,17 +370,33 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			wizard_ = new AcquisitionWizard(controller_, this, acqlist_);
 		} else {
 			wizard_ = new AcquisitionWizard(controller_, this);
+			wizard_.startWizard();
 		}
 	}
 	
 	private void loadAcquisitionList(){
-		ArrayList<Acquisition> acqlist = wizard_.loadAcquisitionList();		
-		if(acqlist != null){
-			acqlist_ = acqlist;
-			ready_ = true;
-			addText(TEXT_LOADED);	
-			setSummaryText();
-		}
+		JFileChooser fileChooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Acquisition list", SystemConstants.ACQ_EXT);
+		fileChooser.setFileFilter(filter);
+		int result = fileChooser.showOpenDialog(new JFrame());
+		String path;
+		if (result == JFileChooser.APPROVE_OPTION) {
+		    File selectedFile = fileChooser.getSelectedFile();
+		    path = selectedFile.getAbsolutePath();
+		    
+			if(wizard_ == null){
+				wizard_ = new AcquisitionWizard(controller_, this);
+			}
+			ArrayList<Acquisition> acqlist = wizard_.loadAcquisitionList(path);		
+			
+			if(acqlist != null){
+				acqlist_ = acqlist;
+				ready_ = true;
+				addText(TEXT_LOADED);	
+				setSummaryText();
+			}
+	    }
+		return;
 	}
 	
 	public String getBFPPropertyName(){
@@ -486,13 +510,15 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	
 	private void setSummaryText(){
 		if(ready_){
-			String s = TEXT_SUMMARY;
-			s += "Experiments: ";
-			for(int i=0;i<acqlist_.size()-1;i++){
-				s = s+acqlist_.get(i).getType()+", ";
+			if(acqlist_.size()>0){
+				String s = TEXT_SUMMARY;
+				s += "Experiments: ";
+				for(int i=0;i<acqlist_.size()-1;i++){
+					s = s+acqlist_.get(i).getType()+", ";
+				}
+				s = s+acqlist_.get(acqlist_.size()-1).getType()+".\n";
+				jTextPane_progress.setText(s);
 			}
-			s = s+acqlist_.get(acqlist_.size()-1).getType()+".\n";
-			jTextPane_progress.setText(s);
 		}
 	}
 
@@ -535,9 +561,9 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			// save the acquisition list to the destination folder
 			boolean b = true;
 			if(wizard_ != null){
-				b = wizard_.saveAcquisitionList(acqlist_,path+"/");
+				b = wizard_.saveAcquisitionList(acqlist_, waitingtime_,path+"/");
 			} else {
-				b = (new AcquisitionFactory(this, controller_)).writeAcquisitionList(acqlist_, path+"/");
+				b = (new AcquisitionFactory(this, controller_)).writeAcquisitionList(acqlist_, waitingtime_, path+"/");
 			}
 			
 			if(!b){
@@ -549,10 +575,16 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			acqengine_.startTask();
 			
 			setStartText();
+			jProgressBar_progress.setValue(0);
 			
 			try {
 				int numpos = controller_.getScriptInterface().getPositionList().getNumberOfPositions();
-				jProgressBar_progress.setMaximum(numpos);
+				if(numpos>0){
+					jProgressBar_progress.setMaximum(numpos);
+				} else {
+					jProgressBar_progress.setMaximum(100);
+					jProgressBar_progress.setValue(100);
+				}
 			} catch (MMScriptException e) {
 				// Do nothing
 			}
@@ -618,6 +650,30 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	@Override
 	public Task getTask() {
 		return acqengine_;
+	}
+	
+	@Override
+	public void taskDone() {
+		Runnable doDone = new Runnable() {
+			public void run() {
+				done();
+			}
+		};
+		if (SwingUtilities.isEventDispatchThread()) {
+			doDone.run();
+		} else {
+			done();
+		}
+	}
+
+	private void done(){
+		if(!isTaskRunning()){		
+			jProgressBar_progress.setValue(jProgressBar_progress.getMaximum());
+			
+			jToggle_startstop.setSelected(false);
+			jToggle_startstop.setText("Start");
+			setStopText();
+		}
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////
