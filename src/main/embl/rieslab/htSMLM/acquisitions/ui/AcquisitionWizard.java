@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
+import main.embl.rieslab.htSMLM.acquisitions.Experiment;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.util.utils;
 
@@ -34,29 +35,29 @@ public class AcquisitionWizard {
 		tabs_ = new ArrayList<AcquisitionTab>();
 	}
 	
-	public AcquisitionWizard(SystemController controller, AcquisitionUI owner, ArrayList<Acquisition> acqlist_) {
+	public AcquisitionWizard(SystemController controller, AcquisitionUI owner, Experiment exp) {
 		owner_ = owner;
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
 
-		startWizard(acqlist_);
+		startWizard(exp);
 	}
 
 	public void startWizard(){
-		setUpFrame();
+		setUpFrame(5);
 	}	
 	
-	public void startWizard(ArrayList<Acquisition> acqlist_){
-		setUpFrame();
-		setAcquisitions(acqlist_);
+	public void startWizard(Experiment exp){
+		setUpFrame(exp.getPauseTime());
+		setAcquisitions(exp.getAcquisitionList());
 	}
 	
-	private void setUpFrame() {
+	private void setUpFrame(int waitingtime) {
 		frame_ = new JFrame("Acquisition wizard");
 		JPanel contentpane = new JPanel();
 		contentpane.setLayout(new BoxLayout(contentpane,BoxLayout.LINE_AXIS));
 
-		contentpane.add(setUpLeftPanel());
+		contentpane.add(setUpLeftPanel(waitingtime));
 		contentpane.add(setUpRightPanel());
 		
 		frame_.add(contentpane);
@@ -65,7 +66,7 @@ public class AcquisitionWizard {
 		frame_.setVisible(true);
 	}
 
-	private JPanel setUpLeftPanel() {
+	private JPanel setUpLeftPanel(int waitingtime) {
 		JPanel leftpane = new JPanel();
 
 		JButton add = new JButton("Add");
@@ -76,7 +77,7 @@ public class AcquisitionWizard {
 		
 		JLabel wait = new JLabel("Waiting (s)");
 		
-		waitfield = new JTextField("5");
+		waitfield = new JTextField(String.valueOf(waitingtime));
 		
 		add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -241,7 +242,7 @@ public class AcquisitionWizard {
     }
     	
     protected void saveAcqList() {
-		owner_.setAcquisitionList(getAcquisitionList(), getWaitingTime());
+		owner_.setExperiment(new Experiment(getWaitingTime(),getAcquisitionList()));
 		shutDown();		
 	}
     
@@ -252,6 +253,7 @@ public class AcquisitionWizard {
 		}
 		return 5000;
 	}
+	
 	private ArrayList<Acquisition> getAcquisitionList() {
 		ArrayList<Acquisition> acqlist = new ArrayList<Acquisition>();
 		
@@ -266,12 +268,12 @@ public class AcquisitionWizard {
 		return frame_.isActive();
 	}
 	
-	public ArrayList<Acquisition> loadAcquisitionList(String path) {		
+	public Experiment loadAcquisitionList(String path) {		
     	return (new AcquisitionFactory(owner_, controller_)).readAcquisitionList(path);
 	}
 
-	public boolean saveAcquisitionList(ArrayList<Acquisition> acqlist_, int waitingtime, String path) {
-		return (new AcquisitionFactory(owner_, controller_)).writeAcquisitionList(acqlist_, waitingtime, path);
+	public boolean saveAcquisitionList(Experiment exp, String path) {
+		return (new AcquisitionFactory(owner_, controller_)).writeAcquisitionList(exp, path);
 	}
 	
 	public SystemController getController(){

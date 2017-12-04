@@ -1,13 +1,11 @@
 package main.embl.rieslab.htSMLM.acquisitions.ui;
 
-import java.util.ArrayList;
-
-import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
+import main.embl.rieslab.htSMLM.acquisitions.Experiment;
 
 public interface AcquisitionUI {
 
-	public void setAcquisitionList(ArrayList<Acquisition> acquisitionList, int waitingTime);
-	public ArrayList<Acquisition> getAcquisitionList();
+	public void setExperiment(Experiment experiment);
+	public Experiment getExperiment();
 	public String getUIPropertyName(String acqtype);
 	
 }

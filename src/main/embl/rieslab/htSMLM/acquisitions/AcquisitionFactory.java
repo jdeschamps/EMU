@@ -49,12 +49,14 @@ public class AcquisitionFactory {
 		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getConfigurationGroups());
 	}
 
-	public boolean writeAcquisitionList(ArrayList<Acquisition> acqlist, int waitingtime, String path){
-
+	public boolean writeAcquisitionList(Experiment exp, String path){
+		ArrayList<Acquisition> acqlist = exp.getAcquisitionList();
 		ArrayList<AcquisitionWrapper> aqwlist = new ArrayList<AcquisitionWrapper>();
 		for(int i=0;i<acqlist.size();i++){
 			aqwlist.add(new AcquisitionWrapper(acqlist.get(i)));
 		}
+		
+		ExperimentWrapper expw = new ExperimentWrapper(exp.getPauseTime(),aqwlist);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -67,7 +69,7 @@ public class AcquisitionFactory {
 		}
 		
 		try {
-			objectMapper.writeValue(new FileOutputStream(name), aqwlist);
+			objectMapper.writeValue(new FileOutputStream(name), expw);
 			
 			return true;
 		} catch (JsonGenerationException e) {
@@ -86,14 +88,19 @@ public class AcquisitionFactory {
 		return false;
 	}
 	
-	public ArrayList<Acquisition> readAcquisitionList(String path){	
+	public Experiment readAcquisitionList(String path){	
 		ArrayList<Acquisition> acqlist = new ArrayList<Acquisition>();
+		int waitingtime = 5;
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
 		try {
-			ArrayList<AcquisitionWrapper> acqwlist = objectMapper.readValue(new FileInputStream(path), new TypeReference<ArrayList<AcquisitionWrapper>>(){});			
+			ExperimentWrapper expw = objectMapper.readValue(new FileInputStream(path), ExperimentWrapper.class);			
+
+			ArrayList<AcquisitionWrapper> acqwlist = expw.acqwlist;	
+			
+			waitingtime = expw.pausetime;
 			
 			if(acqwlist != null && !acqwlist.isEmpty()){
 				for(int i=0;i<acqwlist.size();i++){
@@ -212,7 +219,7 @@ public class AcquisitionFactory {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
-		return acqlist;
+		
+		return new Experiment(waitingtime, acqlist);
 	}
 }

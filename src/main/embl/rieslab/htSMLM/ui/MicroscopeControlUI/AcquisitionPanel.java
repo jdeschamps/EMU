@@ -40,6 +40,7 @@ import org.micromanager.utils.MMScriptException;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
+import main.embl.rieslab.htSMLM.acquisitions.Experiment;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionUI;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionWizard;
 import main.embl.rieslab.htSMLM.configuration.SystemConstants;
@@ -60,7 +61,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	private static final long serialVersionUID = 8529929695246469740L;
 		
 	private SystemController controller_;
-	private ArrayList<Acquisition> acqlist_;
+	private Experiment exp_;
     private AcquisitionWizard wizard_;
     private MainFrame owner_;
     
@@ -79,8 +80,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     private boolean ready_;
     private JFrame summaryframe_;
     
-    private int waitingtime_ = 0;
-
     private final static String TEXT_INIT = "No configured acquisition list.\n";
     private final static String TEXT_START = "Starting acquisition.\n";
     private final static String TEXT_NEW = "Stage position done: ";
@@ -104,7 +103,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		controller_ = controller;
 		ready_ = false;
 		
-		acqlist_ = new ArrayList<Acquisition>();
+		// set dummy experiment
+		exp_ = new Experiment(0,new ArrayList<Acquisition>());
 		
 		owner_ = owner;
 		owner_.addComponentListener(new ComponentAdapter() {
@@ -165,7 +165,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 				if(e.getStateChange()==ItemEvent.SELECTED){
 					String path = jTextField_path.getText();
 
-					if(!ready_ || acqlist_ == null || acqlist_.isEmpty()){
+					if(!ready_ || exp_.getAcquisitionList().isEmpty()){
 						showNoAcqMessage();
 						jToggle_startstop.setSelected(false);
 						return;
@@ -331,10 +331,15 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	//////
 
 	@Override
-	public void setAcquisitionList(ArrayList<Acquisition> acqlist, int waitingtime){
-		acqlist_ = acqlist;
-		waitingtime_ = waitingtime;
-		if(!acqlist_.isEmpty()){
+	public void setExperiment(Experiment exp){
+		if(exp.getAcquisitionList() == null){
+			exp_ = new Experiment(0,new ArrayList<Acquisition>());
+			return;
+		}
+		
+		exp_ = exp;
+
+		if(!exp_.getAcquisitionList().isEmpty()){
 			ready_ = true;
 			addText(TEXT_LOADED);	
 			setSummaryText();
@@ -344,8 +349,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	}
 	
 	@Override
-	public ArrayList<Acquisition> getAcquisitionList(){
-		return acqlist_;
+	public Experiment getExperiment(){
+		return exp_;
 	}
 	
 	@Override
@@ -366,8 +371,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	//////
 	
 	private void showAcquisitionConfiguration(){
-		if(!acqlist_.isEmpty()){
-			wizard_ = new AcquisitionWizard(controller_, this, acqlist_);
+		if(!exp_.getAcquisitionList().isEmpty()){
+			wizard_ = new AcquisitionWizard(controller_, this, exp_);
 		} else {
 			wizard_ = new AcquisitionWizard(controller_, this);
 			wizard_.startWizard();
@@ -387,10 +392,10 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			if(wizard_ == null){
 				wizard_ = new AcquisitionWizard(controller_, this);
 			}
-			ArrayList<Acquisition> acqlist = wizard_.loadAcquisitionList(path);		
+			Experiment exp = wizard_.loadAcquisitionList(path);		
 			
-			if(acqlist != null){
-				acqlist_ = acqlist;
+			if(exp.getAcquisitionList() != null){
+				exp_ = exp;
 				ready_ = true;
 				addText(TEXT_LOADED);	
 				setSummaryText();
@@ -452,29 +457,34 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	}
 	
 	private void createNodes(DefaultMutableTreeNode top) {
-	    DefaultMutableTreeNode exp = null;
+	    DefaultMutableTreeNode expnode = null;
 	    DefaultMutableTreeNode setting = null;
 
 	    if(ready_){
 	    	Acquisition acq;
 	    	String s;
 	    	String[] propval, specificsettings;
-	    	for(int i=0;i<acqlist_.size();i++){
-	    		acq = acqlist_.get(i);
-	    	    exp = new DefaultMutableTreeNode((i+1)+": "+acq.getType());
-	            top.add(exp);
+
+    	    expnode = new DefaultMutableTreeNode("Pause between acquisitions (s) "+exp_.getPauseTime());
+            top.add(expnode);
+	    	
+	    	ArrayList<Acquisition> acqlist = exp_.getAcquisitionList();
+	    	for(int i=0;i<acqlist.size();i++){
+	    		acq = acqlist.get(i);
+	    	    expnode = new DefaultMutableTreeNode((i+1)+": "+acq.getType());
+	            top.add(expnode);
 
 	            specificsettings = acq.getSpecialSettings();
 	    	    for(int j=0;j<specificsettings.length;j++){
 	   	    		setting = new DefaultMutableTreeNode(specificsettings[j]);
-	   	    		exp.add(setting);
+	   	    		expnode.add(setting);
 	    	    }
 	            
 	    	    propval = new String[acq.getPropertyValues().size()];
 	    	    Iterator<String> it = acq.getPropertyValues().keySet().iterator();
 	    	    int j=0;
 	    	    while(it.hasNext()){
-	    	    	s = it.next();
+	    	    	s = it.next();  
 	    	    	propval[j] = s+": "+acq.getPropertyValues().get(s);
 	    	    	j++;
 	    	    }
@@ -482,12 +492,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    propval = StringSorting.sort(propval);
 	    	    for(j=0;j<propval.length;j++){
 	   	    		setting = new DefaultMutableTreeNode(propval[j]);
-	   	    		exp.add(setting);
+	   	    		expnode.add(setting);
 	    	    }
 	    	}
 	    } else {
-    	    exp = new DefaultMutableTreeNode("No acquisition defined");
-            top.add(exp);
+    	    expnode = new DefaultMutableTreeNode("No acquisition defined");
+            top.add(expnode);
 	    }
 	}
 	
@@ -510,13 +520,14 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	
 	private void setSummaryText(){
 		if(ready_){
-			if(acqlist_.size()>0){
+			ArrayList<Acquisition> acqlist = exp_.getAcquisitionList();
+			if(acqlist.size()>0){
 				String s = TEXT_SUMMARY;
-				s += "Experiments: ";
-				for(int i=0;i<acqlist_.size()-1;i++){
-					s = s+acqlist_.get(i).getType()+", ";
+				s += "Acquisitions: ";
+				for(int i=0;i<acqlist.size()-1;i++){
+					s = s+acqlist.get(i).getType()+", ";
 				}
-				s = s+acqlist_.get(acqlist_.size()-1).getType()+".\n";
+				s = s+acqlist.get(acqlist.size()-1).getType()+".\n";
 				jTextPane_progress.setText(s);
 			}
 		}
@@ -542,7 +553,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	public Integer[] retrieveAllParameters() {
-		Integer[] i = {waitingtime_};
+		Integer[] i = {exp_.getPauseTime()};
 		return i;
 	}
 
@@ -553,17 +564,18 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			String path = jTextField_path.getText();
 			String name = jTextField_expname.getText();
 			
-			for(int i=0;i<acqlist_.size();i++){
-				acqlist_.get(i).setName(name);
-				acqlist_.get(i).setPath(path);
+			ArrayList<Acquisition> acqlist = exp_.getAcquisitionList();
+			for(int i=0;i<acqlist.size();i++){
+				acqlist.get(i).setName(name);
+				acqlist.get(i).setPath(path);
 			}
 			
 			// save the acquisition list to the destination folder
 			boolean b = true;
 			if(wizard_ != null){
-				b = wizard_.saveAcquisitionList(acqlist_, waitingtime_,path+"/");
+				b = wizard_.saveAcquisitionList(exp_,path+"/");
 			} else {
-				b = (new AcquisitionFactory(this, controller_)).writeAcquisitionList(acqlist_, waitingtime_, path+"/");
+				b = (new AcquisitionFactory(this, controller_)).writeAcquisitionList(exp_, path+"/");
 			}
 			
 			if(!b){
@@ -571,7 +583,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			}
 			
 			acqengine_ = new AcquisitionEngine(this, controller_);
-			acqengine_.setAcquisitionList(acqlist_);
+			acqengine_.setAcquisitionList(acqlist);
 			acqengine_.startTask();
 			
 			setStartText();
