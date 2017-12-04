@@ -45,7 +45,7 @@ import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionUI;
 import main.embl.rieslab.htSMLM.acquisitions.ui.AcquisitionWizard;
 import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
-import main.embl.rieslab.htSMLM.threads.AcquisitionEngine;
+import main.embl.rieslab.htSMLM.threads.AcquisitionTask;
 import main.embl.rieslab.htSMLM.threads.Task;
 import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
@@ -72,7 +72,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     
 	///// Task
 	private final static String TASK_NAME = "Unsupervised acquisitions";
-	private AcquisitionEngine acqengine_;
+	private AcquisitionTask acqengine_;
 	
     ///// Convenience variables
 	private String paramBFP_, paramLocking_, paramBrightField_;
@@ -311,7 +311,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		c.gridx = 3;
 		c.weightx =0.1;
 		this.add(jButton_load, c);	  
-		
 	}
 		
 	private void showSelectPath(){
@@ -561,30 +560,38 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	public void startTask() {
 		if(ready_){	
 			// set path and experiment name in acquisition
-			String path = jTextField_path.getText();
-			String name = jTextField_expname.getText();
-			
-			ArrayList<Acquisition> acqlist = exp_.getAcquisitionList();
-			for(int i=0;i<acqlist.size();i++){
-				acqlist.get(i).setName(name);
-				acqlist.get(i).setPath(path);
-			}
-			
-			// save the acquisition list to the destination folder
-			boolean b = true;
-			if(wizard_ != null){
-				b = wizard_.saveAcquisitionList(exp_,path+"/");
-			} else {
-				b = (new AcquisitionFactory(this, controller_)).writeAcquisitionList(exp_, path+"/");
-			}
-			
-			if(!b){
-				// report problem saving
-			}
-			
-			acqengine_ = new AcquisitionEngine(this, controller_);
-			acqengine_.setAcquisitionList(acqlist);
-			acqengine_.startTask();
+			final String path = jTextField_path.getText();
+			final String name = jTextField_expname.getText();
+			final AcquisitionFactory factory = new AcquisitionFactory(this, controller_);
+			acqengine_ = new AcquisitionTask(this, controller_);
+
+			Thread t = new Thread("Set-up acquisition") {
+				public void run() {
+					ArrayList<Acquisition> acqlist = exp_.getAcquisitionList();
+					for(int i=0;i<acqlist.size();i++){
+						acqlist.get(i).setName(name);
+						acqlist.get(i).setPath(path);
+					}
+					
+					// save the acquisition list to the destination folder
+					boolean b = true;
+					if(wizard_ != null){
+						b = wizard_.saveAcquisitionList(exp_,path+"/");
+					} else {
+						b = factory.writeAcquisitionList(exp_, path+"/");
+					}
+					
+					if(!b){
+						// report problem saving
+					}
+					
+					acqengine_.setAcquisitionList(acqlist);
+					acqengine_.startTask();
+					
+				}
+
+			};
+			t.start();
 			
 			setStartText();
 			jProgressBar_progress.setValue(0);
@@ -594,8 +601,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 				if(numpos>0){
 					jProgressBar_progress.setMaximum(numpos);
 				} else {
-					jProgressBar_progress.setMaximum(100);
-					jProgressBar_progress.setValue(100);
+					taskDone();
 				}
 			} catch (MMScriptException e) {
 				// Do nothing
