@@ -26,7 +26,8 @@ public class MMProperties {
 		MMPropertyBuilder builder = new MMPropertyBuilder(core_);
 
 		for (String device : deviceList) {
-			MMDevice dev = new MMDevice(device);
+			if(!device.substring(0, 3).equals("COM")){
+							MMDevice dev = new MMDevice(device);
 			//System.out.println("- Adding new device: "+device);
 			try {
 				propertyList = core_.getDevicePropertyNames(device);
@@ -40,6 +41,7 @@ public class MMProperties {
 				e.printStackTrace();
 			}
 			devices_.put(dev.getLabel(),dev);
+			}
 		}
 	}
 	

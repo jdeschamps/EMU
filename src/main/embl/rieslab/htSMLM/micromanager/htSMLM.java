@@ -1,10 +1,8 @@
 package main.embl.rieslab.htSMLM.micromanager;
 
-
 import javax.swing.SwingUtilities;
 
 import main.embl.rieslab.htSMLM.configuration.SystemController;
-import mmcorej.CMMCore;
 
 import org.micromanager.api.MMPlugin;
 import org.micromanager.api.ScriptInterface;
@@ -12,7 +10,6 @@ import org.micromanager.api.ScriptInterface;
 public class htSMLM implements MMPlugin {
 
 	private ScriptInterface gui_;
-	private CMMCore core_;
 	private SystemController controller_;
 
 	private static String copyright = "LGPL";

@@ -1,6 +1,5 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
-
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;

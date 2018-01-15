@@ -7,5 +7,6 @@ public interface AcquisitionUI {
 	public void setExperiment(Experiment experiment);
 	public Experiment getExperiment();
 	public String getUIPropertyName(String acqtype);
+	public boolean isPropertyEnabled(String acqtype);
 	
 }

@@ -34,7 +34,6 @@ public class BrightFieldAcquisition extends Acquisition {
 	// UI property
 	private TwoStateUIProperty bfprop_; 
 	
-
 	public BrightFieldAcquisition(double exposure, HashMap<String,String[]> configgroups, UIProperty bfprop) {
 		super(AcquisitionType.BRIGHTFIELD, exposure, configgroups);
 		
@@ -167,6 +166,9 @@ public class BrightFieldAcquisition extends Acquisition {
 
 	@Override
 	public PropertyFilter getPropertyFilter() {
+		if(bfprop_ == null){
+			return null;
+		}
 		return new SinglePropertyFilter(bfprop_.getName());
 	}
 
