@@ -431,7 +431,7 @@ public class AcquisitionTab extends JPanel {
 			UIProperty prop = props_.get(filteredProperties[i]);
 			if(propertyValues.containsKey(prop.getFriendlyName())){
 				if (prop.isTwoState()) {
-					if(propertyValues.get(prop.getFriendlyName()).equals(TwoStateUIProperty.ON)){
+					if(propertyValues.get(prop.getFriendlyName()).equals(TwoStateUIProperty.getOnStateName())){
 						model.addRow(new Object[] {prop.getFriendlyName(), true });
 					} else {
 						model.addRow(new Object[] {prop.getFriendlyName(), false });
@@ -531,9 +531,9 @@ public class AcquisitionTab extends JPanel {
 								props.put((String) model.getValueAt(k, 0), (String) model.getValueAt(k, 1)); 
 							} else {
 								if((Boolean) model.getValueAt(k, 1)){
-									props.put((String) model.getValueAt(k, 0), TwoStateUIProperty.ON); 
+									props.put((String) model.getValueAt(k, 0), TwoStateUIProperty.getOnStateName()); 
 								} else {
-									props.put((String) model.getValueAt(k, 0), TwoStateUIProperty.OFF);
+									props.put((String) model.getValueAt(k, 0), TwoStateUIProperty.getOffStateName());
 								}
 							}
 						}

@@ -60,7 +60,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	@Override
 	public boolean isInRange(Float val) {
 		if(hasLimits()){
-			if(val>downLimit & val<upLimit & val<maxValue & val>minValue){
+			if(val>getLowerLimit() & val<getUpperLimit() & val<getMax() & val>getMin()){
 				return true;
 			}
 		}
@@ -70,8 +70,8 @@ public class FloatMMProperty extends MMProperty<Float> {
 	@Override
 	public boolean isAllowed(Float val) {
 		if(hasAllowedValues()){
-			for(int i=0;i<allowedValues.length;i++){
-				if(areEqual(val, allowedValues[i])){
+			for(int i=0;i<getAllowedValues().length;i++){
+				if(areEqual(val, getAllowedValues()[i])){
 					return true;
 				}
 			}

@@ -47,7 +47,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 	private TitledBorder border_;
 
 	//////// Properties
-	private final static String TRIGGER_BEHAVIOUR = "behaviour";
+	private final static String TRIGGER_BEHAVIOUR = "mode";
 	private final static String TRIGGER_SEQUENCE = "sequence";
 	private final static String PULSE_LENGTH = "pulse length (trig)";
 	
@@ -75,7 +75,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 		///////////////////////////////////////////////////////////////////////// Instantiate components
 		
 		/////////////////////////////////////////////////////// labels
-		labelbehaviour_ = new JLabel("Trigger behaviour:");
+		labelbehaviour_ = new JLabel("Trigger mode:");
 		labelpulselength_ = new JLabel("Pulse length (us):");
 		labelsequence_ = new JLabel("Trigger sequence:");
 

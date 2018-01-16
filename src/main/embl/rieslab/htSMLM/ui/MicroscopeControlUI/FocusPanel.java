@@ -378,9 +378,9 @@ public class FocusPanel extends PropertyPanel {
 
 	protected void lockPosition(boolean b) {
 		if(b){
-			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.ON);
+			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOnStateName());
 		} else {
-			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.OFF);
+			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOffStateName());
 		}
 	}
 
@@ -444,7 +444,7 @@ public class FocusPanel extends PropertyPanel {
 				}
 			}
 		} else if(name.equals(FOCUS_STABILIZATION)){
-			if(newvalue.equals(TwoStateUIProperty.ON)){
+			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
 				togglebuttonLock_.setSelected(true);
 			} else {
 				togglebuttonLock_.setSelected(false);

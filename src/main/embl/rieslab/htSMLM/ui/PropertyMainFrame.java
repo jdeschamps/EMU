@@ -62,7 +62,7 @@ public abstract class PropertyMainFrame extends JFrame {
         JMenuBar mb=new JMenuBar();  
         
         menu=new JMenu("Menu");  
-        newcfg=new JMenuItem(new AbstractAction("New configuration") {
+        newcfg=new JMenuItem(new AbstractAction("Settings") {
             /**
 			 * 
 			 */
@@ -76,7 +76,7 @@ public abstract class PropertyMainFrame extends JFrame {
             }
         });
         
-        loadcfg=new JMenuItem(new AbstractAction("Load configuration") {
+        loadcfg=new JMenuItem(new AbstractAction("Load settings") {
             /**
 			 * 
 			 */

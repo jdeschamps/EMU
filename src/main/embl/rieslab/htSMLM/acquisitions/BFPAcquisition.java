@@ -51,14 +51,14 @@ public class BFPAcquisition extends Acquisition {
 	@Override
 	public void preAcquisition() {
 		if(bfpprop_ != null){
-			bfpprop_.setPropertyValue(TwoStateUIProperty.ON);
+			bfpprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 		}
 	}
 
 	@Override
 	public void postAcquisition() {
 		if(bfpprop_ != null){
-			bfpprop_.setPropertyValue(TwoStateUIProperty.OFF);
+			bfpprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		}
 	}
 

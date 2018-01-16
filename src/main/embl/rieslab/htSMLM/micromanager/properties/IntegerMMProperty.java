@@ -28,7 +28,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 		try{
 			val = Double.parseDouble(s);
 		} catch(Exception e){
-			System.out.println("Error parsing int"); 			///// implement log
+			System.out.println("IntergerMMProperty: Error parsing int ["+s+"]"); 			///// implement log
 		}
 		return val.intValue();
 	}
@@ -61,7 +61,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	@Override
 	public boolean isInRange(Integer val) {
 		if(hasLimits()){
-			if(val>downLimit & val<upLimit & val<maxValue & val>minValue){
+			if(val>=getLowerLimit() & val<=getUpperLimit() & val<=getMax() & val>=getMin()){
 				return true;
 			}
 		}
@@ -71,8 +71,8 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	@Override
 	public boolean isAllowed(Integer val) {
 		if(hasAllowedValues()){
-			for(int i=0;i<allowedValues.length;i++){
-				if(areEqual(val, allowedValues[i])){
+			for(int i=0;i<getAllowedValues().length;i++){
+				if(areEqual(val, getAllowedValues()[i])){
 					return true;
 				}
 			}

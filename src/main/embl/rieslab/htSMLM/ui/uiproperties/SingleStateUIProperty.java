@@ -23,6 +23,7 @@ public class SingleStateUIProperty extends UIProperty{
 	@Override
 	public void setPropertyValue(String val) {
 		if (isAllocated()) {
+			System.out.println("Change property: "+getMMPoperty().getPropertyName()+" to "+val);
 			getMMPoperty().setStringValue(state_, this);
 		}
 	}

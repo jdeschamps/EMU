@@ -18,10 +18,10 @@ public abstract class MMProperty<T> {
 	private boolean readOnly;							
 	private boolean hasLimits;						
 	private boolean hasAllowedValues;
-	protected double upLimit, downLimit;
-	protected T[] allowedValues;
-	protected T value;
-	protected T maxValue, minValue;
+	private double upLimit, downLimit;
+	private T[] allowedValues;
+	private T value;
+	private T maxValue, minValue;
 	private ArrayList<UIProperty> listeners_;
 	
 	public MMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly){
@@ -111,11 +111,22 @@ public abstract class MMProperty<T> {
 				try{
 					// set value
 					value = val;
+					
+					System.out.println("In MMProperty ["+getHash()+"], set value ["+val+"] from ["+stringval+"]");
+					
 					core_.setProperty(devicelabel_,label_,stringval);
+					if(!core_.hasProperty(devicelabel_, label_)){
+						System.out.println("Device property ["+devicelabel_+","+label_+"] doesn't exist.");
+					} 
+					
 					notifyListeners(source, stringval);
 				} catch (Exception e){
+					System.out.println("Error in setting property ["+getHash()+"] to ["+val+"] from ["+stringval+"]");
+
 					e.printStackTrace(); 
 				}
+			} else {
+				System.out.println("VALUE NOT ALLOWED: in ["+getHash()+"], set value ["+val+"] from ["+stringval+"]");
 			}
 		}
 	}
@@ -137,7 +148,7 @@ public abstract class MMProperty<T> {
 	}
 
 	public T[] getAllowedValues(){
-		if(hasAllowedValues){
+		if(hasAllowedValues()){
 			return allowedValues;
 		}
 		return null;
@@ -165,15 +176,31 @@ public abstract class MMProperty<T> {
 			minValue = val;
 		}
 	}
-	
-	public String getMax(){
+
+	public String getStringMax(){
 		return convertToString(maxValue);
 	}
 	
-	public String getMin(){
+	public String getStringMin(){
 		return convertToString(minValue);
 	}
+	
+	public T getMax(){
+		return maxValue;
+	}
+	
+	public T getMin(){
+		return minValue;
+	}
 
+	public double getLowerLimit(){
+		return downLimit;
+	}
+	
+	public double getUpperLimit(){
+		return upLimit;
+	}
+	
 	public String getDeviceName(){
 		return devicelabel_;
 	}

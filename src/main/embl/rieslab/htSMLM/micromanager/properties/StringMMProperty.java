@@ -55,8 +55,8 @@ public class StringMMProperty extends MMProperty<String> {
 	@Override
 	public boolean isAllowed(String val) {
 		if(hasAllowedValues()){
-			for(int i=0;i<allowedValues.length;i++){
-				if(areEqual(val, allowedValues[i])){
+			for(int i=0;i<getAllowedValues().length;i++){
+				if(areEqual(val, getAllowedValues()[i])){
 					return true;
 				}
 			}

@@ -5,10 +5,10 @@ import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 
 public class TwoStateUIProperty extends UIProperty{
 	
-	public final static String ON = "On value";
-	public final static String OFF = "Off value";
-	private String onstate_ = "";
-	private String offstate_ = "";
+	private final static String ON = " On value";
+	private final static String OFF = " Off value";
+	private String onstate_;
+	private String offstate_;
 	
 	public TwoStateUIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag) {
 		super(owner, name, description, flag);
@@ -20,11 +20,11 @@ public class TwoStateUIProperty extends UIProperty{
 	}
 	
 	public static String getOnStateName(){
-		return " "+ON;
+		return ON;
 	}
 	
 	public static String getOffStateName(){
-		return " "+OFF;
+		return OFF;
 	}
 
 	public void setOnStateValue(String on){
@@ -34,25 +34,26 @@ public class TwoStateUIProperty extends UIProperty{
 	public void setOffStateValue(String off){
 		offstate_ = off;
 	}
+
+	public String getOnStateValue(){
+		return onstate_;
+	}
+	
+	public String getOffStateValue(){
+		return offstate_;
+	}
 	
 	@Override
 	public void setPropertyValue(String val) {
 		if(isAllocated()) {
-			if (val.equals(ON)) {
-				getMMPoperty().setStringValue(onstate_, this);
+			if (val.equals(getOnStateName())) {
+				String t = getOnStateValue();
+				getMMPoperty().setStringValue(t, this);
 			} else {
-				getMMPoperty().setStringValue(offstate_, this);
+				String t = getOffStateValue();
+				getMMPoperty().setStringValue(t, this);
 			}
 		}
 	}
 
-	public String[] getStates(){
-		String[] s = {offstate_,onstate_};
-		return s;
-	}
-	
-	public String[] getStatesName(){
-		String[] s = {OFF,ON};
-		return s;
-	}
 }

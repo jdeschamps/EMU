@@ -153,12 +153,12 @@ public class PropertiesTable extends JPanel {
 						uion = Configuration.KEY_ENTERVALUE;
 					}
 					if(uioff == null){
-						uion = Configuration.KEY_ENTERVALUE;
+						uioff = Configuration.KEY_ENTERVALUE;
 					}
 					
 					// adds a row for each with the preset state value
 					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", uion });
-					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "",	uioff });
+					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "", uioff });
 				} else if (uipropertySet.get(uipropkeys_[i]).isSingleState()) { // if single value property
 					// gets the value of the state and adds the corresponding row
 					uisingle = propertymapping.get(uipropkeys_[i]+ SingleStateUIProperty.getValueName());

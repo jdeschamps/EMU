@@ -64,14 +64,14 @@ public class ZStackAcquisition extends Acquisition {
 	@Override
 	public void preAcquisition() {
 		if(stabprop_ != null){
-			stabprop_.setPropertyValue(TwoStateUIProperty.OFF);
+			stabprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		}
 	}
 
 	@Override
 	public void postAcquisition() {
 		if(stabprop_ != null){
-			stabprop_.setPropertyValue(TwoStateUIProperty.ON);
+			stabprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 		}
 	}
 

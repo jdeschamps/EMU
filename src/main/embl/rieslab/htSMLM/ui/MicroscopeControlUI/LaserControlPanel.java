@@ -51,7 +51,6 @@ public class LaserControlPanel extends PropertyPanel {
 	private Color color_;
 	
 	/////// Convenience variables
-	private final static String DEFAULT_USERINPUT = "50";
 	
 	public LaserControlPanel(String label) {
 		super(label);
@@ -65,10 +64,9 @@ public class LaserControlPanel extends PropertyPanel {
 		border_ = BorderFactory.createTitledBorder(null, title_, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, color_);
 		this.setBorder(border_);
 		border_.setTitleFont(border_.getTitleFont().deriveFont(Font.BOLD, 12));
-		
-		
+				
 		///////////////////////////////////////////////////////////////////////// User input text field
-		textfieldUser_ = new JTextField(DEFAULT_USERINPUT);
+		textfieldUser_ = new JTextField("50");
 
 		textfieldUser_.addFocusListener(new FocusListener() {
 			@Override
@@ -124,7 +122,7 @@ public class LaserControlPanel extends PropertyPanel {
 			}
         });		
 
-		togglebuttonUser_ = new JToggleButton(DEFAULT_USERINPUT+"%");
+		togglebuttonUser_ = new JToggleButton("50%");
 		togglebuttonUser_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -171,9 +169,9 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_OPERATION,TwoStateUIProperty.ON);
+					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					changeProperty(LASER_OPERATION,TwoStateUIProperty.OFF);
+					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
 				}
 			}
         });
@@ -245,7 +243,7 @@ public class LaserControlPanel extends PropertyPanel {
 	public void propertyhasChanged(String name, String newvalue) {
 		if(name.equals(getLabel()+" "+LASER_PERCENTAGE)){
 			if(utils.isNumeric(newvalue)){
-				double val = Double.parseDouble(newvalue) ;
+				double val = Double.parseDouble(newvalue);
 				if(val == 100){
 					togglebutton100_.setSelected(true);
 				} else if(val == 20){
@@ -261,9 +259,9 @@ public class LaserControlPanel extends PropertyPanel {
 				}
 			}
 		} else if(name.equals(getLabel()+" "+LASER_OPERATION)){
-			if(newvalue.equals(TwoStateUIProperty.ON)){
+			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
 				togglebuttonOnOff_.setSelected(true);
-			} else {
+			} else {  
 				togglebuttonOnOff_.setSelected(false);
 			}
 		}		

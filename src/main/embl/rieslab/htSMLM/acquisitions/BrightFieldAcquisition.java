@@ -50,14 +50,14 @@ public class BrightFieldAcquisition extends Acquisition {
 	@Override
 	public void preAcquisition() {
 		if(bfprop_ != null){
-			bfprop_.setPropertyValue(TwoStateUIProperty.ON);
+			bfprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 		}
 	}
 
 	@Override
 	public void postAcquisition() {
 		if(bfprop_ != null){
-			bfprop_.setPropertyValue(TwoStateUIProperty.OFF);
+			bfprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		}
 	}
 

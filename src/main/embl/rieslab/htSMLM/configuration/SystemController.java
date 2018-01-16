@@ -163,6 +163,7 @@ public class SystemController {
 						TwoStateUIProperty t = (TwoStateUIProperty) uiproperties_.get(uiprop);
 						t.setOnStateValue(configprop.get(uiprop+TwoStateUIProperty.getOnStateName()));
 						t.setOffStateValue(configprop.get(uiprop+TwoStateUIProperty.getOffStateName()));
+
 					} else if(uiproperties_.get(uiprop).isSingleState()){ // if single state property
 						// extract the state value
 						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties_.get(uiprop);

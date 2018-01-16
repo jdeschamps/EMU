@@ -12,7 +12,7 @@ public class MMPropertyBuilder {
 
 	@SuppressWarnings("rawtypes")
 	public MMProperty getNewProperty(String deviceLabel, String propertyLabel) {
-		
+		System.out.println("MMProperty Factory: create property ["+propertyLabel+"] in ["+deviceLabel+"]");
 		MMProperty p = null;
 		
 		try {
