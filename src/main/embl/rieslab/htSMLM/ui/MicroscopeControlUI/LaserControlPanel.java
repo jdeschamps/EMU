@@ -93,20 +93,22 @@ public class LaserControlPanel extends PropertyPanel {
 		textfieldUser_.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String typed = getUserInput();
-        	    if(typed == null) {
-        	        return;
-        	    } 
-				try {
-					int val = Integer.parseInt(typed);
-					if (val <= 100 && val >= 0) {
-						togglebuttonUser_.setText(typed + "%");
-						if (togglebuttonUser_.isSelected()) {
-							changeProperty(LASER_PERCENTAGE,typed);
+				if(isPropertyChangeAllowed()){
+					String typed = getUserInput();
+	        	    if(typed == null) {
+	        	        return;
+	        	    } 
+					try {
+						int val = Integer.parseInt(typed);
+						if (val <= 100 && val >= 0) {
+							togglebuttonUser_.setText(typed + "%");
+							if (togglebuttonUser_.isSelected()) {
+								changeProperty(LASER_PERCENTAGE,typed);
+							}
 						}
+					} catch (Exception exc) {
+						exc.printStackTrace();
 					}
-				} catch (Exception exc) {
-					exc.printStackTrace();
 				}
         	}
         });
@@ -161,7 +163,19 @@ public class LaserControlPanel extends PropertyPanel {
         group.add(togglebuttonUser_);
         group.add(togglebutton20_);
         group.add(togglebutton1_);
-		
+        
+        /*Font buttonfont = togglebutton100_.getFont();
+        Font newfont = buttonfont.deriveFont((float) 10);
+        togglebutton100_.setFont(newfont);
+        togglebuttonUser_.setFont(newfont);
+        togglebutton20_.setFont(newfont);
+        togglebutton1_.setFont(newfont);*/
+
+        togglebutton100_.setMargin(new Insets(2,8,2,8));
+        togglebuttonUser_.setMargin(new Insets(2,8,2,8));
+        togglebutton20_.setMargin(new Insets(2,8,2,8));
+        togglebutton1_.setMargin(new Insets(2,8,2,8));
+        
 		///////////////////////////////////////////////////////////////////////// On/Off button
 		togglebuttonOnOff_ = new JToggleButton();
 		
@@ -241,6 +255,7 @@ public class LaserControlPanel extends PropertyPanel {
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
+		turnOffPropertyChange();
 		if(name.equals(getLabel()+" "+LASER_PERCENTAGE)){
 			if(utils.isNumeric(newvalue)){
 				double val = Double.parseDouble(newvalue);
@@ -265,6 +280,8 @@ public class LaserControlPanel extends PropertyPanel {
 				togglebuttonOnOff_.setSelected(false);
 			}
 		}		
+		turnOnPropertyChange();
+
 	}
 
 	@Override

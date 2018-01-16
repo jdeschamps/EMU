@@ -23,6 +23,8 @@ public abstract class PropertyPanel extends JPanel{
 
 	private String label_;
 	
+	private boolean propertychange_ = true;
+	
 	public PropertyPanel(String label){
 		label_ = label;
 		
@@ -115,6 +117,17 @@ public abstract class PropertyPanel extends JPanel{
 		parameters_.put(param, uiParameter);
 	}
 	
+	public boolean isPropertyChangeAllowed(){
+		return propertychange_;
+	}
+
+	public void turnOffPropertyChange(){
+		propertychange_ = false;
+	}
+
+	public void turnOnPropertyChange(){
+		propertychange_ = true;
+	}
 	
 	protected abstract void initializeProperties();
 	protected abstract void initializeInternalProperties();

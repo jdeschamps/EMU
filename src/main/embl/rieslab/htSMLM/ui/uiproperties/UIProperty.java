@@ -115,7 +115,7 @@ public class UIProperty {
 	
 	public String[] getLimits(){
 		if(hasMMPropertyAllowedValues()){
-			String[] lim = {mmproperty_.getMin(),mmproperty_.getMax()};
+			String[] lim = {mmproperty_.getStringMin(),mmproperty_.getStringMax()};
 			return lim;
 		}
 		return null;
