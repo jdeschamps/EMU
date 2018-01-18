@@ -1,6 +1,7 @@
 package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
 
 import ij.ImagePlus;
+import ij.process.ImageProcessor;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -258,10 +259,17 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
         	        return;
         	    } 
 				try {
-					double val = Double.parseDouble(typed);
-					if (val >= 0) {
-						dT_ = val;
-					}
+				    if(!utils.isInteger(typed)) {
+						double val = Double.parseDouble(typed);
+						if (val >= 1 ) {
+							dT_ = Math.floor(val);
+						}
+				    } else {
+						int val = Integer.parseInt(typed);
+						if (val > 0) {
+							dT_ = val;
+						}
+	        	    }
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -613,8 +621,11 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		textfieldcutoff_.setText(String.valueOf(output[ActivationTask.OUTPUT_NEWCUTOFF]));
 		
 		if(shownms_ && counternms_ % 10 == 0){
-			im_.setProcessor(task_.getNMSResult());
-			im_.updateAndRepaintWindow();
+			ImageProcessor imp = task_.getNMSResult();
+			if(imp != null && imp.getPixels() != null){
+				im_.setProcessor(task_.getNMSResult());
+				im_.updateAndRepaintWindow();
+			}
 			counternms_ ++;
 		}
 		

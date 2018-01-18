@@ -96,13 +96,8 @@ public abstract class MMProperty<T> {
 		// ask core for value
 		String val = "";
 		try {
-			val = core_.getProperty(devicelabel_, label_);
-			
-			System.out.println("Property ["+getHash()+"] value is "+val);
-			
-			value = convertToValue(val);
-			
-			System.out.println("Property ["+getHash()+"] converted value is "+value);
+			val = core_.getProperty(devicelabel_, label_);			
+			value = convertToValue(val);			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

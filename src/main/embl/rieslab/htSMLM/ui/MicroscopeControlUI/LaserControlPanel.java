@@ -73,20 +73,23 @@ public class LaserControlPanel extends PropertyPanel {
 			public void focusGained(FocusEvent arg0) {}
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				String typed = getUserInput();
-        	    if(typed == null) {
-        	        return;
-        	    } 
-				try {
-					int val = Integer.parseInt(typed);
-					if (val <= 100 && val >= 0) {
-						togglebuttonUser_.setText(typed + "%");
-						if (togglebuttonUser_.isSelected()) {
-							changeProperty(LASER_PERCENTAGE,typed);
+				if(isPropertyChangeAllowed()){
+	
+					String typed = getUserInput();
+	        	    if(typed == null) {
+	        	        return;
+	        	    } 
+					try {
+						int val = Integer.parseInt(typed);
+						if (val <= 100 && val >= 0) {
+							togglebuttonUser_.setText(typed + "%");
+							if (togglebuttonUser_.isSelected()) {
+								changeProperty(LASER_PERCENTAGE,typed);
+							}
 						}
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				} catch (Exception e) {
-					e.printStackTrace();
 				}
         	}
          });
@@ -128,12 +131,14 @@ public class LaserControlPanel extends PropertyPanel {
 		togglebuttonUser_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange()==ItemEvent.SELECTED){
-					String typed = getUserInput();
-	        	    if(typed == null) {
-	        	        return;
-	        	    }
-					changeProperty(LASER_PERCENTAGE,typed);
+				if(isPropertyChangeAllowed()){
+					if(e.getStateChange()==ItemEvent.SELECTED){
+						String typed = getUserInput();
+		        	    if(typed == null) {
+		        	        return;
+		        	    }
+						changeProperty(LASER_PERCENTAGE,typed);
+					}
 				}
 			}
         });
@@ -281,7 +286,6 @@ public class LaserControlPanel extends PropertyPanel {
 			}
 		}		
 		turnOnPropertyChange();
-
 	}
 
 	@Override

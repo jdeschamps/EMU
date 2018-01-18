@@ -27,20 +27,18 @@ public class MMProperties {
 
 		for (String device : deviceList) {
 			if(!device.substring(0, 3).equals("COM")){
-							MMDevice dev = new MMDevice(device);
-			//System.out.println("- Adding new device: "+device);
-			try {
-				propertyList = core_.getDevicePropertyNames(device);
-				for (String property : propertyList) {
-					//System.out.println("--- Adding new property: "+property);
-					MMProperty prop = builder.getNewProperty(device, property);
-					dev.registerProperty(prop);
-					properties_.put(prop.getHash(),prop);
+				MMDevice dev = new MMDevice(device);
+				try {
+					propertyList = core_.getDevicePropertyNames(device);
+					for (String property : propertyList) {
+						MMProperty prop = builder.getNewProperty(device, property);
+						dev.registerProperty(prop);
+						properties_.put(prop.getHash(),prop);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			devices_.put(dev.getLabel(),dev);
+				devices_.put(dev.getLabel(),dev);
 			}
 		}
 	}
