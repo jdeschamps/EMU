@@ -23,6 +23,7 @@ import javax.swing.border.TitledBorder;
 import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.ComboUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
@@ -55,8 +56,8 @@ public class LaserTriggerPanel extends PropertyPanel {
 	private final static String PARAM_TITLE = "Name";
 	private final static String PARAM_COLOR = "Color";
 	private final static String PARAM_DEF_BEHAVIOUR = "Default trigger";
-	private String title_, behaviour_;
-	//private boolean useseq_ = false;
+	private final static String PARAM_DEF_SEQUENCE = "Default sequence";
+	private String title_, behaviour_, sequence_;
 	private Color color_;
 	
 	public LaserTriggerPanel(String label) {
@@ -224,12 +225,6 @@ public class LaserTriggerPanel extends PropertyPanel {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		this.add(textfieldsequence_,c);
 
-	/*	c.gridx = 3;
-		c.gridy = 3;
-		c.weightx = 1;
-		c.gridwidth = 1;
-		this.add(usesequence_,c);
-		*/	
 	}
 
 	@Override
@@ -242,11 +237,12 @@ public class LaserTriggerPanel extends PropertyPanel {
 	@Override
 	protected void initializeParameters() {
 		title_="Laser";
-		behaviour_=SystemConstants.FPGA_BEHAVIOURS[4];
+		sequence_=BinaryConverter.getBinary16bits(SystemConstants.FPGA_MAX_SEQUENCE);
 		color_=Color.black;		
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Name of the laser.",title_));
-		addUIParameter(new StringUIParameter(this, PARAM_DEF_BEHAVIOUR,"Default trigger behaviour of the laser.",behaviour_));
+		addUIParameter(new ComboUIParameter(this, PARAM_DEF_BEHAVIOUR,"Default trigger behaviour of the laser.",SystemConstants.FPGA_BEHAVIOURS,4));
+		addUIParameter(new StringUIParameter(this, PARAM_DEF_SEQUENCE,"Default triggering sequence of the laser.",sequence_));
 		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Color of the laser.",color_)); 
 	}
 
@@ -289,8 +285,13 @@ public class LaserTriggerPanel extends PropertyPanel {
 			border_.setTitleColor(color_);
 			this.repaint();
 		} else if(label.equals(PARAM_DEF_BEHAVIOUR)){
-			behaviour_ = ((StringUIParameter) getUIParameter(PARAM_DEF_BEHAVIOUR)).getValue();
+			behaviour_ = ((ComboUIParameter) getUIParameter(PARAM_DEF_BEHAVIOUR)).getValue();
 			combobehaviour_.setSelectedItem(behaviour_);
+		} else if(label.equals(PARAM_DEF_SEQUENCE)){
+			if(BinaryConverter.is16bits(((StringUIParameter) getUIParameter(PARAM_DEF_SEQUENCE)).getValue())){
+				sequence_ = ((StringUIParameter) getUIParameter(PARAM_DEF_SEQUENCE)).getValue();
+				textfieldsequence_.setText(sequence_);
+			} 
 		}
 	}
 

@@ -2,8 +2,14 @@ package main.embl.rieslab.htSMLM.util;
 
 public class BinaryConverter {
 
+	/**
+	 * Returns the decimal value of a 16bits string, 0 otherwise.
+	 * 
+	 * @param s
+	 * @return Decimal value of s
+	 */
 	public static int getDecimal16bits(String s){
-		if(!isBits(s)){
+		if(!isBits(s) || s.length() != 16){
 			return 0;
 		}
 		
@@ -14,6 +20,12 @@ public class BinaryConverter {
 		return i;
 	}
 	
+	/**
+	 * Tests if a string is represents 16bits.
+	 * 
+	 * @param s
+	 * @return
+	 */
 	public static boolean is16bits(String s){
 		if(s.length() != 16){
 			return false;

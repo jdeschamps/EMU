@@ -20,6 +20,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import main.embl.rieslab.htSMLM.ui.uiparameters.BoolUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.ComboUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameterType;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
@@ -146,7 +147,7 @@ public class ParametersTable extends JPanel{
 					return new BoldTableCellRenderer();
 				case 1:
 					String s = (String) table.getValueAt(row, 0);
-					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){
+					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){ // if Color parameter
 						return new IconTableRenderer();
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) { // if checkbox
 						return super.getDefaultRenderer(Boolean.class);
@@ -167,6 +168,8 @@ public class ParametersTable extends JPanel{
 					String s = (String) table.getValueAt(row, 0);
 					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){
 						return new DefaultCellEditor(color);
+					} else if (uiparameterSet_.get(s) instanceof ComboUIParameter) {
+						return new DefaultCellEditor(new JComboBox( ((ComboUIParameter) uiparameterSet_.get(s)).getComboValues() ));
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) {
 						return super.getDefaultEditor(Boolean.class);
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.UIPROPERTY.getTypeValue())) {
