@@ -14,7 +14,7 @@ public class MMPropertyBuilder {
 	public MMProperty getNewProperty(String deviceLabel, String propertyLabel) {
 		MMProperty p = null;
 		
-		try {
+		try {		
 			String type = (core_.getPropertyType(deviceLabel, propertyLabel)).toString();	
 				
 			boolean readOnly = core_.isPropertyReadOnly(deviceLabel, propertyLabel);

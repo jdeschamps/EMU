@@ -776,7 +776,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	@Override
 	public boolean isPropertyEnabled(String label) {
 		if(label.equals(PARAM_BFP) || label.equals(PARAM_LOCKING) || label.equals(PARAM_BRIGHTFIELD)){
-			if(!getUIPropertyName(label).equals("None")){
+			if(!getUIPropertyName(label).equals(UIPropertyParameter.NO_PROPERTY)){
 				return true;
 			}
 		}

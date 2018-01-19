@@ -27,7 +27,6 @@ import javax.swing.table.TableModel;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
-import main.embl.rieslab.htSMLM.acquisitions.AcquisitionType;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
@@ -60,7 +59,8 @@ public class AcquisitionTab extends JPanel {
 		factory_ = factory;
 		wizard_ = wizard;
 		
-		acqtypes_ = AcquisitionType.getList();
+		// Get the array of acquisition types and create a JComboBox
+		acqtypes_ = factory_.getAcquisitionTypeList();
 		acqtype_ = new JComboBox(acqtypes_);
 		acqtype_.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
@@ -68,18 +68,21 @@ public class AcquisitionTab extends JPanel {
 	    	}
 	    });
 		
+		// Set the current tab acquisition
 		currind = 0;
 		this.setName(acqtypes_[currind]);
 		
+		// Filter out read-only properties from the system properties
 		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getController().getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
 		Iterator<String> it = props_.keySet().iterator();
 		String s;
 		while(it.hasNext()){
 			s = it.next();
-			propsfriendlyname_.put(props_.get(s).getFriendlyName(), s);
+			propsfriendlyname_.put(props_.get(s).getFriendlyName(), s); // get each property friendly name
 		}
 		
+		// Create acquisition panels
 	    acqcard_ = new JPanel(new CardLayout());
 		acqpanes_ = new JPanel[acqtypes_.length];
 		acqpanels_ = new JPanel[acqtypes_.length];
@@ -97,7 +100,8 @@ public class AcquisitionTab extends JPanel {
 		factory_ = factory;
 		wizard_ = wizard;
 		
-		acqtypes_ = AcquisitionType.getList();
+		// Get the array of acquisition types and create a JComboBox
+		acqtypes_ = factory_.getAcquisitionTypeList();
 		acqtype_ = new JComboBox(acqtypes_);
 		acqtype_.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
@@ -105,6 +109,7 @@ public class AcquisitionTab extends JPanel {
 	    	}
 	    });
 		
+		// Set current acquisition to the acquisition passed as parameter
 		currind = 0;
 		for(int i=0;i<acqtypes_.length;i++){
 			if(acqtypes_[i].equals(acquisition.getType())){
@@ -115,6 +120,7 @@ public class AcquisitionTab extends JPanel {
 		this.setName(acqtypes_[currind]);
 		acqtype_.setSelectedIndex(currind);
 		
+		// Filter out read-only properties from the system properties
 		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getController().getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
 		Iterator<String> it = props_.keySet().iterator();
@@ -124,12 +130,12 @@ public class AcquisitionTab extends JPanel {
 			propsfriendlyname_.put(props_.get(s).getFriendlyName(), s);
 		}
 		
+		// Create acquisition panels and set the property values for the current acquisition tab
 	    acqcard_ = new JPanel(new CardLayout());
 		acqpanes_ = new JPanel[acqtypes_.length];
 		acqpanels_ = new JPanel[acqtypes_.length];
 		for(int i=0;i<acqtypes_.length;i++){
 			if(i==currind){
-				System.out.println("currind = "+i);
 				acqpanels_[i] = acquisition.getPanel();
 				acqpanes_[i] = createPanel(acqpanels_[i],acquisition.getPropertyFilter(),acquisition.getPropertyValues());
 				acqcard_.add(acqpanes_[i],acqtypes_[i]);
@@ -153,10 +159,8 @@ public class AcquisitionTab extends JPanel {
 		pane.add(Box.createVerticalStrut(10));
 		
 		// acquisition panel
-		pane.add(acqpane);
-		
+		pane.add(acqpane);	
 		pane.add(Box.createVerticalStrut(10));
-
 		
 		// get properties
 		HashMap<String, UIProperty> props = filter.filterProperties(props_);
@@ -384,13 +388,16 @@ public class AcquisitionTab extends JPanel {
 			@Override
 			public TableCellEditor getCellEditor(int row, int column) {
 				String s = (String) this.getValueAt(row, 0);
-				
+				System.out.println("Acq: property "+s);
+				System.out.println(s+" is "+propsfriendlyname_.get(s));
+				System.out.println(s+" has allowed values? "+props_.get(propsfriendlyname_.get(s)).hasMMPropertyAllowedValues());
 				if(column == 1){
 					if (getValueAt(row, column) instanceof Boolean) {
 						return super.getDefaultEditor(Boolean.class);
 					} else if (props_.get(propsfriendlyname_.get(s)).isMultiState()) { 
 						return new DefaultCellEditor(new JComboBox(((MultiStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
 					} else if (props_.get(propsfriendlyname_.get(s)).hasMMPropertyAllowedValues()){
+						System.out.println(s+" has allowed values");
 						return new DefaultCellEditor(new JComboBox(props_.get(propsfriendlyname_.get(s)).getAllowedValues()));
 					} else {
 						super.getCellEditor(row, column);

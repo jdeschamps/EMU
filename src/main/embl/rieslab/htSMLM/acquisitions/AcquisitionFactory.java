@@ -23,9 +23,38 @@ public class AcquisitionFactory {
 	private AcquisitionUI acqpane_;
 	private SystemController controller_;
 	
+	private String[] acqtypelist_;
+	
 	public AcquisitionFactory(AcquisitionUI acqpane, SystemController controller){
 		acqpane_ = acqpane;
 		controller_ = controller;
+		
+		acqtypelist_ = extractAcquisitionTypes();
+	}
+	
+	private String[] extractAcquisitionTypes() {
+		String[] temp = AcquisitionType.getList();
+		ArrayList<String> finalacq = new ArrayList<String>();
+		
+		for(int i=0;i<temp.length;i++){
+			if(temp[i].equals(AcquisitionType.BFP.getTypeValue())){ // if the acquisition is of type BFP
+				if(acqpane_.isPropertyEnabled(AcquisitionPanel.PARAM_BFP)){ // if enabled in the configuration
+					finalacq.add(temp[i]); // then add BFP to the list of possible acquisition
+				}
+			} else if(temp[i].equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
+				if(acqpane_.isPropertyEnabled(AcquisitionPanel.PARAM_BRIGHTFIELD)){ 
+					finalacq.add(temp[i]); 
+				}
+			} else {
+				finalacq.add(temp[i]); 
+			}
+		}
+		
+		return finalacq.toArray(new String[0]);
+	}
+
+	public String[] getAcquisitionTypeList(){
+		return acqtypelist_;
 	}
 	
 	public Acquisition getAcquisition(String type){
@@ -44,7 +73,7 @@ public class AcquisitionFactory {
 		return getDefaultAcquisition();
 	}
 	
-	public Acquisition getDefaultAcquisition() {
+	private Acquisition getDefaultAcquisition() {
 		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getConfigurationGroups());
 	}
 

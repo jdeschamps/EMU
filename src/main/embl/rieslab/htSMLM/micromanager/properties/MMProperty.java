@@ -212,8 +212,7 @@ public abstract class MMProperty<T> {
 	public String getHash(){
 		return hash_;
 	}
-
-
+	
 	protected boolean isAllowed(String strval){
 		T val = convertToValue(strval);
 		return isAllowed(val);
