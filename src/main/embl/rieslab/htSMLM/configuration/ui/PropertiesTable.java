@@ -1,5 +1,6 @@
 package main.embl.rieslab.htSMLM.configuration.ui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.HashMap;
@@ -220,9 +221,9 @@ public class PropertiesTable extends JPanel {
 				case 0:
 					return new BoldTableCellRenderer(); // first column is written in bold font
 				case 1:
-					return new DefaultTableCellRenderer(); // column 1 takes a default renderer 
+					return new ColoredUneditedTableRenderer(); // column 1 takes a colored default renderer (previously just default)
 				case 2:
-					return new DefaultTableCellRenderer(); // column 2 takes a default renderer
+					return new ColoredUneditedTableRenderer(); // column 2 takes a colored default renderer
 				default:
 					return super.getCellRenderer(row, column);
 				}
@@ -241,7 +242,7 @@ public class PropertiesTable extends JPanel {
 						return super.getCellEditor(row, column);
 					case 1: // in the second column return a JComboBox cell editor with the devices name
 						return new DefaultCellEditor(devices);
-					case 2: // in the last column return a Jcombobox cell editor with the properties name corresponding to the selected device
+					case 2: // in the last column return a JcomboBox cell editor with the properties name corresponding to the selected device
 						return new DefaultCellEditor(getDevicePropertiesComboBox((String) getValueAt(row, 1)));
 					default:
 						return super.getCellEditor(row, column);
@@ -401,6 +402,33 @@ public class PropertiesTable extends JPanel {
 
              return compo;
           }
+	}
+	
+	public static class ColoredUneditedTableRenderer extends DefaultTableCellRenderer {
+
+	    /**
+		 * 
+		 */
+		private static final long serialVersionUID = -8629607160286367931L;
+
+		@Override
+	    public Component getTableCellRendererComponent(JTable table, Object value,
+	            boolean isSelected, boolean hasFocus, int row, int column) {
+
+	        Component c = super.getTableCellRendererComponent(table, value, isSelected,
+	                hasFocus, row, column);
+
+	        if (column > 0) {
+	            String versionVal = (String) value;
+
+	            if (versionVal.equals(Configuration.KEY_ENTERVALUE) || versionVal.equals(Configuration.KEY_UNALLOCATED)) {
+	                c.setForeground(Color.RED);
+	            } else {
+	                c.setForeground(Color.BLACK);
+	            }
+	        }
+	        return c;
+	    }
 	}
 	
 }
