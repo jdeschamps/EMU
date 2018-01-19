@@ -80,8 +80,12 @@ public class UIProperty {
 	public boolean isSingleState(){
 		return false;
 	}	
-	
+
 	public boolean isMultiState(){
+		return false;
+	}
+	
+	public boolean isFixedState(){
 		return false;
 	}
 	

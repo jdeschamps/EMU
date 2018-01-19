@@ -12,6 +12,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.LinkedHashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
@@ -25,6 +26,7 @@ import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ComboUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.FixedStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.BinaryConverter;
@@ -228,7 +230,12 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {	
-		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing.", PropertyFlag.LASER));
+		LinkedHashMap<String,String> map = new LinkedHashMap<String,String>();
+		for(int i=0;i<SystemConstants.FPGA_BEHAVIOURS.length;i++){
+			map.put(SystemConstants.FPGA_BEHAVIOURS[i], String.valueOf(i));
+		}
+		
+		addUIProperty(new FixedStateUIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing.", PropertyFlag.LASER,map));
 		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered).", PropertyFlag.LASER));
 		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"Pulse length of the laser.", PropertyFlag.LASER));
 	}

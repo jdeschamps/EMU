@@ -27,6 +27,7 @@ import javax.swing.table.TableModel;
 
 import main.embl.rieslab.htSMLM.acquisitions.Acquisition;
 import main.embl.rieslab.htSMLM.acquisitions.AcquisitionFactory;
+import main.embl.rieslab.htSMLM.ui.uiproperties.FixedStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
@@ -347,6 +348,13 @@ public class AcquisitionTab extends JPanel {
 
 	}
 	
+	/**
+	 * Creates a JPanel holding a JTable of the filtered properties with default values
+	 * 
+	 * @param filteredProperties Properties to add to the table
+	 * @param twostatedefault_ Default value for TwoStateProperties
+	 * @return
+	 */
 	private JPanel createTable(String[] filteredProperties, boolean twostatedefault_) {
 		JPanel pane = new JPanel();
 		
@@ -362,6 +370,8 @@ public class AcquisitionTab extends JPanel {
 				model.addRow(new Object[] {prop.getFriendlyName(),((SingleStateUIProperty) prop).getStateValue() });
 			} else if (prop.isMultiState()) {
 				model.addRow(new Object[] {prop.getFriendlyName(),((MultiStateUIProperty) prop).getStatesName()[0] });
+			} else if (prop.isFixedState()) {
+				model.addRow(new Object[] {prop.getFriendlyName(),((FixedStateUIProperty) prop).getStatesName()[0] });
 			} else {
 				model.addRow(new Object[] {prop.getFriendlyName(),prop.getPropertyValue() });
 			}
@@ -388,16 +398,15 @@ public class AcquisitionTab extends JPanel {
 			@Override
 			public TableCellEditor getCellEditor(int row, int column) {
 				String s = (String) this.getValueAt(row, 0);
-				System.out.println("Acq: property "+s);
-				System.out.println(s+" is "+propsfriendlyname_.get(s));
-				System.out.println(s+" has allowed values? "+props_.get(propsfriendlyname_.get(s)).hasMMPropertyAllowedValues());
+
 				if(column == 1){
 					if (getValueAt(row, column) instanceof Boolean) {
 						return super.getDefaultEditor(Boolean.class);
 					} else if (props_.get(propsfriendlyname_.get(s)).isMultiState()) { 
 						return new DefaultCellEditor(new JComboBox(((MultiStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
+					} else if (props_.get(propsfriendlyname_.get(s)).isFixedState()) { 
+						return new DefaultCellEditor(new JComboBox(((FixedStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
 					} else if (props_.get(propsfriendlyname_.get(s)).hasMMPropertyAllowedValues()){
-						System.out.println(s+" has allowed values");
 						return new DefaultCellEditor(new JComboBox(props_.get(propsfriendlyname_.get(s)).getAllowedValues()));
 					} else {
 						super.getCellEditor(row, column);
@@ -426,7 +435,14 @@ public class AcquisitionTab extends JPanel {
 		
 		return pane;
 	}
-
+	/**
+	 * Creates a JPanel holding a JTable of the filtered properties with the current values of the acquisition properties.
+	 * 
+	 * @param filteredProperties Properties to add to the table
+	 * @param twostatedefault_ Default value for TwoStateProperties
+	 * @param propertyValues Property values of the current acquisition
+	 * @return
+	 */
 	private JPanel createTable(String[] filteredProperties, boolean twostatedefault_, HashMap<String, String> propertyValues) {
 		JPanel pane = new JPanel();
 		
@@ -436,7 +452,7 @@ public class AcquisitionTab extends JPanel {
 		// For each property of the UI
 		for (int i = 0; i < filteredProperties.length; i++) {	
 			UIProperty prop = props_.get(filteredProperties[i]);
-			if(propertyValues.containsKey(prop.getFriendlyName())){
+			if(propertyValues.containsKey(prop.getFriendlyName())){ // if the property is found in the acquisition properties
 				if (prop.isTwoState()) {
 					if(propertyValues.get(prop.getFriendlyName()).equals(TwoStateUIProperty.getOnStateName())){
 						model.addRow(new Object[] {prop.getFriendlyName(), true });
@@ -444,19 +460,23 @@ public class AcquisitionTab extends JPanel {
 						model.addRow(new Object[] {prop.getFriendlyName(), false });
 					}
 				} else if (prop.isSingleState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(), propertyValues.get(prop.getFriendlyName()) });
+					model.addRow(new Object[] {prop.getFriendlyName(), propertyValues.get(prop.getFriendlyName())});
 				} else if (prop.isMultiState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName()) });
+					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName())});
+				} else if (prop.isFixedState()) {
+					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName())});
 				} else {
 					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName())});
 				}
-			} else {
+			} else { // if not, set by default value
 				if (prop.isTwoState()) {
 					model.addRow(new Object[] {prop.getFriendlyName(), twostatedefault_ });
 				} else if (prop.isSingleState()) {
 					model.addRow(new Object[] {prop.getFriendlyName(),((SingleStateUIProperty) prop).getStateValue() });
 				} else if (prop.isMultiState()) {
 					model.addRow(new Object[] {prop.getFriendlyName(),((MultiStateUIProperty) prop).getStatesName()[0] });
+				} else if (prop.isFixedState()) {
+					model.addRow(new Object[] {prop.getFriendlyName(),((FixedStateUIProperty) prop).getStatesName()[0] });
 				} else {
 					model.addRow(new Object[] {prop.getFriendlyName(),prop.getPropertyValue() });
 				}
@@ -490,6 +510,8 @@ public class AcquisitionTab extends JPanel {
 						return super.getDefaultEditor(Boolean.class);
 					} else if (props_.get(propsfriendlyname_.get(s)).isMultiState()) { 
 						return new DefaultCellEditor(new JComboBox(((MultiStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
+					} else if (props_.get(propsfriendlyname_.get(s)).isFixedState()) { 
+						return new DefaultCellEditor(new JComboBox(((FixedStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
 					} else if (props_.get(propsfriendlyname_.get(s)).hasMMPropertyAllowedValues()){
 						return new DefaultCellEditor(new JComboBox(props_.get(propsfriendlyname_.get(s)).getAllowedValues()));
 					} else {
