@@ -158,7 +158,6 @@ public class LaserTriggerPanel extends PropertyPanel {
 					textfieldsequence_.setForeground(ColorRepository.getColor("black"));
 					String str = String.valueOf(BinaryConverter.getDecimal16bits(s));
 					changeProperty(TRIGGER_SEQUENCE,str);
-				
 				} else if(BinaryConverter.isBits(s)) {
 					textfieldsequence_.setForeground(ColorRepository.getColor("blue"));
 				} else {
@@ -286,12 +285,13 @@ public class LaserTriggerPanel extends PropertyPanel {
 			this.repaint();
 		} else if(label.equals(PARAM_DEF_BEHAVIOUR)){
 			behaviour_ = ((ComboUIParameter) getUIParameter(PARAM_DEF_BEHAVIOUR)).getValue();
-			combobehaviour_.setSelectedItem(behaviour_);
+			combobehaviour_.setSelectedItem(behaviour_); // triggers the action listener
 		} else if(label.equals(PARAM_DEF_SEQUENCE)){
 			if(BinaryConverter.is16bits(((StringUIParameter) getUIParameter(PARAM_DEF_SEQUENCE)).getValue())){
 				sequence_ = ((StringUIParameter) getUIParameter(PARAM_DEF_SEQUENCE)).getValue();
 				textfieldsequence_.setText(sequence_);
-			} 
+				changeProperty(TRIGGER_SEQUENCE,String.valueOf(BinaryConverter.getDecimal16bits(sequence_))); // setting text on JTextField does not trigger the action listeners in this case
+			}
 		}
 	}
 
