@@ -60,7 +60,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	@Override
 	public boolean isInRange(Float val) {
 		if(hasLimits()){
-			if(val>getLowerLimit() & val<getUpperLimit() & val<getMax() & val>getMin()){
+			if(val>=getLowerLimit() & val<=getUpperLimit() & val<=getMax() & val>=getMin()){
 				return true;
 			}
 		}
