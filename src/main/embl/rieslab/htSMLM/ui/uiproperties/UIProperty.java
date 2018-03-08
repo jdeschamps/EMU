@@ -53,7 +53,6 @@ public class UIProperty {
 	
 	public void setPropertyValue(String val){
 		if(allocated_){
-			System.out.println("Change property in UIProperty: "+mmproperty_.getPropertyName()+" to "+val);
 			mmproperty_.setStringValue(val, this);
 		}  
 	}

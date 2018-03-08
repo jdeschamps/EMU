@@ -80,7 +80,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 
 	//////// Conveniance variables
 	private boolean activate_, shownms_, autocutoff_;
-	private double sdcoeff_, feedback_, dT_ = 1, N0_ = 0, cutoff_ = 100;
+	private double sdcoeff_, feedback_, dT_, N0_ = 0, cutoff_ = 100;
 	private int npos_, idletime_, maxpulse_;
 	private ImagePlus im_;
 	private int counternms_ = 0;
@@ -230,7 +230,8 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		labeldT_ = new JLabel("Average:");
 		c.gridy = 4;
 		pane.add(labeldT_,c);
-		
+
+		dT_ = 1;
 		textfielddT_ = new JTextField(String.valueOf(dT_));
 		textfielddT_.addFocusListener(new FocusListener() {
 			@Override
@@ -623,13 +624,17 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		if(shownms_ && counternms_ % 10 == 0){
 			ImageProcessor imp = task_.getNMSResult();
 			if(imp != null && imp.getPixels() != null){
+				System.out.println("Update Image");
 				im_.setProcessor(task_.getNMSResult());
 				im_.updateAndRepaintWindow();
 			}
-			counternms_ ++;
+		} else if(counternms_ == Integer.MAX_VALUE){
+			counternms_ = 0;
 		}
 		
 		changeProperty(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
+		
+		counternms_ ++;
 	}
 
 	@Override

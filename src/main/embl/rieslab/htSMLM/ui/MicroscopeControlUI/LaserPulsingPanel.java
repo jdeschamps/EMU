@@ -75,55 +75,11 @@ public class LaserPulsingPanel extends PropertyPanel {
 		c.gridwidth = 1;
 		c.insets = new Insets(1,15,1,15);
 		
-		///////////////////////////////////////////////////////////////////////// User value text field
-		textfieldvalue_ = new JTextField();
-		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 0;
-		this.add(textfieldvalue_, c);
-		
-		textfieldvalue_.addFocusListener(new FocusListener() {
-			@Override
-			public void focusGained(FocusEvent arg0) {}
-			@Override
-			public void focusLost(FocusEvent arg0) {
-	       	    String typed = textfieldvalue_.getText();
-        	    if(!utils.isInteger(typed)) {
-        	        return;
-        	    }  
-        	    int val = Integer.parseInt(typed);
-        	    if(val<=logslider_.getMaxWithin()){
-        	    	logslider_.setValueWithin(val);
-        	    	changeProperty(LASER_PULSE,typed);
-        	    } else {
-        	    	logslider_.setValueWithin(logslider_.getMaxWithin());
-        	    	changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
-        	    }
-        	}
-         });
-		textfieldvalue_.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-	       	    String typed = textfieldvalue_.getText();
-        	    if(!utils.isInteger(typed)) {
-        	        return;
-        	    }  
-        	    int val = Integer.parseInt(typed);
-        	    if(val<=logslider_.getMaxWithin()){
-        	    	logslider_.setValueWithin(val);
-        	    	changeProperty(LASER_PULSE,typed);
-        	    } else {
-        	    	logslider_.setValueWithin(logslider_.getMaxWithin());
-        	    	changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
-        	    }
-        	}
-        });
-		
-
 		///////////////////////////////////////////////////////////////////////// User max text field
 		textfieldmax_ = new JTextField("10000");
 		textfieldmax_.setPreferredSize(new Dimension(30,15));
 		c.fill = GridBagConstraints.BOTH;
-		c.gridy = 1;
+		c.gridy = 0;
 		c.ipady = 7;
 		this.add(textfieldmax_, c);
 		
@@ -185,6 +141,50 @@ public class LaserPulsingPanel extends PropertyPanel {
 			}
 
 		});
+		
+		
+		///////////////////////////////////////////////////////////////////////// User value text field
+		textfieldvalue_ = new JTextField();
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 1;
+		this.add(textfieldvalue_, c);
+		
+		textfieldvalue_.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent arg0) {}
+			@Override
+			public void focusLost(FocusEvent arg0) {
+	       	    String typed = textfieldvalue_.getText();
+        	    if(!utils.isInteger(typed)) {
+        	        return;
+        	    }  
+        	    int val = Integer.parseInt(typed);
+        	    if(val<=logslider_.getMaxWithin()){
+        	    	logslider_.setValueWithin(val);
+        	    	changeProperty(LASER_PULSE,typed);
+        	    } else {
+        	    	logslider_.setValueWithin(logslider_.getMaxWithin());
+        	    	changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
+        	    }
+        	}
+         });
+		textfieldvalue_.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+	       	    String typed = textfieldvalue_.getText();
+        	    if(!utils.isInteger(typed)) {
+        	        return;
+        	    }  
+        	    int val = Integer.parseInt(typed);
+        	    if(val<=logslider_.getMaxWithin()){
+        	    	logslider_.setValueWithin(val);
+        	    	changeProperty(LASER_PULSE,typed);
+        	    } else {
+        	    	logslider_.setValueWithin(logslider_.getMaxWithin());
+        	    	changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
+        	    }
+        	}
+        });
 		
 		///////////////////////////////////////////////////////////////////////// Log JSlider
 		logslider_ = new LogarithmicJSlider(JSlider.VERTICAL,1, 10000, 10);

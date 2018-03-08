@@ -111,9 +111,7 @@ public abstract class MMProperty<T> {
 				try{
 					// set value
 					value = val;
-					
-					System.out.println("In MMProperty ["+getHash()+"], set value ["+val+"] from ["+stringval+"]");
-					
+										
 					core_.setProperty(devicelabel_,label_,stringval);
 					if(!core_.hasProperty(devicelabel_, label_)){
 						System.out.println("Device property ["+devicelabel_+","+label_+"] doesn't exist.");
