@@ -74,7 +74,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	private final static String INTERNAL_MAXPULSE = LaserPulsingPanel.INTERNAL_MAXPULSE;
 	
 	//////// Parameters
-	private final static String PARAM_IDLE = "Idle time";
+	private final static String PARAM_IDLE = "Idle time (ms)";
 	private final static String PARAM_NPOS = "Number of points";
 	private final static String PARAM_DEF_SD = "Default sd coeff";
 	private final static String PARAM_DEF_FB = "Default feedback";
@@ -541,7 +541,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		
 		addUIParameter(new DoubleUIParameter(this, PARAM_DEF_SD,"Default value of the cutoff coefficient.",sdcoeff_));
 		addUIParameter(new DoubleUIParameter(this, PARAM_DEF_FB,"Default value of the activation feedback coefficient.",feedback_));
-		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time of the stage position monitoring.",idletime_)); // thread idle time
+		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time (ms) of the stage position monitoring.",idletime_)); // thread idle time
 		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
 	}
 

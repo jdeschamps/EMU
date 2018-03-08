@@ -70,7 +70,7 @@ public class FocusPanel extends PropertyPanel {
 	//////// Parameters
 	public final static String PARAM_LARGESTEP = "Large step";
 	public final static String PARAM_SMALLSTEP = "Small step";
-	public final static String PARAM_IDLE = "Idle time";
+	public final static String PARAM_IDLE = "Idle time (ms)";
 	public final static String PARAM_NPOS = "Number of points";
 	
 	//////// Default parameters
@@ -423,7 +423,7 @@ public class FocusPanel extends PropertyPanel {
 		
 		addUIParameter(new DoubleUIParameter(this, PARAM_LARGESTEP,"Default value for large z stage step.",largestep_));
 		addUIParameter(new DoubleUIParameter(this, PARAM_SMALLSTEP,"Default value for large z stage step.",smallstep_));
-		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time of the stage position monitoring.",idle_)); // thread idle time
+		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time in ms of the stage position monitoring.",idle_)); // thread idle time
 		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
 	}
 	

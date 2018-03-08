@@ -33,7 +33,7 @@ public class QPDPanel extends PropertyPanel {
 	//////// Parameters
 	public final static String PARAM_XYMAX = "XY max";
 	public final static String PARAM_ZMAX = "Z max";
-	public final static String PARAM_IDLE = "Idle time";
+	public final static String PARAM_IDLE = "Idle time (ms)";
 	
 	//////// Default parameters
 	private int idle_, xymax_, zmax_; 
@@ -136,7 +136,7 @@ public class QPDPanel extends PropertyPanel {
 		
 		addUIParameter(new IntUIParameter(this, PARAM_XYMAX,"Maximum X and Y signals value to display.",xymax_));
 		addUIParameter(new IntUIParameter(this, PARAM_ZMAX,"Maximum Z signal value to display.",zmax_));
-		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time of the QPD signals monitoring.",idle_)); // thread idle time
+		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time (ms) of the QPD signals monitoring.",idle_)); // thread idle time
 	}
 
 	@Override
