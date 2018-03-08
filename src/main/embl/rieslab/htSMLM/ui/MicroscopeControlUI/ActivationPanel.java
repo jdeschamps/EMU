@@ -81,8 +81,8 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 
 	//////// Conveniance variables
 	private boolean activate_, shownms_, autocutoff_;
-	private double sdcoeff_, feedback_, dT_, N0_ = 0, cutoff_ = 100;
-	private int npos_, idletime_, maxpulse_;
+	private double sdcoeff_, feedback_, N0_ = 0, cutoff_ = 100;
+	private int npos_, idletime_, maxpulse_, dT_;
 	private ImagePlus im_;
 	private ImageProcessor ip_;
 	private int counternms_ = 0;
@@ -242,13 +242,15 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				String typed = textfielddT_.getText();
-        	    if(!utils.isNumeric(typed)) {
+        	    if(!utils.isInteger(typed)) {
         	        return;
         	    } 
 				try {
-					double val = Double.parseDouble(typed);
-					if (val >= 0) {
+					int val = Integer.parseInt(typed);
+					if (val > 1) {
 						dT_ = val;
+					} else {
+						dT_ = 1;
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -259,21 +261,16 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 			@Override
 			public void actionPerformed(ActionEvent ex) {
 				String typed = textfielddT_.getText();
-        	    if(!utils.isNumeric(typed)) {
+        	    if(!utils.isInteger(typed)) {
         	        return;
         	    } 
 				try {
-				    if(!utils.isInteger(typed)) {
-						double val = Double.parseDouble(typed);
-						if (val >= 1 ) {
-							dT_ = Math.floor(val);
-						}
-				    } else {
-						int val = Integer.parseInt(typed);
-						if (val > 0) {
-							dT_ = val;
-						}
-	        	    }
+					int val = Integer.parseInt(typed);
+					if (val > 1) {
+						dT_ = val;
+					} else {
+						dT_ = 1;
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -624,7 +621,6 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		graph_.addPoint(output[ActivationTask.OUTPUT_N]);
 		
 		if(autocutoff_){
-			System.out.println("New cutoff: "+output[ActivationTask.OUTPUT_NEWCUTOFF]);
 			textfieldcutoff_.setText(String.valueOf(output[ActivationTask.OUTPUT_NEWCUTOFF]));
 		}
 		
@@ -651,7 +647,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		params[ActivationTask.PARAM_ACTIVATE] = activate_ ? 1. : 0.; 
 		params[ActivationTask.PARAM_AUTOCUTOFF] = autocutoff_ ? 1. : 0.; 
 		params[ActivationTask.PARAM_CUTOFF] = cutoff_; 
-		params[ActivationTask.PARAM_dT] = dT_; 
+		params[ActivationTask.PARAM_dT] = (double) dT_; 
 		params[ActivationTask.PARAM_FEEDBACK] = feedback_; 
 		params[ActivationTask.PARAM_MAXPULSE] = (double) maxpulse_; // what to do for this? 
 		params[ActivationTask.PARAM_N0] = N0_; 

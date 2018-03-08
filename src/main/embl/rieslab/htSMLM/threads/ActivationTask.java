@@ -97,11 +97,10 @@ public class ActivationTask implements Task<Double> {
 
 			int buffsize = core_.getImageBufferSize();
 
-			if (buffsize > SystemConstants.FPGA_BIT_DEPTH) {
+			if (buffsize > SystemConstants.CAM_BIT_DEPTH) {
 				try {
 					tagged1 = core_.getLastTaggedImage();
-					tagged2 = core_
-							.getNBeforeLastTaggedImage(SystemConstants.FPGA_BIT_DEPTH);
+					tagged2 = core_.getNBeforeLastTaggedImage(SystemConstants.FPGA_SEQUENCE_LENGTH);
 				} catch (Exception e) {
 					// exit?
 				}
@@ -134,13 +133,14 @@ public class ActivationTask implements Task<Double> {
 				double newcutoff;
 				if (autocutoff) {
 					newcutoff = (1 - 1 / dT) * cutoff + tempcutoff / dT;
+					newcutoff = Math.floor(10 * newcutoff + 0.5) / 10;
 				} else {
 					newcutoff = cutoff;
 					if (newcutoff == 0) {
-						newcutoff = tempcutoff;
+						newcutoff = Math.floor(10 * tempcutoff + 0.5) / 10;;
 					}
 				}
-
+				
 				ip_ = NMSuppr.run(imp3, SystemConstants.nmsMaskSize, newcutoff);
 				output_[OUTPUT_NEWCUTOFF] = newcutoff;
 				output_[OUTPUT_N] = (double) NMSuppr.getN();
@@ -154,7 +154,15 @@ public class ActivationTask implements Task<Double> {
 		double min = 0.4;
 		double npulse = 0;
 		
-		if(core_.isSequenceRunning()){			
+		System.out.println("--------------------");
+		System.out.println("Original pulse: "+pulse);
+		System.out.println("Max pulse: "+maxpulse);
+		System.out.println("N0: "+N0);
+		System.out.println("N computed: "+N);
+		
+		if(core_.isSequenceRunning()){
+			System.out.println("Sequence is running");
+			
 			if(pulse < min){
 				npulse = min;			
 			} else {
@@ -164,12 +172,15 @@ public class ActivationTask implements Task<Double> {
 			}
 
 			// calculate new pulse
-			if(N0 != 0){
+			if(N0 > 0){
 				temppulse = npulse*(1+feedback*(1-N/N0));
 			} else {
 				output_[OUTPUT_NEWPULSE] = 0.;
 				return;
 			}
+			
+			System.out.println("New pulse: "+temppulse);
+
 
 			if(temppulse < min){
 				temppulse = min;
@@ -189,12 +200,14 @@ public class ActivationTask implements Task<Double> {
 			npulse = temppulse;
 
 		} else {
+			System.out.println("Sequence is NOT running");
+
 			npulse = pulse;
 		}
 		
 		if(npulse > maxpulse){
 			npulse = maxpulse;
-		}
+		}		
 		
 		output_[OUTPUT_NEWPULSE] = Math.floor(npulse);
 	}
