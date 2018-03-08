@@ -81,7 +81,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 
 	//////// Conveniance variables
 	private boolean activate_, shownms_, autocutoff_;
-	private double sdcoeff_, feedback_, N0_ = 0, cutoff_ = 100;
+	private double sdcoeff_, feedback_, N0_ = 1, cutoff_ = 100;
 	private int npos_, idletime_, maxpulse_, dT_;
 	private ImagePlus im_;
 	private ImageProcessor ip_;
@@ -284,13 +284,14 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
             public void actionPerformed(java.awt.event.ActionEvent evt) {
             	String val = String.valueOf(graph_.getLastPoint());
             	textfieldN0_.setText(val);
-            	N0_ = Double.parseDouble(val);
+            	N0_ = graph_.getLastPoint();
             }
         });
 		c.gridy = 6;
 		c.insets = new Insets(20,6,2,6);
 		pane.add(buttongetN_,c);	
 		
+		N0_ = 1;
 		textfieldN0_ = new JTextField(String.valueOf(N0_));
 		textfieldN0_.addFocusListener(new FocusListener() {
 			@Override

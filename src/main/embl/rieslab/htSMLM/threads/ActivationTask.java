@@ -40,11 +40,15 @@ public class ActivationTask implements Task<Double> {
 	private Double[] output_;
 	private ImageProcessor ip_;
 	
+	private double previous_pulse_;
+	
 	public ActivationTask(TaskHolder<Double> holder, CMMCore core, int idle){
 		core_ = core;
 		idletime_ = idle;
 		
 		registerHolder(holder);
+		
+		previous_pulse_ = 0.4;
 		
 		output_ = new Double[3];
 		output_[0] = 0.;
@@ -152,7 +156,15 @@ public class ActivationTask implements Task<Double> {
 		double N = output_[OUTPUT_N];
 		double temppulse=0;
 		double min = 0.4;
-		double npulse = 0;
+		
+		if(Math.abs(previous_pulse_-pulse)>1){ // in case of user intervention
+			previous_pulse_ = pulse;
+		}
+		
+		
+		
+		double npulse = previous_pulse_;// avoid getting stuck between 0 and 1 (otherwise newp=0.4+0.4*1.99*coeff < 1 unless coeff ~> 0.7 
+										// which is not good for higher values of the pulse) by reusing the previous pulse and not the current pulse
 		
 		System.out.println("--------------------");
 		System.out.println("Original pulse: "+pulse);
@@ -161,15 +173,14 @@ public class ActivationTask implements Task<Double> {
 		System.out.println("N computed: "+N);
 		
 		if(core_.isSequenceRunning()){
-			System.out.println("Sequence is running");
 			
-			if(pulse < min){
-				npulse = min;			
-			} else {
-				// avoid getting stuck between 0 and 1 (otherwise newp=0.4+0.4*1.99*coeff < 1 unless coeff ~> 0.7 
-				// which is not good for higher values of the pulse)
-				npulse = pulse;
+			System.out.println("Previous pulse: "+previous_pulse_);
+			
+			if(previous_pulse_ < min){ 
+				npulse = min;
 			}
+			
+			System.out.println("Basic pulse: "+npulse);
 
 			// calculate new pulse
 			if(N0 > 0){
@@ -180,7 +191,6 @@ public class ActivationTask implements Task<Double> {
 			}
 			
 			System.out.println("New pulse: "+temppulse);
-
 
 			if(temppulse < min){
 				temppulse = min;
@@ -209,6 +219,9 @@ public class ActivationTask implements Task<Double> {
 			npulse = maxpulse;
 		}		
 		
+		System.out.println("Final pulse: "+npulse);
+		
+		previous_pulse_ = npulse;
 		output_[OUTPUT_NEWPULSE] = Math.floor(npulse);
 	}
 	
