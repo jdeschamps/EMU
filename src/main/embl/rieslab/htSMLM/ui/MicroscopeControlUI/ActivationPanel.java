@@ -623,7 +623,10 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	public void update(final Double[] output) {
 		graph_.addPoint(output[ActivationTask.OUTPUT_N]);
 		
-		textfieldcutoff_.setText(String.valueOf(output[ActivationTask.OUTPUT_NEWCUTOFF]));
+		if(autocutoff_){
+			System.out.println("New cutoff: "+output[ActivationTask.OUTPUT_NEWCUTOFF]);
+			textfieldcutoff_.setText(String.valueOf(output[ActivationTask.OUTPUT_NEWCUTOFF]));
+		}
 		
 		if(shownms_ && counternms_ % 10 == 0){
 			ImageProcessor imp = task_.getNMSResult();
@@ -636,7 +639,9 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 			counternms_ = 0;
 		}
 		
-		changeProperty(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
+		if(activate_){
+			changeProperty(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
+		}
 		
 		counternms_ ++;
 	}
@@ -662,6 +667,10 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		return params;
 	}
 
+	/**
+	 * Called from automated acquisition?
+	 * 
+	 */
 	@Override
 	public void startTask() {
 		if(task_.isRunning()){ // if task is running 
