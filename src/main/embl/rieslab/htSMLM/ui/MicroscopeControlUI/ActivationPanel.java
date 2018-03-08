@@ -2,6 +2,7 @@ package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
 
 import ij.ImagePlus;
 import ij.process.ImageProcessor;
+import ij.process.ShortProcessor;
 
 import java.awt.Dimension;
 import java.awt.EventQueue;
@@ -83,6 +84,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	private double sdcoeff_, feedback_, dT_, N0_ = 0, cutoff_ = 100;
 	private int npos_, idletime_, maxpulse_;
 	private ImagePlus im_;
+	private ImageProcessor ip_;
 	private int counternms_ = 0;
 	private Double[] params;
 	
@@ -90,7 +92,8 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		super(label);
 		
 		task_ = new ActivationTask(this, core, idletime_);
-		im_ = new ImagePlus();
+    	ip_ = new ShortProcessor(200,200);
+		im_ = new ImagePlus("NMS result");
 		
 		params = new Double[ActivationTask.NUM_PARAMETERS];
 	}
@@ -499,6 +502,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	protected void showNMS(boolean b){
 		if(b){
 			shownms_ = true;
+			im_.setProcessor(ip_);
 			im_.show();
 		} else {
 			shownms_ = false;
@@ -624,8 +628,8 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		if(shownms_ && counternms_ % 10 == 0){
 			ImageProcessor imp = task_.getNMSResult();
 			if(imp != null && imp.getPixels() != null){
-				System.out.println("Update Image");
-				im_.setProcessor(task_.getNMSResult());
+				ip_ = task_.getNMSResult();
+				im_.setProcessor(ip_);
 				im_.updateAndRepaintWindow();
 			}
 		} else if(counternms_ == Integer.MAX_VALUE){
