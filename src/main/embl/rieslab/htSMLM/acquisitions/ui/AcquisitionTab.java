@@ -543,26 +543,26 @@ public class AcquisitionTab extends JPanel {
 	}
 	
 
-	private HashMap<String, String> getProperties(JPanel pane){
-		HashMap<String, String> props = new HashMap<String, String>();
+	private HashMap<String, String> getProperties(JPanel pane){ 
+		HashMap<String, String> props = new HashMap<String, String>(); // <PropertyName, value>
 		
 		// find panels within and tables
 		Component[] comps = pane.getComponents();
 		for(int i=0;i<comps.length;i++){
-			if(comps[i] instanceof JPanel && comps[i].getName() == null){
+			if(comps[i] instanceof JPanel && comps[i].getName() == null){ // get JPanel which have not been given a name
 				Component[] subcomps = ((JPanel) comps[i]).getComponents();
-				for(int j=0;j<subcomps.length;j++){
-					if(subcomps[j] instanceof JTable){
+				for(int j=0;j<subcomps.length;j++){	// loop over all their subcomponents
+					if(subcomps[j] instanceof JTable){	// if find a JTable
 						TableModel model = ((JTable) subcomps[j]).getModel();
 						int nrow = model.getRowCount(); 
-						for(int k=0;k<nrow;k++){
-							if(!(model.getValueAt(k, 1) instanceof Boolean)){
-								props.put((String) model.getValueAt(k, 0), (String) model.getValueAt(k, 1)); 
+						for(int k=0;k<nrow;k++){	// loop through the rows
+							if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
+								props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), (String) model.getValueAt(k, 1)); 
 							} else {
 								if((Boolean) model.getValueAt(k, 1)){
-									props.put((String) model.getValueAt(k, 0), TwoStateUIProperty.getOnStateName()); 
+									props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOnStateName()); 
 								} else {
-									props.put((String) model.getValueAt(k, 0), TwoStateUIProperty.getOffStateName());
+									props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOffStateName());
 								}
 							}
 						}

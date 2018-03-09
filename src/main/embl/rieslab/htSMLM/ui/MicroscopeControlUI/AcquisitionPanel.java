@@ -484,7 +484,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    int j=0;
 	    	    while(it.hasNext()){
 	    	    	s = it.next();  
-	    	    	propval[j] = s+": "+acq.getPropertyValues().get(s);
+	    	    	propval[j] = controller_.getProperty(s).getFriendlyName()+": "+acq.getPropertyValues().get(s);
 	    	    	j++;
 	    	    }
 	    	    
@@ -559,6 +559,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	@Override
 	public void startTask() {
 		if(ready_){	
+			System.out.println("Acq started in UI");
+			
 			// set path and experiment name in acquisition
 			final String path = jTextField_path.getText();
 			final String name = jTextField_expname.getText();
@@ -583,8 +585,11 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 					
 					if(!b){
 						// report problem saving
+						System.out.println("Error writting acquisition list");
+
 					}
 					
+					System.out.println("Start task acq engine");
 					acqengine_.setAcquisitionList(acqlist);
 					acqengine_.startTask();
 					

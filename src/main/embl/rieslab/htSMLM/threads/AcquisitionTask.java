@@ -13,6 +13,7 @@ import org.micromanager.api.IAcquisitionEngine2010;
 import org.micromanager.api.MultiStagePosition;
 import org.micromanager.api.PositionList;
 import org.micromanager.api.ScriptInterface;
+import org.micromanager.api.StagePosition;
 import org.micromanager.utils.MMScriptException;
 
 public class AcquisitionTask implements Task<Integer>{
@@ -49,9 +50,13 @@ public class AcquisitionTask implements Task<Integer>{
 	@Override
 	public void startTask() {
 		if(acqlist_ != null && !acqlist_.isEmpty()){
+			System.out.println("Acq start in Engine");
+
 			t = new AcquisitionRun(acqlist_);
 			t.execute();
 			running_ = true;
+		} else {
+			System.out.println("Acquisition list is empty or null");
 		}
 	}
 
@@ -99,11 +104,14 @@ public class AcquisitionTask implements Task<Integer>{
 		public Integer runAcquisitions() {
 			Integer[] param = holder_.retrieveAllParameters();
 			
-			if(acqlist_ != null){
+			if(acqlist_ == null){
+				System.out.println("Acquisition list is null");
 				return 0;
 			}
 			
 			if(acqlist_.size() > 0) {
+				System.out.println("Number of acquisition: "+acqlist_.size());
+
 				try {
 					// clear all previous acquisitions
 					script_.closeAllAcquisitions();
@@ -112,7 +120,9 @@ public class AcquisitionTask implements Task<Integer>{
 					PositionList poslist = script_.getPositionList();
 					int numPosition = poslist.getNumberOfPositions();
 					
-					if(numPosition>0){						
+					if(numPosition>0){		
+						System.out.println("Number of positions: "+numPosition);
+
 						MultiStagePosition currPos;
 	
 						String xystage = script_.getXYStageName();
@@ -122,7 +132,7 @@ public class AcquisitionTask implements Task<Integer>{
 
 							// move to next stage position
 							currPos = poslist.getPosition(i);
-							core_.setXYPosition(xystage, currPos.get(0).x,currPos.get(0).y);
+							core_.setXYPosition(xystage, currPos.getX(),currPos.getY());
 	
 							// let time for the stage to move to position
 							Thread.sleep(param[0]);
@@ -138,14 +148,14 @@ public class AcquisitionTask implements Task<Integer>{
 								// set acquisition name
 								final String acqname = createAcqName(acq, i);
 	
+								// set-up system
+								system_.setUpSystem(acq.getPropertyValues());
+								
 								// set configuration channel
 								if (acq.useConfig()) {
 									core_.setConfig(acq.getConfigGroup(),acq.getConfigName());
 								}
-	
-								// set-up system
-								system_.setUpSystem(acq.getPropertyValues());
-	
+								
 								// set-up special acquisition state
 								acq.preAcquisition();
 	

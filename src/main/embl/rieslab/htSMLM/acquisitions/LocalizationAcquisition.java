@@ -258,7 +258,7 @@ public class LocalizationAcquisition extends Acquisition {
 	
 	@Override
 	public String[][] getAdditionalJSONParameters() {
-		String[][] s = new String[2][3];
+		String[][] s = new String[3][2];
 
 		s[0][0] = KEY_USEACT;
 		s[0][1] = String.valueOf(useactivation_);
