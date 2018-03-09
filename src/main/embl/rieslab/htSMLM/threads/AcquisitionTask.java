@@ -13,7 +13,6 @@ import org.micromanager.api.IAcquisitionEngine2010;
 import org.micromanager.api.MultiStagePosition;
 import org.micromanager.api.PositionList;
 import org.micromanager.api.ScriptInterface;
-import org.micromanager.api.StagePosition;
 import org.micromanager.utils.MMScriptException;
 
 public class AcquisitionTask implements Task<Integer>{
@@ -110,8 +109,6 @@ public class AcquisitionTask implements Task<Integer>{
 			}
 			
 			if(acqlist_.size() > 0) {
-				System.out.println("Number of acquisition: "+acqlist_.size());
-
 				try {
 					// clear all previous acquisitions
 					script_.closeAllAcquisitions();
@@ -121,15 +118,11 @@ public class AcquisitionTask implements Task<Integer>{
 					int numPosition = poslist.getNumberOfPositions();
 					
 					if(numPosition>0){		
-						System.out.println("Number of positions: "+numPosition);
-
 						MultiStagePosition currPos;
 	
 						String xystage = script_.getXYStageName();
 	
 						for (int i = 0; i < numPosition; i++) {
-							System.out.println("New position");
-
 							// move to next stage position
 							currPos = poslist.getPosition(i);
 							core_.setXYPosition(xystage, currPos.getX(),currPos.getY());
@@ -140,7 +133,6 @@ public class AcquisitionTask implements Task<Integer>{
 							// perform each acquisition sequentially
 							for (int k = 0; k < acqlist_.size(); k++) {
 								final Acquisition acq = acqlist_.get(k);
-								System.out.println("New acquisition: "+acq.getType());
 
 								// set acquisition settings
 								script_.setAcquisitionSettings(acq.getSettings());
@@ -205,7 +197,6 @@ public class AcquisitionTask implements Task<Integer>{
 						}
 					} else {
 						System.out.println("Position list empty");
-						System.out.println(numPosition);
 					}
 
 				} catch (MMScriptException e) {
@@ -215,7 +206,6 @@ public class AcquisitionTask implements Task<Integer>{
 				}
 			}
 			
-			System.out.println("Will publish progress -1");
 			publish(-1);
 			
 			return 0;
@@ -253,12 +243,10 @@ public class AcquisitionTask implements Task<Integer>{
 		@Override
 		protected void process(List<Integer> chunks) {
 			for(Integer result : chunks){
-				if(result>0){
+				if(result>=0){
 					Integer[] results = {result};
 					notifyHolder(results);
 				} else if(result == -1){
-					System.out.println("Will set done");
-
 					running_ = false;
 					holder_.taskDone();
 				}
