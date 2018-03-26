@@ -56,8 +56,10 @@ public abstract class ComponentUpdater<T extends JComponent> {
 		protected Integer doInBackground() throws Exception {
 			while(running_){
 				
-				publish(property_.getPropertyValue());
-				
+				String s = property_.getPropertyValue();
+				if(s != null && !s.isEmpty()){
+					publish(property_.getPropertyValue());
+				}
 				Thread.sleep(idletime_);
 			}
 			return 1;

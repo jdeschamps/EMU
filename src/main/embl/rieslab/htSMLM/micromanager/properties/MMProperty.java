@@ -97,7 +97,10 @@ public abstract class MMProperty<T> {
 		String val = "";
 		try {
 			val = core_.getProperty(devicelabel_, label_);			
-			value = convertToValue(val);			
+
+			if(val != null && !val.isEmpty()){
+				value = convertToValue(val);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

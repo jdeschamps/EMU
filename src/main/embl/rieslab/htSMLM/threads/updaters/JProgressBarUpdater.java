@@ -26,9 +26,10 @@ public class JProgressBarUpdater extends ComponentUpdater<JProgressBar>{
 
 	@Override
 	public void updateComponent(String val) {
-		int value = (int) Math.round(Double.parseDouble(val));
-		
-		component_.setValue(value);
+		if(utils.isNumeric(val)){
+			int value = (int) Math.round(Double.parseDouble(val));
+			component_.setValue(value);
+		}
 	}
 
 	public double round(double value, int places) {
