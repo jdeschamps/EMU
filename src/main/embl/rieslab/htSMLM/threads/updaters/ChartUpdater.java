@@ -66,7 +66,7 @@ public class ChartUpdater {
 			while(running_){
 
 				value[0] = Double.parseDouble(propertyX_.getPropertyValue());
-				value[1] = Double.parseDouble(propertyX_.getPropertyValue());
+				value[1] = Double.parseDouble(propertyY_.getPropertyValue());
 				publish(value);
 				
 				Thread.sleep(idletime_);
