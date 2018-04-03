@@ -268,10 +268,10 @@ public class LaserControlPanel extends PropertyPanel {
 					togglebutton100_.setSelected(true);
 				} else if(val == 20){
 					togglebutton20_.setSelected(true);
-				} else if(val == 0){
+				} else if(val == 1){
 					togglebutton1_.setSelected(true);
 				} else {
-					if(val>0 && val<100){
+					if(val>=0 && val<100){
 						togglebuttonUser_.setSelected(true);
 						togglebuttonUser_.setText(String.valueOf(val)+"%");
 						textfieldUser_.setText(String.valueOf(val));

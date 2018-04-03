@@ -135,13 +135,20 @@ public class MainFrame extends PropertyMainFrame{
 		tab = new JTabbedPane();
 		
 		/////////// tab
+		
+		/// QPD tab
 		qpdPanel = new QPDPanel("QPD");
 		tab.add("QPD", qpdPanel);
 
+		/// Focus-lock panel
+		JPanel focuslock = new FocusLockPanel("Focus-lock");
+		tab.add("Focus-lock", focuslock);
+		
+		// Activation
 		activationPanel = new ActivationPanel("Activation", getCore());
 		tab.add("Activation", activationPanel);
 		
-		/// laser trigger
+		/// laser trigger tab
 		JPanel lasertrigg = new JPanel();
 		lasertrigg.setLayout(new GridLayout(2,2));
 		triggerPanels = new LaserTriggerPanel[4];
@@ -151,9 +158,9 @@ public class MainFrame extends PropertyMainFrame{
 		}
 		tab.add("Trigger", lasertrigg);
 		
+		/// Acquisition tab
 		acqPanel = new AcquisitionPanel(getController(), this);
 		tab.add("Acquisition", acqPanel);
-
 		
 		/*c3.gridx = 0;
 		c3.gridy = 0;

@@ -19,8 +19,8 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
+import main.embl.rieslab.htSMLM.ui.components.LogarithmicJSlider;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
-import main.embl.rieslab.htSMLM.ui.misc.LogarithmicJSlider;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
