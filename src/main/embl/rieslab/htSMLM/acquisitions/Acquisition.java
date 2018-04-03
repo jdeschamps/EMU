@@ -1,6 +1,5 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -10,9 +9,6 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.htSMLM.util.StringSorting;
 
 import org.micromanager.api.SequenceSettings;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
 
 public abstract class Acquisition {
 
