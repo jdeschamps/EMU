@@ -27,6 +27,7 @@ public class MainFrame extends PropertyMainFrame{
 
 	private FocusPanel focusPanel;
 	private QPDPanel qpdPanel;
+	private FocusLockPanel focuslockpanel;
 	private FiltersPanel filterPanel;
 	private LaserControlPanel[] controlPanels;
 	private LaserPulsingPanel pulsePanel;
@@ -141,8 +142,8 @@ public class MainFrame extends PropertyMainFrame{
 		tab.add("QPD", qpdPanel);
 
 		/// Focus-lock panel
-		JPanel focuslock = new FocusLockPanel("Focus-lock");
-		tab.add("Focus-lock", focuslock);
+		focuslockpanel = new FocusLockPanel("Focus-lock");
+		tab.add("Focus-lock", focuslockpanel);
 		
 		// Activation
 		activationPanel = new ActivationPanel("Activation", getCore());
@@ -200,6 +201,7 @@ public class MainFrame extends PropertyMainFrame{
 	@Override
 	protected void registerPropertyPanels() {
         registerPropertyPanel(focusPanel);
+        registerPropertyPanel(qpdPanel);
         registerPropertyPanel(qpdPanel);
         registerPropertyPanel(filterPanel);
         registerPropertyPanel(pulsePanel);
