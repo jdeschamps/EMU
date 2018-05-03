@@ -202,7 +202,7 @@ public class MainFrame extends PropertyMainFrame{
 	protected void registerPropertyPanels() {
         registerPropertyPanel(focusPanel);
         registerPropertyPanel(qpdPanel);
-        registerPropertyPanel(qpdPanel);
+        registerPropertyPanel(focuslockpanel);
         registerPropertyPanel(filterPanel);
         registerPropertyPanel(pulsePanel);
         for(int i=0;i<triggerPanels.length;i++){
