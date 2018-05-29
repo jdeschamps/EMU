@@ -515,7 +515,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	public boolean isActivationAtMax(){
 		String val = getUIProperty(LASER_PULSE).getPropertyValue();
 		if(utils.isNumeric(val)){
-			if(Double.parseDouble(val)<maxpulse_){
+			if(Double.parseDouble(val)>=maxpulse_){
 				return true;
 			}
 		}

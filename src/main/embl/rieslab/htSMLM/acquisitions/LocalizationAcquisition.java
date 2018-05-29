@@ -59,6 +59,7 @@ public class LocalizationAcquisition extends Acquisition {
 		useactivation_ = true;
 		stoponmax_ = true;
 		stoponmaxdelay_ = 5;
+		this.setNumberFrames(30000);
 	}
 
 	@Override
