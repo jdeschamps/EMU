@@ -33,6 +33,8 @@ public class TimeAcquisition extends Acquisition {
 	
 	public TimeAcquisition(double exposure, HashMap<String,String[]> configgroups) {
 		super(AcquisitionType.TIME, exposure, configgroups);
+		
+		this.setNumberFrames(30000);
 	}
 
 	@Override

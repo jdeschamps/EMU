@@ -66,6 +66,8 @@ public class AcquisitionFactory {
 			return new TimeAcquisition(controller_.getExposure(), controller_.getConfigurationGroups());
 		} else if(type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
 			return new BrightFieldAcquisition(controller_.getExposure(), controller_.getConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BRIGHTFIELD)));
+		}  else if(type.equals(AcquisitionType.SNAP.getTypeValue())){
+			return new SnapAcquisition(controller_.getExposure(), controller_.getConfigurationGroups());
 		} else if(type.equals(AcquisitionType.ZSTACK.getTypeValue())){
 			return new ZStackAcquisition(controller_.getExposure(), controller_.getConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
 		}
