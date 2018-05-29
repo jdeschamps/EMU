@@ -232,6 +232,24 @@ public class AcquisitionFactory {
 						acq.setIntervalMs(acqw.interval);		
 						
 						acqlist.add(acq);
+					} else if(acqw.type.equals(AcquisitionType.SNAP.getTypeValue())){
+						SnapAcquisition acq = (SnapAcquisition) getAcquisition(acqw.type);
+						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
+						acq.setExposureTime(acqw.exposure);
+						acq.setWaitingTime(acqw.waitingTime);
+			
+						HashMap<String,String> props = new HashMap<String,String>();
+						if(acqw.props != null){
+							for(int j=0;j<acqw.props.length;j++){
+								props.put(acqw.props[j][0], acqw.props[j][1]);
+							}
+						}
+						acq.setProperties(props);
+						
+						acq.setNumberFrames(acqw.numFrames);
+						acq.setIntervalMs(acqw.interval);		
+						
+						acqlist.add(acq);
 					}
 				}
 			}
