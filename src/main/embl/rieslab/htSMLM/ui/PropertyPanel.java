@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import main.embl.rieslab.htSMLM.ui.internalproperty.InternalProperty;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameter;
@@ -97,7 +98,7 @@ public abstract class PropertyPanel extends JPanel{
 		String prop;
 		while(it.hasNext()){
 			prop = it.next();
-			propertyhasChanged(prop,properties_.get(prop).getPropertyValue());
+			triggerPropertyHasChanged(prop,properties_.get(prop).getPropertyValue());
 		}
 	}	
 	
@@ -129,13 +130,22 @@ public abstract class PropertyPanel extends JPanel{
 		propertychange_ = true;
 	}
 	
+	public void triggerPropertyHasChanged(final String name, final String newvalue){
+		// Makes sure that the updating runs on EDT
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				propertyhasChanged(name, newvalue);
+			}
+		});
+	}
+	
 	protected abstract void initializeProperties();
 	protected abstract void initializeInternalProperties();
 	protected abstract void initializeParameters();
 	public abstract void setupPanel();
 	protected abstract void changeProperty(String name, String value);
 	protected abstract void changeInternalProperty(String name, String value);
-	public abstract void propertyhasChanged(String name, String newvalue);
+	protected abstract void propertyhasChanged(String name, String newvalue);
 	public abstract void parameterhasChanged(String label);
 	public abstract void internalpropertyhasChanged(String label);
 	public abstract void shutDown();

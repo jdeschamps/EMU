@@ -41,7 +41,7 @@ public class UIProperty {
 	}
 	
 	public void mmPropertyHasChanged(String value){
-		owner_.propertyhasChanged(name_,value);
+		owner_.triggerPropertyHasChanged(name_,value);
 	}
 	
 	public String getPropertyValue(){
