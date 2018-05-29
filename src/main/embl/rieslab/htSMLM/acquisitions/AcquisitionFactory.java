@@ -92,7 +92,9 @@ public class AcquisitionFactory {
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
 		String name;
-		if(!path.endsWith("/")){
+		if(path.endsWith(SystemConstants.ACQ_EXT)){
+			name = path;
+		} else if(!path.endsWith("/")){
 			name = path+"/"+SystemConstants.ACQ_NAME;
 		} else {
 			name = path+SystemConstants.ACQ_NAME;

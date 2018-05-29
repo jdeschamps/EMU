@@ -91,7 +91,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     ///// UI
     private JButton jButton_setpath;
     private JToggleButton jToggle_startstop,jButton_showSummary;
-    private JButton jButton_load,jButton_configAcq;
+    private JButton jButton_load,jButton_configAcq,jButton_saveAcq;
     private JLabel jLabel_expname, jLabel_path, jLabel_progress;
     private JProgressBar jProgressBar_progress;
     private JTextField jTextField_expname;
@@ -201,6 +201,14 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 				showAcquisitionConfiguration();
 			}
         });
+        
+        jButton_saveAcq = new JButton("Save as");
+        jButton_saveAcq.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				saveAcquisitionList();
+			}
+        });
 
         jButton_showSummary = new JToggleButton(">>");
         jButton_showSummary.addItemListener(new ItemListener(){
@@ -303,13 +311,15 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		c.weighty = 0;		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		this.add(jToggle_startstop, c);	 
-		
+
 		c.gridx = 1;
-		//c.weightx = getWeightX(1);
-		this.add(jButton_configAcq, c);	 
+		this.add(jButton_configAcq, c);	
+		
+		c.gridx = 2;
+		this.add(jButton_saveAcq, c);	 
 
 		c.gridx = 3;
-		c.weightx =0.1;
+		c.weightx = 0.1;
 		this.add(jButton_load, c);	  
 	}
 		
@@ -400,7 +410,34 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 				setSummaryText();
 			}
 	    }
-		return;
+	}
+	
+	private void saveAcquisitionList(){
+		if(exp_ == null || exp_.getAcquisitionList().isEmpty()){
+			showNoAcquisitionToBeSaved();
+			return;
+		}
+		
+		JFileChooser fileChooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Acquisition list", SystemConstants.ACQ_EXT);
+		fileChooser.setFileFilter(filter);
+		int result = fileChooser.showSaveDialog(new JFrame());
+		String path;
+		if(result == JFileChooser.APPROVE_OPTION) {
+		    File selectedFile = fileChooser.getSelectedFile();
+		    path = selectedFile.getAbsolutePath();
+		    
+		    if(!path.endsWith("."+SystemConstants.ACQ_EXT)){
+				path = path+"."+SystemConstants.ACQ_EXT;
+			}
+		    
+			if(wizard_ != null){
+				wizard_.saveAcquisitionList(exp_,path);
+			} else {
+				wizard_ = new AcquisitionWizard(controller_, this);
+				wizard_.saveAcquisitionList(exp_,path);
+			}
+		}
 	}
 	
 	public String getBFPPropertyName(){
@@ -592,7 +629,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 					System.out.println("Start task acq engine");
 					acqengine_.setAcquisitionList(acqlist);
 					acqengine_.startTask();
-					
 				}
 
 			};
@@ -623,6 +659,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	private void showNoAcqMessage() {
 		String title = "No Acquisition";
 		String message = "The acquisition list is empty.";
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	private void showNoAcquisitionToBeSaved(){
+		String title = "No Acquisition present";
+		String message = "The acquisition list is empty, nothing to save.";
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
