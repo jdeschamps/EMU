@@ -381,6 +381,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	
 	private void showAcquisitionConfiguration(){
 		if(!exp_.getAcquisitionList().isEmpty()){
+			System.out.println("is not empty");
 			wizard_ = new AcquisitionWizard(controller_, this, exp_);
 		} else {
 			wizard_ = new AcquisitionWizard(controller_, this);

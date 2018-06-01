@@ -448,25 +448,25 @@ public class AcquisitionTab extends JPanel {
 		
 		// Defines table model
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"Property", "Value" }, 0);
-
+		
 		// For each property of the UI
 		for (int i = 0; i < filteredProperties.length; i++) {	
 			UIProperty prop = props_.get(filteredProperties[i]);
-			if(propertyValues.containsKey(prop.getFriendlyName())){ // if the property is found in the acquisition properties
+			if(propertyValues.containsKey(filteredProperties[i])){ // if the property is found in the acquisition properties
 				if (prop.isTwoState()) {
-					if(propertyValues.get(prop.getFriendlyName()).equals(TwoStateUIProperty.getOnStateName())){
+					if(propertyValues.get(filteredProperties[i]).equals(TwoStateUIProperty.getOnStateName())){
 						model.addRow(new Object[] {prop.getFriendlyName(), true });
 					} else {
 						model.addRow(new Object[] {prop.getFriendlyName(), false });
 					}
 				} else if (prop.isSingleState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(), propertyValues.get(prop.getFriendlyName())});
+					model.addRow(new Object[] {prop.getFriendlyName(), propertyValues.get(filteredProperties[i])});
 				} else if (prop.isMultiState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName())});
+					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(filteredProperties[i])});
 				} else if (prop.isFixedState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName())});
+					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(filteredProperties[i])});
 				} else {
-					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(prop.getFriendlyName())});
+					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(filteredProperties[i])});
 				}
 			} else { // if not, set by default value
 				if (prop.isTwoState()) {
