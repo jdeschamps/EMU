@@ -21,6 +21,7 @@ import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
@@ -47,8 +48,10 @@ public class LaserControlPanel extends PropertyPanel {
 	//////// Parameters
 	public final static String PARAM_TITLE = "Name";
 	public final static String PARAM_COLOR = "Color";	
+	public final static String PARAM_SCALING = "Scaling max";	
 	private String title_;	
 	private Color color_;
+	private int scaling_;
 	
 	/////// Convenience variables
 	
@@ -84,7 +87,8 @@ public class LaserControlPanel extends PropertyPanel {
 						if (val <= 100 && val >= 0) {
 							togglebuttonUser_.setText(typed + "%");
 							if (togglebuttonUser_.isSelected()) {
-								changeProperty(LASER_PERCENTAGE,typed);
+				        	    int value = (int) (val*scaling_/100);
+								changeProperty(LASER_PERCENTAGE,String.valueOf(value));
 							}
 						}
 					} catch (Exception e) {
@@ -106,7 +110,8 @@ public class LaserControlPanel extends PropertyPanel {
 						if (val <= 100 && val >= 0) {
 							togglebuttonUser_.setText(typed + "%");
 							if (togglebuttonUser_.isSelected()) {
-								changeProperty(LASER_PERCENTAGE,typed);
+				        	    int value = (int) (val*scaling_/100);
+								changeProperty(LASER_PERCENTAGE,String.valueOf(value));
 							}
 						}
 					} catch (Exception exc) {
@@ -122,7 +127,7 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_PERCENTAGE,"100");
+					changeProperty(LASER_PERCENTAGE,String.valueOf(scaling_));
 				}
 			}
         });		
@@ -137,7 +142,8 @@ public class LaserControlPanel extends PropertyPanel {
 		        	    if(typed == null) {
 		        	        return;
 		        	    }
-						changeProperty(LASER_PERCENTAGE,typed);
+		        	    int val = (int) (Double.valueOf(typed)*scaling_/100);
+						changeProperty(LASER_PERCENTAGE,String.valueOf(val));
 					}
 				}
 			}
@@ -148,7 +154,8 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_PERCENTAGE,"20");
+					int val = (int) (scaling_*0.2);
+					changeProperty(LASER_PERCENTAGE,String.valueOf(val));
 				}
 			}
         });
@@ -158,7 +165,8 @@ public class LaserControlPanel extends PropertyPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_PERCENTAGE,"1");
+					int val = (int) (scaling_*0.01);
+					changeProperty(LASER_PERCENTAGE,String.valueOf(val));
 				}
 			}
         });
@@ -246,9 +254,11 @@ public class LaserControlPanel extends PropertyPanel {
 	protected void initializeParameters() {
 		title_ = "Laser";	
 		color_ = Color.black;
+		scaling_ = 100;
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
-		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Default value for large z stage step.",color_));
+		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Laser color.",color_));
+		addUIParameter(new IntUIParameter(this, PARAM_SCALING,"Maximum value of the laser percentage after scaling.",scaling_));
 	}
 
 	@Override
@@ -263,7 +273,13 @@ public class LaserControlPanel extends PropertyPanel {
 		turnOffPropertyChange();
 		if(name.equals(getLabel()+" "+LASER_PERCENTAGE)){
 			if(utils.isNumeric(newvalue)){
-				double val = Double.parseDouble(newvalue);
+				int val = (int) Double.parseDouble(newvalue);
+				
+				// scale if necessary
+				if(scaling_ != 100){
+					val = (int) (val*scaling_/100);
+				}
+				
 				if(val == 100){
 					togglebutton100_.setSelected(true);
 				} else if(val == 20){
@@ -300,6 +316,8 @@ public class LaserControlPanel extends PropertyPanel {
 			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
 			border_.setTitleColor(color_);
 			this.repaint();
+		}else if(label.equals(PARAM_SCALING)){
+			scaling_ = ((IntUIParameter) getUIParameter(PARAM_SCALING)).getValue();
 		}
 	}
 

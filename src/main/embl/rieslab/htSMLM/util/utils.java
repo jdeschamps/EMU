@@ -88,6 +88,11 @@ public class utils {
 		}	
 	}
 	
+	private static double round(double value, int precision) {
+	    int scale = (int) Math.pow(10, precision);
+	    return (double) Math.round(value * scale) / scale;
+	}
+	
 	public static Color getColorFromStringArray(String[] c){
 		if(c.length==3){
 			if(isInteger(c[0])&&isInteger(c[1])&&isInteger(c[2])){
