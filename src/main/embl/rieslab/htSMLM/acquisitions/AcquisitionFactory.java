@@ -1,5 +1,6 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -17,6 +18,7 @@ import main.embl.rieslab.htSMLM.configuration.SystemConstants;
 import main.embl.rieslab.htSMLM.configuration.SystemController;
 import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.AcquisitionPanel;
 import main.embl.rieslab.htSMLM.ui.MicroscopeControlUI.ActivationPanel;
+import main.embl.rieslab.htSMLM.util.utils;
 
 public class AcquisitionFactory {
 	
@@ -100,6 +102,16 @@ public class AcquisitionFactory {
 			name = path+SystemConstants.ACQ_NAME;
 		}
 		
+		boolean fileExists = true;
+		while(fileExists){
+			File f = new File(path);
+			if(f.exists()) { 
+			    name = incrementAcquisitionFileName(name);
+			} else {
+				fileExists = false;
+			}
+		}
+		
 		try {
 			objectMapper.writeValue(new FileOutputStream(name), expw);
 			
@@ -120,6 +132,30 @@ public class AcquisitionFactory {
 		return false;
 	}
 	
+	private String incrementAcquisitionFileName(String name) {
+		String newname = name.substring(0, name.length()-SystemConstants.ACQ_EXT.length()-1);
+		int ind = 0;
+		for(int i=0;i<newname.length();i++){
+			if(newname.charAt(i) == '_'){
+				ind = i;
+			}
+		}
+		
+		if(ind == 0){
+			newname = newname+"_1."+SystemConstants.ACQ_EXT;
+		} else {
+			if(utils.isInteger(newname.substring(ind+1))){
+				int num = Integer.valueOf(newname.substring(ind+1))+1;
+				newname = newname.substring(0, ind)+String.valueOf(num)+"."+SystemConstants.ACQ_EXT;
+			} else {
+				newname = newname+"_1."+SystemConstants.ACQ_EXT;
+			}
+		}
+		
+		return newname;
+	}
+
+
 	public Experiment readAcquisitionList(String path){	
 		ArrayList<Acquisition> acqlist = new ArrayList<Acquisition>();
 		int waitingtime = 3;
