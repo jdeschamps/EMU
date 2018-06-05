@@ -352,6 +352,7 @@ public class SystemController {
 			i = core_.getExposure();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
+			System.out.println("Could not get exposure from core.");
 			e.printStackTrace();
 		}
 		return i;
