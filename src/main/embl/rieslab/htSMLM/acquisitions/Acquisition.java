@@ -48,9 +48,12 @@ public abstract class Acquisition {
 
 	public void setSlices(double zstart, double zend, double zstep){
 		slices_ = new ArrayList<Double>();
-		for(double z=zstart;z<=zend;z=z+zstep){
+		double z = utils.round(zstart-zstep,2);
+		
+		while (z<=zend){
+			z += zstep;
 			slices_.add(utils.round(z,2));
-		}	
+		}
 	}
 	
 	public SequenceSettings getSettings(){
