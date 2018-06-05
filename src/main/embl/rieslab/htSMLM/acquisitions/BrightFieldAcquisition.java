@@ -17,8 +17,10 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
+import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
+import main.embl.rieslab.htSMLM.ui.uiproperties.filters.AntiFlagPropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.SinglePropertyFilter;
 
@@ -169,7 +171,7 @@ public class BrightFieldAcquisition extends Acquisition {
 		if(bfprop_ == null){
 			return null;
 		}
-		return new SinglePropertyFilter(bfprop_.getName());
+		return new SinglePropertyFilter(bfprop_.getName(), new AntiFlagPropertyFilter(PropertyFlag.LASER));
 	}
 
 	@Override
