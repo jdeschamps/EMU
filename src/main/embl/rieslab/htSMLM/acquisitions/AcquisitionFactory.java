@@ -86,7 +86,7 @@ public class AcquisitionFactory {
 			aqwlist.add(new AcquisitionWrapper(acqlist.get(i)));
 		}
 		
-		ExperimentWrapper expw = new ExperimentWrapper(exp.getPauseTime(),aqwlist);
+		ExperimentWrapper expw = new ExperimentWrapper(exp.getPauseTime(), exp.getNumberPositions(), aqwlist);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -122,7 +122,8 @@ public class AcquisitionFactory {
 	
 	public Experiment readAcquisitionList(String path){	
 		ArrayList<Acquisition> acqlist = new ArrayList<Acquisition>();
-		int waitingtime = 5;
+		int waitingtime = 3;
+		int numpos = 0;
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -131,8 +132,9 @@ public class AcquisitionFactory {
 			ExperimentWrapper expw = objectMapper.readValue(new FileInputStream(path), ExperimentWrapper.class);			
 
 			ArrayList<AcquisitionWrapper> acqwlist = expw.acqwlist;	
-			
+
 			waitingtime = expw.pausetime;
+			numpos = expw.numberpositions;
 			
 			if(acqwlist != null && !acqwlist.isEmpty()){
 				for(int i=0;i<acqwlist.size();i++){
@@ -270,6 +272,6 @@ public class AcquisitionFactory {
 			e.printStackTrace();
 		}
 		
-		return new Experiment(waitingtime, acqlist);
+		return new Experiment(waitingtime, numpos, acqlist);
 	}
 }

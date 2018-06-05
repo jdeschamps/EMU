@@ -122,7 +122,13 @@ public class AcquisitionTask implements Task<Integer>{
 	
 						String xystage = script_.getXYStageName();
 	
-						for (int i = 0; i < numPosition; i++) {
+						// retrieve max number of positions
+						int maxNumPosition = numPosition;
+						if(param[1] > 0){
+							maxNumPosition = param[1];
+						}
+						
+						for (int i = 0; i < maxNumPosition; i++) {
 							// move to next stage position
 							currPos = poslist.getPosition(i);
 							core_.setXYPosition(xystage, currPos.getX(),currPos.getY());

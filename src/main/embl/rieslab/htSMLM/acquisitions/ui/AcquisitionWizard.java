@@ -27,6 +27,7 @@ public class AcquisitionWizard {
 	private ArrayList<AcquisitionTab> tabs_;
 	private JTabbedPane tabbedpane_;
 	private JTextField waitfield;
+	private JTextField numposfield;
 	private SystemController controller_;
 	
 	public AcquisitionWizard(SystemController controller, AcquisitionUI owner){
@@ -44,20 +45,20 @@ public class AcquisitionWizard {
 	}
 
 	public void startWizard(){
-		setUpFrame(3);
+		setUpFrame(3,0);
 	}	
 	
 	public void startWizard(Experiment exp){
-		setUpFrame(exp.getPauseTime());
+		setUpFrame(exp.getPauseTime(),exp.getNumberPositions());
 		setAcquisitions(exp.getAcquisitionList());
 	}
 	
-	private void setUpFrame(int waitingtime) {
+	private void setUpFrame(int waitingtime, int numpos) {
 		frame_ = new JFrame("Acquisition wizard");
 		JPanel contentpane = new JPanel();
 		contentpane.setLayout(new BoxLayout(contentpane,BoxLayout.LINE_AXIS));
 
-		contentpane.add(setUpLeftPanel(waitingtime));
+		contentpane.add(setUpLeftPanel(waitingtime, numpos));
 		contentpane.add(setUpRightPanel());
 		
 		frame_.add(contentpane);
@@ -66,7 +67,7 @@ public class AcquisitionWizard {
 		frame_.setVisible(true);
 	}
 
-	private JPanel setUpLeftPanel(int waitingtime) {
+	private JPanel setUpLeftPanel(int waitingtime, int numpos) {
 		JPanel leftpane = new JPanel();
 
 		JButton add = new JButton("Add");
@@ -76,8 +77,10 @@ public class AcquisitionWizard {
 		JButton save = new JButton("Save");
 		
 		JLabel wait = new JLabel("Waiting (s)");
-		
 		waitfield = new JTextField(String.valueOf(waitingtime));
+		
+		JLabel pos = new JLabel("Pos number");
+		numposfield = new JTextField(String.valueOf(numpos));
 		
 		add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -140,7 +143,7 @@ public class AcquisitionWizard {
 		c.gridy = 3;
 		c.gridwidth = 1;
 		pane.add(Box.createHorizontalStrut(10), c);	
-		
+
 		c.gridx = 1;
 		c.gridy = 5;
 		pane.add(wait, c);	
@@ -149,6 +152,15 @@ public class AcquisitionWizard {
 		c.gridy = 5;
 		c.gridwidth = 2;
 		pane.add(waitfield, c);	
+
+		c.gridx = 1;
+		c.gridy = 6;
+		pane.add(pos, c);	
+		
+		c.gridx = 2;
+		c.gridy = 6;
+		c.gridwidth = 2;
+		pane.add(numposfield, c);	
 		
 		c.gridx = 1;
 		c.gridy = 8;
@@ -242,7 +254,7 @@ public class AcquisitionWizard {
     }
     	
     protected void saveAcqList() {
-		owner_.setExperiment(new Experiment(getWaitingTime(),getAcquisitionList()));
+		owner_.setExperiment(new Experiment(getWaitingTime(), getNumberPositions(),getAcquisitionList()));
 		shutDown();		
 	}
     
@@ -251,7 +263,15 @@ public class AcquisitionWizard {
 		if(utils.isInteger(s)){
 			return Integer.parseInt(s); 
 		}
-		return 5000;
+		return 3000;
+	}  
+	
+	private int getNumberPositions() {
+		String s = numposfield.getText();
+		if(utils.isInteger(s)){
+			return Integer.parseInt(s); 
+		}
+		return 0;
 	}
 	
 	private ArrayList<Acquisition> getAcquisitionList() {

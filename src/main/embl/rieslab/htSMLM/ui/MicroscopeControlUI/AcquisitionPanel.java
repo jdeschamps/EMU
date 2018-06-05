@@ -104,7 +104,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		ready_ = false;
 		
 		// set dummy experiment
-		exp_ = new Experiment(0,new ArrayList<Acquisition>());
+		exp_ = new Experiment(3,0,new ArrayList<Acquisition>());
 		
 		owner_ = owner;
 		owner_.addComponentListener(new ComponentAdapter() {
@@ -342,7 +342,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	@Override
 	public void setExperiment(Experiment exp){
 		if(exp.getAcquisitionList() == null){
-			exp_ = new Experiment(0,new ArrayList<Acquisition>());
+			exp_ = new Experiment(3,0,new ArrayList<Acquisition>());
 			return;
 		}
 		
@@ -590,7 +590,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	public Integer[] retrieveAllParameters() {
-		Integer[] i = {exp_.getPauseTime()};
+		Integer[] i = {exp_.getPauseTime(), exp_.getNumberPositions()};
 		return i;
 	}
 
