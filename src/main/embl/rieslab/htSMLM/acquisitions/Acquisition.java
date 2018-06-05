@@ -33,7 +33,7 @@ public abstract class Acquisition {
 		expname_ = "";
 		
 		exposure_ = exposure;
-		waitingtime_ = 0;
+		waitingtime_ = 3;
 		intervalMs_ = 0;
 		numFrames_ = 1;
 		

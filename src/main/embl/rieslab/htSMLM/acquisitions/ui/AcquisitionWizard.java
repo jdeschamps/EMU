@@ -44,7 +44,7 @@ public class AcquisitionWizard {
 	}
 
 	public void startWizard(){
-		setUpFrame(5);
+		setUpFrame(3);
 	}	
 	
 	public void startWizard(Experiment exp){
