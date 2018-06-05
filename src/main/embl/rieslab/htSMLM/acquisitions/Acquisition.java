@@ -7,6 +7,7 @@ import javax.swing.JPanel;
 
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.htSMLM.util.StringSorting;
+import main.embl.rieslab.htSMLM.util.utils;
 
 import org.micromanager.api.SequenceSettings;
 
@@ -48,7 +49,7 @@ public abstract class Acquisition {
 	public void setSlices(double zstart, double zend, double zstep){
 		slices_ = new ArrayList<Double>();
 		for(double z=zstart;z<=zend;z=z+zstep){
-			slices_.add(z);
+			slices_.add(utils.round(z,2));
 		}	
 	}
 	
