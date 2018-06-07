@@ -16,6 +16,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 
 import javax.swing.BorderFactory;
@@ -51,7 +52,6 @@ import main.embl.rieslab.htSMLM.threads.TaskHolder;
 import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
-import main.embl.rieslab.htSMLM.util.StringSorting;
 
 public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Integer>, AcquisitionUI{
 
@@ -529,7 +529,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    	j++;
 	    	    }
 	    	    
-	    	    propval = StringSorting.sort(propval);
+	    	    Arrays.sort(propval);
 	    	    for(j=0;j<propval.length;j++){
 	   	    		setting = new DefaultMutableTreeNode(propval[j]);
 	   	    		expnode.add(setting);

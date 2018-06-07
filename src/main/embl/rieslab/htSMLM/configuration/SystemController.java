@@ -2,6 +2,7 @@ package main.embl.rieslab.htSMLM.configuration;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -22,7 +23,6 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyPair;
 import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
-import main.embl.rieslab.htSMLM.util.StringSorting;
 import mmcorej.CMMCore;
 
 public class SystemController {
@@ -316,8 +316,8 @@ public class SystemController {
 	
 	public String[] getMMConfigGroups(){
 		String[] groups = configgroups_.getConfigurationGroups().keySet().toArray(new String[0]);
-		
-		return StringSorting.sort(groups);
+		Arrays.sort(groups);
+		return groups;
 	}	
 	
 	public ConfigurationGroup getMMConfigGroup(String groupname){

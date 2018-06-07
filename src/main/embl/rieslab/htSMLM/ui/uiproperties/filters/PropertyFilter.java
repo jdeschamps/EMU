@@ -1,10 +1,10 @@
 package main.embl.rieslab.htSMLM.ui.uiproperties.filters;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
-import main.embl.rieslab.htSMLM.util.StringSorting;
 
 public abstract class PropertyFilter {
 	
@@ -58,8 +58,9 @@ public abstract class PropertyFilter {
 		}
 		
 		String[] stringprop = filteredproperties.keySet().toArray(new String[0]);
+		Arrays.sort(stringprop);
 		
-		return StringSorting.sort(stringprop);
+		return stringprop;
 	}
 	
 	public HashMap<String, UIProperty> filteredProperties(HashMap<String, UIProperty> properties){

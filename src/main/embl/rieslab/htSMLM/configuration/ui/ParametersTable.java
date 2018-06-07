@@ -3,6 +3,7 @@ package main.embl.rieslab.htSMLM.configuration.ui;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,7 +27,6 @@ import main.embl.rieslab.htSMLM.ui.uiparameters.UIParameterType;
 import main.embl.rieslab.htSMLM.ui.uiparameters.UIPropertyParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.util.ColorRepository;
-import main.embl.rieslab.htSMLM.util.StringSorting;
 import main.embl.rieslab.htSMLM.util.utils;
 
 public class ParametersTable extends JPanel{
@@ -65,7 +65,8 @@ public class ParametersTable extends JPanel{
 		// Extract uiparameters names
 		uiparamkeys_ = new String[uiparameterSet_.size()];
 		String[] temp = new String[uiparameterSet_.size()]; 
-		uiparamkeys_ = StringSorting.sort(uiparameterSet_.keySet().toArray(temp));
+		uiparamkeys_ = uiparameterSet_.keySet().toArray(temp);
+		Arrays.sort(uiparamkeys_);
 		
 		// Define table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"UI parameter", "Value" }, 0);
@@ -104,7 +105,8 @@ public class ParametersTable extends JPanel{
 		// Extract uiparameters names
 		uiparamkeys_ = new String[uiparameterSet_.size()];
 		String[] temp = new String[uiparameterSet_.size()]; 
-		uiparamkeys_ = StringSorting.sort(uiparameterSet_.keySet().toArray(temp));
+		uiparamkeys_ = uiparameterSet_.keySet().toArray(temp);
+		Arrays.sort(uiparamkeys_);
 		
 		// Define table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"UI parameter", "Value" }, 0);
@@ -217,7 +219,9 @@ public class ParametersTable extends JPanel{
 				props.add(s);
 			}
 		}
-		String[] stot = StringSorting.sort(props.toArray(new String[0]));
+		String[] stot = props.toArray(new String[0]);
+		Arrays.sort(stot);
+		
 		String[] sfin = new String[stot.length+1];
 		sfin[0] = UIPropertyParameter.NO_PROPERTY;
 		for(int i=0;i<stot.length;i++){

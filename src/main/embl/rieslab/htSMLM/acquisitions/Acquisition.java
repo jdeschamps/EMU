@@ -1,12 +1,12 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
 
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
-import main.embl.rieslab.htSMLM.util.StringSorting;
 import main.embl.rieslab.htSMLM.util.utils;
 
 import org.micromanager.api.SequenceSettings;
@@ -164,7 +164,9 @@ public abstract class Acquisition {
 	public String[] getConfigGroupList(){
 		int size = configgroups_.size();
 		String[] s = new String[size+1];
-		String[] temp = StringSorting.sort(configgroups_.keySet().toArray(new String[0]));
+		String[] temp = configgroups_.keySet().toArray(new String[0]);
+		Arrays.sort(temp);
+		
 		s[0] = EMPTY[0];
 		for(int i=0;i<size;i++){
 			s[i+1] = temp[i];
@@ -177,7 +179,10 @@ public abstract class Acquisition {
 			return EMPTY;
 		}
 		
-		return StringSorting.sort(configgroups_.get(group));
+		String[] array = configgroups_.get(group).clone();
+		Arrays.sort(array);
+		
+		return array;
 	}
 	
 	public abstract void preAcquisition();

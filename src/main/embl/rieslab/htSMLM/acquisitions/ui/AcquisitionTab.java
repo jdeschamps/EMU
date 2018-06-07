@@ -289,7 +289,7 @@ public class AcquisitionTab extends JPanel {
 
 		// lasers
 		filt = new FlagPropertyFilter(PropertyFlag.LASER);
-		temp = filt.filterStringProperties(props);
+		temp = filt.filterStringProperties(props);		
 		props = filt.filteredProperties(props);
 		
 		if(temp.length>0){

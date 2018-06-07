@@ -3,6 +3,7 @@ package main.embl.rieslab.htSMLM.configuration.ui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.DefaultCellEditor;
@@ -23,7 +24,6 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
-import main.embl.rieslab.htSMLM.util.StringSorting;
 
 
 public class PropertiesTable extends JPanel {
@@ -57,7 +57,9 @@ public class PropertiesTable extends JPanel {
 
 		// Combobox holding the devices name sorted alphabetically
 		devices = new JComboBox();
-		String[] strarray = StringSorting.sort(mmproperties_.getDevicesList());
+		String[] strarray = mmproperties_.getDevicesList().clone();
+		Arrays.sort(strarray);
+		
 		devices.addItem(Configuration.KEY_UNALLOCATED);
 		for (int k = 0; k < strarray.length; k++) {
 			devices.addItem(strarray[k]);
@@ -65,7 +67,8 @@ public class PropertiesTable extends JPanel {
 
 		// Extracts uiproperties name from the UI map and sort them alphabetically
 		String[] temp = new String[uipropertySet_.size()];
-		uipropkeys_ = StringSorting.sort(uipropertySet_.keySet().toArray(temp));
+		uipropkeys_ = uipropertySet_.keySet().toArray(temp);
+		Arrays.sort(uipropkeys_);
 
 		// Defines table model
 		DefaultTableModel model = getDefaultModel();
@@ -117,7 +120,9 @@ public class PropertiesTable extends JPanel {
 
 		// ComboBox holding the devices name sorted alphabetically
 		devices = new JComboBox();
-		String[] strarray = StringSorting.sort(mmproperties_.getDevicesList());
+		String[] strarray = mmproperties_.getDevicesList().clone();
+		Arrays.sort(strarray);
+		
 		devices.addItem(Configuration.KEY_UNALLOCATED);
 		for (int k = 0; k < strarray.length; k++) {
 			devices.addItem(strarray[k]);
@@ -125,7 +130,8 @@ public class PropertiesTable extends JPanel {
 
 		// Extracts UIProperties name from the UI map and sort them alphabetically
 		String[] temp = new String[uipropertySet_.size()];
-		uipropkeys_ = StringSorting.sort(uipropertySet_.keySet().toArray(temp));
+		uipropkeys_ = uipropertySet_.keySet().toArray(temp);
+		Arrays.sort(uipropkeys_);
 
 		// Defines table model
 		DefaultTableModel model = getDefaultModel();

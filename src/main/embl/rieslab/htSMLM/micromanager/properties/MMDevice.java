@@ -1,9 +1,8 @@
 package main.embl.rieslab.htSMLM.micromanager.properties;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-
-import main.embl.rieslab.htSMLM.util.StringSorting;
 
 public class MMDevice {
 
@@ -54,9 +53,9 @@ public class MMDevice {
 	}
 
 	public String[] getPropertiesHash(){
-		String[] str = new String[properties_.size()];
-		String[] sorted = StringSorting.sort(properties_.keySet().toArray(str)); 
-		return sorted;
+		String[] str = properties_.keySet().toArray(new String[properties_.size()]); 
+		Arrays.sort(str);
+		return str;
 	}
 	
 	public String[] getPropertiesFriendlyName(){
@@ -70,8 +69,8 @@ public class MMDevice {
 			count ++;
 		}
 		
-		String[] sorted = StringSorting.sort(str); 
-		return sorted;
+		Arrays.sort(str); 
+		return str;
 	}
 	
 }

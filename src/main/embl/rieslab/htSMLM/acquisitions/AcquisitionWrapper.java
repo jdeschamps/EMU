@@ -1,8 +1,7 @@
 package main.embl.rieslab.htSMLM.acquisitions;
 
+import java.util.Arrays;
 import java.util.HashMap;
-
-import main.embl.rieslab.htSMLM.util.StringSorting;
 
 public class AcquisitionWrapper {
 
@@ -26,7 +25,8 @@ public class AcquisitionWrapper {
         waitingTime= acq.getWaitingTime();
         
         HashMap<String,String> prop = acq.getPropertyValues();
-        String[] propkeys = StringSorting.sort(prop.keySet().toArray(new String[0]));
+        String[] propkeys = prop.keySet().toArray(new String[0]);
+        Arrays.sort(propkeys);
         props = new String[propkeys.length][2];
        	for(int j=0;j<propkeys.length;j++){
           	props[j][0] = propkeys[j];
