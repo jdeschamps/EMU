@@ -22,6 +22,7 @@ import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.components.LogarithmicJSlider;
 import main.embl.rieslab.htSMLM.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
@@ -46,7 +47,8 @@ public class LaserPulsingPanel extends PropertyPanel {
 	
 	//////// Parameters
 	public final static String PARAM_TITLE = "Name";
-	public final static String PARAM_COLOR = "Color";	
+	public final static String PARAM_COLOR = "Color";
+	public final static String PARAM_DEFAULT_MAX = "Default max pulse";	
 	private String title_;	
 	private Color color_;
 	
@@ -226,6 +228,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
 		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Default value for large z stage step.",color_));
+		addUIParameter(new IntUIParameter(this, PARAM_DEFAULT_MAX,"Default maximum value for pulse length.",maxpulse_));
 	}
 
 
@@ -277,6 +280,16 @@ public class LaserPulsingPanel extends PropertyPanel {
 			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
 			border_.setTitleColor(color_);
 			this.repaint();
+		} else if(label.equals(PARAM_DEFAULT_MAX)){
+			maxpulse_ = ((IntUIParameter) getUIParameter(PARAM_DEFAULT_MAX)).getValue();
+			logslider_.setMaxWithin(maxpulse_);
+			if (logslider_.getValue() > logslider_.getMaxWithin()) {
+				logslider_.setValueWithin(logslider_.getMaxWithin());
+				textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
+				changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
+			}
+			textfieldmax_.setText(String.valueOf(maxpulse_));
+			changeMaxPulseProperty(maxpulse_);
 		}
 	}
 
