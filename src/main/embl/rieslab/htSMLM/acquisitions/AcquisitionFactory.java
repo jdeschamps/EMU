@@ -146,7 +146,7 @@ public class AcquisitionFactory {
 		} else {
 			if(utils.isInteger(newname.substring(ind+1))){
 				int num = Integer.valueOf(newname.substring(ind+1))+1;
-				newname = newname.substring(0, ind)+String.valueOf(num)+"."+SystemConstants.ACQ_EXT;
+				newname = newname.substring(0, ind+1)+String.valueOf(num)+"."+SystemConstants.ACQ_EXT;
 			} else {
 				newname = newname+"_1."+SystemConstants.ACQ_EXT;
 			}
