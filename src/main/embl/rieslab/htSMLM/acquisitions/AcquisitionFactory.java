@@ -104,7 +104,7 @@ public class AcquisitionFactory {
 		
 		boolean fileExists = true;
 		while(fileExists){
-			File f = new File(path);
+			File f = new File(name);
 			if(f.exists()) { 
 			    name = incrementAcquisitionFileName(name);
 			} else {
