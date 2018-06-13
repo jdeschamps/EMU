@@ -674,6 +674,7 @@ public class AcquisitionTab extends JPanel {
 				Component[] subcomps = ((JPanel) comps[i]).getComponents();
 				for(int j=0;j<subcomps.length;j++){	// loop over all their subcomponents
 					if(subcomps[j] instanceof JTable){	// if find a JTable
+						if (((JTable) subcomps[j]).isEditing()) ((JTable) subcomps[j]).getCellEditor().stopCellEditing();
 						TableModel model = ((JTable) subcomps[j]).getModel();
 						int nrow = model.getRowCount(); 
 						for(int k=0;k<nrow;k++){	// loop through the rows
@@ -692,6 +693,7 @@ public class AcquisitionTab extends JPanel {
 						Component[] subsubcomps = ((JPanel) subcomps[j]).getComponents();
 						for(int l=0;l<subsubcomps.length;l++){	// loop over all their subcomponents
 							if(subsubcomps[l] instanceof JTable){	// if find a JTable
+								if (((JTable) subsubcomps[l]).isEditing()) ((JTable) subsubcomps[l]).getCellEditor().stopCellEditing();
 								TableModel model = ((JTable) subsubcomps[l]).getModel();
 								int nrow = model.getRowCount(); 
 								for(int k=0;k<nrow;k++){	// loop through the rows
