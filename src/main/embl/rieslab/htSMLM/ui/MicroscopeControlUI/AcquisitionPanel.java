@@ -502,11 +502,16 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	String s;
 	    	String[] propval, specificsettings;
 
-    	    expnode = new DefaultMutableTreeNode("Pause between acquisitions (s) "+exp_.getPauseTime());
+    	    expnode = new DefaultMutableTreeNode("Pause between acquisitions (s): "+exp_.getPauseTime());
             top.add(expnode);
             
-    	    expnode = new DefaultMutableTreeNode("Number of positions "+exp_.getNumberPositions());
-            top.add(expnode);
+            if(exp_.getNumberPositions() > 0){
+            	expnode = new DefaultMutableTreeNode("Number of positions: "+exp_.getNumberPositions());
+            	top.add(expnode);
+            } else {
+            	expnode = new DefaultMutableTreeNode("Number of positions: all");
+            	top.add(expnode);
+            }
 	    	
 	    	ArrayList<Acquisition> acqlist = exp_.getAcquisitionList();
 	    	for(int i=0;i<acqlist.size();i++){
