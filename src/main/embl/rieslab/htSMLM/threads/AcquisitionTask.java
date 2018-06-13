@@ -134,7 +134,7 @@ public class AcquisitionTask implements Task<Integer>{
 							core_.setXYPosition(xystage, currPos.getX(),currPos.getY());
 	
 							// let time for the stage to move to position
-							Thread.sleep(param[0]);
+							Thread.sleep(param[0]*1000);
 	
 							// perform each acquisition sequentially
 							for (int k = 0; k < acqlist_.size(); k++) {
@@ -158,7 +158,7 @@ public class AcquisitionTask implements Task<Integer>{
 								acq.preAcquisition();
 	
 								// let time for the system to adjust
-								Thread.sleep(acq.getWaitingTime());
+								Thread.sleep(acq.getWaitingTime()*1000);
 	
 								// run acquisition
 								Thread t = new Thread() {
