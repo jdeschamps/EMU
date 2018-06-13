@@ -136,9 +136,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
             
             @Override
             public void windowIconified(WindowEvent e) {
-            	System.out.println("FrameChange");
             	if ((owner_.getExtendedState() & Frame.ICONIFIED) != 0) {
-                    System.out.println("Frame was minimized");
 					if (summaryframe_ != null) {
 						summaryframe_.setAlwaysOnTop(false);
 						summaryframe_.toBack();

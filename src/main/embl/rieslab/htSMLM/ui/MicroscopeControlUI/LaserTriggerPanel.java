@@ -84,6 +84,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 		/////////////////////////////////////////////////////// behaviour combobox
 		combobehaviour_ = new JComboBox(SystemConstants.FPGA_BEHAVIOURS);
+		combobehaviour_.setMinimumSize(new Dimension(40,10));
 		combobehaviour_.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		String val= String.valueOf(combobehaviour_.getSelectedIndex());

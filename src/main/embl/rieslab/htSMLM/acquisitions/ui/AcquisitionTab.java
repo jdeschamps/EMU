@@ -7,6 +7,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -202,12 +203,72 @@ public class AcquisitionTab extends JPanel {
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
+		///////////////////////////////////////////////////////////////// This works on the assumption that all lasers are called "Laser #"
 		if(temp.length>0){
-		    JPanel lasertab = createTable(temp,false);
+			
+			// fine laser number of the first file
+			int ind = 0;
+			for(int i=0;i<temp[0].length()-1;i++){
+				if(Character.isDigit(temp[0].charAt(i)) && Character.isDigit(temp[0].charAt(i+1))){
+					ind = Integer.valueOf(temp[0].substring(i, i+1));
+					break;
+				} else if(Character.isDigit(temp[0].charAt(i))){
+					ind = Integer.valueOf(temp[0].substring(i, i+1));
+					break;
+				}
+			}
+			
+			JPanel lasertab = new JPanel();
 		    lasertab.setBorder(BorderFactory.createTitledBorder(null, "Lasers", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+		    lasertab.setLayout(new BoxLayout(lasertab, BoxLayout.PAGE_AXIS));
 			((TitledBorder) lasertab.getBorder()).setTitleFont(((TitledBorder) lasertab.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
-			pane.add(lasertab);
+		    
+			ArrayList<String> templaser = new ArrayList<String>();
+			templaser.add(temp[0]);
 
+			for(int j=1; j<temp.length;j++){
+				int ind2 = 0;
+				
+				for(int i=0;i<temp[j].length()-1;i++){
+					if(Character.isDigit(temp[j].charAt(i)) && Character.isDigit(temp[j].charAt(i+1))){
+						ind2 = Integer.valueOf(temp[j].substring(i, i+1));
+						break;
+					} else if(Character.isDigit(temp[j].charAt(i))){
+						ind2 = Integer.valueOf(temp[j].substring(i, i+1));
+						break;
+					}
+				}
+
+				if(ind2 == ind && j < temp.length-1){
+					templaser.add(temp[j]);
+				} else if(ind2 == ind && j == temp.length-1){
+					// create a jpanel
+					templaser.add(temp[j]);
+				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false);
+				    lasertab.add(subpanel);
+				}else if(ind2 != ind && j == temp.length-1){
+					// create a jpanel
+				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false);
+				    lasertab.add(subpanel);
+				    
+				    templaser = new ArrayList<String>();
+					templaser.add(temp[j]);
+					
+					subpanel = createTable(templaser.toArray(new String[0]),false);
+				    lasertab.add(subpanel);
+				} else {
+					ind = ind2;
+					
+					// create a jpanel
+				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false);
+				    lasertab.add(subpanel);
+				    
+				    templaser = new ArrayList<String>();
+					templaser.add(temp[j]);
+				}
+			}
+			
+			pane.add(lasertab);
 			pane.add(Box.createVerticalStrut(10));
 		}
 
@@ -292,12 +353,72 @@ public class AcquisitionTab extends JPanel {
 		temp = filt.filterStringProperties(props);		
 		props = filt.filteredProperties(props);
 		
+		///////////////////////////////////////////////////////////////// This works on the assumption that all lasers are called "Laser #"
 		if(temp.length>0){
-		    JPanel lasertab = createTable(temp,false,propertyValues);
+			
+			// fine laser number of the first file
+			int ind = 0;
+			for(int i=0;i<temp[0].length()-1;i++){
+				if(Character.isDigit(temp[0].charAt(i)) && Character.isDigit(temp[0].charAt(i+1))){
+					ind = Integer.valueOf(temp[0].substring(i, i+1));
+					break;
+				} else if(Character.isDigit(temp[0].charAt(i))){
+					ind = Integer.valueOf(temp[0].substring(i, i+1));
+					break;
+				}
+			}
+			
+			JPanel lasertab = new JPanel();
 		    lasertab.setBorder(BorderFactory.createTitledBorder(null, "Lasers", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+		    lasertab.setLayout(new BoxLayout(lasertab, BoxLayout.PAGE_AXIS));
 			((TitledBorder) lasertab.getBorder()).setTitleFont(((TitledBorder) lasertab.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
-			pane.add(lasertab);
+		    
+			ArrayList<String> templaser = new ArrayList<String>();
+			templaser.add(temp[0]);
 
+			for(int j=1; j<temp.length;j++){
+				int ind2 = 0;
+				
+				for(int i=0;i<temp[j].length()-1;i++){
+					if(Character.isDigit(temp[j].charAt(i)) && Character.isDigit(temp[j].charAt(i+1))){
+						ind2 = Integer.valueOf(temp[j].substring(i, i+1));
+						break;
+					} else if(Character.isDigit(temp[j].charAt(i))){
+						ind2 = Integer.valueOf(temp[j].substring(i, i+1));
+						break;
+					}
+				}
+
+				if(ind2 == ind && j < temp.length-1){
+					templaser.add(temp[j]);
+				} else if(ind2 == ind && j == temp.length-1){
+					// create a jpanel
+					templaser.add(temp[j]);
+				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false,propertyValues);
+				    lasertab.add(subpanel);
+				}else if(ind2 != ind && j == temp.length-1){
+					// create a jpanel
+				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false,propertyValues);
+				    lasertab.add(subpanel);
+				    
+				    templaser = new ArrayList<String>();
+					templaser.add(temp[j]);
+					
+					subpanel = createTable(templaser.toArray(new String[0]),false,propertyValues);
+				    lasertab.add(subpanel);
+				} else {
+					ind = ind2;
+					
+					// create a jpanel
+				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false,propertyValues);
+				    lasertab.add(subpanel);
+				    
+				    templaser = new ArrayList<String>();
+					templaser.add(temp[j]);
+				}
+			}
+			
+			pane.add(lasertab);
 			pane.add(Box.createVerticalStrut(10));
 		}
 
@@ -558,11 +679,34 @@ public class AcquisitionTab extends JPanel {
 						for(int k=0;k<nrow;k++){	// loop through the rows
 							if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
 								props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), (String) model.getValueAt(k, 1)); 
+								System.out.println(propsfriendlyname_.get((String) model.getValueAt(k, 0))+" and "+(String) model.getValueAt(k, 1));
 							} else {
 								if((Boolean) model.getValueAt(k, 1)){
 									props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOnStateName()); 
 								} else {
 									props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOffStateName());
+								}
+							}
+						}
+					} else if(subcomps[j] instanceof JPanel){
+						Component[] subsubcomps = ((JPanel) subcomps[j]).getComponents();
+						for(int l=0;l<subsubcomps.length;l++){	// loop over all their subcomponents
+							if(subsubcomps[l] instanceof JTable){	// if find a JTable
+								TableModel model = ((JTable) subsubcomps[l]).getModel();
+								int nrow = model.getRowCount(); 
+								for(int k=0;k<nrow;k++){	// loop through the rows
+									if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
+										props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), (String) model.getValueAt(k, 1)); 
+										System.out.println(propsfriendlyname_.get((String) model.getValueAt(k, 0))+" and "+(String) model.getValueAt(k, 1));
+									} else {
+										if((Boolean) model.getValueAt(k, 1)){
+											System.out.println(propsfriendlyname_.get((String) model.getValueAt(k, 0))+" and "+TwoStateUIProperty.getOnStateName());
+											props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOnStateName()); 
+										} else {
+											System.out.println(propsfriendlyname_.get((String) model.getValueAt(k, 0))+" and "+TwoStateUIProperty.getOffStateName());
+											props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOffStateName());
+										}
+									}
 								}
 							}
 						}
