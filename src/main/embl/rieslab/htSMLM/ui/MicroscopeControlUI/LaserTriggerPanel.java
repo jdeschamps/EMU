@@ -84,7 +84,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 		/////////////////////////////////////////////////////// behaviour combobox
 		combobehaviour_ = new JComboBox(SystemConstants.FPGA_BEHAVIOURS);
-		combobehaviour_.setMinimumSize(new Dimension(40,10));
+		//combobehaviour_.setMinimumSize(new Dimension(40,10));
 		combobehaviour_.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		String val= String.valueOf(combobehaviour_.getSelectedIndex());
@@ -92,22 +92,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 	    	}
         });
 
-		/////////////////////////////////////////////////////// use sequence checkbox
-		/*usesequence_ = new JCheckBox();
-		usesequence_.addItemListener(new ItemListener(){
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange()==ItemEvent.SELECTED){
-					useseq_ = true;
-				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					useseq_ = false;
-				}
-			}
-        });*/
-
 		/////////////////////////////////////////////////////// pulse length
 		textfieldpulselength_ = new JTextField();
-		textfieldpulselength_.setPreferredSize(new Dimension(60,20));
+		//textfieldpulselength_.setPreferredSize(new Dimension(60,20));
 		textfieldpulselength_.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {	
 				String s = textfieldpulselength_.getText();
@@ -153,7 +140,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 		/////////////////////////////////////////////////////// sequence
 		textfieldsequence_ = new JTextField();
-		textfieldsequence_.setPreferredSize(new Dimension(105,20));
+		//textfieldsequence_.setPreferredSize(new Dimension(105,20));
 		textfieldsequence_.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {	
 				String s = textfieldsequence_.getText();
@@ -212,19 +199,18 @@ public class LaserTriggerPanel extends PropertyPanel {
 		this.add(sliderpulse_,c);
 		
 		c.gridy = 3;
-		c.gridwidth = 3;
-		c.fill = GridBagConstraints.NONE;		
+		c.gridwidth = 3;	
 		this.add(labelsequence_,c);
 
 		c.gridx = 3;
 		c.gridy = 0;
+		c.weightx = 1;
 		this.add(combobehaviour_,c);
 
 		c.gridy = 1;
 		this.add(textfieldpulselength_,c);
 
 		c.gridy = 3;
-		c.fill = GridBagConstraints.HORIZONTAL;
 		this.add(textfieldsequence_,c);
 
 	}
