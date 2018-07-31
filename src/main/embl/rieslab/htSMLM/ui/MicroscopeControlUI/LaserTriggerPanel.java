@@ -1,7 +1,6 @@
 package main.embl.rieslab.htSMLM.ui.MicroscopeControlUI;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;

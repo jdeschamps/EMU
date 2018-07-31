@@ -44,11 +44,15 @@ public class UIProperty {
 		owner_.triggerPropertyHasChanged(name_,value);
 	}
 	
-	public String getPropertyValue(){
+	public String getMMPropertyValue(){
 		if(allocated_){
 			return mmproperty_.getStringValue();
 		}
 		return "0";
+	}
+	
+	public String getPropertyValue(){
+		return getMMPropertyValue();
 	}
 	
 	public void setPropertyValue(String val){

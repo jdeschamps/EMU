@@ -23,6 +23,7 @@ import main.embl.rieslab.htSMLM.ui.PropertyPanel;
 import main.embl.rieslab.htSMLM.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.IntUIParameter;
 import main.embl.rieslab.htSMLM.ui.uiparameters.StringUIParameter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
@@ -295,7 +296,7 @@ public class LaserControlPanel extends PropertyPanel {
 				}
 			}
 		} else if(name.equals(getLabel()+" "+LASER_OPERATION)){
-			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+			if(newvalue.equals(((TwoStateUIProperty) getUIProperty(getLabel()+" "+LASER_OPERATION)).getOnStateValue())){
 				togglebuttonOnOff_.setSelected(true);
 			} else {  
 				togglebuttonOnOff_.setSelected(false);
