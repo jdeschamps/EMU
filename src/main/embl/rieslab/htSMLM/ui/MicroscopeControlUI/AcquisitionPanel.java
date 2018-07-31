@@ -745,6 +745,9 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			jToggle_startstop.setSelected(false);
 			jToggle_startstop.setText("Start");
 			setStopText();
+			
+			// refresh all properties
+			controller_.refreshProperties();
 		}
 	}
 	
