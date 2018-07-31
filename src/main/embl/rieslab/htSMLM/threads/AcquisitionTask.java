@@ -266,5 +266,10 @@ public class AcquisitionTask implements Task<Integer>{
 			}
 		}
 	}
+
+	@Override
+	public void setSaveData(boolean savedata) {
+		// Ignore
+	}
 }
 

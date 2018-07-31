@@ -36,13 +36,16 @@ public class ActivationTask implements Task<Double> {
 	private TaskHolder<Double> holder_;
 	private int idletime_;
 	private AutomatedActivation worker_;
-	private boolean running_ = false;  
+	private boolean running_, saveData_;  
 	private Double[] output_;
 	private ImageProcessor ip_;
 	
 	private double previous_pulse_;
 	
 	public ActivationTask(TaskHolder<Double> holder, CMMCore core, int idle){
+		running_ = false;
+		saveData_ = false;
+		
 		core_ = core;
 		idletime_ = idle;
 		
@@ -268,5 +271,10 @@ public class ActivationTask implements Task<Double> {
 	@Override
 	public void resumeTask() {
 		// do nothing
+	}
+
+	@Override
+	public void setSaveData(boolean savedata) {
+		saveData_ = savedata;
 	}
 }

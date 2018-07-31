@@ -9,4 +9,5 @@ public interface Task<T> {
 	public boolean isPausable();
 	public void pauseTask();
 	public void resumeTask();
+	public void setSaveData(boolean savedata);
 }

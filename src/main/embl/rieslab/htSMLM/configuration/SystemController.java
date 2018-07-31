@@ -382,5 +382,11 @@ public class SystemController {
 	public HashMap<String, String[]> getConfigurationGroups(){
 		return configgroups_.getConfigurationChannelsMap();
 	}
+	
+	public void refreshProperties(){
+		if(mainframe_ != null){
+			mainframe_.updateAll();
+		}
+	}
 
 }
