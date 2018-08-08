@@ -85,7 +85,7 @@ public class ActivationTask implements Task<Double> {
 		idletime_ = idle;
 	}
 
-	private void getN(double sdcoeff, double cutoff, double dT,boolean autocutoff) {
+	private void getN(double sdcoeff, double cutoff, double dT, boolean autocutoff) {
 		
 		if (core_.isSequenceRunning() && core_.getBytesPerPixel() == 2) {
 			int width, height;

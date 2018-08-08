@@ -79,10 +79,11 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	private final static String PARAM_DEF_SD = "Default sd coeff";
 	private final static String PARAM_DEF_FB = "Default feedback";
 
-	//////// Conveniance variables
+	//////// Convenience variables
 	private boolean activate_, shownms_, autocutoff_;
 	private double sdcoeff_, feedback_, N0_ = 1, cutoff_ = 100;
-	private int npos_, idletime_, maxpulse_, dT_;
+	private int npos_, idletime_, maxpulse_;
+	private double dT_;
 	private ImagePlus im_;
 	private ImageProcessor ip_;
 	private int counternms_ = 0;
@@ -234,7 +235,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		c.gridy = 4;
 		pane.add(labeldT_,c);
 
-		dT_ = 1;
+		dT_ = 1.;
 		textfielddT_ = new JTextField(String.valueOf(dT_));
 		textfielddT_.addFocusListener(new FocusListener() {
 			@Override
@@ -242,11 +243,11 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 			@Override
 			public void focusLost(FocusEvent arg0) {
 				String typed = textfielddT_.getText();
-        	    if(!utils.isInteger(typed)) {
+        	    if(!utils.isNumeric(typed)) {
         	        return;
         	    } 
 				try {
-					int val = Integer.parseInt(typed);
+					double val = Double.parseDouble(typed);
 					if (val > 1) {
 						dT_ = val;
 					} else {
@@ -261,11 +262,11 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 			@Override
 			public void actionPerformed(ActionEvent ex) {
 				String typed = textfielddT_.getText();
-        	    if(!utils.isInteger(typed)) {
+        	    if(!utils.isNumeric(typed)) {
         	        return;
         	    } 
 				try {
-					int val = Integer.parseInt(typed);
+					double val = Double.parseDouble(typed);
 					if (val > 1) {
 						dT_ = val;
 					} else {
@@ -648,7 +649,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		params[ActivationTask.PARAM_ACTIVATE] = activate_ ? 1. : 0.; 
 		params[ActivationTask.PARAM_AUTOCUTOFF] = autocutoff_ ? 1. : 0.; 
 		params[ActivationTask.PARAM_CUTOFF] = cutoff_; 
-		params[ActivationTask.PARAM_dT] = (double) dT_; 
+		params[ActivationTask.PARAM_dT] = dT_; 
 		params[ActivationTask.PARAM_FEEDBACK] = feedback_; 
 		params[ActivationTask.PARAM_MAXPULSE] = (double) maxpulse_; // what to do for this? 
 		params[ActivationTask.PARAM_N0] = N0_; 
