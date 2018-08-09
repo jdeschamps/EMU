@@ -624,6 +624,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		
 		if(autocutoff_){
 			textfieldcutoff_.setText(String.valueOf(output[ActivationTask.OUTPUT_NEWCUTOFF]));
+			cutoff_ = output[ActivationTask.OUTPUT_NEWCUTOFF];
 		}
 		
 		if(shownms_ && counternms_ % 10 == 0){
