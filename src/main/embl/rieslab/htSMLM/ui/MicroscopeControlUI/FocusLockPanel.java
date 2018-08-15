@@ -86,6 +86,7 @@ public class FocusLockPanel  extends PropertyPanel {
 						double val = Double.parseDouble(typed);
 						if (val <= max_power && val >= 0) {
 							changeProperty(LASER_POWER,typed);
+							sliderPower_.setValue((int) val);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -107,6 +108,7 @@ public class FocusLockPanel  extends PropertyPanel {
 						double val = Double.parseDouble(typed);
 						if (val <= max_power && val >= 0) {
 							changeProperty(LASER_POWER,typed);
+							sliderPower_.setValue((int) val);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -130,7 +132,7 @@ public class FocusLockPanel  extends PropertyPanel {
 		sliderFinea_.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				if(sliderFinea_.getValue() < 100){
-					fineaperc_.setText("  "+String.valueOf(sliderFinea_.getValue())+" %");				
+					fineaperc_.setText(String.valueOf(sliderFinea_.getValue())+" %");				
 				} else {
 					fineaperc_.setText(String.valueOf(sliderFinea_.getValue())+" %");		
 				}
@@ -142,7 +144,7 @@ public class FocusLockPanel  extends PropertyPanel {
 		sliderFineb_.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {	
 				if(sliderFineb_.getValue() < 100){
-					finebperc_.setText("  "+String.valueOf(sliderFineb_.getValue())+" %");				
+					finebperc_.setText(String.valueOf(sliderFineb_.getValue())+" %");				
 				} else {
 					finebperc_.setText(String.valueOf(sliderFineb_.getValue())+" %");		
 				}				
@@ -200,40 +202,11 @@ public class FocusLockPanel  extends PropertyPanel {
 		finebperc_ = new JLabel("100 %");
 
 		// others
-		JLabel enableext = new JLabel("Enable ext");
-		JLabel enablelaser = new JLabel("Enable laser");
 		JLabel fineAperc = new JLabel("a");
 		JLabel finebperc = new JLabel("b");
 		JLabel power = new JLabel("Power (mW):");
 		
 		///////////////////////////////////////////////////////////////////////////// Channel 1
-		JPanel panel1 = new JPanel();
-		panel1.setLayout(new GridBagLayout());
-		TitledBorder border = BorderFactory.createTitledBorder(null, "Operation", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, 
-				null, ColorRepository.getColor(ColorRepository.strblack));
-		panel1.setBorder(border);
-		
-		// gridbad layout
-		GridBagConstraints c1 = new GridBagConstraints();
-		c1.gridx = 1;
-		c1.gridy = 0;
-		c1.ipadx = 5;
-		c1.ipady = 5;
-		c1.weightx = 0.2;
-		c1.weighty = 0.3;
-		c1.fill = GridBagConstraints.BOTH;
-		panel1.add(enablelaser, c1);
-
-		c1.gridx = 3;
-		panel1.add(enableext, c1);
-
-		c1.gridx = 1;
-		c1.gridy = 1;
-		panel1.add(togglebuttonLaser_, c1);
-
-		c1.gridx = 3;
-		panel1.add(togglesliderenableExt_, c1);
-
 		
 		JPanel panel2 = new JPanel();
 		panel2.setLayout(new GridBagLayout());
@@ -251,8 +224,12 @@ public class FocusLockPanel  extends PropertyPanel {
 		c2.fill = GridBagConstraints.BOTH;
 		panel2.add(power, c2);
 
-		c2.gridx = 3;
+		c2.gridx = 2;
 		panel2.add(textfieldUserPower_, c2);
+		
+
+		c2.gridx = 3;
+		panel2.add(togglebuttonLaser_, c2);
 
 		c2.gridx = 0;
 		c2.gridy = 4;
@@ -276,33 +253,33 @@ public class FocusLockPanel  extends PropertyPanel {
 		cfine.ipady = 2;
 		cfine.gridx = 0;
 		cfine.gridy = 0;
-		cfine.gridheight = 2;
 		panelfine.add(togglesliderenableFine_, cfine);
 
 		cfine.gridx = 1;
-		cfine.gridy = 0;
-		cfine.gridheight = 1;
+		cfine.gridy = 1;
 		cfine.ipadx = 5;
 		panelfine.add(fineAperc, cfine);
 		
-		cfine.gridy = 1;
+		cfine.gridy = 2;
 		panelfine.add(finebperc, cfine);
 		
 		cfine.gridx = 2;
-		cfine.gridy = 0;
+		cfine.gridy = 1;
 		cfine.ipadx = 4;
+		cfine.gridwidth = 3;
 		panelfine.add(sliderFinea_, cfine);
 		
-		cfine.gridy = 1;
+		cfine.gridy = 2;
 		panelfine.add(sliderFineb_, cfine);
 		
-		cfine.gridx = 3;
-		cfine.gridy = 0;
+		cfine.gridx = 5;
+		cfine.gridy = 1;
 		cfine.ipadx = 5;
+		cfine.gridwidth = 1;
 		cfine.insets = new Insets(2,35,2,2);
 		panelfine.add(fineaperc_, cfine);
 		
-		cfine.gridy = 1;
+		cfine.gridy = 2;
 		cfine.insets = new Insets(2,35,2,2);
 		panelfine.add(finebperc_, cfine);
 
@@ -310,23 +287,26 @@ public class FocusLockPanel  extends PropertyPanel {
 		//////////////////////////////////////////////////////////////////////////// Main panel
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.BOTH;
-		c.weightx = 1;
-		c.weighty = 1;
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.weightx = 0.4;
+		c.weighty = 0.2;
 		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 2;
 		c.gridheight = 1;
-		this.add(panel1,c);
-
-		c.gridy = 1;
 		this.add(panel2,c);
 		
 		c.gridx = 0;
-		c.gridy = 2;
+		c.gridy = 1;
 		c.gridheight = 1;
 		c.fill = GridBagConstraints.HORIZONTAL;
 		this.add(panelfine,c);
+		
+		c.gridx = 0;
+		c.gridy = 2;
+		c.weighty = 0.8;
+		c.fill = GridBagConstraints.BOTH;
+		this.add(new JPanel(),c);
 	}
 	
 	@Override
