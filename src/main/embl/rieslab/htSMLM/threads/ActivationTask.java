@@ -139,18 +139,8 @@ public class ActivationTask implements Task<Double> {
 
 				double newcutoff;
 				if (autocutoff) {
-					System.out.println("dT: "+dT);
-					System.out.println("Cutoff: "+cutoff);
-					System.out.println("Temp cutoff: "+tempcutoff);
-					double t = (1 - 1 / dT) * cutoff;
-					double p = tempcutoff / dT;
-					System.out.println("T: "+t);
-					System.out.println("P: "+p);
-					
 					newcutoff = (1 - 1 / dT) * cutoff + tempcutoff / dT;
-					System.out.println("New cutoff: "+newcutoff);
 					newcutoff = Math.floor(10 * newcutoff + 0.5) / 10;
-					System.out.println("New cutoff floored: "+newcutoff);
 				} else {
 					newcutoff = cutoff;
 					if (newcutoff == 0) {
