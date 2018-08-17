@@ -80,6 +80,8 @@ public class LaserPulsingPanel extends PropertyPanel {
 		///////////////////////////////////////////////////////////////////////// User max text field
 		textfieldmax_ = new JTextField("10000");
 		textfieldmax_.setPreferredSize(new Dimension(30,15));
+		textfieldmax_.setBackground(new Color(220,220,220));
+
 		c.fill = GridBagConstraints.BOTH;
 		c.gridy = 0;
 		c.ipady = 7;
@@ -87,42 +89,12 @@ public class LaserPulsingPanel extends PropertyPanel {
 		
 		textfieldmax_.addActionListener(new java.awt.event.ActionListener() {
 	         public void actionPerformed(java.awt.event.ActionEvent evt) {	
-	        	 String s = textfieldmax_.getText();
-					if (utils.isInteger(s)) {
-						int max = Integer.parseInt(s);
-						String str = getUIProperty(CAMERA_EXPOSURE).getPropertyValue();
-						
-						if (utils.isNumeric(str)) {
-							double exp = Double.parseDouble(str);
-
-							if (max > 1000 * exp) {
-								max = (int) Math.round(1000 * exp);
-							}
-						}
-
-						logslider_.setMaxWithin(max);
-						if (logslider_.getValue() > logslider_.getMaxWithin()) {
-							logslider_.setValueWithin(logslider_.getMaxWithin());
-							textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
-							changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
-						}
-						
-						changeMaxPulseProperty(max);
-					}
-	         }
-	    });
-		textfieldmax_.addFocusListener(new FocusListener() {
-          @Override
-          public void focusGained(FocusEvent ex) {
-          }
-
-			@Override
-			public void focusLost(FocusEvent ex) {
 				String s = textfieldmax_.getText();
 				if (utils.isInteger(s)) {
 					int max = Integer.parseInt(s);
-					String str = getUIProperty(CAMERA_EXPOSURE).getPropertyValue();
-					
+					String str = getUIProperty(CAMERA_EXPOSURE)
+							.getPropertyValue();
+
 					if (utils.isNumeric(str)) {
 						double exp = Double.parseDouble(str);
 
@@ -134,16 +106,51 @@ public class LaserPulsingPanel extends PropertyPanel {
 					logslider_.setMaxWithin(max);
 					if (logslider_.getValue() > logslider_.getMaxWithin()) {
 						logslider_.setValueWithin(logslider_.getMaxWithin());
-						textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
-						changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
+						textfieldvalue_.setText(String.valueOf(logslider_
+								.getValue()));
+						changeProperty(LASER_PULSE,
+								String.valueOf(logslider_.getValue()));
 					}
-					
+
+					changeMaxPulseProperty(max);
+				}
+			}
+		});
+		textfieldmax_.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent ex) {
+			}
+
+			@Override
+			public void focusLost(FocusEvent ex) {
+				String s = textfieldmax_.getText();
+				if (utils.isInteger(s)) {
+					int max = Integer.parseInt(s);
+					String str = getUIProperty(CAMERA_EXPOSURE)
+							.getPropertyValue();
+
+					if (utils.isNumeric(str)) {
+						double exp = Double.parseDouble(str);
+
+						if (max > 1000 * exp) {
+							max = (int) Math.round(1000 * exp);
+						}
+					}
+
+					logslider_.setMaxWithin(max);
+					if (logslider_.getValue() > logslider_.getMaxWithin()) {
+						logslider_.setValueWithin(logslider_.getMaxWithin());
+						textfieldvalue_.setText(String.valueOf(logslider_
+								.getValue()));
+						changeProperty(LASER_PULSE,
+								String.valueOf(logslider_.getValue()));
+					}
+
 					changeMaxPulseProperty(max);
 				}
 			}
 
 		});
-		
 		
 		///////////////////////////////////////////////////////////////////////// User value text field
 		textfieldvalue_ = new JTextField();

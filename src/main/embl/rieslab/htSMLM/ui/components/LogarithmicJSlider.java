@@ -64,6 +64,9 @@ public class LogarithmicJSlider extends JSlider {
 
     public void setMaxWithin(int max){
     	maxwithin = max;
+    	if(maxwithin > this.getMaximum()){
+    		this.setMaximum(maxwithin);
+    	}
     }
     
     public int getMaxWithin(){
