@@ -282,11 +282,11 @@ public class FocusPanel extends PropertyPanel {
 			public void focusGained(FocusEvent arg0) {}
 			@Override
 			public void focusLost(FocusEvent arg0) {
-        	    if(!utils.isNumeric(textfieldLargeStep_.getText())) {
+        	    if(!utils.isNumeric(textfieldSmallStep_.getText())) {
         	        return;
         	    } 
 				try {
-					largestep_ = Double.parseDouble(textfieldLargeStep_.getText());
+					smallstep_ = Double.parseDouble(textfieldSmallStep_.getText());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -295,11 +295,11 @@ public class FocusPanel extends PropertyPanel {
 		textfieldSmallStep_.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-        	    if(!utils.isNumeric(textfieldLargeStep_.getText())) {
+        	    if(!utils.isNumeric(textfieldSmallStep_.getText())) {
         	        return;
         	    } 
 				try {
-					largestep_ = Double.parseDouble(textfieldLargeStep_.getText());
+					smallstep_ = Double.parseDouble(textfieldSmallStep_.getText());
 				} catch (Exception ex) {
 					ex.printStackTrace();
 				}
