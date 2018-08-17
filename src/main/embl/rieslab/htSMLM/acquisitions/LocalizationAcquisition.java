@@ -133,7 +133,7 @@ public class LocalizationAcquisition extends Acquisition {
 		
 		channelname.getModel().setSelectedItem(this.getConfigName());		
 		
-		exposurespin = new JSpinner(new SpinnerNumberModel(this.getExposure(), 1, 10000000, 1));
+		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(this.getExposure(),1), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
 		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 1)); 
 		waitingspin.setName(LABEL_PAUSE);

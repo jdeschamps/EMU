@@ -35,6 +35,7 @@ import main.embl.rieslab.htSMLM.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.UIProperty;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.AllocatedPropertyFilter;
+import main.embl.rieslab.htSMLM.ui.uiproperties.filters.AntiFlagPropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.FlagPropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.htSMLM.ui.uiproperties.filters.ReadOnlyPropertyFilter;
@@ -273,7 +274,7 @@ public class AcquisitionTab extends JPanel {
 		}
 
 		// Two-state
-		filt = new TwoStatePropertyFilter();
+		filt = new TwoStatePropertyFilter(new AntiFlagPropertyFilter(PropertyFlag.FOCUSLOCK));
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
@@ -423,7 +424,7 @@ public class AcquisitionTab extends JPanel {
 		}
 
 		// Two-state
-		filt = new TwoStatePropertyFilter();
+		filt = new TwoStatePropertyFilter(new AntiFlagPropertyFilter(PropertyFlag.FOCUSLOCK));
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
