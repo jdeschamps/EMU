@@ -44,13 +44,11 @@ public class FocusLockPanel  extends PropertyPanel {
 	private JSlider sliderFineb_;
 	private JToggleButton togglebuttonLaser_;
 	private ToggleSlider togglesliderenableFine_;
-	private ToggleSlider togglesliderenableExt_;
 	private JLabel fineaperc_;
 	private JLabel finebperc_;
 
 	//////// Properties
 	public final static String LASER_OPERATION = "focus-lock laser operation";
-	public final static String LASER_ENABLEEXT = "enable ext trigger";	
 	public final static String LASER_ENABLEFINE = "enable fine";	
 	public final static String LASER_POWER = "laser power";	
 	public final static String LASER_PERCFINEA = "percentage fine a";	
@@ -185,19 +183,6 @@ public class FocusLockPanel  extends PropertyPanel {
 			}
         });
 
-		// Ext enable
-		togglesliderenableExt_ = new ToggleSlider();
-		togglesliderenableExt_.addItemListener(new ItemListener(){
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_ENABLEEXT,TwoStateUIProperty.getOnStateName());
-				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					changeProperty(LASER_ENABLEEXT,TwoStateUIProperty.getOffStateName());
-				}
-			}
-        });
-
 		fineaperc_ = new JLabel("100 %");
 		finebperc_ = new JLabel("100 %");
 
@@ -319,15 +304,13 @@ public class FocusLockPanel  extends PropertyPanel {
 		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_MAXPOWER,"iBeamSmart Maximum power (mW).", PropertyFlag.FOCUSLOCK));
 
 		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_OPERATION,"iBeamSmart On/Off operation property.", PropertyFlag.FOCUSLOCK));
-		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_ENABLEEXT,"iBeamSmart Enable property of external trigger.", PropertyFlag.FOCUSLOCK));
 		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_ENABLEFINE,"iBeamSmart Enable property of fine.", PropertyFlag.FOCUSLOCK));
 	}
 
 
 	@Override
 	protected void changeProperty(String name, String value) {
-		if(name.equals(LASER_OPERATION) || name.equals(LASER_ENABLEEXT)
-				 || name.equals(LASER_ENABLEFINE) || name.equals(LASER_POWER) || name.equals(LASER_PERCFINEA)
+		if(name.equals(LASER_OPERATION) || name.equals(LASER_ENABLEFINE) || name.equals(LASER_POWER) || name.equals(LASER_PERCFINEA)
 				 || name.equals(LASER_PERCFINEB)){
 			getUIProperty(getLabel()+" "+name).setPropertyValue(value);
 		}	
@@ -373,12 +356,6 @@ public class FocusLockPanel  extends PropertyPanel {
 				togglebuttonLaser_.setSelected(true);
 			} else {  
 				togglebuttonLaser_.setSelected(false);
-			}
-		} else if(name.equals(getLabel()+" "+LASER_ENABLEEXT)){
-			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
-				togglesliderenableExt_.setSelected(true);
-			} else {  
-				togglesliderenableExt_.setSelected(false);
 			}
 		} else if(name.equals(getLabel()+" "+LASER_ENABLEFINE)){
 			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
