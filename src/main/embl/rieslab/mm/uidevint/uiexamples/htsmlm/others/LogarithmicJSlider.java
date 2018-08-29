@@ -15,8 +15,25 @@ import javax.swing.plaf.SliderUI;
 import javax.swing.plaf.UIResource;
 import javax.swing.plaf.basic.BasicSliderUI;
 
+
 /*
- * LogarithmicJSlider.java is edited as JSlider API for vertical slider with Logarithmic features
+ * Copyright 2002-2004 Greg Hinkle
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * The original file has been modified to have "max within" and vertical slider
  */
 public class LogarithmicJSlider extends JSlider {
 
@@ -338,50 +355,6 @@ public class LogarithmicJSlider extends JSlider {
 
     }
 
-/*
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        frame.setSize(408, 408);
-
-        final JSlider slider = new LogarithmicJSlider(JSlider.VERTICAL,10,10000,1000);
-        final JLabel label = new JLabel();
-
-        slider.setPaintTicks(true);
-        slider.setPaintLabels(true);
-        slider.setMajorTickSpacing(10);
-        slider.setMinorTickSpacing(10);
-
-        slider.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                System.out.println("Value is now: " + slider.getValue());
-
-
-                label.setText("Current value is: " + slider.getValue());
-
-            }
-        });
-
-        frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-        frame.getContentPane().add(slider);
-        frame.getContentPane().add(label);
-        frame.setVisible(true);
-
-        
-        LogSliderUI ui = (LogSliderUI) slider.getUI();
-        if (slider.getOrientation() == JSlider.HORIZONTAL) {
-        for (int i = 10; i <= 10000; i *= 10) {
-            System.out.println("I: " + i + " xPos: " + ui.xPositionForValue(i) + " valueFor: " + ui.valueForXPosition(ui.xPositionForValue(i)));
-        }
-        }else{
-        	for (int i = 10; i <= 10000; i *= 10) {
-            System.out.println("I: " + i + " myyPos: " + ui.yPositionForValue(i) + " myvalueFor: " + ui.valueForYPosition(ui.yPositionForValue(i)));
-        }
-        	
-        }
-
-    }
-
-*/
     /**
      * Creates a hashtable holding the text labels for this slider. This implementation
      * uses the increment as a log-base.

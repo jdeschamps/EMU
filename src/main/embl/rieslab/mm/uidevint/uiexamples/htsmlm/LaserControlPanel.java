@@ -23,9 +23,9 @@ import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.IntUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.StringUIParameter;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.LaserFlag;
 import main.embl.rieslab.mm.uidevint.utils.utils;
 
 public class LaserControlPanel extends PropertyPanel {
@@ -246,8 +246,8 @@ public class LaserControlPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCENTAGE,"Power percentage of the laser.", PropertyFlag.LASER));
-		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_OPERATION,"Laser On/Off operation property.", PropertyFlag.LASER));
+		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCENTAGE,"Power percentage of the laser.", new LaserFlag()));
+		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_OPERATION,"Laser On/Off operation property.", new LaserFlag()));
 	}
 
 	@Override

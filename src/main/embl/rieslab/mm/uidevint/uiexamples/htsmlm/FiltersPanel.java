@@ -16,7 +16,7 @@ import javax.swing.border.TitledBorder;
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.FilterWheelFlag;
 import main.embl.rieslab.mm.uidevint.utils.ColorRepository;
 
 public class FiltersPanel extends PropertyPanel {
@@ -123,7 +123,7 @@ public class FiltersPanel extends PropertyPanel {
 	
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new MultiStateUIProperty(this, FW_POSITION,"Filter wheel position property.", PropertyFlag.FILTERWHEEL,NUM_POS));		
+		addUIProperty(new MultiStateUIProperty(this, FW_POSITION,"Filter wheel position property.", new FilterWheelFlag(),NUM_POS));		
 	}
 
 	@Override

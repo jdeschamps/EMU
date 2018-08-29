@@ -17,12 +17,12 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
 
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.filters.AntiFlagPropertyFilter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.filters.SinglePropertyFilter;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.LaserFlag;
 
 public class BrightFieldAcquisition extends Acquisition {
 		
@@ -171,7 +171,7 @@ public class BrightFieldAcquisition extends Acquisition {
 		if(bfprop_ == null){
 			return null;
 		}
-		return new SinglePropertyFilter(bfprop_.getName(), new AntiFlagPropertyFilter(PropertyFlag.LASER));
+		return new SinglePropertyFilter(bfprop_.getName(), new AntiFlagPropertyFilter(new LaserFlag()));
 	}
 
 	@Override

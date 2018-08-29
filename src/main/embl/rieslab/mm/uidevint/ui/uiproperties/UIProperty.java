@@ -2,6 +2,8 @@ package main.embl.rieslab.mm.uidevint.ui.uiproperties;
 
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperty;
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.flag.NoFlag;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.flag.PropertyFlag;
 
 @SuppressWarnings("rawtypes")
 public class UIProperty {
@@ -19,6 +21,13 @@ public class UIProperty {
 		this.name_ = name;
 		this.description_ = description;
 		this.flag_ = flag;
+	}	
+	
+	public UIProperty(PropertyPanel owner, String name, String description){
+		this.owner_ = owner;
+		this.name_ = name;
+		this.description_ = description;
+		this.flag_ = new NoFlag();
 	}
 	
 	public String getName(){
@@ -129,6 +138,6 @@ public class UIProperty {
 	}
 	
 	public String getFlag(){
-		return flag_.getDeviceType();
+		return flag_.getPropertyFlag();
 	}
 }

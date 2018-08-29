@@ -44,13 +44,14 @@ import main.embl.rieslab.mm.uidevint.tasks.Task;
 import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIPropertyParameter;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.flag.TwoStateFlag;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.acquisitions.Acquisition;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.acquisitions.Experiment;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.acquisitions.ui.AcquisitionUI;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.acquisitions.ui.AcquisitionWizard;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.constants.HTSMLMConstants;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.FocusStabFlag;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.tasks.AcquisitionTask;
 
 public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Integer>, AcquisitionUI{
@@ -773,9 +774,9 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		paramLocking_ = UIPropertyParameter.NO_PROPERTY;
 		paramBrightField_ = UIPropertyParameter.NO_PROPERTY;	
 		
-		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens.", PropertyFlag.TWOSTATE.getDeviceType()));
-		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.", PropertyFlag.FOCUSSTAB.getDeviceType())); 
-		addUIParameter(new UIPropertyParameter(this, PARAM_BRIGHTFIELD,"UIProperty corresponding to the triggering of the white light illumination.", PropertyFlag.TWOSTATE.getDeviceType())); 
+		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens.", TwoStateFlag.TWOSTATE_FLAG));
+		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.", FocusStabFlag.FOCUSSTAB_FLAG)); 
+		addUIParameter(new UIPropertyParameter(this, PARAM_BRIGHTFIELD,"UIProperty corresponding to the triggering of the white light illumination.", TwoStateFlag.TWOSTATE_FLAG)); 
 	}
 
 	@Override

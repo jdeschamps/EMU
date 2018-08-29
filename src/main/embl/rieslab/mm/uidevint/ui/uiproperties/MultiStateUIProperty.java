@@ -1,6 +1,7 @@
 package main.embl.rieslab.mm.uidevint.ui.uiproperties;
 
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.flag.PropertyFlag;
 
 public class MultiStateUIProperty extends UIProperty{
 
@@ -11,6 +12,17 @@ public class MultiStateUIProperty extends UIProperty{
 	
 	public MultiStateUIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag, int size) {
 		super(owner, name, description, flag);
+
+		states_ = new String[size];
+		statesname_ = new String[size];
+		for(int i=0;i<size;i++){
+			states_[i] = "";
+			statesname_[i] = "State"+i;
+		}
+	}	
+	
+	public MultiStateUIProperty(PropertyPanel owner, String name, String description, int size) {
+		super(owner, name, description);
 
 		states_ = new String[size];
 		statesname_ = new String[size];

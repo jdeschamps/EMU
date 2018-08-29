@@ -25,9 +25,9 @@ import main.embl.rieslab.mm.uidevint.ui.uiparameters.ColorUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.ComboUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.FixedStateUIProperty;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.constants.HTSMLMConstants;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.LaserFlag;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.utils.BinaryConverter;
 import main.embl.rieslab.mm.uidevint.utils.ColorRepository;
 import main.embl.rieslab.mm.uidevint.utils.utils;
@@ -221,9 +221,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 			map.put(HTSMLMConstants.FPGA_BEHAVIOURS[i], String.valueOf(i));
 		}
 		
-		addUIProperty(new FixedStateUIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing.", PropertyFlag.LASER,map));
-		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered).", PropertyFlag.LASER));
-		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"Pulse length of the laser.", PropertyFlag.LASER));
+		addUIProperty(new FixedStateUIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing.", new LaserFlag(),map));
+		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered).", new LaserFlag()));
+		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"Pulse length of the laser.", new LaserFlag()));
 	}
 
 	@Override

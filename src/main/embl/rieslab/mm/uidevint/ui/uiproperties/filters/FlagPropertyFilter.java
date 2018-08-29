@@ -1,7 +1,7 @@
 package main.embl.rieslab.mm.uidevint.ui.uiproperties.filters;
 
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.flag.PropertyFlag;
 
 public class FlagPropertyFilter extends PropertyFilter {
 
@@ -19,7 +19,7 @@ public class FlagPropertyFilter extends PropertyFilter {
 	
 	@Override
 	public boolean filterOut(UIProperty property) {
-		if(property.getFlag().equals(flag_.getDeviceType())){
+		if(property.getFlag().equals(flag_.getPropertyFlag())){
 			return false;
 		}
 		return true;

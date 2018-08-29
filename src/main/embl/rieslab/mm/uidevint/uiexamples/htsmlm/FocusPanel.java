@@ -25,9 +25,9 @@ import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.graph.TimeChart;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.DoubleUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.IntUIParameter;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.FocusStabFlag;
 import main.embl.rieslab.mm.uidevint.updaters.TimeChartUpdater;
 import main.embl.rieslab.mm.uidevint.utils.utils;
 
@@ -410,8 +410,8 @@ public class FocusPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, FOCUS_POSITION,"Position property of the stage, used for movements and monitoring.", PropertyFlag.OTHERS));
-		addUIProperty(new TwoStateUIProperty(this, FOCUS_STABILIZATION,"Property used for focus stabilization.", PropertyFlag.FOCUSSTAB));
+		addUIProperty(new UIProperty(this, FOCUS_POSITION,"Position property of the stage, used for movements and monitoring."));
+		addUIProperty(new TwoStateUIProperty(this, FOCUS_STABILIZATION,"Property used for focus stabilization.", new FocusStabFlag()));
 	}
 	
 	@Override

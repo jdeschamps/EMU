@@ -28,7 +28,6 @@ import javax.swing.table.TableModel;
 
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.FixedStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
@@ -40,6 +39,10 @@ import main.embl.rieslab.mm.uidevint.ui.uiproperties.filters.ReadOnlyPropertyFil
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.filters.TwoStatePropertyFilter;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.acquisitions.Acquisition;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.FilterWheelFlag;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.FocusLockFlag;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.FocusStabFlag;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.LaserFlag;
 
 public class AcquisitionTab extends JPanel {
 
@@ -171,7 +174,7 @@ public class AcquisitionTab extends JPanel {
 		PropertyFilter filt;
 		
 		// focus stabilization
-		filt = new FlagPropertyFilter(PropertyFlag.FOCUSSTAB);
+		filt = new FlagPropertyFilter(new FocusStabFlag());
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
@@ -185,7 +188,7 @@ public class AcquisitionTab extends JPanel {
 		}
 
 		// filterwheel
-		filt = new FlagPropertyFilter(PropertyFlag.FILTERWHEEL);
+		filt = new FlagPropertyFilter(new FilterWheelFlag());
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
@@ -200,7 +203,7 @@ public class AcquisitionTab extends JPanel {
 		}
 
 		// lasers
-		filt = new FlagPropertyFilter(PropertyFlag.LASER);
+		filt = new FlagPropertyFilter(new LaserFlag());
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
@@ -274,7 +277,7 @@ public class AcquisitionTab extends JPanel {
 		}
 
 		// Two-state
-		filt = new TwoStatePropertyFilter(new AntiFlagPropertyFilter(PropertyFlag.FOCUSLOCK));
+		filt = new TwoStatePropertyFilter(new AntiFlagPropertyFilter(new FocusLockFlag()));
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
@@ -321,7 +324,7 @@ public class AcquisitionTab extends JPanel {
 		PropertyFilter filt;
 		
 		// focus stabilization
-		filt = new FlagPropertyFilter(PropertyFlag.FOCUSSTAB);
+		filt = new FlagPropertyFilter(new FocusStabFlag());
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
@@ -335,7 +338,7 @@ public class AcquisitionTab extends JPanel {
 		}
 
 		// filterwheel
-		filt = new FlagPropertyFilter(PropertyFlag.FILTERWHEEL);
+		filt = new FlagPropertyFilter(new FilterWheelFlag());
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		
@@ -350,7 +353,7 @@ public class AcquisitionTab extends JPanel {
 		}
 
 		// lasers
-		filt = new FlagPropertyFilter(PropertyFlag.LASER);
+		filt = new FlagPropertyFilter(new LaserFlag());
 		temp = filt.filterStringProperties(props);		
 		props = filt.filteredProperties(props);
 		
@@ -424,7 +427,7 @@ public class AcquisitionTab extends JPanel {
 		}
 
 		// Two-state
-		filt = new TwoStatePropertyFilter(new AntiFlagPropertyFilter(PropertyFlag.FOCUSLOCK));
+		filt = new TwoStatePropertyFilter(new AntiFlagPropertyFilter(new FocusLockFlag()));
 		temp = filt.filterStringProperties(props);
 		props = filt.filteredProperties(props);
 		

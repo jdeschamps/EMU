@@ -14,7 +14,6 @@ import javax.swing.SwingConstants;
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.graph.Chart;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.IntUIParameter;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 import main.embl.rieslab.mm.uidevint.updaters.ChartUpdater;
 import main.embl.rieslab.mm.uidevint.updaters.JProgressBarUpdater;
@@ -123,9 +122,9 @@ public class QPDPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, QPD_X,"Read-out property of the QPD x signal.", PropertyFlag.OTHERS));
-		addUIProperty(new UIProperty(this, QPD_Y,"Read-out property of the QPD y signal.", PropertyFlag.OTHERS));
-		addUIProperty(new UIProperty(this, QPD_Z,"Read-out property of the QPD z signal.", PropertyFlag.OTHERS));
+		addUIProperty(new UIProperty(this, QPD_X,"Read-out property of the QPD x signal."));
+		addUIProperty(new UIProperty(this, QPD_Y,"Read-out property of the QPD y signal."));
+		addUIProperty(new UIProperty(this, QPD_Z,"Read-out property of the QPD z signal."));
 	}
 
 	@Override

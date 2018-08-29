@@ -1,6 +1,7 @@
 package main.embl.rieslab.mm.uidevint.ui.uiproperties;
 
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.flag.PropertyFlag;
 
 
 public class TwoStateUIProperty extends UIProperty{
@@ -12,6 +13,10 @@ public class TwoStateUIProperty extends UIProperty{
 	
 	public TwoStateUIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag) {
 		super(owner, name, description, flag);
+	}	
+	
+	public TwoStateUIProperty(PropertyPanel owner, String name, String description) {
+		super(owner, name, description);
 	}
 
 	@Override

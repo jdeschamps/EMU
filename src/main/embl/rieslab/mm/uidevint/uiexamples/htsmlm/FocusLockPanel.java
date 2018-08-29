@@ -23,9 +23,9 @@ import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyFlag;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
+import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.flags.FocusLockFlag;
 import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.others.ToggleSlider;
 import main.embl.rieslab.mm.uidevint.utils.ColorRepository;
 import main.embl.rieslab.mm.uidevint.utils.utils;
@@ -298,13 +298,13 @@ public class FocusLockPanel  extends PropertyPanel {
 	protected void initializeProperties() {
 		max_power = 200;
 		
-		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_POWER,"iBeamSmart Power (mW).", PropertyFlag.FOCUSLOCK));
-		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCFINEA,"iBeamSmart Power percentage of fine a.", PropertyFlag.FOCUSLOCK));
-		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCFINEB,"iBeamSmart Power percentage of fine b.", PropertyFlag.FOCUSLOCK));
-		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_MAXPOWER,"iBeamSmart Maximum power (mW).", PropertyFlag.FOCUSLOCK));
+		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_POWER,"iBeamSmart Power (mW).", new FocusLockFlag()));
+		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCFINEA,"iBeamSmart Power percentage of fine a.", new FocusLockFlag()));
+		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCFINEB,"iBeamSmart Power percentage of fine b.", new FocusLockFlag()));
+		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_MAXPOWER,"iBeamSmart Maximum power (mW).", new FocusLockFlag()));
 
-		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_OPERATION,"iBeamSmart On/Off operation property.", PropertyFlag.FOCUSLOCK));
-		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_ENABLEFINE,"iBeamSmart Enable property of fine.", PropertyFlag.FOCUSLOCK));
+		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_OPERATION,"iBeamSmart On/Off operation property.", new FocusLockFlag()));
+		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_ENABLEFINE,"iBeamSmart Enable property of fine.", new FocusLockFlag()));
 	}
 
 
