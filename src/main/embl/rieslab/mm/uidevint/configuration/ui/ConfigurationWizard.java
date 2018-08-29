@@ -20,18 +20,18 @@ import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 
-public class UIWizard {
+public class ConfigurationWizard {
 
-	private HashMap<String, String> prop_;
-	private HashMap<String, String> param_;
-	private PropertiesTable propertytable_;
-	private ParametersTable parametertable_;
-	private HelpWindow help_;
-	private Configuration config_;
-	private JFrame frame_;
+	private HashMap<String, String> prop_; // stores the name of the uiproperties and their corresponding mmproperty (or Configuration.KEY_UNALLOCATED)
+	private HashMap<String, String> param_; // stores the name of the uiparameters and their value
+	private PropertiesTable propertytable_; // panel used by the user to pair ui- and mmproperties
+	private ParametersTable parametertable_; // panel used by the user to set the values of uiparameters
+	private HelpWindow help_; // help window to display the description of uiproperties and uiparameters
+	private Configuration config_; // configuration class
+	private JFrame frame_; // overall frame for the configuration wizard
 	private boolean running_ = false;
 	
-	public UIWizard(Configuration config) {
+	public ConfigurationWizard(Configuration config) {
 		config_ = config;
 		
 		prop_ = new HashMap<String, String>();

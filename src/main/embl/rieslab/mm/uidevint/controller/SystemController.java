@@ -75,7 +75,7 @@ public class SystemController {
 		boolean read = config.readDefaultConfiguration(uiproperties_, uiparameters_, mmproperties_);
 
 		if(read){ // if read a configuration
-			getConfiguration();
+			setConfiguration();
 			start_ = false;
 		} else { // if failed
 			start_ = false;
@@ -127,7 +127,7 @@ public class SystemController {
 		boolean read = config.readConfiguration(uiproperties_, uiparameters_, mmproperties_, f);
 		
 		if(read){ // if read a configuration, then update.
-			getConfiguration();
+			setConfiguration();
 			return true;
 		} else {
 			return false;
@@ -214,7 +214,7 @@ public class SystemController {
 	 * there are some unallocated properties, then pops-up a message.
 	 * 
 	 */
-	public void getConfiguration() {
+	public void setConfiguration() {
 		// Allocate UI properties and parameters
 		readProperties(config.getPropertiesConfiguration());
 		readParameters(config.getParametersConfiguration());
