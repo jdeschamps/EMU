@@ -29,6 +29,12 @@ import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 import main.embl.rieslab.mm.uidevint.utils.ColorRepository;
 import main.embl.rieslab.mm.uidevint.utils.utils;
 
+/**
+ * JPanel displaying a table allowing the user to set the values of the UI parameters.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class ParametersTable extends JPanel{
 
 	/**
@@ -44,7 +50,14 @@ public class ParametersTable extends JPanel{
 	private String[] uiparamkeys_;
 	private HelpWindow help_;
 	private HashMap<String, UIProperty> uipropertySet_;
-		
+	
+	/**
+	 * Constructor called when no configuration exists. All the parameter values are set to default values.
+	 * 
+	 * @param uiparameterSet Map of the UI parameters, indexed by their name
+	 * @param uipropertySet Map of the UI properties, indexed by their name
+	 * @param help Help window
+	 */
 	@SuppressWarnings("rawtypes")
 	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, UIProperty> uipropertySet, HelpWindow help) {
 		
@@ -85,7 +98,14 @@ public class ParametersTable extends JPanel{
 		this.add(sc);
 	}
 	
-
+	/**
+	 * Constructor called when a configuration exists.
+	 * 
+	 * @param uiparameterSet Map of the UI parameters, indexed by their name
+	 * @param configparam Map of the UIParameter names (keys) and their value (values) from the configuration
+	 * @param uipropertySet Map of the UI properties, indexed by their name
+	 * @param help Help window
+	 */
 	@SuppressWarnings("rawtypes")
 	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HashMap<String, UIProperty>  uipropertySet, HelpWindow help) {		
 		help_ = help;
@@ -232,6 +252,11 @@ public class ParametersTable extends JPanel{
 	}
 
 
+	/**
+	 * Shows the help window and updates its content with the description of the parameter currently selected.
+	 * 
+	 * @param b True if the window is to be displayed, false otherwise.
+	 */
 	public void showHelp(boolean b){
 		help_.showHelp(b);
 		updateHelper(table.getSelectedRow());
@@ -242,6 +267,11 @@ public class ParametersTable extends JPanel{
 		help_.update(s+":\n\n"+uiparameterSet_.get(s).getDescription());
 	}
 	
+	/**
+	 * Returns the map of the UIParameter names (keys) and their values (values).
+	 * 
+	 * @return
+	 */
 	public HashMap<String,String> getSettings(){
 		HashMap<String,String> settings = new HashMap<String,String>();
 		

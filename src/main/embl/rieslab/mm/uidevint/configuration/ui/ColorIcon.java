@@ -16,8 +16,6 @@ import java.awt.Insets;
 
 import javax.swing.Icon;
 
-//
-
 public class ColorIcon implements Icon {
 	private int iWidth;
 	private int iHeight;

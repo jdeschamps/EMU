@@ -60,17 +60,17 @@ public class SystemController {
 	public void start() {
 		start_ = true;
 		
-		// extract MM properties
+		// extracts MM properties
 		mmproperties_ = new MMProperties(core_);
 		configgroups_ = new ConfigurationGroupsRegistry(core_);
 
-		// initiate UI
+		// initiates UI
 		mainframe_ = new MainFrame("ht-SMLM control center", this);
 
-		// extract UI properties and parameters
+		// extracts UI properties and parameters
 		extractPropertiesAndParameters();
 			
-		// read out configuration
+		// reads out configuration
 		config = new Configuration(this);
 		boolean read = config.readDefaultConfiguration(uiproperties_, uiparameters_, mmproperties_);
 
@@ -79,38 +79,53 @@ public class SystemController {
 			start_ = false;
 		} else { // if failed
 			start_ = false;
-			// launch a new wizard
+			// launches a new wizard
 			config.launchNewWizard(uiproperties_, uiparameters_, mmproperties_);
 		}
 	}
 	
+	// Extract the UIProperty and UIParameter from the UI.
 	@SuppressWarnings("rawtypes")
 	private void extractPropertiesAndParameters() {
 		Iterator<PropertyPanel> it = mainframe_.getPropertyPanels().iterator();
 		PropertyPanel pan;
-		while (it.hasNext()) {
+		while (it.hasNext()) { // loops over the PropertyPanel contained in the MainFrame
 			pan = it.next();
 			
-			uiproperties_.putAll(pan.getUIProperties());
+			// adds all the UIProperties, since their name contains their parent PropertyPanel name
+			// there is no collision
+			uiproperties_.putAll(pan.getUIProperties()); 
 			
+			
+			////////////////////////////////////////////////////////////////////////////////////////////////
+			//
+			// I am not really certain any more of the purpose of theses lines
+			// TODO
+			
+			// Loops over all parameters and make sure that they are unique
 			HashMap<String,UIParameter> panparam = pan.getUIParameters();
 			Iterator<String> paramit = panparam.keySet().iterator();
 			ArrayList<String> subst = new ArrayList<String>();
 			while(paramit.hasNext()){
 				String param = paramit.next();
 				
-				if(!uiparameters_.containsKey(param)){
+				if(!uiparameters_.containsKey(param)){ // if param doesn't exist already, adds it
 					uiparameters_.put(param, panparam.get(param));
 				} else if(uiparameters_.get(param).getType().equals(panparam.get(param).getType())){
+					// if it already exists and the new parameter is of the same type than the one
+					// previously added to the HashMap, then add to array subst
 					subst.add(param);
 				} 
 			}
-			// avoid concurrent modification of the hashmap
+			// avoid concurrent modification of the hashmap, by substituting the parameters while keeping the same value
 			for(int i=0;i<subst.size();i++){
 				pan.substituteParameter(subst.get(i), uiparameters_.get(subst.get(i)));
 			}
-			//uiparameters_.putAll(pan.getUIParameters());
 			
+			//
+			///////////////////////////////////////////////////////////////////////////////////////////////
+			
+			// gets tasks
 			if(pan instanceof TaskHolder){
 				tasks_.put(((TaskHolder) pan).getTaskName(), (TaskHolder) pan);
 			}
@@ -135,7 +150,7 @@ public class SystemController {
 	}
 	
 	/**
-	 * Reads out the properties from the configuration and link them to ui properties.
+	 * Reads out the properties from the configuration and pairs them to ui properties.
 	 * 
 	 * @param configprop Mapping of the Micro-manager properties to the UI properties.
 	 */
@@ -239,11 +254,7 @@ public class SystemController {
 		return config.launchWizard(uiproperties_, uiparameters_, mmproperties_);
 	}
 	
-
-
-	/**
-	 * Pops-up a message indicating that a parameter has been wrongly set.
-	 */
+	// Pops-up a message indicating that a parameter has been wrongly set.
 	private void showWrongParameterMessage(ArrayList<String> wrongvals) {
 		String title = "Unallocated properties";
 		
@@ -266,9 +277,7 @@ public class SystemController {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
-	/**	 
-	 * Pops-up a message indicating the unallocated ui properties.
-	 */
+	// Pops-up a message indicating the unallocated ui properties.
 	private void showUnallocatedMessage() {
 		String title = "Unallocated properties";
 		
@@ -291,12 +300,7 @@ public class SystemController {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	/**
-	 * Links a ui property and a Micro-manager property together.
-	 * 
-	 * @param ui UI property
-	 * @param mm Micro-manager property
-	 */
+	// Pairs a ui property and a Micro-manager property together.
 	@SuppressWarnings("rawtypes")
 	private void addPair(UIProperty ui, MMProperty mm){
 		pairs_.add(new PropertyPair(ui,mm));
@@ -315,12 +319,23 @@ public class SystemController {
 		}
 	}
 	
+	/**
+	 * Returns a sorted array containing the name of all Micro-manager configuration groups.
+	 * 
+	 * @return
+	 */
 	public String[] getMMConfigGroups(){
 		String[] groups = configgroups_.getConfigurationGroups().keySet().toArray(new String[0]);
 		Arrays.sort(groups);
 		return groups;
 	}	
 	
+	/**
+	 * Returns an object wrapping a Micro-manager configuration group.
+	 * 
+	 * @param groupname Name of the group to return
+	 * @return 
+	 */
 	public ConfigurationGroup getMMConfigGroup(String groupname){
 		if(configgroups_.getConfigurationGroups().containsKey(groupname)){
 			return configgroups_.getConfigurationGroups().get(groupname);
@@ -328,6 +343,12 @@ public class SystemController {
 		return null;
 	}
 	
+	/**
+	 * Returns an array containing the names of each state of the specified Micro-manager configuration group.
+	 * 
+	 * @param groupname
+	 * @return
+	 */
 	public String[] getMMConfigNames(String groupname){
 		if(configgroups_.getConfigurationGroups().containsKey(groupname)){
 			return configgroups_.getConfigurationGroups().get(groupname).getConfigurations().toArray();
@@ -336,6 +357,11 @@ public class SystemController {
 		return s;
 	}
 	
+	/**
+	 * Sets the state of the UIProperties used as keys in propvalues to the corresponding value.
+	 * 
+	 * @param propvalues Map of the UIProperties (keys) and the values they should be set to.
+	 */
 	public void setUpSystem(HashMap<String, String> propvalues){
 		Iterator<String> it = propvalues.keySet().iterator();
 		String s;
@@ -347,8 +373,13 @@ public class SystemController {
 		}
 	}
 
+	/**
+	 * Returns the camera exposure. If the exposure failed to be retrieved from Micro-manager, returns 0.
+	 * 
+	 * @return Camera exposure in ms, or 0 if failed to retrieve it from Micro-manager.
+	 */
 	public double getExposure(){
-		double i = 10;
+		double i = 0;
 		try {
 			i = core_.getExposure();
 		} catch (Exception e) {
@@ -359,27 +390,59 @@ public class SystemController {
 		return i;
 	}
 	
+	/** 
+	 * Returns Micro-manager CMMCore.
+	 * 
+	 * @return
+	 */
 	public CMMCore getCore(){
 		return core_;
 	}
 
+	/**
+	 * Returns Micro-Maanager ScriptInterface.
+	 * 
+	 * @return
+	 */
 	public ScriptInterface getScriptInterface(){
 		return script_;
 	}
 	
+	/**
+	 * Returns the corresponding UIProperty.
+	 * 
+	 * @param name name of the UIProperty
+	 * @return
+	 */
 	public UIProperty getProperty(String name){ 
 		return uiproperties_.get(name);
 	}
 	
+	/**
+	 * Returns a HashMap containing the name of the UIProperties (keys) and the corresponding UIProperties.
+	 * 
+	 * @return
+	 */
 	public HashMap<String, UIProperty> getPropertiesMap(){
 		return uiproperties_;
 	}
 	
+	/**
+	 * Returns the corresponding TaskHolder.
+	 * 
+	 * @param taskname name of the task.
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public TaskHolder getTaskHolder(String taskname){
 		return tasks_.get(taskname);
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
 	public HashMap<String, String[]> getConfigurationGroups(){
 		return configgroups_.getConfigurationChannelsMap();
 	}

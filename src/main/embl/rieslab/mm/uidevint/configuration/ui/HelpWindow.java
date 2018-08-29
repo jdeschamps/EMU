@@ -9,6 +9,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * JFrame wrapper that displays a String in a frame and hides/displays it.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class HelpWindow {
 
 	private JTextArea txtarea;
@@ -40,6 +46,11 @@ public class HelpWindow {
 
 	}
 
+	/**
+	 * Shows window.
+	 * 
+	 * @param b True if the window is to be displayed, false otherwise.
+	 */
 	public void showHelp(boolean b){
 		if(frame.isDisplayable()){
 			frame.setVisible(b);
@@ -53,10 +64,17 @@ public class HelpWindow {
 		}
 	}
 	
+	/**
+	 * Disposes of the frame.
+	 */
 	public void disposeHelp(){
 		frame.dispose();
 	}
 
+	/**
+	 * Updates the frame with a new text.
+	 * @param newtext Text to be displayed.
+	 */
 	public void update(String newtext){
 		txtarea.setText(newtext);
 	}

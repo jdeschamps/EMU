@@ -20,6 +20,13 @@ import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 
+/**
+ * UI used to configure the system by allocating UI properties to existing device properties in Micro-manager, the values of their state
+ * and the values of the UI parameters.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class ConfigurationWizard {
 
 	private HashMap<String, String> prop_; // stores the name of the uiproperties and their corresponding mmproperty (or Configuration.KEY_UNALLOCATED)
@@ -101,6 +108,8 @@ public class ConfigurationWizard {
 		});
 	}
 	
+	
+	// Sets up the frame used for the interactive configuration.
 	private JFrame createFrame(final PropertiesTable propertytable, final ParametersTable parametertable, final HelpWindow help){
 		JFrame frame = new JFrame("UI properties wizard");
 		frame.addWindowListener(new WindowAdapter() {
@@ -170,35 +179,61 @@ public class ConfigurationWizard {
 		return frame;
 	}
 	
+	/**
+	 * 
+	 * @return true if running, false otherwise.
+	 */
 	public boolean isRunning(){
 		return running_;
 	}
 	
+	/**
+	 * Returns the entries of the property table as a HashMap with the keys being the UIProperty names or state names, and the 
+	 * values being the allocated MMProperty names or state values.
+	 * 
+	 * @return
+	 */
 	public HashMap<String, String> getWizardProperties() {
 		return prop_;
 	}
-
+	
+	/**
+	 * Returns the entries of the parameter table as a HashMap with the keys being the UIParameter names and the values
+	 * being the parameter values.
+	 * 
+	 * @return
+	 */
 	public HashMap<String, String> getWizardParameters() {
 		return param_;
 	}
 	
+	/**
+	 * Sets the help window visible and displays the description of the currently selected UIProperty or UIParameter.
+	 * 
+	 * @param b True if the help window is to be displayed, false otherwise
+	 */
 	public void showHelp(boolean b){
 		if(help_ != null){
 			help_.showHelp(b);
 		}
 	}
 	
+	//  Retrieves the UIProperty and UIParameter name/value pairs from the tables, updates the Configuration and closes
+	//  all windows. 
 	private void saveConfiguration(){
 		prop_ = propertytable_.getSettings();
 		param_ = parametertable_.getSettings();
 		
-		config_.getWizardSettings();
+		config_.setWizardSettings();
 		
 		frame_.dispose();
 		help_.disposeHelp();
 		running_ = false;
 	}
 
+	/**
+	 * Closes open windows (wizard frame and help)
+	 */
 	public void shutDown(){
 		if(help_ != null){
 			help_.disposeHelp();
@@ -207,7 +242,5 @@ public class ConfigurationWizard {
 			frame_.dispose();
 		}
 		running_ = false;
-	}
-
-	
+	}	
 }

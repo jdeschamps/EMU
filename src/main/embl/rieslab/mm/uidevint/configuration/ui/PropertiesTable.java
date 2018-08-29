@@ -25,7 +25,13 @@ import main.embl.rieslab.mm.uidevint.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 
-
+/**
+ * JPanel displaying a table allowing the user to allocate device properties from Micro-manager with
+ * UIProperty from the current UI. 
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class PropertiesTable extends JPanel {
 
     /**
@@ -44,7 +50,7 @@ public class PropertiesTable extends JPanel {
 	/**
 	 * Constructor called when no configuration exists. Creates a table with non-allocated fields.
 	 * 
-	 * @param uipropertySet Map of the UI properties of the user interface.
+	 * @param uipropertySet Map of the UI properties of the user interface indexed by their name.
 	 * @param mmproperties Object containing the device properties from the current Micro-manager session. 
 	 * @param help Help window.
 	 */
@@ -286,18 +292,13 @@ public class PropertiesTable extends JPanel {
 		});
 	}
 	
-	/**
-	 * Creates a JComboBox containing all the Micro-manager device properties corresponding to the device.
-	 * 
-	 * @param device Device to extract the properties from.
-	 * @return JCombobx with all the corresponding properties.
-	 */
+
+	// Creates a JComboBox containing all the Micro-manager device properties corresponding to the device.
 	private JComboBox getDevicePropertiesComboBox(String device) {
 		JComboBox cb = new JComboBox();
 		cb.addItem(Configuration.KEY_UNALLOCATED);
 
 		if (!device.equals(Configuration.KEY_UNALLOCATED)) {
-			//String[] props = mmproperties_.getDevice(device).getPropertiesHash();
 			String[] props = mmproperties_.getDevice(device).getPropertiesFriendlyName(); // fill with the name of the property itself
 			for (int i = 0; i < props.length; i++) {
 				cb.addItem(props[i]);
@@ -317,11 +318,7 @@ public class PropertiesTable extends JPanel {
 		updateHelper(table.getSelectedRow());
 	}
 
-	/**
-	 * Updates the helper window text with the description of the UI property represented by the selected row in the table.
-	 * 
-	 * @param row Selected row.
-	 */
+	// Updates the helper window text with the description of the UI property represented by the selected row in the table.
 	private void updateHelper(int row){
 		String s = (String) table.getValueAt(row, 0);
 	

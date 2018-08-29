@@ -18,10 +18,25 @@ import main.embl.rieslab.mm.uidevint.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 
+/**
+ * This class reads and writes a configuration file detailing the allocation of MMProperties to UIProperties,
+ * as well as the values of UIProperty states and UIParameters. In addition, the Configuration can launch a
+ * ConfigurationWizard to allow the user to interactively allocate the device properties from Micro-manager
+ * to the UIProperties and set all values.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class Configuration {
 
 	// Keys
+	/**
+	 * Value given to unallocated UIProperty.
+	 */
 	public final static String KEY_UNALLOCATED = "Unallocated";
+	/**
+	 * Value given to unallocated UIProperty states and UIParameters values.
+	 */
 	public final static String KEY_ENTERVALUE = "Enter value";
 	private final static String KEY_UIPROPERTY = "UI Property: ";
 	private final static String KEY_UIPARAMETER = "UI Parameter: ";
@@ -221,10 +236,10 @@ public class Configuration {
 
 	/**
 	 * Retrieves the pairs of UIProperty name and MMProperty names (or UIProperty state values), as well as the pairs UIParameter names and values,
-	 * and writes them to the configuration file. It then calls the SystemController to update the system. 
-	 * 
+	 * and writes them to the configuration file. It then calls the SystemController to update the system. This method is called by the ConfigurationWizard
+	 * upon saving of the configuration by the user.
 	 */
-	public void getWizardSettings() {
+	public void setWizardSettings() {
 		if (wizard_ != null) {
 			// Retrieves the HashMap
 			uiproperties_ = wizard_.getWizardProperties();
