@@ -153,7 +153,7 @@ public class PropertiesTable extends JPanel {
 			// if the configuration indeed contains the property and is mapped in the configuration with an existing MM property
 			if (propertymapping.containsKey(uipropkeys_[i]) && mmproperties.isProperty(mmprop)) { 
 				// adds the UI property, its corresponding device and device property friendly name
-				model.addRow(new Object[] { uipropkeys_[i], mmproperties.getProperty(mmprop).getDeviceName(), mmproperties.getProperty(mmprop).getPropertyName() });
+				model.addRow(new Object[] { uipropkeys_[i], mmproperties.getProperty(mmprop).getDeviceLabel(), mmproperties.getProperty(mmprop).getMMPropertyLabel() });
 				
 				// if the property is an instance of SingleState, TwoState or MultiState property, then looks for the assigned values
 				if (uipropertySet.get(uipropkeys_[i]).isTwoState()) { // if two state

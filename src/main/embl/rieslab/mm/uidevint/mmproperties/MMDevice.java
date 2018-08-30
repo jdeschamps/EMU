@@ -17,7 +17,7 @@ public class MMDevice {
 	}
 	
 	public void registerProperty(@SuppressWarnings("rawtypes") MMProperty p){
-		if(!hasProperty(p.getPropertyName())){
+		if(!hasProperty(p.getMMPropertyLabel())){
 			properties_.put(p.getHash(), p);
 		}
 	}
@@ -30,7 +30,7 @@ public class MMDevice {
 		Iterator<String> keys = properties_.keySet().iterator();
 		while(keys.hasNext()){
 			String prop = keys.next();
-			if(properties_.get(prop).getPropertyName().equals(s)){
+			if(properties_.get(prop).getMMPropertyLabel().equals(s)){
 				return true;
 			}
 		}
@@ -41,7 +41,7 @@ public class MMDevice {
 		Iterator<String> keys = properties_.keySet().iterator();
 		while(keys.hasNext()){
 			String prop = keys.next();
-			if(properties_.get(prop).getPropertyName().equals(s)){
+			if(properties_.get(prop).getMMPropertyLabel().equals(s)){
 				return prop;
 			}
 		}
@@ -65,7 +65,7 @@ public class MMDevice {
 		int count = 0;
 		while(keys.hasNext()){
 			String prop = keys.next();
-			str[count] = properties_.get(prop).getPropertyName();
+			str[count] = properties_.get(prop).getMMPropertyLabel();
 			count ++;
 		}
 		

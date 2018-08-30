@@ -51,9 +51,7 @@ public class MMPropertyBuilder {
 					p = new IntegerMMProperty(core_, deviceLabel, propertyLabel, readOnly);
 				}
 			} else { // String or Undef	
-				if(hasLimits){
-					p = new StringMMProperty(core_, deviceLabel, propertyLabel, upLimit, downLimit);
-				} else if(!allowedValuesIsNull){
+				if(!allowedValuesIsNull){
 					p = new StringMMProperty(core_, deviceLabel, propertyLabel, allowedValues);
 				} else {
 					p = new StringMMProperty(core_, deviceLabel, propertyLabel);		

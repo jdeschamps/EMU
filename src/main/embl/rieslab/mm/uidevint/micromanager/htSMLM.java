@@ -13,9 +13,9 @@ public class htSMLM implements MMPlugin {
 	private SystemController controller_;
 
 	private static String copyright = "LGPL";
-	private static String description = "Plugin for the control of a high-throughput SMLM microscope.";
-	private static String info = "Written by Joran Deschamps, Ries lab, EMBL.";
-	private static String version = "v1-alpha";
+	private static String description = "Interface UIs with device properties.";
+	private static String info = "Joran Deschamps, EMBL, 2016-2019.";
+	private static String version = "v1";
 
 	@Override
 	public String getCopyright() {

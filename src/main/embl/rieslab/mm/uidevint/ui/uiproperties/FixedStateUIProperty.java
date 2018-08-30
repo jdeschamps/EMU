@@ -84,10 +84,10 @@ public class FixedStateUIProperty extends UIProperty {
 	public void setPropertyValue(String value) {
 		if (isAllocated()) {
 			if(states_.containsKey(value)){ // if value is the name of one of the state
-				System.out.println("Change property: "+getMMPoperty().getPropertyName()+" to "+states_.get(value));
+				System.out.println("Change property: "+getMMPoperty().getMMPropertyLabel()+" to "+states_.get(value));
 				getMMPoperty().setStringValue(states_.get(value), this);
 			} else if(isStateValue(value)){ // if value corresponds to a state
-				System.out.println("Change property: "+getMMPoperty().getPropertyName()+" to "+value);
+				System.out.println("Change property: "+getMMPoperty().getMMPropertyLabel()+" to "+value);
 				getMMPoperty().setStringValue(value, this);
 			}
 		}

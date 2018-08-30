@@ -2,21 +2,37 @@ package main.embl.rieslab.mm.uidevint.mmproperties;
 
 import mmcorej.CMMCore;
 
+/**
+ * Wrapper for a Micro-manager device property with String value. The property can be
+ * read-only or not or with a set of allowed values.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class StringMMProperty extends MMProperty<String> {
 
-	public StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel) {
+	/**
+	 * Builds a String MMProperty without limits or allowed values. The property can be read-only.
+	 * @param core Micro-manager core.
+	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
+	 * @param propertyLabel Label of the device property as defined in Micro-manager.
+	 * @param readOnly True if the device property is read-only, false otherwise.
+	 */
+	StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel) {
 		super(core, deviceLabel, propertyLabel, true);
 		
 		type_ = MMPropertyType.STRING;
 	}
 	
-	public StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
-		super(core, deviceLabel, propertyLabel, upLimit, downLimit);
-		
-		type_ = MMPropertyType.STRING;
-	}
-	
-	public StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
+	/**
+	 * Builds a String MMProperty with allowed values.
+	 * 
+	 * @param core Micro-manager core.
+	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
+	 * @param propertyLabel Label of the device property as defined in Micro-manager.
+	 * @param allowedValues Array of allowed values.
+	 */
+	StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
 		super(core, deviceLabel, propertyLabel, allowedValues);
 		
 		type_ = MMPropertyType.STRING;
@@ -38,7 +54,7 @@ public class StringMMProperty extends MMProperty<String> {
 	}
 
 	@Override
-	public String[] allowedValuesFromString(String[] s) {
+	public String[] arrayFromStrings(String[] s) {
 		return s;
 	}
 
@@ -49,7 +65,7 @@ public class StringMMProperty extends MMProperty<String> {
 
 	@Override
 	public boolean isInRange(String val) {
-		return false;
+		return true;
 	}
 
 	@Override
@@ -61,7 +77,7 @@ public class StringMMProperty extends MMProperty<String> {
 				}
 			}
 		}
-		return false;
+		return true;
 	}
 
 	@Override
