@@ -84,5 +84,11 @@ public abstract class PropertyFilter {
 		return filteredproperties;
 	}
 
+	/**
+	 * Decides if the UIProperty should be filtered out (returns True) or kept (returns False). 
+	 * 
+	 * @param property Property to be filtered out or kept
+	 * @return False if the property is to be kept, True if it should be excluded
+	 */
 	protected abstract boolean filterOut(UIProperty property);
 }

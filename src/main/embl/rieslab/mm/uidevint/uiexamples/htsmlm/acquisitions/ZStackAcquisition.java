@@ -19,6 +19,7 @@ import javax.swing.border.TitledBorder;
 
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.filters.NoPropertyFilter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.filters.SinglePropertyFilter;
 
@@ -197,6 +198,9 @@ public class ZStackAcquisition extends Acquisition {
 
 	@Override
 	public PropertyFilter getPropertyFilter() {
+		if(stabprop_ == null){
+			return new NoPropertyFilter();
+		}
 		return new SinglePropertyFilter(stabprop_.getName());
 	}
 
