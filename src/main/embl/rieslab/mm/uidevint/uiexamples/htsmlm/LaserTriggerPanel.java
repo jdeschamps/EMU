@@ -51,12 +51,12 @@ public class LaserTriggerPanel extends PropertyPanel {
 	//////// Properties
 	private final static String TRIGGER_BEHAVIOUR = "mode";
 	private final static String TRIGGER_SEQUENCE = "sequence";
-	private final static String PULSE_LENGTH = "pulse length (trig)";
+	private final static String PULSE_LENGTH = "pulse duration";
 	
 	//////// Parameters
 	private final static String PARAM_TITLE = "Name";
 	private final static String PARAM_COLOR = "Color";
-	private final static String PARAM_DEF_BEHAVIOUR = "Default trigger";
+	private final static String PARAM_DEF_BEHAVIOUR = "Default mode";
 	private final static String PARAM_DEF_SEQUENCE = "Default sequence";
 	private String title_, behaviour_, sequence_;
 	private Color color_;
@@ -221,9 +221,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 			map.put(HTSMLMConstants.FPGA_BEHAVIOURS[i], String.valueOf(i));
 		}
 		
-		addUIProperty(new FixedStateUIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"Property dictating the behaviour of the laser trigger, from camera to pulsing.", new LaserFlag(),map));
-		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"Trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered).", new LaserFlag()));
-		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"Pulse length of the laser.", new LaserFlag()));
+		addUIProperty(new FixedStateUIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"From Micro-Mojo FPGA: property dictating the behaviour of the laser trigger, from camera to pulsing.", new LaserFlag(),map));
+		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"From Micro-Mojo FPGA: trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered).", new LaserFlag()));
+		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"From Micro-Mojo FPGA: duration of the laser pulses.", new LaserFlag()));
 	}
 
 	@Override
@@ -233,9 +233,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 		color_=Color.black;		
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Name of the laser.",title_));
-		addUIParameter(new ComboUIParameter(this, PARAM_DEF_BEHAVIOUR,"Default trigger behaviour of the laser.",HTSMLMConstants.FPGA_BEHAVIOURS,4));
-		addUIParameter(new StringUIParameter(this, PARAM_DEF_SEQUENCE,"Default triggering sequence of the laser.",sequence_));
-		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Color of the laser.",color_)); 
+		addUIParameter(new ComboUIParameter(this, PARAM_DEF_BEHAVIOUR,"Default trigger behaviour of the laser (see Micro-Mojo FPGA).",HTSMLMConstants.FPGA_BEHAVIOURS,4));
+		addUIParameter(new StringUIParameter(this, PARAM_DEF_SEQUENCE,"Default triggering sequence of the laser (see Micro-Mojo FPGA).",sequence_));
+		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Display color of the laser.",color_)); 
 	}
 
 	@Override

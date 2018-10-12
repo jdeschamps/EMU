@@ -122,9 +122,9 @@ public class QPDPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, QPD_X,"Read-out property of the QPD x signal."));
-		addUIProperty(new UIProperty(this, QPD_Y,"Read-out property of the QPD y signal."));
-		addUIProperty(new UIProperty(this, QPD_Z,"Read-out property of the QPD z signal."));
+		addUIProperty(new UIProperty(this, QPD_X,"Read-out property of the QPD X signal."));
+		addUIProperty(new UIProperty(this, QPD_Y,"Read-out property of the QPD Y signal."));
+		addUIProperty(new UIProperty(this, QPD_Z,"Read-out property of the QPD Z signal."));
 	}
 
 	@Override
@@ -133,8 +133,8 @@ public class QPDPanel extends PropertyPanel {
 		zmax_ = 700;
 		idle_ = 100;
 		
-		addUIParameter(new IntUIParameter(this, PARAM_XYMAX,"Maximum X and Y signals value to display.",xymax_));
-		addUIParameter(new IntUIParameter(this, PARAM_ZMAX,"Maximum Z signal value to display.",zmax_));
+		addUIParameter(new IntUIParameter(this, PARAM_XYMAX,"Maximum X and Y signals value from the QPD to display.",xymax_));
+		addUIParameter(new IntUIParameter(this, PARAM_ZMAX,"Maximum Z signal value from the QPD to display.",zmax_));
 		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time (ms) of the QPD signals monitoring.",idle_)); // thread idle time
 	}
 

@@ -48,12 +48,12 @@ public class FocusLockPanel  extends PropertyPanel {
 	private JLabel finebperc_;
 
 	//////// Properties
-	public final static String LASER_OPERATION = "focus-lock laser operation";
+	public final static String LASER_OPERATION = "operation";
 	public final static String LASER_ENABLEFINE = "enable fine";	
 	public final static String LASER_POWER = "laser power";	
-	public final static String LASER_PERCFINEA = "percentage fine a";	
-	public final static String LASER_PERCFINEB = "percentage fine b";	
-	public final static String LASER_MAXPOWER = "ibeamSmart maximum power";	
+	public final static String LASER_PERCFINEA = "fine a (%)";	
+	public final static String LASER_PERCFINEB = "fine b (%)";	
+	public final static String LASER_MAXPOWER = "max power";	
 	
 	/////// Convenience variables
 	private int max_power;

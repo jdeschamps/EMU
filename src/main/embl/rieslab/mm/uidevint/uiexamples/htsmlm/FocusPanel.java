@@ -410,7 +410,7 @@ public class FocusPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, FOCUS_POSITION,"Position property of the stage, used for movements and monitoring."));
+		addUIProperty(new UIProperty(this, FOCUS_POSITION,"Position of the stage, used to move the stage and monitor its position."));
 		addUIProperty(new TwoStateUIProperty(this, FOCUS_STABILIZATION,"Property used for focus stabilization.", new FocusStabFlag()));
 	}
 	
@@ -422,7 +422,7 @@ public class FocusPanel extends PropertyPanel {
 		npos_ = 30; 
 		
 		addUIParameter(new DoubleUIParameter(this, PARAM_LARGESTEP,"Default value for large z stage step.",largestep_));
-		addUIParameter(new DoubleUIParameter(this, PARAM_SMALLSTEP,"Default value for large z stage step.",smallstep_));
+		addUIParameter(new DoubleUIParameter(this, PARAM_SMALLSTEP,"Default value for small z stage step.",smallstep_));
 		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time in ms of the stage position monitoring.",idle_)); // thread idle time
 		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
 	}

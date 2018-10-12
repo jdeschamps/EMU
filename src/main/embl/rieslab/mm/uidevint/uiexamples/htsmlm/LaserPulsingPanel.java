@@ -43,7 +43,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 
 	//////// Properties
 	public final static String CAMERA_EXPOSURE = "Camera exposure";
-	public final static String LASER_PULSE = "Activation pulse length (UI)";	
+	public final static String LASER_PULSE = "UV pulse duration (main frame)";	
 	
 	//////// Parameters
 	public final static String PARAM_TITLE = "Name";
@@ -225,7 +225,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 	@Override
 	protected void initializeProperties() {
 		addUIProperty(new UIProperty(this, CAMERA_EXPOSURE,"Camera exposure in ms.", new CameraExpFlag()));
-		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse length of the activation laser."));
+		addUIProperty(new UIProperty(this, LASER_PULSE,"Pulse duration of the activation laser."));
 	}
 
 	@Override
@@ -235,7 +235,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
 		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Default value for large z stage step.",color_));
-		addUIParameter(new IntUIParameter(this, PARAM_DEFAULT_MAX,"Default maximum value for pulse length.",maxpulse_));
+		addUIParameter(new IntUIParameter(this, PARAM_DEFAULT_MAX,"Default maximum value for the activation laser pulse length.",maxpulse_));
 	}
 
 

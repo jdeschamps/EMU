@@ -43,7 +43,7 @@ public class LaserControlPanel extends PropertyPanel {
 
 	//////// Properties
 	public final static String LASER_PERCENTAGE = "power percentage";
-	public final static String LASER_OPERATION = "on/off";	
+	public final static String LASER_OPERATION = "enable";	
 	
 	//////// Parameters
 	public final static String PARAM_TITLE = "Name";
@@ -246,8 +246,10 @@ public class LaserControlPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeProperties() {
-		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCENTAGE,"Power percentage of the laser.", new LaserFlag()));
-		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_OPERATION,"Laser On/Off operation property.", new LaserFlag()));
+		String text = "Power percentage of the laser. If the laser only has a power set point (mW) property, select this property and use the scaling parameter in the parameters tab.";
+		
+		addUIProperty(new UIProperty(this, getLabel()+" "+LASER_PERCENTAGE,text, new LaserFlag()));
+		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_OPERATION,"Laser On/Off property. Enter the values for the on and off states (e.g. 1/0 or On/Off).", new LaserFlag()));
 	}
 
 	@Override
