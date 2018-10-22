@@ -9,18 +9,12 @@ import java.awt.Point;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrame;
 
 public class MainFrame extends PropertyMainFrame{
-	
-	public MainFrame(String title, SystemController controller) {
-		super(title, controller);
-	}
-
-	/**
+		/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7647811940748674013L;
@@ -38,10 +32,12 @@ public class MainFrame extends PropertyMainFrame{
 	private JPanel lowerpanel;
 	private JTabbedPane tab;
 	
-    protected void initComponents() {
-    	
-    	System.out.println("Is the MainFrame setting up running on the EDT: "+SwingUtilities.isEventDispatchThread());
-    	
+	public MainFrame(String title, SystemController controller) {
+		super(title, controller);
+	}
+
+	@Override
+    protected void initComponents() {    	
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Windows".equals(info.getName())) {
@@ -61,7 +57,7 @@ public class MainFrame extends PropertyMainFrame{
 
         setupPanels();
  
-        this.pack(); // avoid packing when one can
+        this.pack(); 
         this.setResizable(false);
  	    this.setVisible(true);        
     }
@@ -188,18 +184,8 @@ public class MainFrame extends PropertyMainFrame{
 
 		this.add(lowerpanel,c2);*/
 		this.add(lowerpanel);
-    }
-    
-    public Point getAcquisitionPanelLocation(){
-    	Point loc = this.getLocation();
-    	loc.x += tab.getLocation().x+lowerpanel.getLocation().x+acqPanel.getLocation().x;
-    	loc.y += tab.getLocation().y+lowerpanel.getLocation().y+acqPanel.getLocation().y;
-    	
-    	return loc;
-    }
-    
-	@Override
-	protected void registerPropertyPanels() {
+		
+		// Register property panels
         registerPropertyPanel(focusPanel);
         registerPropertyPanel(qpdPanel);
         registerPropertyPanel(focuslockpanel);
@@ -212,5 +198,13 @@ public class MainFrame extends PropertyMainFrame{
         registerPropertyPanel(addcontrolPanel);
         registerPropertyPanel(activationPanel);
         registerPropertyPanel(acqPanel);
-	}
+    }
+    
+    public Point getAcquisitionPanelLocation(){
+    	Point loc = this.getLocation();
+    	loc.x += tab.getLocation().x+lowerpanel.getLocation().x+acqPanel.getLocation().x;
+    	loc.y += tab.getLocation().y+lowerpanel.getLocation().y+acqPanel.getLocation().y;
+    	
+    	return loc;
+    }
 }

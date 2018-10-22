@@ -52,7 +52,6 @@ public abstract class PropertyMainFrame extends JFrame {
         
     	setUpMenuBar();
 		initComponents();
-		registerPropertyPanels();
 		linkInternalProperties();
 	}
 	
@@ -191,5 +190,4 @@ public abstract class PropertyMainFrame extends JFrame {
 	}
 	
 	protected abstract void initComponents();
-	protected abstract void registerPropertyPanels();
 }
