@@ -453,4 +453,8 @@ public class SystemController {
 		}
 	}
 
+	public String getPluginName() {
+		return null;
+	}
+
 }

@@ -117,8 +117,8 @@ public abstract class PropertyMainFrame extends JFrame {
 		return true;
 	}
 	
-	protected void registerBundle(PropertyPanelBundle bun){
-		panels_.addAll(bun.getPanels());
+	protected void registerPropertyPanel(ArrayList<PropertyPanel> panels){
+		panels_.addAll(panels);
 	}
 	
 	protected void registerPropertyPanel(PropertyPanel pan){
