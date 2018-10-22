@@ -10,6 +10,7 @@ public class UIPluginLoader {
 	
 	public static PropertyMainFrame loadPlugin(SystemController controller) {
 		ServiceLoader<UIPlugin> serviceLoader = ServiceLoader.load(UIPlugin.class);
+		
 		for (UIPlugin uiPlugin : serviceLoader) {
 			if((controller.getPluginName()).equals(uiPlugin.getName())){
 				return uiPlugin.getMainFrame(controller);

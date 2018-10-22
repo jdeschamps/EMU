@@ -15,7 +15,9 @@ import main.embl.rieslab.mm.uidevint.mmproperties.ConfigurationGroup;
 import main.embl.rieslab.mm.uidevint.mmproperties.ConfigurationGroupsRegistry;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperty;
+import main.embl.rieslab.mm.uidevint.plugin.UIPluginLoader;
 import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
+import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrame;
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
@@ -23,7 +25,6 @@ import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyPair;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
-import main.embl.rieslab.mm.uidevint.uiexamples.htsmlm.MainFrame;
 import mmcorej.CMMCore;
 
 public class SystemController {
@@ -33,7 +34,7 @@ public class SystemController {
 	private MMProperties mmproperties_;
 	private ConfigurationGroupsRegistry configgroups_;
 	private Configuration config;
-	private MainFrame mainframe_;
+	private PropertyMainFrame mainframe_;
 	private ArrayList<PropertyPair> pairs_;
 	private HashMap<String,UIProperty> uiproperties_;
 	@SuppressWarnings("rawtypes")
@@ -65,8 +66,8 @@ public class SystemController {
 		configgroups_ = new ConfigurationGroupsRegistry(core_);
 
 		// initiates UI
-		mainframe_ = new MainFrame("ht-SMLM control center", this);
-
+		mainframe_ = UIPluginLoader.loadPlugin(this);
+		
 		// extracts UI properties and parameters
 		extractPropertiesAndParameters();
 			
@@ -454,7 +455,7 @@ public class SystemController {
 	}
 
 	public String getPluginName() {
-		return null;
+		return "Lasers";
 	}
 
 }
