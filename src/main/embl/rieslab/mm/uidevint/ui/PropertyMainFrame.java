@@ -25,7 +25,12 @@ import main.embl.rieslab.mm.uidevint.ui.internalproperty.InternalProperty;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.InternalPropertyType;
 import mmcorej.CMMCore;
 
-
+/**
+ * 
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public abstract class PropertyMainFrame extends JFrame {
 
 	/**
@@ -36,6 +41,11 @@ public abstract class PropertyMainFrame extends JFrame {
 	private ArrayList<PropertyPanel> panels_;
 	private SystemController controller_;
 	
+	/**
+	 * 
+	 * @param title
+	 * @param controller
+	 */
 	public PropertyMainFrame(String title, SystemController controller){
 		controller_ = controller;
 		
@@ -46,7 +56,7 @@ public abstract class PropertyMainFrame extends JFrame {
     	this.addWindowListener(new WindowAdapter() {
     	    @Override
     	    public void windowClosing(WindowEvent e) {
-    	    	shutDown();
+    	    	shutDownAllPropertyPanels();
     	    }
     	});
         
@@ -119,7 +129,7 @@ public abstract class PropertyMainFrame extends JFrame {
 		return panels_;
 	}
 	
-	public void updateAll(){
+	public void updateAllPropertyPanels(){
 		Iterator<PropertyPanel> it = panels_.iterator();
 		PropertyPanel pan;
 		while(it.hasNext()){
@@ -130,7 +140,7 @@ public abstract class PropertyMainFrame extends JFrame {
 		}
 	}
 	
-	public void shutDown(){
+	public void shutDownAllPropertyPanels(){
 		Iterator<PropertyPanel> it = panels_.iterator();
 		PropertyPanel pan;
 		while(it.hasNext()){
@@ -140,11 +150,11 @@ public abstract class PropertyMainFrame extends JFrame {
 		this.dispose();
 	}
 
-	public CMMCore getCore(){
+	protected CMMCore getCore(){
 		return controller_.getCore();
 	}
 	
-	public SystemController getController(){
+	protected SystemController getController(){
 		return controller_;
 	}
 	

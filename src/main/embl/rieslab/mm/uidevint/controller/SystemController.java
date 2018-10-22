@@ -235,7 +235,7 @@ public class SystemController {
 		readParameters(config.getParametersConfiguration());
 
 		// update all properties and parameters
-		mainframe_.updateAll();
+		mainframe_.updateAllPropertyPanels();
 
 		// if unallocated properties show message
 		if (!start_ && unallocatedprop_.size() > 0) {
@@ -315,7 +315,7 @@ public class SystemController {
 			config.shutDown();
 		}
 		if(mainframe_ != null){
-			mainframe_.shutDown();
+			mainframe_.shutDownAllPropertyPanels();
 		}
 	}
 	
@@ -449,7 +449,7 @@ public class SystemController {
 	
 	public void refreshProperties(){
 		if(mainframe_ != null){
-			mainframe_.updateAll();
+			mainframe_.updateAllPropertyPanels();
 		}
 	}
 
