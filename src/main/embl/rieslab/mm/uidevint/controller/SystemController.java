@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 
 import org.micromanager.api.ScriptInterface;
 
-import main.embl.rieslab.mm.uidevint.configuration.Configuration;
+import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController2;
 import main.embl.rieslab.mm.uidevint.mmproperties.ConfigurationGroup;
 import main.embl.rieslab.mm.uidevint.mmproperties.ConfigurationGroupsRegistry;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
@@ -33,7 +33,7 @@ public class SystemController {
 	private CMMCore core_;
 	private MMProperties mmproperties_;
 	private ConfigurationGroupsRegistry configgroups_;
-	private Configuration config;
+	private ConfigurationController2 config;
 	private PropertyMainFrame mainframe_;
 	private ArrayList<PropertyPair> pairs_;
 	private HashMap<String,UIProperty> uiproperties_;
@@ -72,7 +72,7 @@ public class SystemController {
 		extractPropertiesAndParameters();
 			
 		// reads out configuration
-		config = new Configuration(this);
+		config = new ConfigurationController2(this);
 		boolean read = config.readDefaultConfiguration(uiproperties_, uiparameters_, mmproperties_);
 
 		if(read){ // if read a configuration
@@ -167,7 +167,7 @@ public class SystemController {
 			if (uiproperties_.containsKey(uiprop)) {
 
 				// if the ui property is not allocated, add to the list of unallocated properties.  
-				if (configprop.get(uiprop).equals(Configuration.KEY_UNALLOCATED)) {
+				if (configprop.get(uiprop).equals(ConfigurationController2.KEY_UNALLOCATED)) {
 					// register missing allocation
 					unallocatedprop_.add(uiprop);
 				} else if (mmproperties_.isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
@@ -455,7 +455,7 @@ public class SystemController {
 	}
 
 	public String getPluginName() {
-		return "Lasers2";
+		return "ht-SMLM";
 	}
 
 }

@@ -11,10 +11,6 @@ public class AcquisitionWrapper {
 	public String[][] props;
 	public String[][] additionalParams;
 	
-	public AcquisitionWrapper(){
-		
-	}
-	
 	public AcquisitionWrapper(Acquisition acq){
         type = acq.getType();
         configGroup= acq.getConfigGroup();

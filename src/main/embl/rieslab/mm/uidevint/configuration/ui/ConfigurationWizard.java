@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 
-import main.embl.rieslab.mm.uidevint.configuration.Configuration;
+import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController2;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
@@ -34,11 +34,11 @@ public class ConfigurationWizard {
 	private PropertiesTable propertytable_; // panel used by the user to pair ui- and mmproperties
 	private ParametersTable parametertable_; // panel used by the user to set the values of uiparameters
 	private HelpWindow help_; // help window to display the description of uiproperties and uiparameters
-	private Configuration config_; // configuration class
+	private ConfigurationController2 config_; // configuration class
 	private JFrame frame_; // overall frame for the configuration wizard
 	private boolean running_ = false;
 	
-	public ConfigurationWizard(Configuration config) {
+	public ConfigurationWizard(ConfigurationController2 config) {
 		config_ = config;
 		
 		prop_ = new HashMap<String, String>();

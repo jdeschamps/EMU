@@ -18,7 +18,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import main.embl.rieslab.mm.uidevint.configuration.Configuration;
+import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController2;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.SingleStateUIProperty;
@@ -66,7 +66,7 @@ public class PropertiesTable extends JPanel {
 		String[] strarray = mmproperties_.getDevicesList().clone();
 		Arrays.sort(strarray);
 		
-		devices.addItem(Configuration.KEY_UNALLOCATED);
+		devices.addItem(ConfigurationController2.KEY_UNALLOCATED);
 		for (int k = 0; k < strarray.length; k++) {
 			devices.addItem(strarray[k]);
 		}
@@ -82,22 +82,22 @@ public class PropertiesTable extends JPanel {
 		// For each property of the UI
 		for (int i = 0; i < uipropkeys_.length; i++) {
 			// adds a row corresponding to the allocation of the UI property to a MM device property
-			model.addRow(new Object[] { uipropkeys_[i], Configuration.KEY_UNALLOCATED, Configuration.KEY_UNALLOCATED });
+			model.addRow(new Object[] { uipropkeys_[i], ConfigurationController2.KEY_UNALLOCATED, ConfigurationController2.KEY_UNALLOCATED });
 			
 			if (uipropertySet.get(uipropkeys_[i]).isTwoState()) {
 				// if property is a toggle property, adds a line for the on and off values respectively.
-				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", Configuration.KEY_ENTERVALUE });
-				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOffStateName(),"", Configuration.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationController2.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOffStateName(),"", ConfigurationController2.KEY_ENTERVALUE });
 				
 			} else if (uipropertySet.get(uipropkeys_[i]).isSingleState()) {
 				// if property is a single value property, adds a line for the value the property must take
-				model.addRow(new Object[] {uipropkeys_[i] + SingleStateUIProperty.getValueName(),"", Configuration.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + SingleStateUIProperty.getValueName(),"", ConfigurationController2.KEY_ENTERVALUE });
 				
 			} else if (uipropertySet.get(uipropkeys_[i]).isMultiState()) {
 				// if multiple values property, adds a line for each of the value to be allocated
 				int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 				for(int j=0;j<numpos;j++){
-					model.addRow(new Object[] {uipropkeys_[i] + MultiStateUIProperty.getStateName(j),"", Configuration.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i] + MultiStateUIProperty.getStateName(j),"", ConfigurationController2.KEY_ENTERVALUE });
 				}
 			} 
 		}
@@ -129,7 +129,7 @@ public class PropertiesTable extends JPanel {
 		String[] strarray = mmproperties_.getDevicesList().clone();
 		Arrays.sort(strarray);
 		
-		devices.addItem(Configuration.KEY_UNALLOCATED);
+		devices.addItem(ConfigurationController2.KEY_UNALLOCATED);
 		for (int k = 0; k < strarray.length; k++) {
 			devices.addItem(strarray[k]);
 		}
@@ -163,10 +163,10 @@ public class PropertiesTable extends JPanel {
 					
 					// if null then sets to default
 					if(uion == null){
-						uion = Configuration.KEY_ENTERVALUE;
+						uion = ConfigurationController2.KEY_ENTERVALUE;
 					}
 					if(uioff == null){
-						uioff = Configuration.KEY_ENTERVALUE;
+						uioff = ConfigurationController2.KEY_ENTERVALUE;
 					}
 					
 					// adds a row for each with the preset state value
@@ -176,7 +176,7 @@ public class PropertiesTable extends JPanel {
 					// gets the value of the state and adds the corresponding row
 					uisingle = propertymapping.get(uipropkeys_[i]+ SingleStateUIProperty.getValueName());
 					if(uisingle == null){
-						uion = Configuration.KEY_ENTERVALUE;
+						uion = ConfigurationController2.KEY_ENTERVALUE;
 					}
 					model.addRow(new Object[] {	uipropkeys_[i] + SingleStateUIProperty.getValueName(), "", uisingle });
 				} else if (uipropertySet.get(uipropkeys_[i]).isMultiState()) { // if multiple values property
@@ -186,7 +186,7 @@ public class PropertiesTable extends JPanel {
 						uitemp = propertymapping.get(uipropkeys_[i]+ MultiStateUIProperty.getStateName(j));
 
 						if(uitemp == null){
-							uitemp = Configuration.KEY_ENTERVALUE;
+							uitemp = ConfigurationController2.KEY_ENTERVALUE;
 						}
 						
 						model.addRow(new Object[] {	uipropkeys_[i] +  MultiStateUIProperty.getStateName(j), "", uitemp });
@@ -194,18 +194,18 @@ public class PropertiesTable extends JPanel {
 				} 
 			} else {
 				// if it is not found in the configuration
-				model.addRow(new Object[] {uipropkeys_[i],Configuration.KEY_UNALLOCATED,Configuration.KEY_UNALLOCATED });
+				model.addRow(new Object[] {uipropkeys_[i],ConfigurationController2.KEY_UNALLOCATED,ConfigurationController2.KEY_UNALLOCATED });
 				
 				// if the property is an instance of SingleState, TwoState or MultiState property, creates rows for the states value
 				if (uipropertySet.get(uipropkeys_[i]).isTwoState()) {
-					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", Configuration.KEY_ENTERVALUE });
-					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "",Configuration.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationController2.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "",ConfigurationController2.KEY_ENTERVALUE });
 				} else if (uipropertySet.get(uipropkeys_[i]).isSingleState()) {
-					model.addRow(new Object[] {uipropkeys_[i]+ SingleStateUIProperty.getValueName(), "",Configuration.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i]+ SingleStateUIProperty.getValueName(), "",ConfigurationController2.KEY_ENTERVALUE });
 				} else if (uipropertySet.get(uipropkeys_[i]).isMultiState()) { // if multiple values property
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
-						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getStateName(j), "",Configuration.KEY_ENTERVALUE });
+						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getStateName(j), "",ConfigurationController2.KEY_ENTERVALUE });
 					}
 				} 
 			}
@@ -246,7 +246,7 @@ public class PropertiesTable extends JPanel {
 				String s = (String) table.getValueAt(row, 0);
 				if (column == 2 && isStateValue(s)) { 
 					// if in the last column and corresponds to a field value, returns a textfield cell editor
-					return new DefaultCellEditor(new JTextField(Configuration.KEY_ENTERVALUE));
+					return new DefaultCellEditor(new JTextField(ConfigurationController2.KEY_ENTERVALUE));
 				} else {
 					// if not a field value or not in third column
 					switch (column) {
@@ -296,9 +296,9 @@ public class PropertiesTable extends JPanel {
 	// Creates a JComboBox containing all the Micro-manager device properties corresponding to the device.
 	private JComboBox getDevicePropertiesComboBox(String device) {
 		JComboBox cb = new JComboBox();
-		cb.addItem(Configuration.KEY_UNALLOCATED);
+		cb.addItem(ConfigurationController2.KEY_UNALLOCATED);
 
-		if (!device.equals(Configuration.KEY_UNALLOCATED)) {
+		if (!device.equals(ConfigurationController2.KEY_UNALLOCATED)) {
 			String[] props = mmproperties_.getDevice(device).getPropertiesFriendlyName(); // fill with the name of the property itself
 			for (int i = 0; i < props.length; i++) {
 				cb.addItem(props[i]);
@@ -362,13 +362,13 @@ public class PropertiesTable extends JPanel {
 		
 		for(int i=0;i<nrow;i++){
 			// if device column is not empty (from state property, e.g. single state value or multistates) and is not unallocated
-			if (!isStateValue((String) model.getValueAt(i, 0)) && !((String) model.getValueAt(i, 1)).equals(Configuration.KEY_UNALLOCATED)) { 
+			if (!isStateValue((String) model.getValueAt(i, 0)) && !((String) model.getValueAt(i, 1)).equals(ConfigurationController2.KEY_UNALLOCATED)) { 
 				String propertyname = (String) model.getValueAt(i, 2);
 				if( mmproperties_.getDevice((String) model.getValueAt(i, 1)).hasFriendlyProperty(propertyname)){
 					String hash = mmproperties_.getDevice((String) model.getValueAt(i, 1)).getFriendlyPropertyHash(propertyname);
 					settings.put((String) model.getValueAt(i, 0), hash); // put with the property hash
 				} else {
-					settings.put((String) model.getValueAt(i, 0), Configuration.KEY_UNALLOCATED); // set to unallocated
+					settings.put((String) model.getValueAt(i, 0), ConfigurationController2.KEY_UNALLOCATED); // set to unallocated
 				}
 			} else {
 				settings.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 2)); // keep the unallocated as is
@@ -436,7 +436,7 @@ public class PropertiesTable extends JPanel {
 	        if (column > 0) {
 	            String versionVal = (String) value;
 
-	            if (versionVal.equals(Configuration.KEY_ENTERVALUE) || versionVal.equals(Configuration.KEY_UNALLOCATED)) {
+	            if (versionVal.equals(ConfigurationController2.KEY_ENTERVALUE) || versionVal.equals(ConfigurationController2.KEY_UNALLOCATED)) {
 	                c.setForeground(Color.RED);
 	            } else {
 	                c.setForeground(Color.BLACK);

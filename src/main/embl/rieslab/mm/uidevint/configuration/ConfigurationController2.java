@@ -27,7 +27,7 @@ import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
  * @author Joran Deschamps
  *
  */
-public class Configuration {
+public class ConfigurationController2 {
 
 	// Keys
 	/**
@@ -47,7 +47,7 @@ public class Configuration {
 	private SystemController controller_;
 	private ConfigurationWizard wizard_;
 	
-	public Configuration(SystemController controller){
+	public ConfigurationController2(SystemController controller){
 		controller_ = controller;
 		uiproperties_ = new HashMap<String,String>();
 		uiparameters_ = new HashMap<String,String>();
@@ -68,7 +68,7 @@ public class Configuration {
 	}
 	
 	/**
-	 * Reads a configuration in the Micro-manager folder.
+	 * Reads a configuration.
 	 * 
 	 * @param uipropertySet UIProperties of the current UI 
 	 * @param uiparameterSet UIParameters of the current UI
