@@ -14,13 +14,13 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class ConfigurationIO {
 
-	public static GlobalConfiguration read(File file) {
+	public static GlobalConfigurationWrapper read(File file) {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
 		try {
-			GlobalConfiguration config = objectMapper.readValue(new FileInputStream(file), GlobalConfiguration.class);
+			GlobalConfigurationWrapper config = objectMapper.readValue(new FileInputStream(file), GlobalConfigurationWrapper.class);
 			return config;
 			
 		} catch (JsonParseException e) {
@@ -36,7 +36,7 @@ public class ConfigurationIO {
 		return null;
 	}
 
-	public static boolean write(File file, GlobalConfiguration configuration) {
+	public static boolean write(File file, GlobalConfigurationWrapper configuration) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);

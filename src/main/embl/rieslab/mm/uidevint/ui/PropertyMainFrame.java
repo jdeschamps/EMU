@@ -19,10 +19,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.embl.rieslab.mm.uidevint.configuration.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
+import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.IntInternalPropertyValue;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.InternalProperty;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.InternalPropertyType;
+import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
 /**
@@ -40,6 +43,7 @@ public abstract class PropertyMainFrame extends JFrame {
 
 	private ArrayList<PropertyPanel> panels_;
 	private SystemController controller_;
+	private PropertyMainFrameInterface interface_;
 	
 	/**
 	 * 
@@ -63,8 +67,9 @@ public abstract class PropertyMainFrame extends JFrame {
     	setUpMenuBar();
 		initComponents();
 		linkInternalProperties();
+		interface_ = generateInterface();
 	}
-	
+
 	private void setUpMenuBar(){
         JMenu menu;
         JMenuItem newcfg, loadcfg;  
@@ -115,6 +120,37 @@ public abstract class PropertyMainFrame extends JFrame {
 		    return controller_.loadConfiguration(selectedFile);
 		}
 		return true;
+	}
+	
+	public PropertyMainFrameInterface getInterface(){
+		return interface_;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	private PropertyMainFrameInterface generateInterface() {
+		Iterator<PropertyPanel> it = this.getPropertyPanels().iterator();
+		PropertyPanel pan;
+		HashMap<String, UIProperty> uiprops = new HashMap<String,UIProperty>();
+		HashMap<String, UIParameter> uiparams = new HashMap<String,UIParameter>();
+		HashMap<String, TaskHolder> tasks = new HashMap<String,TaskHolder>();
+		
+		while (it.hasNext()) { // loops over the PropertyPanel contained in the MainFrame
+			pan = it.next();
+			
+			// adds all the UIProperties, since their name contains their parent PropertyPanel name
+			// there is no collision
+			uiprops.putAll(pan.getUIProperties()); 
+			
+			// adds all the UIParameters, here collision will be handled by the HashMap (overwrite entry)
+			uiparams.putAll(pan.getUIParameters());
+			
+			// gets tasks
+			if(pan instanceof TaskHolder){
+				tasks.put(((TaskHolder) pan).getTaskName(), (TaskHolder) pan);
+			}
+		}	
+
+		return new PropertyMainFrameInterface(panels_, uiprops, uiparams, tasks);
 	}
 	
 	protected void registerPropertyPanel(ArrayList<PropertyPanel> panels){

@@ -1,29 +1,30 @@
 package main.embl.rieslab.mm.uidevint.configuration;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 
 public class PluginConfiguration implements Comparable<PluginConfiguration>{
 	
-	public String name;
-	public String plugin_name;
-	public TreeMap<String,String> properties;
-	public TreeMap<String,String> parameters;
+	private String configurationName;
+	private String pluginName;
+	private TreeMap<String,String> properties;
+	private TreeMap<String,String> parameters;
 	
-	public PluginConfiguration(String name, HashMap<String,String> props, HashMap<String,String> params){
-		this.name = name;
+	public PluginConfiguration(String configurationName, String pluginName, Map<String,String> props, Map<String,String> params){
+		this.configurationName = configurationName;
+		this.pluginName = pluginName;
 
 		properties = new TreeMap<String,String>(props);
 		parameters = new TreeMap<String,String>(params);	
 	}
 	
-	public String getName(){
-		return name;
+	public String getConfigurationName(){
+		return configurationName;
 	}
 
 	public String getPluginName(){
-		return plugin_name;
+		return pluginName;
 	}
 	
 	public TreeMap<String,String> getProperties(){
@@ -36,7 +37,7 @@ public class PluginConfiguration implements Comparable<PluginConfiguration>{
 	
 	@Override
 	public int compareTo(PluginConfiguration OtherUIPluginWrapper) {
-		return name.compareTo(OtherUIPluginWrapper.getName());
+		return configurationName.compareTo(OtherUIPluginWrapper.getConfigurationName());
 	}
 	
 }

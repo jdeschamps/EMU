@@ -10,14 +10,16 @@ import javax.swing.JOptionPane;
 
 import org.micromanager.api.ScriptInterface;
 
+import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
 import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController2;
-import main.embl.rieslab.mm.uidevint.mmproperties.ConfigurationGroup;
-import main.embl.rieslab.mm.uidevint.mmproperties.ConfigurationGroupsRegistry;
+import main.embl.rieslab.mm.uidevint.mmproperties.MMConfigurationGroup;
+import main.embl.rieslab.mm.uidevint.mmproperties.MMConfigurationGroupsRegistry;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperty;
 import main.embl.rieslab.mm.uidevint.plugin.UIPluginLoader;
 import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrame;
+import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
@@ -32,15 +34,12 @@ public class SystemController {
 	private ScriptInterface script_;
 	private CMMCore core_;
 	private MMProperties mmproperties_;
-	private ConfigurationGroupsRegistry configgroups_;
-	private ConfigurationController2 config;
+	private MMConfigurationGroupsRegistry mmconfiggroups_;
+	private ConfigurationController config;
 	private PropertyMainFrame mainframe_;
+	private PropertyMainFrameInterface interface_;
+	private UIPluginLoader pluginloader_;
 	private ArrayList<PropertyPair> pairs_;
-	private HashMap<String,UIProperty> uiproperties_;
-	@SuppressWarnings("rawtypes")
-	private HashMap<String,UIParameter> uiparameters_;
-	@SuppressWarnings("rawtypes")
-	private HashMap<String,TaskHolder> tasks_;
 	private ArrayList<String> unallocatedprop_; 
 	private boolean start_;
 		
@@ -49,9 +48,7 @@ public class SystemController {
 		script_ = script;
 		core_ = script_.getMMCore();
 		pairs_ = new ArrayList<PropertyPair>();
-		uiproperties_ = new HashMap<String,UIProperty>();
-		uiparameters_ = new HashMap<String,UIParameter>();
-		tasks_ = new HashMap<String,TaskHolder>();
+
 		unallocatedprop_ = new ArrayList<String>();
 	}
 	
@@ -63,74 +60,67 @@ public class SystemController {
 		
 		// extracts MM properties
 		mmproperties_ = new MMProperties(core_);
-		configgroups_ = new ConfigurationGroupsRegistry(core_);
+		mmconfiggroups_ = new MMConfigurationGroupsRegistry(core_);
 
-		// initiates UI
-		mainframe_ = UIPluginLoader.loadPlugin(this);
+		// load plugin list
+		pluginloader_ = new UIPluginLoader(this);
 		
-		// extracts UI properties and parameters
-		extractPropertiesAndParameters();
+		// if no plugin is found
+		if(pluginloader_.getPluginNumber() == 0){
+			// show message: no plugin found, stop here
+			// TODO
+		} else {
+			// reads out configuration
+			config = new ConfigurationController(this);
 			
-		// reads out configuration
-		config = new ConfigurationController2(this);
-		boolean read = config.readDefaultConfiguration(uiproperties_, uiparameters_, mmproperties_);
+			if(config.readDefaultConfiguration()){ // if a configuration was read
+				
+				if(pluginloader_.isPluginAvailable(config.getConfiguration().getCurrentPluginName())){ // plugin available
+					
+					// initiates UI
+					mainframe_ = pluginloader_.loadPlugin(config.getConfiguration().getCurrentPluginName());
+					
+					// extracts UI properties and parameters
+					interface_ = mainframe_.getInterface();
+					
+					// sanity check on the configuration to make sure the UIProperties and UIParameters match
+					boolean sane = ;
+					
+					if(sane){
+						// apply configuration
+						applyConfiguration();
+					} else {
+						// show dialog: apply (might have missing properties), apply and save or launch wizard
+						// TODO
+					}
+					
+				} else { // default UI not found
+					// launch wizard
+					// TODO
+				}
+				
+			} else { // no configuration
+				// launch a new wizard			
+				start_ = false;
 
-		if(read){ // if read a configuration
-			setConfiguration();
+				// TODO
+			}
+		}
+		
+		if(read){ // if a configuration was read
+			
+			// initiates UI
+			mainframe_ = UIPluginLoader.loadPlugin(this);
+			
+			// extracts UI properties and parameters
+			interface_ = mainframe_.getInterface();
+			applyConfiguration();
 			start_ = false;
 		} else { // if failed
 			start_ = false;
 			// launches a new wizard
-			config.launchNewWizard(uiproperties_, uiparameters_, mmproperties_);
+			config.launchNewWizard(interface_, mmproperties_);
 		}
-	}
-	
-	// Extract the UIProperty and UIParameter from the UI.
-	@SuppressWarnings("rawtypes")
-	private void extractPropertiesAndParameters() {
-		Iterator<PropertyPanel> it = mainframe_.getPropertyPanels().iterator();
-		PropertyPanel pan;
-		while (it.hasNext()) { // loops over the PropertyPanel contained in the MainFrame
-			pan = it.next();
-			
-			// adds all the UIProperties, since their name contains their parent PropertyPanel name
-			// there is no collision
-			uiproperties_.putAll(pan.getUIProperties()); 
-			
-			
-			////////////////////////////////////////////////////////////////////////////////////////////////
-			//
-			// I am not really certain any more of the purpose of theses lines
-			// TODO
-			
-			// Loops over all parameters and make sure that they are unique
-			HashMap<String,UIParameter> panparam = pan.getUIParameters();
-			Iterator<String> paramit = panparam.keySet().iterator();
-			ArrayList<String> subst = new ArrayList<String>();
-			while(paramit.hasNext()){
-				String param = paramit.next();
-				
-				if(!uiparameters_.containsKey(param)){ // if param doesn't exist already, adds it
-					uiparameters_.put(param, panparam.get(param));
-				} else if(uiparameters_.get(param).getType().equals(panparam.get(param).getType())){
-					// if it already exists and the new parameter is of the same type than the one
-					// previously added to the HashMap, then add to array subst
-					subst.add(param);
-				} 
-			}
-			// avoid concurrent modification of the hashmap, by substituting the parameters while keeping the same value
-			for(int i=0;i<subst.size();i++){
-				pan.substituteParameter(subst.get(i), uiparameters_.get(subst.get(i)));
-			}
-			
-			//
-			///////////////////////////////////////////////////////////////////////////////////////////////
-			
-			// gets tasks
-			if(pan instanceof TaskHolder){
-				tasks_.put(((TaskHolder) pan).getTaskName(), (TaskHolder) pan);
-			}
-		}	
 	}
 
 	/**
@@ -140,10 +130,10 @@ public class SystemController {
 	 * @return True if reading successful
 	 */
 	public boolean loadConfiguration(File f){
-		boolean read = config.readConfiguration(uiproperties_, uiparameters_, mmproperties_, f);
+		boolean read = config.readConfiguration(interface_, mmproperties_, f);
 		
 		if(read){ // if read a configuration, then update.
-			setConfiguration();
+			applyConfiguration();
 			return true;
 		} else {
 			return false;
@@ -159,12 +149,14 @@ public class SystemController {
 		String uiprop;
 		unallocatedprop_.clear(); // clear the list of unallocated properties
 		
+		HashMap<String, UIProperty> uiproperties = interface_.getUIProperties();
+		
 		Iterator<String> itstr = configprop.keySet().iterator(); // iteration through all the mapped UI properties
 		while (itstr.hasNext()) {
 			uiprop = itstr.next(); // ui property
 
 			// if ui property exists
-			if (uiproperties_.containsKey(uiprop)) {
+			if (uiproperties.containsKey(uiprop)) {
 
 				// if the ui property is not allocated, add to the list of unallocated properties.  
 				if (configprop.get(uiprop).equals(ConfigurationController2.KEY_UNALLOCATED)) {
@@ -172,21 +164,21 @@ public class SystemController {
 					unallocatedprop_.add(uiprop);
 				} else if (mmproperties_.isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
 					// link the properties
-					addPair(uiproperties_.get(uiprop),mmproperties_.getProperty(configprop.get(uiprop)));
+					addPair(uiproperties.get(uiprop),mmproperties_.getProperty(configprop.get(uiprop)));
 					
 					// test if the property has finite number of states
-					if(uiproperties_.get(uiprop).isTwoState()){ // if it is a two-state property
+					if(uiproperties.get(uiprop).isTwoState()){ // if it is a two-state property
 						// extract the on/off values
-						TwoStateUIProperty t = (TwoStateUIProperty) uiproperties_.get(uiprop);
+						TwoStateUIProperty t = (TwoStateUIProperty) uiproperties.get(uiprop);
 						t.setOnStateValue(configprop.get(uiprop+TwoStateUIProperty.getOnStateName()));
 						t.setOffStateValue(configprop.get(uiprop+TwoStateUIProperty.getOffStateName()));
 
-					} else if(uiproperties_.get(uiprop).isSingleState()){ // if single state property
+					} else if(uiproperties.get(uiprop).isSingleState()){ // if single state property
 						// extract the state value
-						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties_.get(uiprop);
+						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
 						t.setStateValue(configprop.get(uiprop+SingleStateUIProperty.getValueName()));
-					} else if (uiproperties_.get(uiprop).isMultiState()) {// if it is a multistate property
-						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties_.get(uiprop);
+					} else if (uiproperties.get(uiprop).isMultiState()) {// if it is a multistate property
+						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties.get(uiprop);
 						int numpos = t.getNumberOfStates();
 						for(int j=0;j<numpos;j++){
 							t.setStateValue(j, configprop.get(uiprop+MultiStateUIProperty.getStateName(j)));
@@ -205,16 +197,18 @@ public class SystemController {
 	 * 
 	 * @param configparam Values set by the user mapped to their corresponding ui parameter.
 	 */
+	@SuppressWarnings("rawtypes")
 	public void readParameters(HashMap<String, String> configparam){
 		String uiparam;
+		HashMap<String, UIParameter> uiparameters = interface_.getUIParameters();
 		Iterator<String> itstr = configparam.keySet().iterator();
 		ArrayList<String> wrg = new ArrayList<String>();
 		while (itstr.hasNext()) {
 			uiparam = itstr.next();
 			
-			if (uiparameters_.containsKey(uiparam)) {
+			if (uiparameters.containsKey(uiparam)) {
 				try{
-					uiparameters_.get(uiparam).setStringValue(configparam.get(uiparam));
+					uiparameters.get(uiparam).setStringValue(configparam.get(uiparam));
 				} catch (Exception e){
 					wrg.add(uiparam);
 				}
@@ -230,7 +224,7 @@ public class SystemController {
 	 * there are some unallocated properties, then pops-up a message.
 	 * 
 	 */
-	public void setConfiguration() {
+	public void applyConfiguration() {
 		// Allocate UI properties and parameters
 		readProperties(config.getPropertiesConfiguration());
 		readParameters(config.getParametersConfiguration());
@@ -252,7 +246,7 @@ public class SystemController {
 	 * @return False if a Wizard is already running.
 	 */
 	public boolean launchWizard() {
-		return config.launchWizard(uiproperties_, uiparameters_, mmproperties_);
+		return config.launchWizard(interface_, mmproperties_);
 	}
 	
 	// Pops-up a message indicating that a parameter has been wrongly set.
@@ -326,7 +320,7 @@ public class SystemController {
 	 * @return
 	 */
 	public String[] getMMConfigGroups(){
-		String[] groups = configgroups_.getConfigurationGroups().keySet().toArray(new String[0]);
+		String[] groups = mmconfiggroups_.getConfigurationGroups().keySet().toArray(new String[0]);
 		Arrays.sort(groups);
 		return groups;
 	}	
@@ -337,9 +331,9 @@ public class SystemController {
 	 * @param groupname Name of the group to return
 	 * @return 
 	 */
-	public ConfigurationGroup getMMConfigGroup(String groupname){
-		if(configgroups_.getConfigurationGroups().containsKey(groupname)){
-			return configgroups_.getConfigurationGroups().get(groupname);
+	public MMConfigurationGroup getMMConfigGroup(String groupname){
+		if(mmconfiggroups_.getConfigurationGroups().containsKey(groupname)){
+			return mmconfiggroups_.getConfigurationGroups().get(groupname);
 		}		
 		return null;
 	}
@@ -351,8 +345,8 @@ public class SystemController {
 	 * @return
 	 */
 	public String[] getMMConfigNames(String groupname){
-		if(configgroups_.getConfigurationGroups().containsKey(groupname)){
-			return configgroups_.getConfigurationGroups().get(groupname).getConfigurations().toArray();
+		if(mmconfiggroups_.getConfigurationGroups().containsKey(groupname)){
+			return mmconfiggroups_.getConfigurationGroups().get(groupname).getConfigurations().toArray();
 		} 
 		String[] s = {"Empty"}; 
 		return s;
@@ -364,12 +358,13 @@ public class SystemController {
 	 * @param propvalues Map of the UIProperties (keys) and the values they should be set to.
 	 */
 	public void setUpSystem(HashMap<String, String> propvalues){
+		HashMap<String, UIProperty> uiproperties = interface_.getUIProperties();
 		Iterator<String> it = propvalues.keySet().iterator();
 		String s;
 		while(it.hasNext()){
 			s = it.next();
-			if(uiproperties_.containsKey(s)){
-				uiproperties_.get(s).setPropertyValue(propvalues.get(s));
+			if(uiproperties.containsKey(s)){
+				uiproperties.get(s).setPropertyValue(propvalues.get(s));
 			}
 		}
 	}
@@ -384,8 +379,6 @@ public class SystemController {
 		try {
 			i = core_.getExposure();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			System.out.println("Could not get exposure from core.");
 			e.printStackTrace();
 		}
 		return i;
@@ -416,7 +409,7 @@ public class SystemController {
 	 * @return
 	 */
 	public UIProperty getProperty(String name){ 
-		return uiproperties_.get(name);
+		return interface_.getUIProperties().get(name);
 	}
 	
 	/**
@@ -425,7 +418,7 @@ public class SystemController {
 	 * @return
 	 */
 	public HashMap<String, UIProperty> getPropertiesMap(){
-		return uiproperties_;
+		return interface_.getUIProperties();
 	}
 	
 	/**
@@ -436,7 +429,7 @@ public class SystemController {
 	 */
 	@SuppressWarnings("rawtypes")
 	public TaskHolder getTaskHolder(String taskname){
-		return tasks_.get(taskname);
+		return interface_.getUITaskHolders().get(taskname);
 	}
 	
 	/**
@@ -444,8 +437,8 @@ public class SystemController {
 	 * 
 	 * @return
 	 */
-	public HashMap<String, String[]> getConfigurationGroups(){
-		return configgroups_.getConfigurationChannelsMap();
+	public HashMap<String, String[]> getMMConfigurationGroups(){
+		return mmconfiggroups_.getConfigurationChannelsMap();
 	}
 	
 	public void refreshProperties(){

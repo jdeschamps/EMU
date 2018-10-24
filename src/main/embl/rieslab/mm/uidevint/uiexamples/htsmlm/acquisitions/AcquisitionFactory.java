@@ -61,24 +61,24 @@ public class AcquisitionFactory {
 	
 	public Acquisition getAcquisition(String type){
 		if(type.equals(AcquisitionType.BFP.getTypeValue())){
-			return new BFPAcquisition(controller_.getExposure(), controller_.getConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BFP)));
+			return new BFPAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BFP)));
 		} else if(type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
-			return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getConfigurationGroups());
+			return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getMMConfigurationGroups());
 		} else if(type.equals(AcquisitionType.TIME.getTypeValue())){
-			return new TimeAcquisition(controller_.getExposure(), controller_.getConfigurationGroups());
+			return new TimeAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups());
 		} else if(type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
-			return new BrightFieldAcquisition(controller_.getExposure(), controller_.getConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BRIGHTFIELD)));
+			return new BrightFieldAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BRIGHTFIELD)));
 		}  else if(type.equals(AcquisitionType.SNAP.getTypeValue())){
-			return new SnapAcquisition(controller_.getExposure(), controller_.getConfigurationGroups());
+			return new SnapAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups());
 		} else if(type.equals(AcquisitionType.ZSTACK.getTypeValue())){
-			return new ZStackAcquisition(controller_.getExposure(), controller_.getConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
+			return new ZStackAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
 		}
 			
 		return getDefaultAcquisition();
 	}
 	
 	private Acquisition getDefaultAcquisition() {
-		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getConfigurationGroups());
+		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getMMConfigurationGroups());
 	}
 
 	public boolean writeAcquisitionList(Experiment exp, String path){

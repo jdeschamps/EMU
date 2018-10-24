@@ -46,24 +46,22 @@ public class ParametersTable extends JPanel{
 	private JComboBox color;
 	
 	@SuppressWarnings("rawtypes")
-	private HashMap<String, UIParameter> uiparameterSet_;
+	private Map<String, UIParameter> uiparameterSet_;
+	private Map<String, UIProperty> uipropertySet_;
 	private String[] uiparamkeys_;
 	private HelpWindow help_;
-	private HashMap<String, UIProperty> uipropertySet_;
 	
 	/**
 	 * Constructor called when no configuration exists. All the parameter values are set to default values.
 	 * 
 	 * @param uiparameterSet Map of the UI parameters, indexed by their name
-	 * @param uipropertySet Map of the UI properties, indexed by their name
 	 * @param help Help window
 	 */
 	@SuppressWarnings("rawtypes")
-	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, UIProperty> uipropertySet, HelpWindow help) {
+	public ParametersTable(Map<String, UIParameter> uiparameterSet, HelpWindow help) {
 		
 		uiparameterSet_ = uiparameterSet; 
 		help_ = help;
-		uipropertySet_ = uipropertySet;
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
@@ -102,15 +100,13 @@ public class ParametersTable extends JPanel{
 	 * Constructor called when a configuration exists.
 	 * 
 	 * @param uiparameterSet Map of the UI parameters, indexed by their name
-	 * @param configparam Map of the UIParameter names (keys) and their value (values) from the configuration
-	 * @param uipropertySet Map of the UI properties, indexed by their name
+	 * @param paramValues Map of the UIParameter names (keys) and their value (values) from the configuration
 	 * @param help Help window
 	 */
 	@SuppressWarnings("rawtypes")
-	public ParametersTable(HashMap<String, UIParameter> uiparameterSet, HashMap<String, String> configparam, HashMap<String, UIProperty>  uipropertySet, HelpWindow help) {		
+	public ParametersTable(Map<String, UIParameter> uiparameterSet, Map<String, String> paramValues, HelpWindow help) {		
 		help_ = help;
 		uiparameterSet_ = uiparameterSet; 
-		uipropertySet_ = uipropertySet;
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
@@ -131,11 +127,11 @@ public class ParametersTable extends JPanel{
 		// Define table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"UI parameter", "Value" }, 0);
 		for(int i=0;i<uiparamkeys_.length;i++){
-			if(configparam.containsKey(uiparamkeys_[i])){ // if the parameter is found in the configuration, then put its value
+			if(paramValues.containsKey(uiparamkeys_[i])){ // if the parameter is found in the configuration, then put its value
 				if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){
-					model.addRow(new Object[] {uiparamkeys_[i], utils.convertStringToBool(configparam.get(uiparamkeys_[i]))});
+					model.addRow(new Object[] {uiparamkeys_[i], utils.convertStringToBool(paramValues.get(uiparamkeys_[i]))});
 				} else {
-					model.addRow(new Object[] {uiparamkeys_[i], configparam.get(uiparamkeys_[i])});
+					model.addRow(new Object[] {uiparamkeys_[i], paramValues.get(uiparamkeys_[i])});
 				}
 			} else { // else put default value
 				if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){

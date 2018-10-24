@@ -13,10 +13,10 @@ import mmcorej.StrVector;
  * @author Joran Deschamps
  *
  */
-public class ConfigurationGroupsRegistry {
+public class MMConfigurationGroupsRegistry {
 
 	private CMMCore core_;
-	private HashMap<String, ConfigurationGroup> groups_;
+	private HashMap<String, MMConfigurationGroup> groups_;
 	
 	/**
 	 * The constructor receives the current Micro-manager core instance and extract all the
@@ -24,10 +24,10 @@ public class ConfigurationGroupsRegistry {
 	 * 
 	 * @param core
 	 */
-	public ConfigurationGroupsRegistry(CMMCore core){
+	public MMConfigurationGroupsRegistry(CMMCore core){
 		core_ = core;
 		
-		groups_ = new HashMap<String, ConfigurationGroup>();
+		groups_ = new HashMap<String, MMConfigurationGroup>();
 		
 		retrieveConfigurationGroups();
 	}
@@ -37,7 +37,7 @@ public class ConfigurationGroupsRegistry {
 		
 		if(groups != null){
 			for(int i=0;i<groups.size();i++){
-				groups_.put(groups.get(i), new ConfigurationGroup(groups.get(i),core_.getAvailableConfigs(groups.get(i))));
+				groups_.put(groups.get(i), new MMConfigurationGroup(groups.get(i),core_.getAvailableConfigs(groups.get(i))));
 			}
 		}
 	}
@@ -47,7 +47,7 @@ public class ConfigurationGroupsRegistry {
 	 * 
 	 * @return
 	 */
-	public HashMap<String, ConfigurationGroup> getConfigurationGroups(){
+	public HashMap<String, MMConfigurationGroup> getConfigurationGroups(){
 		return groups_;
 	}
 	

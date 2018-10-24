@@ -15,10 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 
-import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController2;
+import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
+import main.embl.rieslab.mm.uidevint.configuration.GlobalConfiguration;
+import main.embl.rieslab.mm.uidevint.configuration.GlobalConfigurationWrapper;
+import main.embl.rieslab.mm.uidevint.configuration.PluginConfiguration;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
-import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
+import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
 
 /**
  * UI used to configure the system by allocating UI properties to existing device properties in Micro-manager, the values of their state
@@ -34,11 +36,11 @@ public class ConfigurationWizard {
 	private PropertiesTable propertytable_; // panel used by the user to pair ui- and mmproperties
 	private ParametersTable parametertable_; // panel used by the user to set the values of uiparameters
 	private HelpWindow help_; // help window to display the description of uiproperties and uiparameters
-	private ConfigurationController2 config_; // configuration class
+	private ConfigurationController config_; // configuration class
 	private JFrame frame_; // overall frame for the configuration wizard
 	private boolean running_ = false;
 	
-	public ConfigurationWizard(ConfigurationController2 config) {
+	public ConfigurationWizard(ConfigurationController config) {
 		config_ = config;
 		
 		prop_ = new HashMap<String, String>();
@@ -53,8 +55,7 @@ public class ConfigurationWizard {
 	 * @param mmproperties Object holding the device properties from Micro-manager.
 	 */
 	@SuppressWarnings("rawtypes")
-	public void newConfiguration(final HashMap<String, UIProperty> uipropertySet,
-			final HashMap<String, UIParameter> uiparameterSet, final MMProperties mmproperties) {
+	public void newConfiguration(final PropertyMainFrameInterface maininterface, final MMProperties mmproperties) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -63,11 +64,11 @@ public class ConfigurationWizard {
 				help_ = new HelpWindow("Click on a row to display the description");
 				
 				// Table defining the properties
-				propertytable_ = new PropertiesTable(uipropertySet, mmproperties, help_);
+				propertytable_ = new PropertiesTable(maininterface.getUIProperties(), mmproperties, help_);
 				propertytable_.setOpaque(true); 
 				
 				// and parameters
-				parametertable_ = new ParametersTable(uiparameterSet, uipropertySet, help_);
+				parametertable_ = new ParametersTable(maininterface.getUIParameters(), help_);
 				parametertable_.setOpaque(true); 
 				
 				frame_ = createFrame(propertytable_, parametertable_, help_);
@@ -85,25 +86,25 @@ public class ConfigurationWizard {
 	 * @param configparam HashMap holding the values of the ui parameters from the configuration.
 	 */
 	@SuppressWarnings("rawtypes")
-	public void existingConfiguration(final HashMap<String, UIProperty> uipropertySet,
-			final HashMap<String, UIParameter> uiparameterSet, final MMProperties mmproperties, final HashMap<String, String> configprop,
-			final HashMap<String, String> configparam) {
+	public void existingConfiguration(final PropertyMainFrameInterface maininterface,
+			final MMProperties mmproperties, final GlobalConfiguration configuration) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				running_ = true;
-				
-				help_ = new HelpWindow("Click on a row to display the description");
+
+				help_ = new HelpWindow(
+						"Click on a row to display the description");
 
 				// Table defining the properties using configuration
-				propertytable_ = new PropertiesTable(uipropertySet, mmproperties, configprop, help_);
-				propertytable_.setOpaque(true); 
-				
+				propertytable_ = new PropertiesTable(maininterface.getUIProperties(), mmproperties, help_);
+				propertytable_.setOpaque(true);
+
 				// now parameters
-				parametertable_ = new ParametersTable(uiparameterSet, configparam, uipropertySet, help_);
-				parametertable_.setOpaque(true); 
-				
-				frame_ = createFrame(propertytable_,parametertable_, help_);
+				parametertable_ = new ParametersTable(maininterface.getUIParameters(), configuration, help_);
+				parametertable_.setOpaque(true);
+
+				frame_ = createFrame(propertytable_, parametertable_, help_);
 			}
 		});
 	}
@@ -242,5 +243,16 @@ public class ConfigurationWizard {
 			frame_.dispose();
 		}
 		running_ = false;
+	}
+
+	public void start(PluginConfiguration pluginConfiguration,
+			PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public String getConfigurationName() {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

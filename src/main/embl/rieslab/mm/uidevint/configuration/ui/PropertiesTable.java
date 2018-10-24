@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.Font;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JComboBox;
@@ -42,7 +43,7 @@ public class PropertiesTable extends JPanel {
 	private JComboBox devices;
 	private JTable table;
 		
-	private HashMap<String, UIProperty> uipropertySet_;
+	private Map<String, UIProperty> uipropertySet_;
 	private MMProperties mmproperties_;
 	private String[] uipropkeys_;
 	private HelpWindow help_;
@@ -54,7 +55,7 @@ public class PropertiesTable extends JPanel {
 	 * @param mmproperties Object containing the device properties from the current Micro-manager session. 
 	 * @param help Help window.
 	 */
-	public PropertiesTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HelpWindow help) {
+	public PropertiesTable(Map<String, UIProperty> uipropertySet, MMProperties mmproperties, HelpWindow help) {
 
 		uipropertySet_ = uipropertySet;
 		mmproperties_ = mmproperties;
@@ -111,14 +112,15 @@ public class PropertiesTable extends JPanel {
 	}
 
 	/**
-	 * Constructor called when modifying an existing configuration. Produces a table filled with preset fields. If the fields are not found, then creates non-allocated ones.
+	 * Constructor called when modifying an existing configuration. Produces a table filled with preset fields. 
+	 * If the fields are not found, then creates non-allocated ones.
 	 * 
 	 * @param uipropertySet UI properties map of the current UI.
 	 * @param mmproperties MM properties found in the current Micro-manager configuration.
 	 * @param propertymapping Mapping of UI and MM properties as read from a configuration.
 	 * @param help Help window.
 	 */
-	public PropertiesTable(HashMap<String, UIProperty> uipropertySet, MMProperties mmproperties, HashMap<String, String> propertymapping, HelpWindow help) {
+	public PropertiesTable(Map<String, UIProperty> uipropertySet, MMProperties mmproperties, Map<String, String> propertymapping, HelpWindow help) {
 
 		uipropertySet_ = uipropertySet;
 		mmproperties_ = mmproperties;

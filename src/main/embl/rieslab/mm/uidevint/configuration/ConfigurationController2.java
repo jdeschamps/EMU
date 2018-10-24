@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Properties;
 
-import main.embl.rieslab.mm.uidevint.configuration.ui.ConfigurationWizard;
+import main.embl.rieslab.mm.uidevint.configuration.ui.ConfigurationWizard2;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
@@ -45,7 +45,7 @@ public class ConfigurationController2 {
 	private HashMap<String,String> uiparameters_;
 	
 	private SystemController controller_;
-	private ConfigurationWizard wizard_;
+	private ConfigurationWizard2 wizard_;
 	
 	public ConfigurationController2(SystemController controller){
 		controller_ = controller;
@@ -199,7 +199,7 @@ public class ConfigurationController2 {
 	public void launchNewWizard(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
 			MMProperties mmproperties){
 		// launch wizard
-		wizard_ = new ConfigurationWizard(this);
+		wizard_ = new ConfigurationWizard2(this);
 		wizard_.newConfiguration(uipropertySet, uiparameterSet, mmproperties);
 	}
 
@@ -215,7 +215,7 @@ public class ConfigurationController2 {
 	public boolean launchWizard(HashMap<String,UIProperty> uipropertySet, 
 			HashMap<String,UIParameter> uiparameterSet, MMProperties mmproperties){
 		if(!isWizardRunning()){	
-			wizard_ = new ConfigurationWizard(this);
+			wizard_ = new ConfigurationWizard2(this);
 			wizard_.existingConfiguration(uipropertySet, uiparameterSet, mmproperties, uiproperties_, uiparameters_);
 			return true;
 		}
@@ -248,7 +248,7 @@ public class ConfigurationController2 {
 			saveConfiguration(uiproperties_, uiparameters_); // writes to file
 
 			// update system
-			controller_.setConfiguration();
+			controller_.applyConfiguration();
 		}
 	}
 	

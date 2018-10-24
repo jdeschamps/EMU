@@ -8,7 +8,7 @@ import mmcorej.StrVector;
  * @author Joran Deschamps
  *
  */
-public class ConfigurationGroup {
+public class MMConfigurationGroup {
 
 	private StrVector configs_;
 	private String name_;
@@ -19,7 +19,7 @@ public class ConfigurationGroup {
 	 * @param name Name of the configuration group
 	 * @param config StrVector returned by Micro-manager and representing the different configurations in the group.
 	 */
-	public ConfigurationGroup(String name, StrVector config){
+	public MMConfigurationGroup(String name, StrVector config){
 		name_ = name;
 		configs_ = config;
 	}

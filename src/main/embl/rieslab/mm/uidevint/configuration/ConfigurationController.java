@@ -9,10 +9,12 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 import main.embl.rieslab.mm.uidevint.configuration.ui.ConfigurationWizard;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
+import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.SingleStateUIProperty;
@@ -20,82 +22,53 @@ import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 
 public class ConfigurationController {
-
-	/**
-	 * Value given to unallocated UIProperty.
-	 */
-	public final static String KEY_UNALLOCATED = "Unallocated";
-	/**
-	 * Value given to unallocated UIProperty states and UIParameters values.
-	 */
-	public final static String KEY_ENTERVALUE = "Enter value";
-	
-	private final static String KEY_UIPROPERTY = "UI Property: ";
-	private final static String KEY_UIPARAMETER = "UI Parameter: ";
-	private final static String KEY_DEFAULTUI = "Default UI: ";
-	
-	private Map<String,String> uiproperties_;
-	private Map<String,String> uiparameters_;
 	
 	private SystemController controller_;
 	private ConfigurationWizard wizard_;
-	private GlobalConfiguration configuration_;
+	private GlobalConfigurationWrapper configuration_;
 	
 	public ConfigurationController(SystemController controller){
 		controller_ = controller;
-		uiproperties_ = new HashMap<String,String>();
-		uiparameters_ = new HashMap<String,String>();
+		configuration_ = new GlobalConfigurationWrapper();
 	}
-	
 
-	private Object getDefaultConfigurationFile() {
+	private File getDefaultConfigurationFile() {
 		return new File(SystemConstants.CONFIG_NAME);
 	}
 
-	private boolean grabConfiguration(Object read) {
-		return false;
-	}
-
-
-
-	@SuppressWarnings("rawtypes")
-	public boolean readDefaultConfiguration(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
-			MMProperties mmproperties){		
-		return grabConfiguration(ConfigurationIO.read(getDefaultConfigurationFile(),uipropertySet, uiparameterSet, mmproperties));
+	public boolean readDefaultConfiguration(){
+		configuration_ = ConfigurationIO.read(getDefaultConfigurationFile());
+		if(configuration_ == null){
+			return false;
+		}
+		return true;
 	}
 	
-
-	@SuppressWarnings("rawtypes")
-	public boolean readConfiguration(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
-			MMProperties mmproperties, File f){		
-		return grabConfiguration(ConfigurationIO.read(f,uipropertySet, uiparameterSet, mmproperties));
+	public boolean readConfiguration(File f){		
+		configuration_ = ConfigurationIO.read(f);
+		if(configuration_ == null){
+			return false;
+		}
+		return true;
 	}
 
 	public boolean writeConfiguration(){
 		return ConfigurationIO.write(getDefaultConfigurationFile(), getConfiguration());
 	}
+
+	public boolean writeConfiguration(File f){
+		return ConfigurationIO.write(f, getConfiguration());
+	}
 	
-
-	private GlobalConfiguration getConfiguration(){
-		return null;
+	public GlobalConfigurationWrapper getConfiguration(){
+		return configuration_;
 	}
 
-
-	@SuppressWarnings("rawtypes")
-	public void launchNewWizard(HashMap<String,UIProperty> uipropertySet, HashMap<String,UIParameter> uiparameterSet,
-			MMProperties mmproperties){
+	public boolean startWizard(PropertyMainFrameInterface maininterface, MMProperties mmproperties){
 		// launch wizard
-		wizard_ = new ConfigurationWizard(this);
-		wizard_.newConfiguration(uipropertySet, uiparameterSet, mmproperties);
-	}
-
-
-	@SuppressWarnings("rawtypes")
-	public boolean launchWizard(HashMap<String,UIProperty> uipropertySet, 
-			HashMap<String,UIParameter> uiparameterSet, MMProperties mmproperties){
 		if(!isWizardRunning()){	
 			wizard_ = new ConfigurationWizard(this);
-			wizard_.existingConfiguration(uipropertySet, uiparameterSet, mmproperties, uiproperties_, uiparameters_);
+			wizard_.start(configuration_.getCurrentPluginConfiguration(), maininterface, mmproperties);
 			return true;
 		}
 		return false;
@@ -120,14 +93,23 @@ public class ConfigurationController {
 	 */
 	public void setWizardSettings() {
 		if (wizard_ != null) {
-			// Retrieves the HashMap
-			uiproperties_ = wizard_.getWizardProperties();
-			uiparameters_ = wizard_.getWizardParameters();
+			// Retrieves the Maps and the name
+			String name = wizard_.getConfigurationName();
+			Map<String, String> uiproperties = wizard_.getWizardProperties();
+			Map<String, String> uiparameters = wizard_.getWizardParameters();
 
+			if(configuration_.getCurrentConfigurationName().equals(name)){
+				// the configuration has the same name
+				configuration_.substituteConfiguration(new PluginConfiguration(name, configuration_.getCurrentPluginName(), uiproperties, uiparameters));
+			} else {
+				// new configuration has a different name  
+				configuration_.addConfiguration(new PluginConfiguration(name, configuration_.getCurrentPluginName(), uiproperties, uiparameters));
+			}
+			
 			saveConfiguration(uiproperties_, uiparameters_); // writes to file
 
 			// update system
-			controller_.setConfiguration();
+			controller_.applyConfiguration();
 		}
 	}
 	
@@ -137,7 +119,7 @@ public class ConfigurationController {
 	 * @return Pairs of UIProperty names (keys) and MMProperty names (values), as well as UIProperty state names (keys)
 	 * and UIProperty state values (values)
 	 */
-	public HashMap<String,String> getPropertiesConfiguration(){
+	public TreeMap<String,String> getPropertiesConfiguration(){
 		return uiproperties_;
 	}
 	
@@ -146,7 +128,7 @@ public class ConfigurationController {
 	 * 
 	 * @return Pairs of UIParameter names (keys) and their value (values)
 	 */
-	public HashMap<String,String> getParametersConfiguration(){
+	public TreeMap<String,String> getParametersConfiguration(){
 		return uiparameters_;
 	}
 	
