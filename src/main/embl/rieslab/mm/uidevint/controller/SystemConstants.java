@@ -1,4 +1,4 @@
-package main.embl.rieslab.mm.uidevint.configuration;
+package main.embl.rieslab.mm.uidevint.controller;
 
 /**
  * Constants used in the library.

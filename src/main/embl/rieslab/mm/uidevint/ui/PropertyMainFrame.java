@@ -17,7 +17,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import main.embl.rieslab.mm.uidevint.configuration.SystemConstants;
+import main.embl.rieslab.mm.uidevint.controller.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.IntInternalProperty;

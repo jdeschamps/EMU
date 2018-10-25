@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.swing.JOptionPane;
 
@@ -41,7 +42,8 @@ public class SystemController {
 	private UIPluginLoader pluginloader_;
 	private ArrayList<PropertyPair> pairs_;
 	private ArrayList<String> unallocatedprop_; 
-	private boolean start_;
+	
+	private String currentPlugin;
 		
 	@SuppressWarnings("rawtypes")
 	public SystemController(ScriptInterface script){
@@ -50,14 +52,14 @@ public class SystemController {
 		pairs_ = new ArrayList<PropertyPair>();
 
 		unallocatedprop_ = new ArrayList<String>();
+		
+		currentPlugin = "";
 	}
 	
 	/**
 	 * Collects Micro-manager device properties, creates the user interface and loads the configuration. 
 	 */
-	public void start() {
-		start_ = true;
-		
+	public void start() {		
 		// extracts MM properties
 		mmproperties_ = new MMProperties(core_);
 		mmconfiggroups_ = new MMConfigurationGroupsRegistry(core_);
@@ -69,6 +71,9 @@ public class SystemController {
 		if(pluginloader_.getPluginNumber() == 0){
 			// show message: no plugin found, stop here
 			// TODO
+			
+			// load empty MainFrame
+			
 		} else {
 			// reads out configuration
 			config = new ConfigurationController(this);
@@ -79,12 +84,13 @@ public class SystemController {
 					
 					// initiates UI
 					mainframe_ = pluginloader_.loadPlugin(config.getConfiguration().getCurrentPluginName());
+					currentPlugin = config.getConfiguration().getCurrentPluginName();
 					
 					// extracts UI properties and parameters
 					interface_ = mainframe_.getInterface();
 					
 					// sanity check on the configuration to make sure the UIProperties and UIParameters match
-					boolean sane = ;
+					boolean sane = config.sanityCheck(interface_, mmproperties_);
 					
 					if(sane){
 						// apply configuration
@@ -95,31 +101,31 @@ public class SystemController {
 					}
 					
 				} else { // default UI not found
+					
+					// get list of available plugins
+					String[] plugins = pluginloader_.getPluginList();
+					
+					// Let user choose which plugin to load
+					// show dialog
+					
+					currentPlugin = 
+					
 					// launch wizard
 					// TODO
+					
+					
 				}
 				
 			} else { // no configuration
+				// get list of available plugins
+				
+				// Let user choose which plugin to load
+				currentPlugin = 
+						
 				// launch a new wizard			
-				start_ = false;
-
+				
 				// TODO
 			}
-		}
-		
-		if(read){ // if a configuration was read
-			
-			// initiates UI
-			mainframe_ = UIPluginLoader.loadPlugin(this);
-			
-			// extracts UI properties and parameters
-			interface_ = mainframe_.getInterface();
-			applyConfiguration();
-			start_ = false;
-		} else { // if failed
-			start_ = false;
-			// launches a new wizard
-			config.launchNewWizard(interface_, mmproperties_);
 		}
 	}
 
@@ -130,12 +136,38 @@ public class SystemController {
 	 * @return True if reading successful
 	 */
 	public boolean loadConfiguration(File f){
-		boolean read = config.readConfiguration(interface_, mmproperties_, f);
+		boolean read = config.readConfiguration(f);
 		
-		if(read){ // if read a configuration, then update.
-			applyConfiguration();
+		if(read){ // if read a configuration
+			// check if the default configuration is compatible with current UI
+			if(config.getConfiguration().getCurrentPluginName().equals(currentPlugin)){
+				
+				//load configuration
+				applyConfiguration();
+				
+			} else {
+				// get list of compatible configurations
+				String[] confs = config.getCompatibleConfigurations(currentPlugin);
+				
+				if(confs != null && confs.length != 0){
+					// show user dialog
+
+					// change current configuration
+
+					// load configuration
+					applyConfiguration();
+					
+				} else {
+					// launch wizard
+					
+				}
+			}
+			
+			
 			return true;
 		} else {
+			// show message
+			// TODO
 			return false;
 		}
 	}
@@ -145,7 +177,7 @@ public class SystemController {
 	 * 
 	 * @param configprop Mapping of the Micro-manager properties to the UI properties.
 	 */
-	public void readProperties(HashMap<String, String> configprop){
+	public void readProperties(Map<String, String> configprop){
 		String uiprop;
 		unallocatedprop_.clear(); // clear the list of unallocated properties
 		
@@ -198,7 +230,7 @@ public class SystemController {
 	 * @param configparam Values set by the user mapped to their corresponding ui parameter.
 	 */
 	@SuppressWarnings("rawtypes")
-	public void readParameters(HashMap<String, String> configparam){
+	public void readParameters(Map<String, String> configparam){
 		String uiparam;
 		HashMap<String, UIParameter> uiparameters = interface_.getUIParameters();
 		Iterator<String> itstr = configparam.keySet().iterator();
@@ -215,13 +247,12 @@ public class SystemController {
 			} 
 		}
 		if(wrg.size()>0){
-			showWrongParameterMessage(wrg);
+			SystemDialogs.showWrongParameterMessage(wrg);
 		}
 	}
 
 	/**
-	 * Extracts the configuration for the ui properties and parameters, then updates the UI accordingly. If
-	 * there are some unallocated properties, then pops-up a message.
+	 * Extracts the configuration for the ui properties and parameters, then updates the UI accordingly.
 	 * 
 	 */
 	public void applyConfiguration() {
@@ -231,11 +262,6 @@ public class SystemController {
 
 		// update all properties and parameters
 		mainframe_.updateAllPropertyPanels();
-
-		// if unallocated properties show message
-		if (!start_ && unallocatedprop_.size() > 0) {
-			showUnallocatedMessage();
-		}
 	}
 	
 
@@ -246,55 +272,9 @@ public class SystemController {
 	 * @return False if a Wizard is already running.
 	 */
 	public boolean launchWizard() {
-		return config.launchWizard(interface_, mmproperties_);
+		return config.startWizard(currentPlugin, interface_, mmproperties_);
 	}
 	
-	// Pops-up a message indicating that a parameter has been wrongly set.
-	private void showWrongParameterMessage(ArrayList<String> wrongvals) {
-		String title = "Unallocated properties";
-		
-		String message = "The following parameters have been set to a wrong value: \n\n";
-		Iterator<String> it = wrongvals.iterator();
-		message = message+it.next();
-		int count = 1;
-		while(it.hasNext()){
-			if(count % 5 == 0){
-				message = message+", \n"+it.next();
-			} else {
-				message = message+", "+it.next();
-			}
-			count ++;
-		}
-		message = message+". \n\n";
-		
-		message = message+"The value from these parameters will be ignored.";
-		
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	// Pops-up a message indicating the unallocated ui properties.
-	private void showUnallocatedMessage() {
-		String title = "Unallocated properties";
-		
-		String message = "The following properties from the UI have not been allocated: \n\n";
-		Iterator<String> it = unallocatedprop_.iterator();
-		message = message+it.next();
-		int count = 1;
-		while(it.hasNext()){
-			if(count % 5 == 0){
-				message = message+", \n"+it.next();
-			} else {
-				message = message+", "+it.next();
-			}
-			count ++;
-		}
-		message = message+". \n\n";
-		
-		message = message+"The UI components related to these properties will not function until these properties are allocated. \nCreate or load configuration to allocate them.";
-		
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
-	}
-
 	// Pairs a ui property and a Micro-manager property together.
 	@SuppressWarnings("rawtypes")
 	private void addPair(UIProperty ui, MMProperty mm){

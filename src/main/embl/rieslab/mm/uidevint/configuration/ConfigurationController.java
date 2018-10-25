@@ -1,25 +1,16 @@
 package main.embl.rieslab.mm.uidevint.configuration;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Properties;
 import java.util.TreeMap;
 
 import main.embl.rieslab.mm.uidevint.configuration.ui.ConfigurationWizard;
+import main.embl.rieslab.mm.uidevint.controller.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.SingleStateUIProperty;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
-import main.embl.rieslab.mm.uidevint.ui.uiproperties.UIProperty;
 
 public class ConfigurationController {
 	
@@ -29,7 +20,6 @@ public class ConfigurationController {
 	
 	public ConfigurationController(SystemController controller){
 		controller_ = controller;
-		configuration_ = new GlobalConfigurationWrapper();
 	}
 
 	private File getDefaultConfigurationFile() {
@@ -63,12 +53,78 @@ public class ConfigurationController {
 	public GlobalConfigurationWrapper getConfiguration(){
 		return configuration_;
 	}
+	
+	public String[] getCompatibleConfigurations(String pluginName){
+		if(configuration_ != null){
+			return configuration_.getCompatibleConfigurations(pluginName);
+		}
+		return null; 
+	}
 
-	public boolean startWizard(PropertyMainFrameInterface maininterface, MMProperties mmproperties){
+	@SuppressWarnings("rawtypes")
+	public boolean sanityCheck(PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
+		boolean sane = true;
+		PluginConfiguration pluginconf = configuration_.getCurrentPluginConfiguration();
+
+		// check that all the expected UIProperties are present
+		Iterator<String> uipropit = maininterface.getUIProperties().keySet().iterator();
+		while(uipropit.hasNext()){
+			String s = uipropit.next();
+			if(!pluginconf.getProperties().containsKey(s)){ // if the UIProperty is not found, then add it as unallocated
+				sane = false;
+				pluginconf.getProperties().put(s, GlobalConfigurationWrapper.KEY_UNALLOCATED);
+			}
+		}
+		
+		// same with parameters
+		Iterator<String> uiparamit = maininterface.getUIParameters().keySet().iterator();
+		while(uiparamit.hasNext()){
+			String s = uiparamit.next();
+			if(!pluginconf.getParameters().containsKey(s)){ // UIParameter is not found, add it with default value
+				sane = false;
+				pluginconf.getParameters().put(s, ((UIParameter) maininterface.getUIParameters().get(s)).getStringValue());
+			}
+		}
+		
+		// remove configuration properties that are not present in the UI (old version)
+		// and set as unallocated the values that do not match mmproperties
+		Iterator<String> confpropit = pluginconf.getProperties().keySet().iterator();
+		while(confpropit.hasNext()){
+			String s = confpropit.next();
+			if(!maininterface.getUIProperties().containsKey(s)){ // if the UIProperty does not exist, remove it
+				pluginconf.getProperties().remove(s);
+			} else { 
+				if(!mmproperties.getProperties().containsKey(pluginconf.getProperties().get(s))){ // if the MMProperty does not exist, set as unallocated
+					pluginconf.getProperties().remove(s);
+					pluginconf.getProperties().put(s, GlobalConfigurationWrapper.KEY_UNALLOCATED);
+				}
+			}
+		}
+		
+		// same with parameters
+		Iterator<String> confparamit = pluginconf.getParameters().keySet().iterator();
+		while(confparamit.hasNext()){
+			String s = confparamit.next();
+			if(!maininterface.getUIParameters().containsKey(s)){ // if the UIParameter does not exist, remove it
+				pluginconf.getParameters().remove(s);
+			}
+		}
+
+		return sane;
+	}
+	
+	public boolean startWizard(String pluginName, PropertyMainFrameInterface maininterface, MMProperties mmproperties){
 		// launch wizard
 		if(!isWizardRunning()){	
 			wizard_ = new ConfigurationWizard(this);
-			wizard_.start(configuration_.getCurrentPluginConfiguration(), maininterface, mmproperties);
+			
+			if(configuration_ != null){
+				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
+			} else {
+				configuration_ = new GlobalConfigurationWrapper();				
+				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
+			}
+			
 			return true;
 		}
 		return false;
@@ -95,18 +151,22 @@ public class ConfigurationController {
 		if (wizard_ != null) {
 			// Retrieves the Maps and the name
 			String name = wizard_.getConfigurationName();
+			String pluginName = wizard_.getPluginName();
 			Map<String, String> uiproperties = wizard_.getWizardProperties();
 			Map<String, String> uiparameters = wizard_.getWizardParameters();
 
 			if(configuration_.getCurrentConfigurationName().equals(name)){
 				// the configuration has the same name
-				configuration_.substituteConfiguration(new PluginConfiguration(name, configuration_.getCurrentPluginName(), uiproperties, uiparameters));
+				configuration_.substituteConfiguration(new PluginConfiguration(name, pluginName, uiproperties, uiparameters));
 			} else {
 				// new configuration has a different name  
-				configuration_.addConfiguration(new PluginConfiguration(name, configuration_.getCurrentPluginName(), uiproperties, uiparameters));
+				configuration_.addConfiguration(new PluginConfiguration(name, pluginName, uiproperties, uiparameters));
 			}
 			
-			saveConfiguration(uiproperties_, uiparameters_); // writes to file
+			// set current configuration
+			configuration_.setCurrentConfiguration(name);
+			
+			writeConfiguration();
 
 			// update system
 			controller_.applyConfiguration();
@@ -120,7 +180,7 @@ public class ConfigurationController {
 	 * and UIProperty state values (values)
 	 */
 	public TreeMap<String,String> getPropertiesConfiguration(){
-		return uiproperties_;
+		return configuration_.getCurrentPluginConfiguration().getProperties();
 	}
 	
 	/**
@@ -129,7 +189,7 @@ public class ConfigurationController {
 	 * @return Pairs of UIParameter names (keys) and their value (values)
 	 */
 	public TreeMap<String,String> getParametersConfiguration(){
-		return uiparameters_;
+		return configuration_.getCurrentPluginConfiguration().getParameters();
 	}
 	
 	/**
@@ -141,4 +201,5 @@ public class ConfigurationController {
 			wizard_.shutDown();
 		}
 	}
+
 }

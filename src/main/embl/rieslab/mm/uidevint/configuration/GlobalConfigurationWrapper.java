@@ -6,6 +6,11 @@ import java.util.Iterator;
 
 public class GlobalConfigurationWrapper {
 
+	/**
+	 * Value given to unallocated UIProperty.
+	 */
+	public final static String KEY_UNALLOCATED = "Unallocated";
+	
 	private String currentConfiguration;
 	private ArrayList<PluginConfiguration> plugins;
 
@@ -61,8 +66,30 @@ public class GlobalConfigurationWrapper {
 			}
 		}
 		return null;
-	}
+	}	
+	
+	public String[] getCompatibleConfigurations(String pluginName) {
+		if(plugins.isEmpty()){
+			return null;
+		}
+		
+		ArrayList<String> configs = new ArrayList<String>();
+		Iterator<PluginConfiguration> it = plugins.iterator();
+		
+		while(it.hasNext()){
+			PluginConfiguration plug = it.next();
 
+			if(plug.getPluginName().equals(pluginName)){
+				configs.add(plug.getConfigurationName());
+			}
+		} 
+		
+		String[] confs = (String[]) configs.toArray(new String[0]);
+		Arrays.sort(confs);
+		
+		return confs;
+	}
+	
 	public String[] getPluginConfigurationList(){
 		int n = plugins.size();
 
@@ -103,4 +130,6 @@ public class GlobalConfigurationWrapper {
 		
 		return exists;
 	}
+
+	
 }

@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.Properties;
 
 import main.embl.rieslab.mm.uidevint.configuration.ui.ConfigurationWizard2;
+import main.embl.rieslab.mm.uidevint.controller.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;

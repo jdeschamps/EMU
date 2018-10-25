@@ -30,6 +30,13 @@ import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
  *
  */
 public class ConfigurationWizard {
+	
+	/**
+	 * Value given to unallocated UIProperty states and UIParameters values.
+	 */
+	public final static String KEY_ENTERVALUE = "Enter value";
+	private final static String KEY_UIPROPERTY = "UI Property: ";
+	private final static String KEY_UIPARAMETER = "UI Parameter: ";
 
 	private HashMap<String, String> prop_; // stores the name of the uiproperties and their corresponding mmproperty (or Configuration.KEY_UNALLOCATED)
 	private HashMap<String, String> param_; // stores the name of the uiparameters and their value
@@ -245,14 +252,19 @@ public class ConfigurationWizard {
 		running_ = false;
 	}
 
-	public void start(PluginConfiguration pluginConfiguration,
+	public void start(String pluginName, GlobalConfigurationWrapper configuration_,
 			PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
 		// TODO Auto-generated method stub
-		
+		if()
 	}
 
 	public String getConfigurationName() {
 		// TODO Auto-generated method stub
 		return null;
-	}	
+	}
+
+	public String getPluginName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
