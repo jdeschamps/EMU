@@ -16,7 +16,7 @@ public class ConfigurationController {
 	
 	private SystemController controller_;
 	private ConfigurationWizard wizard_;
-	private GlobalConfigurationWrapper configuration_;
+	private GlobalConfiguration configuration_;
 	
 	public ConfigurationController(SystemController controller){
 		controller_ = controller;
@@ -43,14 +43,14 @@ public class ConfigurationController {
 	}
 
 	public boolean writeConfiguration(){
-		return ConfigurationIO.write(getDefaultConfigurationFile(), getConfiguration());
+		return ConfigurationIO.write(getDefaultConfigurationFile(), getConfiguration().getGlobalConfiguration());
 	}
 
 	public boolean writeConfiguration(File f){
-		return ConfigurationIO.write(f, getConfiguration());
+		return ConfigurationIO.write(f, getConfiguration().getGlobalConfiguration());
 	}
 	
-	public GlobalConfigurationWrapper getConfiguration(){
+	public GlobalConfiguration getConfiguration(){
 		return configuration_;
 	}
 	
@@ -72,7 +72,7 @@ public class ConfigurationController {
 			String s = uipropit.next();
 			if(!pluginconf.getProperties().containsKey(s)){ // if the UIProperty is not found, then add it as unallocated
 				sane = false;
-				pluginconf.getProperties().put(s, GlobalConfigurationWrapper.KEY_UNALLOCATED);
+				pluginconf.getProperties().put(s, GlobalConfiguration.KEY_UNALLOCATED);
 			}
 		}
 		
@@ -96,7 +96,7 @@ public class ConfigurationController {
 			} else { 
 				if(!mmproperties.getProperties().containsKey(pluginconf.getProperties().get(s))){ // if the MMProperty does not exist, set as unallocated
 					pluginconf.getProperties().remove(s);
-					pluginconf.getProperties().put(s, GlobalConfigurationWrapper.KEY_UNALLOCATED);
+					pluginconf.getProperties().put(s, GlobalConfiguration.KEY_UNALLOCATED);
 				}
 			}
 		}
@@ -121,7 +121,7 @@ public class ConfigurationController {
 			if(configuration_ != null){
 				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
 			} else {
-				configuration_ = new GlobalConfigurationWrapper();				
+				configuration_ = new GlobalConfiguration();				
 				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
 			}
 			
@@ -171,6 +171,10 @@ public class ConfigurationController {
 			// update system
 			controller_.applyConfiguration();
 		}
+	}
+	
+	public boolean setDefaultConfiguration(String configuration){
+		return configuration_.setCurrentConfiguration(configuration);
 	}
 	
 	/**

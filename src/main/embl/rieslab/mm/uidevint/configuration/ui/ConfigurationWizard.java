@@ -17,8 +17,6 @@ import javax.swing.JToggleButton;
 
 import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
 import main.embl.rieslab.mm.uidevint.configuration.GlobalConfiguration;
-import main.embl.rieslab.mm.uidevint.configuration.GlobalConfigurationWrapper;
-import main.embl.rieslab.mm.uidevint.configuration.PluginConfiguration;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
 
@@ -35,8 +33,8 @@ public class ConfigurationWizard {
 	 * Value given to unallocated UIProperty states and UIParameters values.
 	 */
 	public final static String KEY_ENTERVALUE = "Enter value";
-	private final static String KEY_UIPROPERTY = "UI Property: ";
-	private final static String KEY_UIPARAMETER = "UI Parameter: ";
+	public final static String KEY_UIPROPERTY = "UI Property: ";
+	public final static String KEY_UIPARAMETER = "UI Parameter: ";
 
 	private HashMap<String, String> prop_; // stores the name of the uiproperties and their corresponding mmproperty (or Configuration.KEY_UNALLOCATED)
 	private HashMap<String, String> param_; // stores the name of the uiparameters and their value
@@ -46,12 +44,15 @@ public class ConfigurationWizard {
 	private ConfigurationController config_; // configuration class
 	private JFrame frame_; // overall frame for the configuration wizard
 	private boolean running_ = false;
+	private String plugin_name_;
 	
 	public ConfigurationWizard(ConfigurationController config) {
 		config_ = config;
 		
 		prop_ = new HashMap<String, String>();
 		param_ = new HashMap<String, String>();
+		
+		plugin_name_ = "";
 	}
 	
 	/**
@@ -61,8 +62,7 @@ public class ConfigurationWizard {
 	 * @param uiparameterSet HashMap containing the UI parameters.
 	 * @param mmproperties Object holding the device properties from Micro-manager.
 	 */
-	@SuppressWarnings("rawtypes")
-	public void newConfiguration(final PropertyMainFrameInterface maininterface, final MMProperties mmproperties) {
+	private void newConfiguration(final PropertyMainFrameInterface maininterface, final MMProperties mmproperties) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -92,8 +92,7 @@ public class ConfigurationWizard {
 	 * @param configprop HashMap linking mm properties to ui properties from the configuration.
 	 * @param configparam HashMap holding the values of the ui parameters from the configuration.
 	 */
-	@SuppressWarnings("rawtypes")
-	public void existingConfiguration(final PropertyMainFrameInterface maininterface,
+	private void existingConfiguration(final PropertyMainFrameInterface maininterface,
 			final MMProperties mmproperties, final GlobalConfiguration configuration) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -103,15 +102,16 @@ public class ConfigurationWizard {
 				help_ = new HelpWindow(
 						"Click on a row to display the description");
 
-				// Table defining the properties using configuration
-				propertytable_ = new PropertiesTable(maininterface.getUIProperties(), mmproperties, help_);
+				// Table defining the properties using the  configuration
+				propertytable_ = new PropertiesTable(maininterface.getUIProperties(), mmproperties, configuration.getCurrentPluginConfiguration().getProperties(), help_);
 				propertytable_.setOpaque(true);
 
 				// now parameters
-				parametertable_ = new ParametersTable(maininterface.getUIParameters(), configuration, help_);
+				parametertable_ = new ParametersTable(maininterface.getUIParameters(), configuration.getCurrentPluginConfiguration().getParameters(), help_);
 				parametertable_.setOpaque(true);
-
+				
 				frame_ = createFrame(propertytable_, parametertable_, help_);
+
 			}
 		});
 	}
@@ -252,19 +252,22 @@ public class ConfigurationWizard {
 		running_ = false;
 	}
 
-	public void start(String pluginName, GlobalConfigurationWrapper configuration_,
+	public void start(String pluginName, GlobalConfiguration configuration,
 			PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
-		// TODO Auto-generated method stub
-		if()
+		plugin_name_ = pluginName;
+		if(configuration.getCurrentPluginName() != null && configuration.getCurrentPluginName().equals(pluginName)){
+			existingConfiguration(maininterface, mmproperties, configuration);
+		} else {
+			newConfiguration(maininterface, mmproperties);
+		}
+			
 	}
 
 	public String getConfigurationName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Default";
 	}
 
 	public String getPluginName() {
-		// TODO Auto-generated method stub
-		return null;
+		return plugin_name_;
 	}
 }

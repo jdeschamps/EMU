@@ -19,6 +19,7 @@ import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperty;
 import main.embl.rieslab.mm.uidevint.plugin.UIPluginLoader;
 import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
+import main.embl.rieslab.mm.uidevint.ui.EmptyPropertyMainFrame;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrame;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
@@ -70,10 +71,10 @@ public class SystemController {
 		// if no plugin is found
 		if(pluginloader_.getPluginNumber() == 0){
 			// show message: no plugin found, stop here
-			// TODO
+			SystemDialogs.showNoPluginFound();
 			
 			// load empty MainFrame
-			
+			mainframe_ = new EmptyPropertyMainFrame(this);
 		} else {
 			// reads out configuration
 			config = new ConfigurationController(this);
@@ -96,35 +97,63 @@ public class SystemController {
 						// apply configuration
 						applyConfiguration();
 					} else {
-						// show dialog: apply (might have missing properties), apply and save or launch wizard
-						// TODO
+						// show dialog
+						SystemDialogs.showConfigurationDidNotPassSanityCheck();
+						
+						// then apply, the user can choose to change the settings or not
+						applyConfiguration();
 					}
 					
 				} else { // default UI not found
-					
+			
 					// get list of available plugins
 					String[] plugins = pluginloader_.getPluginList();
+					if(plugins.length > 1){
+						// Let user choose which plugin to load
+						// show dialog
+						currentPlugin = SystemDialogs.showPluginsChoiceWindow(plugins);
+					} else { // just one plugin
+						currentPlugin = plugins[0];
+					}
 					
-					// Let user choose which plugin to load
-					// show dialog
+					// load plugin 
+					mainframe_ = pluginloader_.loadPlugin(currentPlugin);
 					
-					currentPlugin = 
+					// extracts UI properties and parameters
+					interface_ = mainframe_.getInterface();
 					
-					// launch wizard
-					// TODO
+					// get list of configurations corresponding to this plugin
+					String[] configs = config.getCompatibleConfigurations(currentPlugin);
 					
-					
+					if(configs == null || configs.length == 0){
+						// launch new wizard
+						config.startWizard(currentPlugin, interface_, mmproperties_);
+					} else if(configs.length == 1){
+						config.setDefaultConfiguration(configs[0]); // set as default
+						applyConfiguration();
+					} else {
+						// if more than one, then let the user decide
+						String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
+						config.setDefaultConfiguration(configuration); // set as default and then launch wizard
+						applyConfiguration();
+					}					
 				}
 				
 			} else { // no configuration
 				// get list of available plugins
+				String[] plugins = pluginloader_.getPluginList();
 				
 				// Let user choose which plugin to load
-				currentPlugin = 
-						
-				// launch a new wizard			
+				currentPlugin = SystemDialogs.showPluginsChoiceWindow(plugins);
 				
-				// TODO
+				// load plugin 
+				mainframe_ = pluginloader_.loadPlugin(currentPlugin);
+				
+				// extracts UI properties and parameters
+				interface_ = mainframe_.getInterface();
+				
+				// launch a new wizard			
+				config.startWizard(currentPlugin, interface_, mmproperties_);
 			}
 		}
 	}
@@ -149,25 +178,25 @@ public class SystemController {
 				// get list of compatible configurations
 				String[] confs = config.getCompatibleConfigurations(currentPlugin);
 				
-				if(confs != null && confs.length != 0){
-					// show user dialog
-
-					// change current configuration
+				if(confs == null || confs.length == 0){
+					// launch wizard
+					config.startWizard(currentPlugin, interface_, mmproperties_);
+				} else if(confs.length == 1){
+					config.setDefaultConfiguration(confs[0]); // set as default 
+					applyConfiguration();
+				} else {
+					// if more than one, then let the user decide
+					String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(confs);
+					config.setDefaultConfiguration(configuration); // set as default and then launch wizard
 
 					// load configuration
 					applyConfiguration();
-					
-				} else {
-					// launch wizard
-					
 				}
 			}
 			
-			
 			return true;
 		} else {
-			// show message
-			// TODO
+
 			return false;
 		}
 	}

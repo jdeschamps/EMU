@@ -3,16 +3,53 @@ package main.embl.rieslab.mm.uidevint.controller;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 public class SystemDialogs {
 
-	public static void showPluginsChoiceWindow(SystemController controller, String[] plugins) {
-		// TODO
+	public static String showPluginsChoiceWindow(String[] plugins) {
+        JFrame frame = new JFrame("Select a plugin");
+        String selected_plugin = (String) JOptionPane.showInputDialog(frame, 
+            "Select a plugin",
+            "Select a plugin:",
+            JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            plugins, 
+            plugins[0]);
+        
+        return selected_plugin;
 	}
 	
-	public static void showPluginConfigurationsChoiceWindow(SystemController controller, String[] pluginConfigurations) {
-		// TODO
+	public static String showPluginConfigurationsChoiceWindow(String[] configs) {
+        JFrame frame = new JFrame("Select a configuration");
+        String selected_conf = (String) JOptionPane.showInputDialog(frame, 
+            "Select a configuration",
+            "Select a configuration:",
+            JOptionPane.QUESTION_MESSAGE, 
+            null, 
+            configs, 
+            configs[0]);
+        
+        return selected_conf;
+	}
+	
+	public static void showNoPluginFound(){
+		String title = "No plugin";
+		
+		String message = "No plugin were found.";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public static void showConfigurationDidNotPassSanityCheck(){
+		String title = "Failed sanity check";
+		
+		String message = "Some entries in the configuration did not match expectations.\n "
+				+ "As a result, the configuration has been automatically edited.\n"
+				+ "Please, check the settings and save the modifications.";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 	/**

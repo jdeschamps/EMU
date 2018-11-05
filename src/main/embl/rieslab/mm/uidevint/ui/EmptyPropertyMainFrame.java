@@ -14,7 +14,7 @@ public class EmptyPropertyMainFrame extends PropertyMainFrame{
 	private static final long serialVersionUID = -1840416249969324418L;
 
 	public EmptyPropertyMainFrame(SystemController controller) {
-		super("No UI found", controller);
+		super("No plugin found", controller);
 	}
 
 	@Override
