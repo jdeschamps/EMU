@@ -27,19 +27,25 @@ public class ConfigurationController {
 	}
 
 	public boolean readDefaultConfiguration(){
-		configuration_ = ConfigurationIO.read(getDefaultConfigurationFile());
-		if(configuration_ == null){
-			return false;
+		if(getDefaultConfigurationFile().exists()){
+			configuration_ = ConfigurationIO.read(getDefaultConfigurationFile());
+			if(configuration_ == null){
+				return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 	
-	public boolean readConfiguration(File f){		
-		configuration_ = ConfigurationIO.read(f);
-		if(configuration_ == null){
-			return false;
+	public boolean readConfiguration(File f){	
+		if(f.exists()){	
+			configuration_ = ConfigurationIO.read(f);
+			if(configuration_ == null){
+				return false;
+			}
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	public boolean writeConfiguration(){

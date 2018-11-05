@@ -76,7 +76,7 @@ public abstract class PropertyMainFrame extends JFrame {
         JMenuBar mb=new JMenuBar();  
         
         menu=new JMenu("Menu");  
-        newcfg=new JMenuItem(new AbstractAction("Settings") {
+        newcfg=new JMenuItem(new AbstractAction("Wizard") {
             /**
 			 * 
 			 */
@@ -90,7 +90,12 @@ public abstract class PropertyMainFrame extends JFrame {
             }
         });
         
-        loadcfg=new JMenuItem(new AbstractAction("Load settings") {
+        //////////////////
+        
+        /// here do a menu "load UI" with a list of the other UI
+        /// and a menu configuration with a list of the corresponding configurations
+        
+        loadcfg=new JMenuItem(new AbstractAction("Load configuration") {
             /**
 			 * 
 			 */

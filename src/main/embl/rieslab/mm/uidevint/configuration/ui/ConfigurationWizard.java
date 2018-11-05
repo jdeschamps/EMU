@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
@@ -45,14 +46,16 @@ public class ConfigurationWizard {
 	private JFrame frame_; // overall frame for the configuration wizard
 	private boolean running_ = false;
 	private String plugin_name_;
+	private String config_name_;
 	
 	public ConfigurationWizard(ConfigurationController config) {
 		config_ = config;
 		
 		prop_ = new HashMap<String, String>();
 		param_ = new HashMap<String, String>();
-		
+
 		plugin_name_ = "";
+		config_name_ = "";
 	}
 	
 	/**
@@ -78,7 +81,7 @@ public class ConfigurationWizard {
 				parametertable_ = new ParametersTable(maininterface.getUIParameters(), help_);
 				parametertable_.setOpaque(true); 
 				
-				frame_ = createFrame(propertytable_, parametertable_, help_);
+				frame_ = createFrame("New configuration", propertytable_, parametertable_, help_);
 			}
 		});
 	}
@@ -110,7 +113,7 @@ public class ConfigurationWizard {
 				parametertable_ = new ParametersTable(maininterface.getUIParameters(), configuration.getCurrentPluginConfiguration().getParameters(), help_);
 				parametertable_.setOpaque(true);
 				
-				frame_ = createFrame(propertytable_, parametertable_, help_);
+				frame_ = createFrame(configuration.getCurrentConfigurationName(), propertytable_, parametertable_, help_);
 
 			}
 		});
@@ -118,7 +121,7 @@ public class ConfigurationWizard {
 	
 	
 	// Sets up the frame used for the interactive configuration.
-	private JFrame createFrame(final PropertiesTable propertytable, final ParametersTable parametertable, final HelpWindow help){
+	private JFrame createFrame(String conf_name, final PropertiesTable propertytable, final ParametersTable parametertable, final HelpWindow help){
 		JFrame frame = new JFrame("UI properties wizard");
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -145,6 +148,9 @@ public class ConfigurationWizard {
 		// gridbag layout for upper and lower panel
 		JPanel upperpane = new JPanel();
 		upperpane.setLayout(new GridLayout(0,4));
+		
+		JLabel conf_name_label = new JLabel("   Name:");
+		JTextField conf_name_txt = new JTextField(conf_name);
 
 		JToggleButton helptoggle = new JToggleButton("HELP");
 		helptoggle.addActionListener(new ActionListener() {
@@ -154,8 +160,8 @@ public class ConfigurationWizard {
 				showHelp(selected);
 			}
 		});
-		upperpane.add(new JLabel(""));
-		upperpane.add(new JLabel(""));
+		upperpane.add(conf_name_label);
+		upperpane.add(conf_name_txt);
 		upperpane.add(new JLabel(""));
 		upperpane.add(helptoggle);
 
@@ -254,6 +260,7 @@ public class ConfigurationWizard {
 
 	public void start(String pluginName, GlobalConfiguration configuration,
 			PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
+		
 		plugin_name_ = pluginName;
 		if(configuration.getCurrentPluginName() != null && configuration.getCurrentPluginName().equals(pluginName)){
 			existingConfiguration(maininterface, mmproperties, configuration);
@@ -264,7 +271,7 @@ public class ConfigurationWizard {
 	}
 
 	public String getConfigurationName() {
-		return "Default";
+		return config_name_;
 	}
 
 	public String getPluginName() {

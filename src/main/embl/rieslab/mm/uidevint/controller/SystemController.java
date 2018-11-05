@@ -7,8 +7,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.JOptionPane;
-
 import org.micromanager.api.ScriptInterface;
 
 import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
@@ -22,7 +20,6 @@ import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
 import main.embl.rieslab.mm.uidevint.ui.EmptyPropertyMainFrame;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrame;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
-import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.PropertyPair;
@@ -46,7 +43,6 @@ public class SystemController {
 	
 	private String currentPlugin;
 		
-	@SuppressWarnings("rawtypes")
 	public SystemController(ScriptInterface script){
 		script_ = script;
 		core_ = script_.getMMCore();
@@ -456,8 +452,11 @@ public class SystemController {
 		}
 	}
 
-	public String getPluginName() {
-		return "ht-SMLM";
+	public String[] getPluginsList() {
+		if(pluginloader_ == null){
+			return null;
+		}
+		return pluginloader_.getPluginList();
 	}
 
 }
