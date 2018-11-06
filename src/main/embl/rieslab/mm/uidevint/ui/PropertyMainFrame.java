@@ -3,21 +3,17 @@ package main.embl.rieslab.mm.uidevint.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
 import javax.swing.AbstractAction;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
-import main.embl.rieslab.mm.uidevint.controller.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.IntInternalProperty;
@@ -72,14 +68,10 @@ public abstract class PropertyMainFrame extends JFrame {
 
 	private void setUpMenuBar(){
         JMenu menu;
-        JMenuItem newcfg, loadcfg;  
         JMenuBar mb=new JMenuBar();  
         
         menu=new JMenu("Menu");  
-        newcfg=new JMenuItem(new AbstractAction("Wizard") {
-            /**
-			 * 
-			 */
+        JMenuItem wiz=new JMenuItem(new AbstractAction("Settings Wizard") {
 			private static final long serialVersionUID = -8992610502306964249L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -89,42 +81,44 @@ public abstract class PropertyMainFrame extends JFrame {
 				}
             }
         });
-        
-        //////////////////
-        
-        /// here do a menu "load UI" with a list of the other UI
-        /// and a menu configuration with a list of the corresponding configurations
-        
-        loadcfg=new JMenuItem(new AbstractAction("Load configuration") {
-            /**
-			 * 
-			 */
-			private static final long serialVersionUID = -8992610502306964249L;
 
-			public void actionPerformed(ActionEvent e) {
-				boolean b = getConfigurationFile();
-				if(!b){
-			        JOptionPane.showMessageDialog(null, "Not a valid configuration.", "Information", JOptionPane.INFORMATION_MESSAGE);
+        // change plugin menu
+        JMenu switch_plugin = new JMenu("Switch plugin");
+        final String[] plugins = controller_.getOtherPluginsList();
+		for (int i = 0; i < plugins.length; i++) {
+			final int index = i;
+			JMenuItem item = new JMenuItem(new AbstractAction(plugins[index]) {
+				private static final long serialVersionUID = -4996932088885254278L;
+
+				public void actionPerformed(ActionEvent e) {
+					controller_.loadPlugin(plugins[index]);
 				}
-            }
-        }); 
-        menu.add(newcfg); 
-        menu.add(loadcfg); 
+			});
+			switch_plugin.add(item);
+		}
+		
+        // change configuration menu
+        JMenu switch_configuration = new JMenu("Switch configuration");
+        final String[] confs = controller_.getCompatibleConfigurationList();
+		for (int i = 0; i < confs.length; i++) {
+			final int index = i;
+			JMenuItem item = new JMenuItem(new AbstractAction(confs[index]) {
+				private static final long serialVersionUID = -4996932088885254278L;
+
+				public void actionPerformed(ActionEvent e) {
+					controller_.loadPlugin(confs[index]);
+				}
+			});
+			switch_configuration.add(item);
+		}
+		
+		
+        menu.add(wiz); 
+        menu.add(switch_plugin);
+        menu.add(switch_configuration); 
         mb.add(menu);  
         
         this.setJMenuBar(mb); 
-	}
-	
-	private boolean getConfigurationFile(){
-		JFileChooser fileChooser = new JFileChooser();
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("UI Configuration", SystemConstants.CONFIG_EXT);
-		fileChooser.setFileFilter(filter);
-		int result = fileChooser.showOpenDialog(this);
-		if (result == JFileChooser.APPROVE_OPTION) {
-		    File selectedFile = fileChooser.getSelectedFile();
-		    return controller_.loadConfiguration(selectedFile);
-		}
-		return true;
 	}
 	
 	public PropertyMainFrameInterface getInterface(){

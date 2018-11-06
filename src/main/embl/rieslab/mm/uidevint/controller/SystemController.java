@@ -79,9 +79,9 @@ public class SystemController {
 				
 				if(pluginloader_.isPluginAvailable(config.getConfiguration().getCurrentPluginName())){ // plugin available
 					
-					// initiates UI
-					mainframe_ = pluginloader_.loadPlugin(config.getConfiguration().getCurrentPluginName());
+					// initiates UI					
 					currentPlugin = config.getConfiguration().getCurrentPluginName();
+					mainframe_ = pluginloader_.loadPlugin(config.getConfiguration().getCurrentPluginName());
 					
 					// extracts UI properties and parameters
 					interface_ = mainframe_.getInterface();
@@ -208,6 +208,12 @@ public class SystemController {
 			return false;
 		}
 	}
+	
+	public void loadPlugin(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	
 	/**
 	 * Reads out the properties from the configuration and pairs them to ui properties.
@@ -468,8 +474,49 @@ public class SystemController {
 	public String[] getPluginsList() {
 		if(pluginloader_ == null){
 			return null;
-		}
+		}	
 		return pluginloader_.getPluginList();
+	}
+	
+	public String[] getOtherPluginsList() {
+		if(pluginloader_ == null){
+			return null;
+		}	
+		
+		String[] list = pluginloader_.getPluginList();
+		String[] others = new String[list.length-1];
+		int curr = 0;
+		for(int i=0;i<list.length;i++){
+			if(!list[i].equals(currentPlugin)){
+				others[curr] = list[i];
+				curr++;
+			}
+		}
+		
+		return others;
+	}
+	
+	public String[] getOtherCompatibleConfigurationList() {
+		if(config == null){
+			return null;
+		}	
+		
+		String[] list = config.getCompatibleConfigurations(currentPlugin);
+		String[] others = new String[list.length-1];
+		int curr = 0;
+		for(int i=0;i<list.length;i++){
+			if(!list[i].equals(config.getConfiguration().getCurrentConfigurationName())){
+				others[curr] = list[i];
+				curr++;
+			}
+		}
+		
+		return others;
+	}
+
+	
+	public String[] getCompatibleConfigurationList() {
+		return config.getCompatibleConfigurations(currentPlugin);
 	}
 
 }
