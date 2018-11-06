@@ -6,8 +6,8 @@ import main.embl.rieslab.mm.uidevint.ui.uiproperties.flag.PropertyFlag;
 
 public class TwoStateUIProperty extends UIProperty{
 	
-	private final static String ON = " On value";
-	private final static String OFF = " Off value";
+	private final static String ON = " - On value";
+	private final static String OFF = " - Off value";
 	private String onstate_;
 	private String offstate_;
 	

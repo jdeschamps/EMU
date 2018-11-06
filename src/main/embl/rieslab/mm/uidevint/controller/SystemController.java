@@ -10,7 +10,7 @@ import java.util.Map;
 import org.micromanager.api.ScriptInterface;
 
 import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
-import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController2;
+import main.embl.rieslab.mm.uidevint.configuration.GlobalConfiguration;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMConfigurationGroup;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMConfigurationGroupsRegistry;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
@@ -74,7 +74,7 @@ public class SystemController {
 		} else {
 			// reads out configuration
 			config = new ConfigurationController(this);
-			
+						
 			if(config.readDefaultConfiguration()){ // if a configuration was read
 				
 				if(pluginloader_.isPluginAvailable(config.getConfiguration().getCurrentPluginName())){ // plugin available
@@ -100,7 +100,7 @@ public class SystemController {
 						applyConfiguration();
 					}
 					
-				} else { // default UI not found
+				} else { // default UI not found or wrong format
 			
 					// get list of available plugins
 					String[] plugins = pluginloader_.getPluginList();
@@ -136,20 +136,32 @@ public class SystemController {
 				}
 				
 			} else { // no configuration
+				
+				// show message
+				if(config.getDefaultConfigurationFile().exists()){
+					SystemDialogs.showConfigurationCouldNotBeParsed();
+				}
+
 				// get list of available plugins
 				String[] plugins = pluginloader_.getPluginList();
 				
 				// Let user choose which plugin to load
 				currentPlugin = SystemDialogs.showPluginsChoiceWindow(plugins);
 				
-				// load plugin 
-				mainframe_ = pluginloader_.loadPlugin(currentPlugin);
-				
-				// extracts UI properties and parameters
-				interface_ = mainframe_.getInterface();
-				
-				// launch a new wizard			
-				config.startWizard(currentPlugin, interface_, mmproperties_);
+				if(currentPlugin != null){
+					// load plugin 
+					mainframe_ = pluginloader_.loadPlugin(currentPlugin);
+					
+					// extracts UI properties and parameters
+					interface_ = mainframe_.getInterface();
+					
+					// launch a new wizard			
+					config.startWizard(currentPlugin, interface_, mmproperties_);
+				} else {
+
+					// load empty MainFrame
+					mainframe_ = new EmptyPropertyMainFrame(this);
+				}
 			}
 		}
 	}
@@ -216,7 +228,7 @@ public class SystemController {
 			if (uiproperties.containsKey(uiprop)) {
 
 				// if the ui property is not allocated, add to the list of unallocated properties.  
-				if (configprop.get(uiprop).equals(ConfigurationController2.KEY_UNALLOCATED)) {
+				if (configprop.get(uiprop).equals(GlobalConfiguration.KEY_UNALLOCATED)) {
 					// register missing allocation
 					unallocatedprop_.add(uiprop);
 				} else if (mmproperties_.isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
@@ -234,6 +246,7 @@ public class SystemController {
 						// extract the state value
 						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
 						t.setStateValue(configprop.get(uiprop+SingleStateUIProperty.getValueName()));
+						
 					} else if (uiproperties.get(uiprop).isMultiState()) {// if it is a multistate property
 						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties.get(uiprop);
 						int numpos = t.getNumberOfStates();

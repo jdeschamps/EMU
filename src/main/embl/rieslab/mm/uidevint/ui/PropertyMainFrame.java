@@ -228,9 +228,9 @@ public abstract class PropertyMainFrame extends JFrame {
 								((IntInternalProperty) internalproperties.get(firstproperty)).linkValue(val);
 								((IntInternalProperty) internalproperties.get(secondproperty)).linkValue(val);
 							} else if(firstType.equals(InternalPropertyType.DOUBLE)){
-								// implement
+								// TODO
 							} else if(firstType.equals(InternalPropertyType.STRING)){
-								// implement
+								// TODO
 							}
 						}
 					}

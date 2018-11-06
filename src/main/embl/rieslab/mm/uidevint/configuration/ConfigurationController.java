@@ -1,8 +1,9 @@
 package main.embl.rieslab.mm.uidevint.configuration;
 
 import java.io.File;
-import java.util.Iterator;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 import main.embl.rieslab.mm.uidevint.configuration.ui.ConfigurationWizard;
@@ -10,7 +11,9 @@ import main.embl.rieslab.mm.uidevint.controller.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
-import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.SingleStateUIProperty;
+import main.embl.rieslab.mm.uidevint.ui.uiproperties.TwoStateUIProperty;
 
 public class ConfigurationController {
 	
@@ -22,7 +25,7 @@ public class ConfigurationController {
 		controller_ = controller;
 	}
 
-	private File getDefaultConfigurationFile() {
+	public File getDefaultConfigurationFile() {
 		return new File(SystemConstants.CONFIG_NAME);
 	}
 
@@ -67,56 +70,25 @@ public class ConfigurationController {
 		return null; 
 	}
 
-	@SuppressWarnings("rawtypes")
 	public boolean sanityCheck(PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
-		boolean sane = true;
-		PluginConfiguration pluginconf = configuration_.getCurrentPluginConfiguration();
-
-		// check that all the expected UIProperties are present
-		Iterator<String> uipropit = maininterface.getUIProperties().keySet().iterator();
-		while(uipropit.hasNext()){
-			String s = uipropit.next();
-			if(!pluginconf.getProperties().containsKey(s)){ // if the UIProperty is not found, then add it as unallocated
-				sane = false;
-				pluginconf.getProperties().put(s, GlobalConfiguration.KEY_UNALLOCATED);
-			}
+		// just check if something is missing. When editing the settings, the PropertiesTable takes care
+		// of removing old properties and such.
+		
+		// check if the plugin configuration contains all the UIProperties
+		Set<String> uipropkeys =  new HashSet<String>(maininterface.getUIProperties().keySet());
+		uipropkeys.removeAll(configuration_.getCurrentPluginConfiguration().getProperties().keySet());
+		if(uipropkeys.size() > 0){
+			return false;
 		}
 		
-		// same with parameters
-		Iterator<String> uiparamit = maininterface.getUIParameters().keySet().iterator();
-		while(uiparamit.hasNext()){
-			String s = uiparamit.next();
-			if(!pluginconf.getParameters().containsKey(s)){ // UIParameter is not found, add it with default value
-				sane = false;
-				pluginconf.getParameters().put(s, ((UIParameter) maininterface.getUIParameters().get(s)).getStringValue());
-			}
+		// check if the plugin configuration contains all the UIParameters
+		Set<String> uiparamkeys =   new HashSet<String>(maininterface.getUIParameters().keySet());
+		uiparamkeys.removeAll(configuration_.getCurrentPluginConfiguration().getParameters().keySet());
+		if(uiparamkeys.size() > 0){
+			return false;
 		}
 		
-		// remove configuration properties that are not present in the UI (old version)
-		// and set as unallocated the values that do not match mmproperties
-		Iterator<String> confpropit = pluginconf.getProperties().keySet().iterator();
-		while(confpropit.hasNext()){
-			String s = confpropit.next();
-			if(!maininterface.getUIProperties().containsKey(s)){ // if the UIProperty does not exist, remove it
-				pluginconf.getProperties().remove(s);
-			} else { 
-				if(!mmproperties.getProperties().containsKey(pluginconf.getProperties().get(s))){ // if the MMProperty does not exist, set as unallocated
-					pluginconf.getProperties().remove(s);
-					pluginconf.getProperties().put(s, GlobalConfiguration.KEY_UNALLOCATED);
-				}
-			}
-		}
-		
-		// same with parameters
-		Iterator<String> confparamit = pluginconf.getParameters().keySet().iterator();
-		while(confparamit.hasNext()){
-			String s = confparamit.next();
-			if(!maininterface.getUIParameters().containsKey(s)){ // if the UIParameter does not exist, remove it
-				pluginconf.getParameters().remove(s);
-			}
-		}
-
-		return sane;
+		return true;
 	}
 	
 	public boolean startWizard(String pluginName, PropertyMainFrameInterface maininterface, MMProperties mmproperties){
@@ -163,10 +135,14 @@ public class ConfigurationController {
 
 			if(configuration_.getCurrentConfigurationName().equals(name)){
 				// the configuration has the same name
-				configuration_.substituteConfiguration(new PluginConfiguration(name, pluginName, uiproperties, uiparameters));
+				PluginConfiguration plugin = new PluginConfiguration();
+				plugin.configure(name, pluginName, uiproperties, uiparameters);
+				configuration_.substituteConfiguration(plugin);
 			} else {
 				// new configuration has a different name  
-				configuration_.addConfiguration(new PluginConfiguration(name, pluginName, uiproperties, uiparameters));
+				PluginConfiguration plugin = new PluginConfiguration();
+				plugin.configure(name, pluginName, uiproperties, uiparameters);
+				configuration_.addConfiguration(plugin);
 			}
 			
 			// set current configuration
@@ -210,6 +186,22 @@ public class ConfigurationController {
 		if (wizard_ != null) {
 			wizard_.shutDown();
 		}
+	}
+	
+	/**
+	 * Tests if the string has been generated by a SingelStateUIProperty, a TwoStateUIProperty or a MultiStateUIProperty.
+	 * 
+	 * @param s String to test, value in the first column of the table
+	 * @return True if corresponds to a field value.
+	 */
+	public static boolean isStateValue(String s){
+		if (s.contains(SingleStateUIProperty.getValueName())
+				|| s.contains(TwoStateUIProperty.getOnStateName()) 
+				|| s.contains(TwoStateUIProperty.getOffStateName())
+				|| s.matches(".*"+MultiStateUIProperty.getGenericStateName()+".*")){
+			return true;
+		}
+		return false;
 	}
 
 }

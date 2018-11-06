@@ -45,9 +45,18 @@ public class SystemDialogs {
 	public static void showConfigurationDidNotPassSanityCheck(){
 		String title = "Failed sanity check";
 		
-		String message = "Some entries in the configuration did not match expectations.\n "
-				+ "As a result, the configuration has been automatically edited.\n"
-				+ "Please, check the settings and save the modifications.";
+		String message = "Some entries in the configuration did not match expectations.\n"
+				+ "As a result, some aspects of the UI might not work properly. \nThis could be due to "
+				+ "missing or unknown properties in the configuration.\n"
+				+ "Please, check the settings.";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	public static void showConfigurationCouldNotBeParsed(){
+		String title = "Improper configuration file";
+		
+		String message = "The default configuration could not be read, check for JSON errors in the file.\n";
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}

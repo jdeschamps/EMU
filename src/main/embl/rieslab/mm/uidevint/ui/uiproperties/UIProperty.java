@@ -140,4 +140,6 @@ public class UIProperty {
 	public String getFlag(){
 		return flag_.getPropertyFlag();
 	}
+	
+
 }

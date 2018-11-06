@@ -5,21 +5,29 @@ import java.util.Collections;
 
 public class GlobalConfigurationWrapper {
 
-	private final String defaultConfigurationName;
-	private final ArrayList<PluginConfiguration> plugins;
+	private String defaultConfigurationName;
+	private ArrayList<PluginConfiguration> pluginConfigurations;
 	
-	public GlobalConfigurationWrapper(String default_ui, ArrayList<PluginConfiguration> plugins){
-		this.defaultConfigurationName = default_ui;
-		
-		this.plugins = plugins;
-		Collections.sort(this.plugins); // alphabetical sorting
-	}	
-	
-	public ArrayList<PluginConfiguration> getPlugins(){
-		return plugins;
+	public GlobalConfigurationWrapper(){
+		// do nothing
 	}
 	
-	public String getDefaultUIName(){
+	public ArrayList<PluginConfiguration> getPluginConfigurations(){
+		Collections.sort(this.pluginConfigurations); // alphabetical sorting
+		return pluginConfigurations;
+	}
+	
+	public String getDefaultConfigurationName(){
 		return defaultConfigurationName;
 	}
+
+	public void setPluginConfigurations(ArrayList<PluginConfiguration> pluginConfigurations){
+		this.pluginConfigurations = pluginConfigurations;
+		Collections.sort(this.pluginConfigurations); // alphabetical sorting
+	}
+	
+	public void setDefaultConfigurationName(String defaultConfigurationName){
+		this.defaultConfigurationName = defaultConfigurationName;
+	}
+
 }

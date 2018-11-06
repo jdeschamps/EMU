@@ -46,7 +46,7 @@ public class ConfigurationWizard {
 	private JFrame frame_; // overall frame for the configuration wizard
 	private boolean running_ = false;
 	private String plugin_name_;
-	private String config_name_;
+	private JTextField config_name_;
 	
 	public ConfigurationWizard(ConfigurationController config) {
 		config_ = config;
@@ -55,7 +55,6 @@ public class ConfigurationWizard {
 		param_ = new HashMap<String, String>();
 
 		plugin_name_ = "";
-		config_name_ = "";
 	}
 	
 	/**
@@ -150,7 +149,7 @@ public class ConfigurationWizard {
 		upperpane.setLayout(new GridLayout(0,4));
 		
 		JLabel conf_name_label = new JLabel("   Name:");
-		JTextField conf_name_txt = new JTextField(conf_name);
+		config_name_ = new JTextField(conf_name);
 
 		JToggleButton helptoggle = new JToggleButton("HELP");
 		helptoggle.addActionListener(new ActionListener() {
@@ -161,7 +160,7 @@ public class ConfigurationWizard {
 			}
 		});
 		upperpane.add(conf_name_label);
-		upperpane.add(conf_name_txt);
+		upperpane.add(config_name_);
 		upperpane.add(new JLabel(""));
 		upperpane.add(helptoggle);
 
@@ -271,7 +270,7 @@ public class ConfigurationWizard {
 	}
 
 	public String getConfigurationName() {
-		return config_name_;
+		return config_name_.getText();
 	}
 
 	public String getPluginName() {

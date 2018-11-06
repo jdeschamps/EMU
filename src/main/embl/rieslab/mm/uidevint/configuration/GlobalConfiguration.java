@@ -22,8 +22,8 @@ public class GlobalConfiguration {
 	
 	@SuppressWarnings("unchecked")
 	public GlobalConfiguration(GlobalConfigurationWrapper configuration){
-		this.currentConfiguration = configuration.getDefaultUIName();		
-		this.plugins = (ArrayList<PluginConfiguration>) configuration.getPlugins().clone();
+		this.currentConfiguration = configuration.getDefaultConfigurationName();		
+		this.plugins = (ArrayList<PluginConfiguration>) configuration.getPluginConfigurations().clone();
 	}	
 	
 	public ArrayList<PluginConfiguration> getPlugins(){
@@ -39,7 +39,10 @@ public class GlobalConfiguration {
 	}
 	
 	public GlobalConfigurationWrapper getGlobalConfiguration(){
-		return new GlobalConfigurationWrapper(currentConfiguration, plugins);
+		GlobalConfigurationWrapper conf =  new GlobalConfigurationWrapper();
+		conf.setDefaultConfigurationName(currentConfiguration);
+		conf.setPluginConfigurations(plugins);
+		return conf;
 	}
 	
 	public String getCurrentPluginName(){

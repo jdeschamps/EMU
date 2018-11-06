@@ -8,7 +8,7 @@ public class LASERS  implements UIPlugin{
 
 	@Override
 	public PropertyMainFrame getMainFrame(SystemController controller) {
-		return new LasersMainFrame("ht-SMLM control center", controller);
+		return new LasersMainFrame("Lasers control center", controller);
 	}
 
 	@Override
