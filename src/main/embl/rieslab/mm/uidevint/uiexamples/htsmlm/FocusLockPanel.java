@@ -166,9 +166,10 @@ public class FocusLockPanel  extends PropertyPanel {
 		togglebuttonLaser_.setBorder(null);
 		togglebuttonLaser_.setFocusable(false);
 		togglebuttonLaser_.setContentAreaFilled(false);
-		togglebuttonLaser_.setIcon(new ImageIcon("ht-SMLM/off.png"));
-		togglebuttonLaser_.setSelectedIcon(new ImageIcon("ht-SMLM/on.png"));
-		togglebuttonLaser_.setDisabledIcon(new ImageIcon("ht-SMLM/off.png"));	
+
+		togglebuttonLaser_.setIcon(new ImageIcon(getClass().getResource("/images/off.png")));
+		togglebuttonLaser_.setSelectedIcon(new ImageIcon(getClass().getResource("/images/on.png")));
+		togglebuttonLaser_.setDisabledIcon(new ImageIcon(getClass().getResource("/images/off.png")));	
 
 		// Fine enable
 		togglesliderenableFine_ = new ToggleSlider();

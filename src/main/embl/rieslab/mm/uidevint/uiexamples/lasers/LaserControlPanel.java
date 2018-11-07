@@ -211,9 +211,10 @@ public class LaserControlPanel extends PropertyPanel {
 		togglebuttonOnOff_.setBorder(null);
 		togglebuttonOnOff_.setFocusable(false);
 		togglebuttonOnOff_.setContentAreaFilled(false);
-		togglebuttonOnOff_.setIcon(new ImageIcon("ht-SMLM/off.png"));
-		togglebuttonOnOff_.setSelectedIcon(new ImageIcon("ht-SMLM/on.png"));
-		togglebuttonOnOff_.setDisabledIcon(new ImageIcon("ht-SMLM/off.png"));	
+
+		togglebuttonOnOff_.setIcon(new ImageIcon(getClass().getResource("/images/off.png")));
+		togglebuttonOnOff_.setSelectedIcon(new ImageIcon(getClass().getResource("/images/on.png")));
+		togglebuttonOnOff_.setDisabledIcon(new ImageIcon(getClass().getResource("/images/off.png")));
 		
 		
 		////// grid bag layout

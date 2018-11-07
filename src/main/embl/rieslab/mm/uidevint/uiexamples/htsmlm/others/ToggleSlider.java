@@ -17,10 +17,10 @@ public class ToggleSlider extends JToggleButton {
 		this.setPreferredSize(new Dimension(65,28));
 		this.setFocusPainted(false);
 
-		this.setIcon(new ImageIcon("ht-SMLM/ToggleSlider-off.png"));
-		this.setSelectedIcon(new ImageIcon("ht-SMLM/ToggleSlider-on.png"));
+		this.setIcon(new ImageIcon(getClass().getResource("/images/ToggleSlider-off.png")));
+		this.setSelectedIcon(new ImageIcon(getClass().getResource("/images/ToggleSlider-on.png")));
 		//this.setRolloverIcon(new ImageIcon("images/ToggleSlider-rollover.png"));
-		this.setDisabledIcon(new ImageIcon("ht-SMLM/ToggleSlider-disabled.png"));
+		this.setDisabledIcon(new ImageIcon(getClass().getResource("/images/ToggleSlider-disabled.png")));
 		
 		this.setBorderPainted(false);
 		this.setBorder(null);
