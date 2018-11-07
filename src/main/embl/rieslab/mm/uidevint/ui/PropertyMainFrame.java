@@ -15,6 +15,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
+import main.embl.rieslab.mm.uidevint.controller.SystemDialogs;
 import main.embl.rieslab.mm.uidevint.tasks.TaskHolder;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.IntInternalProperty;
 import main.embl.rieslab.mm.uidevint.ui.internalproperty.IntInternalPropertyValue;
@@ -87,10 +88,19 @@ public abstract class PropertyMainFrame extends JFrame {
 
 		switch_plugin = new JMenu("Switch plugin");
 		switch_configuration = new JMenu("Switch configuration");
+		
+		JMenuItem about = new JMenuItem(new AbstractAction("About") {
+			private static final long serialVersionUID = -5519431309736542210L;
 
+			public void actionPerformed(ActionEvent e) {
+				SystemDialogs.showAboutUIDevInt();
+			}
+		});
+		
 		menu.add(wiz);
 		menu.add(switch_plugin);
 		menu.add(switch_configuration);
+		menu.add(about);
 		mb.add(menu);
         
         this.setJMenuBar(mb); 
