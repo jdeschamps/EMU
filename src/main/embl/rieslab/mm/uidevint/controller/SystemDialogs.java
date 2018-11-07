@@ -137,9 +137,9 @@ public class SystemDialogs {
 	}
 	
 	public static void showAboutUIDevInt(){
-		String title = "UIDevInt";
+		String title = "Easier Micro-manager User interfaces";
 		
-		String message = "This Micro-manager plugins provides a way to quickly interface a GUI with "
+		String message = "Easier Micro-manager User interfaces (EMU).\nThis Micro-manager plugins provides a way to quickly interface a GUI with "
 				     + "\nthe device properties of Micro-manager. Build you own GUI using drag'n drop "
 				     + "\nsoftwares, follow the tutorials on how to implement properly UIDevInt classes "
 				     + "\nand finally, load your GUI in this plugin. You will then be able to intuitively "
