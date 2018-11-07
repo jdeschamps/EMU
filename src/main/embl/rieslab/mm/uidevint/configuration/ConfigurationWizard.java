@@ -1,4 +1,4 @@
-package main.embl.rieslab.mm.uidevint.configuration.ui;
+package main.embl.rieslab.mm.uidevint.configuration;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,8 +16,9 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
-import main.embl.rieslab.mm.uidevint.configuration.GlobalConfiguration;
+import main.embl.rieslab.mm.uidevint.configuration.ui.HelpWindow;
+import main.embl.rieslab.mm.uidevint.configuration.ui.ParametersTable;
+import main.embl.rieslab.mm.uidevint.configuration.ui.PropertiesTable;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.PropertyMainFrameInterface;
 

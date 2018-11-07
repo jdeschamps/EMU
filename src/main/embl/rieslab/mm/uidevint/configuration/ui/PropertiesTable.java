@@ -20,6 +20,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
+import main.embl.rieslab.mm.uidevint.configuration.ConfigurationWizard;
 import main.embl.rieslab.mm.uidevint.configuration.GlobalConfiguration;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.MultiStateUIProperty;

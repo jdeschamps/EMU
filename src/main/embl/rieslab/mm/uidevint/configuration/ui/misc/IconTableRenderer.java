@@ -1,4 +1,4 @@
-package main.embl.rieslab.mm.uidevint.configuration.ui;
+package main.embl.rieslab.mm.uidevint.configuration.ui.misc;
 
 import java.awt.Component;
 

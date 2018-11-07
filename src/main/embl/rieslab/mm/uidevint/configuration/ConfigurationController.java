@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import main.embl.rieslab.mm.uidevint.configuration.ui.ConfigurationWizard;
 import main.embl.rieslab.mm.uidevint.controller.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;

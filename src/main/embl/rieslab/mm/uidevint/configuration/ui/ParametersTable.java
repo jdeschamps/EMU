@@ -20,6 +20,9 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+import main.embl.rieslab.mm.uidevint.configuration.ui.misc.ColorIcon;
+import main.embl.rieslab.mm.uidevint.configuration.ui.misc.IconListRenderer;
+import main.embl.rieslab.mm.uidevint.configuration.ui.misc.IconTableRenderer;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.BoolUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.ComboUIParameter;
 import main.embl.rieslab.mm.uidevint.ui.uiparameters.UIParameter;
