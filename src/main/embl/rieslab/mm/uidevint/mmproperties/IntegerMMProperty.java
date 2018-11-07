@@ -92,9 +92,10 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	@Override
 	public boolean isInRange(Integer val) {
 		if(hasLimits()){
-			if(val>=getLowerLimit() & val<=getUpperLimit() & val<=getMax() & val>=getMin()){
+			if(val>=getLowerLimit() && val<=getUpperLimit() && val<=getMax() && val>=getMin()){
 				return true;
 			}
+			return false;
 		}
 		return true;
 	}

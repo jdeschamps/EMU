@@ -65,6 +65,13 @@ public class StringMMProperty extends MMProperty<String> {
 
 	@Override
 	public boolean isInRange(String val) {
+		if(hasLimits()){
+			if(val.compareTo(String.valueOf(getLowerLimit()))>=0 && val.compareTo(String.valueOf(getUpperLimit()))<=0 
+					&& val.compareTo(getMin())>=0 && val.compareTo(getMax())<=0 ){
+				return true;
+			}
+			return false;
+		}
 		return true;
 	}
 
@@ -76,6 +83,8 @@ public class StringMMProperty extends MMProperty<String> {
 					return true;
 				}
 			}
+		} else if(hasLimits()){
+			return isInRange(val);
 		}
 		return true;
 	}

@@ -1,5 +1,6 @@
 package main.embl.rieslab.mm.uidevint.mmproperties;
 
+
 import mmcorej.CMMCore;
 
 /**
@@ -91,9 +92,11 @@ public class FloatMMProperty extends MMProperty<Float> {
 	@Override
 	public boolean isInRange(Float val) {
 		if(hasLimits()){
-			if(val>=getLowerLimit() & val<=getUpperLimit() & val<=getMax() & val>=getMin()){
+			if(val.compareTo(new Float(getLowerLimit()))>=0 && val.compareTo(new Float(getUpperLimit()))<=0 
+					&& val.compareTo(getMax())<=0 && val.compareTo(getMin())>=0){
 				return true;
 			}
+			return false;
 		}
 		return true;
 	}
