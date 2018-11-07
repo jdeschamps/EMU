@@ -1,11 +1,13 @@
 package main.embl.rieslab.mm.uidevint.configuration;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import main.embl.rieslab.mm.uidevint.configuration.globalsettings.BoolGlobalSettings;
 import main.embl.rieslab.mm.uidevint.controller.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
@@ -63,6 +65,9 @@ public class ConfigurationController {
 	}
 
 	public boolean isValidConfiguration(String configName){
+		if(configuration_ == null){
+			return false;
+		}
 		return configuration_.isValidConfiguration(configName);
 	}
 	
@@ -74,6 +79,10 @@ public class ConfigurationController {
 	}
 
 	public boolean sanityCheck(PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
+		if(configuration_ == null){
+			return false;
+		}
+		
 		// just check if something is missing. When editing the settings, the PropertiesTable takes care
 		// of removing old properties and such.
 		
@@ -127,9 +136,13 @@ public class ConfigurationController {
 	 * Retrieves the pairs of UIProperty name and MMProperty names (or UIProperty state values), as well as the pairs UIParameter names and values,
 	 * and writes them to the configuration file. It then calls the SystemController to update the system. This method is called by the ConfigurationWizard
 	 * upon saving of the configuration by the user.
+	 * @param globset_ 
 	 */
-	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, Map<String, String> uiparameters) {
-
+	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, Map<String, String> uiparameters, HashMap<String, String> globset_) {
+		if(configuration_ == null){
+			return;
+		}
+		
 		if (configuration_.getCurrentConfigurationName().equals(configName)) {
 			// the configuration has the same name
 			PluginConfiguration plugin = new PluginConfiguration();
@@ -142,6 +155,9 @@ public class ConfigurationController {
 			configuration_.addConfiguration(plugin);
 		}
 
+		// set global settings
+		configuration_.setGlobalSettings(globset_);
+
 		// set current configuration
 		configuration_.setCurrentConfiguration(configName);
 
@@ -149,14 +165,21 @@ public class ConfigurationController {
 
 		// update system
 		controller_.loadConfiguration(configName);
-
 	}
 	
 	public boolean setDefaultConfiguration(String configuration){
+		if(configuration_ == null){
+			return false;
+		}
+		
 		return configuration_.setCurrentConfiguration(configuration);
 	}
 	
 	public String getDefaultConfiguration(){
+		if(configuration_ == null){
+			return null;
+		}
+		
 		return configuration_.getCurrentConfigurationName();
 	}
 	
@@ -167,6 +190,10 @@ public class ConfigurationController {
 	 * and UIProperty state values (values)
 	 */
 	public TreeMap<String,String> getPropertiesConfiguration(){
+		if(configuration_ == null){
+			return null;
+		}
+		
 		return configuration_.getCurrentPluginConfiguration().getProperties();
 	}
 	
@@ -176,6 +203,10 @@ public class ConfigurationController {
 	 * @return Pairs of UIParameter names (keys) and their value (values)
 	 */
 	public TreeMap<String,String> getParametersConfiguration(){
+		if(configuration_ == null){
+			return null;
+		}
+		
 		return configuration_.getCurrentPluginConfiguration().getParameters();
 	}
 	
@@ -205,4 +236,11 @@ public class ConfigurationController {
 		return false;
 	}
 
+	public BoolGlobalSettings getEnableUnallocatedWarnings(){
+		if(configuration_ == null){
+			return null;
+		}
+		
+		return configuration_.getEnableUnallocatedWarnings();
+	}
 }

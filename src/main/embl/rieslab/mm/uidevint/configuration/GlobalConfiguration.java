@@ -2,7 +2,10 @@ package main.embl.rieslab.mm.uidevint.configuration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+
+import main.embl.rieslab.mm.uidevint.configuration.globalsettings.BoolGlobalSettings;
 
 public class GlobalConfiguration {
 
@@ -11,18 +14,22 @@ public class GlobalConfiguration {
 	 */
 	public final static String KEY_UNALLOCATED = "Unallocated";
 	private final static String KEY_NONE = "None";
+	private final static String KEY_ENABLEUNALLOCATEDWARNINGS = "Enable unallocated warnings";
 	
 	private String currentConfiguration;
+	private boolean enableUnallocatedWarnings;
 	private ArrayList<PluginConfiguration> plugins;
 
 	public GlobalConfiguration(){
 		this.currentConfiguration = KEY_NONE;		
+		this.enableUnallocatedWarnings = true;
 		this.plugins = new ArrayList<PluginConfiguration>();
 	}	
 	
 	@SuppressWarnings("unchecked")
 	public GlobalConfiguration(GlobalConfigurationWrapper configuration){
 		this.currentConfiguration = configuration.getDefaultConfigurationName();		
+		this.enableUnallocatedWarnings = configuration.getEnableUnallocatedWarnings();
 		this.plugins = (ArrayList<PluginConfiguration>) configuration.getPluginConfigurations().clone();
 	}	
 	
@@ -38,9 +45,15 @@ public class GlobalConfiguration {
 		return currentConfiguration;
 	}
 	
+	public BoolGlobalSettings getEnableUnallocatedWarnings(){
+		return new BoolGlobalSettings(KEY_ENABLEUNALLOCATEDWARNINGS, 
+				"When enabled, a message will be prompted to the user if some UI properties are note allocated.",enableUnallocatedWarnings);
+	}
+	
 	public GlobalConfigurationWrapper getGlobalConfiguration(){
 		GlobalConfigurationWrapper conf =  new GlobalConfigurationWrapper();
 		conf.setDefaultConfigurationName(currentConfiguration);
+		conf.setEnableUnallocatedWarnings(enableUnallocatedWarnings);
 		conf.setPluginConfigurations(plugins);
 		return conf;
 	}
@@ -155,6 +168,11 @@ public class GlobalConfiguration {
 			}
 		} 
 		return false;
+	}
+
+	public void setGlobalSettings(HashMap<String, String> globset_) {
+		// enable unallocated warnings
+		enableUnallocatedWarnings = Boolean.parseBoolean(globset_.get(KEY_ENABLEUNALLOCATEDWARNINGS));
 	}
 
 	

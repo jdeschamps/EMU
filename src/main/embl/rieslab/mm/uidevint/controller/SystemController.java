@@ -323,7 +323,7 @@ public class SystemController {
 			SystemDialogs.showForbiddenValuesMessage(forbiddenValuesProp_);
 		}
 		
-		if(!unallocatedprop_.isEmpty()){
+		if(config.getEnableUnallocatedWarnings().getValue() && !unallocatedprop_.isEmpty()){
 			SystemDialogs.showUnallocatedMessage(unallocatedprop_);
 		}
 	}

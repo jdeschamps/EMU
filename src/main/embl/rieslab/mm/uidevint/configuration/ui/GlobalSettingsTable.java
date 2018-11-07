@@ -1,5 +1,183 @@
 package main.embl.rieslab.mm.uidevint.configuration.ui;
 
-public class GlobalSettingsTable {
+import java.awt.Component;
+import java.awt.Font;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import javax.swing.DefaultCellEditor;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableModel;
+
+import main.embl.rieslab.mm.uidevint.configuration.globalsettings.BoolGlobalSettings;
+import main.embl.rieslab.mm.uidevint.configuration.globalsettings.GlobalSettings;
+
+public class GlobalSettingsTable extends JPanel{
+
+	private static final long serialVersionUID = -4373947956592815819L;
+
+	private JTable table;
+	@SuppressWarnings("rawtypes")
+	private Map<String, GlobalSettings> globalsettings_;
+	private String[] namesettings_;
+	private HelpWindow help_;
+	
+	@SuppressWarnings("rawtypes")
+	public GlobalSettingsTable(Map<String, GlobalSettings> globalsettings, HelpWindow help) {
+		globalsettings_ = globalsettings;
+		help_ = help;
+		
+		// Extract global settings names
+		namesettings_ = globalsettings_.keySet().toArray(new String[0]);
+		Arrays.sort(namesettings_);
+		
+		// Define table
+		DefaultTableModel model = new DefaultTableModel(new Object[] {"Global setting", "Value" }, 0);
+		for(int i=0;i<namesettings_.length;i++){
+			model.addRow(new Object[] {namesettings_[i], globalsettings_.get(namesettings_[i]).getValue()});
+		}
+
+		createTable(model);
+
+		JScrollPane sc = new JScrollPane(table);
+		this.add(sc);
+	}
+
+	private void createTable(DefaultTableModel model) {
+
+		table = new JTable(model) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -7528102943663023952L;
+
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				switch (column) {
+				case 0:
+					return new BoldTableCellRenderer();
+				case 1:
+					String s = (String) table.getValueAt(row, 0);
+					if(globalsettings_.get(s) instanceof BoolGlobalSettings){ // if bool global settings
+						return super.getDefaultRenderer(Boolean.class);
+					} else {
+						return new DefaultTableCellRenderer(); 
+					}
+				default:
+					return super.getCellRenderer(row, column);
+				}
+			}
+
+			@Override
+			public TableCellEditor getCellEditor(int row, int column) {
+				switch (column) {
+				case 0:
+					return super.getCellEditor(row, column);
+				case 1:
+					String s = (String) table.getValueAt(row, 0);
+					if(globalsettings_.get(s) instanceof BoolGlobalSettings) {
+						return super.getDefaultEditor(Boolean.class);
+					} else {
+						return new DefaultCellEditor(new JTextField()); 
+					}
+				default:
+					return super.getCellEditor(row, column);
+				}
+			}
+			
+			@Override
+	        public boolean isCellEditable(int row, int col) { // only second column is editable
+	            if (col < 1 ) {
+	                return false;
+	            } else {
+	                return true;
+	            }
+	        }
+		};
+		table.setAutoCreateRowSorter(false);
+		table.setRowHeight(23); 
+		
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+		    @Override
+		    public void mouseClicked(java.awt.event.MouseEvent evt) {
+		        int row = table.rowAtPoint(evt.getPoint());
+		        int col = table.columnAtPoint(evt.getPoint());
+		        if (col==0) {
+		            updateHelper(row);
+		        }
+		    }
+		});
+	}
+	
+
+	/**
+	 * Shows the help window and updates its content with the description of the parameter currently selected.
+	 * 
+	 * @param b True if the window is to be displayed, false otherwise.
+	 */
+	public void showHelp(boolean b){
+		help_.showHelp(b);
+		updateHelper(table.getSelectedRow());
+	}
+
+	private void updateHelper(int row){
+		String s = (String) table.getValueAt(row, 0);
+		help_.update(s+":\n\n"+globalsettings_.get(s).getDescription());
+	}
+	
+	/**
+	 * Returns the map of the GlobalSettings names (keys) and their values (values).
+	 * 
+	 * @return
+	 */
+	public HashMap<String,String> getSettings(){
+		HashMap<String,String> settings = new HashMap<String,String>();
+		
+		TableModel model = table.getModel();
+		int nrow = model.getRowCount();
+		
+		for(int i=0;i<nrow;i++){
+			if(model.getValueAt(i, 1) instanceof Boolean){		
+				settings.put((String) model.getValueAt(i, 0), Boolean.toString((Boolean) model.getValueAt(i, 1)));
+			} else {
+				settings.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 1));
+			}
+		}
+		
+		return settings;
+	}
+	
+	/**
+	 * Renders cell text with a bold font. Adapted from: https://stackoverflow.com/questions/22325138/cellrenderer-making-text-bold
+	 */
+	class BoldTableCellRenderer extends DefaultTableCellRenderer {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 7284712630858433079L;
+
+		public Component getTableCellRendererComponent(JTable table,
+                Object value, boolean isSelected, boolean hasFocus,
+                int row, int column) {
+             Component compo = super.getTableCellRendererComponent(table, 
+                   value, isSelected, hasFocus, row, column);
+             if (column == 0) {
+            	 compo.setFont(compo.getFont().deriveFont(Font.BOLD));
+            } else {  
+            	compo.setFont(compo.getFont().deriveFont(Font.PLAIN));
+            }
+
+             return compo;
+          }
+	}
+	
 }
