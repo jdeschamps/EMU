@@ -144,5 +144,18 @@ public class GlobalConfiguration {
 		return exists;
 	}
 
+	public boolean isValidConfiguration(String configName) {
+		Iterator<PluginConfiguration> it = plugins.iterator();
+		
+		while(it.hasNext()){
+			PluginConfiguration plug = it.next();
+
+			if(plug.getConfigurationName().equals(configName)){
+				return true;
+			}
+		} 
+		return false;
+	}
+
 	
 }

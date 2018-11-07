@@ -58,9 +58,13 @@ public class ConfigurationController {
 	public boolean writeConfiguration(File f){
 		return ConfigurationIO.write(f, getConfiguration().getGlobalConfiguration());
 	}
-	
+
 	public GlobalConfiguration getConfiguration(){
 		return configuration_;
+	}
+
+	public boolean isValidConfiguration(String configName){
+		return configuration_.isValidConfiguration(configName);
 	}
 	
 	public String[] getCompatibleConfigurations(String pluginName){
@@ -145,12 +149,16 @@ public class ConfigurationController {
 		writeConfiguration();
 
 		// update system
-		controller_.applyConfiguration();
+		controller_.loadConfiguration(configName);
 
 	}
 	
 	public boolean setDefaultConfiguration(String configuration){
 		return configuration_.setCurrentConfiguration(configuration);
+	}
+	
+	public String getDefaultConfiguration(){
+		return configuration_.getCurrentConfigurationName();
 	}
 	
 	/**

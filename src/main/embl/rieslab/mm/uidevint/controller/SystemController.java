@@ -10,6 +10,7 @@ import org.micromanager.api.ScriptInterface;
 
 import main.embl.rieslab.mm.uidevint.configuration.ConfigurationController;
 import main.embl.rieslab.mm.uidevint.configuration.GlobalConfiguration;
+import main.embl.rieslab.mm.uidevint.exceptions.IncompatiblePluginConfigurationException;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMConfigurationGroup;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMConfigurationGroupsRegistry;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperties;
@@ -85,19 +86,7 @@ public class SystemController {
 					// extracts UI properties and parameters
 					interface_ = mainframe_.getInterface();
 					
-					// sanity check on the configuration to make sure the UIProperties and UIParameters match
-					boolean sane = config.sanityCheck(interface_, mmproperties_);
-					
-					if(sane){
-						// apply configuration
-						applyConfiguration();
-					} else {
-						// show dialog
-						SystemDialogs.showConfigurationDidNotPassSanityCheck();
-						
-						// then apply, the user can choose to change the settings or not
-						applyConfiguration();
-					}
+					applyConfiguration();
 					
 				} else { // default UI not found or wrong format
 			
@@ -165,12 +154,73 @@ public class SystemController {
 		}
 	}
 
-
 	public void loadConfiguration(String configuration){
-		
-		// check if the default configuration is compatible with current UI
-		if (config.getConfiguration().getPluginConfiguration(configuration).getPluginName().equals(currentPlugin)) {
+		try {
+			reloadSystem(currentPlugin, configuration);
+			
+			// apply configuration
+			applyConfiguration();
+			
+		} catch (IncompatiblePluginConfigurationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void loadPlugin(String newPlugin) {
 
+		if(!pluginloader_.isPluginAvailable(newPlugin)){
+			throw new IllegalArgumentException();
+		}
+
+		// get list of configurations corresponding to this plugin
+		String[] configs = config.getCompatibleConfigurations(newPlugin);
+		
+		if(configs == null || configs.length == 0){ // no configuration corresponding to the plugin
+			
+			// launch new wizard
+			config.startWizard(currentPlugin, interface_, mmproperties_);
+			
+		} else if(configs.length == 1){ // a single compatible configuration
+			
+			try {
+				reloadSystem(newPlugin, configs[0]);
+				applyConfiguration();
+			} catch (IncompatiblePluginConfigurationException e) {
+				e.printStackTrace();
+			}
+			
+		} else { // more than one configuration
+			
+			// let the user decide
+			String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
+			
+			// then load system
+			try {
+				reloadSystem(newPlugin, configuration);
+				applyConfiguration();
+			} catch (IncompatiblePluginConfigurationException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private void reloadSystem(String pluginName, String configName) throws IncompatiblePluginConfigurationException {
+		
+		if(!pluginloader_.isPluginAvailable(pluginName) || !config.isValidConfiguration(configName)){
+			throw new IllegalArgumentException();
+		}
+		
+		
+		if(config.getConfiguration().getPluginConfiguration(configName).getPluginName().equals(pluginName)){
+			
+			if(!currentPlugin.equals(pluginName)){
+				currentPlugin = pluginName;
+			}
+			
+			if(!config.getDefaultConfiguration().equals(configName)){
+				config.setDefaultConfiguration(configName);
+			}
+			
 			pairs_ = new ArrayList<PropertyPair>();
 			unallocatedprop_ = new ArrayList<String>();
 			
@@ -181,60 +231,16 @@ public class SystemController {
 			mmproperties_.clearAllListeners();
 			
 			// load plugin 
-			mainframe_ = pluginloader_.loadPlugin(currentPlugin);
+			mainframe_ = pluginloader_.loadPlugin(pluginName);
 			
 			// extracts UI properties and parameters
 			interface_ = mainframe_.getInterface();
 			
-			config.setDefaultConfiguration(configuration); // set as default
-			
-			// load configuration
-			applyConfiguration();
-
 		} else {
-			// should throw exception
+			throw new IncompatiblePluginConfigurationException(pluginName, configName);
 		}
 	}
-	
-	public void loadPlugin(String newPlugin) {
 
-		if(!pluginloader_.isPluginAvailable(newPlugin)){
-			return;
-		}
-		
-		pairs_ = new ArrayList<PropertyPair>();
-		unallocatedprop_ = new ArrayList<String>();
-		currentPlugin = newPlugin;
-		
-		// close mainframe
-		mainframe_.shutDownAllPropertyPanels();
-		
-		// empty mmproperties listeners
-		mmproperties_.clearAllListeners();
-		
-		// load plugin 
-		mainframe_ = pluginloader_.loadPlugin(currentPlugin);
-		
-		// extracts UI properties and parameters
-		interface_ = mainframe_.getInterface();
-		
-		// get list of configurations corresponding to this plugin
-		String[] configs = config.getCompatibleConfigurations(currentPlugin);
-		
-		if(configs == null || configs.length == 0){
-			// launch new wizard
-			config.startWizard(currentPlugin, interface_, mmproperties_);
-		} else if(configs.length == 1){
-			config.setDefaultConfiguration(configs[0]); // set as default
-			applyConfiguration();
-		} else {
-			// if more than one, then let the user decide
-			String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
-			config.setDefaultConfiguration(configuration); // set as default and then launch wizard
-			applyConfiguration();
-		}
-	}
-	
 	
 	/**
 	 * Reads out the properties from the configuration and pairs them to ui properties.
@@ -316,11 +322,16 @@ public class SystemController {
 		}
 	}
 
-	/**
-	 * Extracts the configuration for the ui properties and parameters, then updates the UI accordingly.
-	 * 
-	 */
-	public void applyConfiguration() {
+
+	private void applyConfiguration() {
+		// sanity check
+		boolean sane = config.sanityCheck(interface_, mmproperties_);
+		
+		if(!sane){
+			// show dialog
+			SystemDialogs.showConfigurationDidNotPassSanityCheck();
+		} 
+		
 		// Allocate UI properties and parameters
 		readProperties(config.getPropertiesConfiguration());
 		readParameters(config.getParametersConfiguration());
