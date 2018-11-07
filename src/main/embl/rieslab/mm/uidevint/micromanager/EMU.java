@@ -7,13 +7,13 @@ import main.embl.rieslab.mm.uidevint.controller.SystemController;
 import org.micromanager.api.MMPlugin;
 import org.micromanager.api.ScriptInterface;
 
-public class htSMLM implements MMPlugin {
+public class EMU implements MMPlugin {
 
 	private ScriptInterface gui_;
 	private SystemController controller_;
 
 	private static String copyright = "LGPL";
-	private static String description = "Interface UIs with device properties.";
+	private static String description = "Interface UIs with Micro-manager device properties.";
 	private static String info = "Joran Deschamps, EMBL, 2016-2019.";
 	private static String version = "v1";
 
