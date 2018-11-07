@@ -221,6 +221,8 @@ public class SystemController {
 				config.setDefaultConfiguration(configName);
 			}
 			
+			config.writeConfiguration(); // to remember the default configuration
+			
 			pairs_ = new ArrayList<PropertyPair>();
 			unallocatedprop_ = new ArrayList<String>();
 			
