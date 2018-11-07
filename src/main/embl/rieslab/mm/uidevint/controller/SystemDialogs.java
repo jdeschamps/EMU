@@ -86,7 +86,7 @@ public class SystemDialogs {
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
-	
+
 	/**
 	 * Pops-up a message indicating the unallocated ui properties.
 	 * @param unallocated
@@ -94,7 +94,7 @@ public class SystemDialogs {
 	public static void showUnallocatedMessage(ArrayList<String> unallocated) {
 		String title = "Unallocated properties";
 		
-		String message = "The following properties from the UI have not been allocated: \n\n";
+		String message = "The following UI properties have not been allocated: \n\n";
 		Iterator<String> it = unallocated.iterator();
 		message = message+it.next();
 		int count = 1;
@@ -108,7 +108,30 @@ public class SystemDialogs {
 		}
 		message = message+". \n\n";
 		
-		message = message+"The UI components related to these properties will not function until these properties are allocated. \nCreate or load configuration to allocate them.";
+		message = message+"The corresponding UI components will not function until these properties are allocated. \nUse the Settings Wizard to allocate them.";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+
+	public static void showForbiddenValuesMessage(ArrayList<String> forbiddenvals) {
+		String title = "Forbidden values";
+		
+		String message = "The state values of the following UIproperties are forbidden: \n\n";
+		Iterator<String> it = forbiddenvals.iterator();
+		message = message+it.next();
+		int count = 1;
+		while(it.hasNext()){
+			if(count % 5 == 0){
+				message = message+", \n"+it.next();
+			} else {
+				message = message+", "+it.next();
+			}
+			count ++;
+		}
+		message = message+". \n\n";
+		
+		message = message+"Please check the device property browser of Micro-Manager \nto infer allowed values and correct the state values in the Settings Wizard.\n";
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}

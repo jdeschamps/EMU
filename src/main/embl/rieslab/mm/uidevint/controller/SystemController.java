@@ -40,6 +40,7 @@ public class SystemController {
 	private UIPluginLoader pluginloader_;
 	private ArrayList<PropertyPair> pairs_;
 	private ArrayList<String> unallocatedprop_; 
+	private ArrayList<String> forbiddenValuesProp_; 
 	
 	private String currentPlugin;
 		
@@ -49,6 +50,7 @@ public class SystemController {
 		pairs_ = new ArrayList<PropertyPair>();
 
 		unallocatedprop_ = new ArrayList<String>();
+		forbiddenValuesProp_ = new ArrayList<String>();
 		
 		currentPlugin = "";
 	}
@@ -222,10 +224,7 @@ public class SystemController {
 			}
 			
 			config.writeConfiguration(); // to remember the default configuration
-			
-			pairs_ = new ArrayList<PropertyPair>();
-			unallocatedprop_ = new ArrayList<String>();
-			
+						
 			// close mainframe
 			mainframe_.shutDownAllPropertyPanels();
 			
@@ -251,7 +250,9 @@ public class SystemController {
 	 */
 	public void readProperties(Map<String, String> configprop){
 		String uiprop;
-		unallocatedprop_.clear(); // clear the list of unallocated properties
+		unallocatedprop_.clear(); // clear the list of unallocated properties, props with forbidden values
+		forbiddenValuesProp_.clear();
+		pairs_.clear(); // and the list of pairs
 		
 		HashMap<String, UIProperty> uiproperties = interface_.getUIProperties();
 		
@@ -274,19 +275,41 @@ public class SystemController {
 					if(uiproperties.get(uiprop).isTwoState()){ // if it is a two-state property
 						// extract the on/off values
 						TwoStateUIProperty t = (TwoStateUIProperty) uiproperties.get(uiprop);
-						t.setOnStateValue(configprop.get(uiprop+TwoStateUIProperty.getOnStateName()));
-						t.setOffStateValue(configprop.get(uiprop+TwoStateUIProperty.getOffStateName()));
+						String offval = configprop.get(uiprop+TwoStateUIProperty.getOffStateName());
+						String onval = configprop.get(uiprop+TwoStateUIProperty.getOnStateName());
+						
+						t.setOnStateValue(onval);
+						t.setOffStateValue(offval);
+						
+						if(!t.isValueAllowed(onval) || !t.isValueAllowed(offval)){
+							forbiddenValuesProp_.add(uiprop);
+						}
 
 					} else if(uiproperties.get(uiprop).isSingleState()){ // if single state property
 						// extract the state value
 						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
-						t.setStateValue(configprop.get(uiprop+SingleStateUIProperty.getValueName()));
+						String value = configprop.get(uiprop+SingleStateUIProperty.getValueName());
+						t.setStateValue(value);
+						
+						if(!t.isValueAllowed(value)){
+							forbiddenValuesProp_.add(uiprop);
+						}
 						
 					} else if (uiproperties.get(uiprop).isMultiState()) {// if it is a multistate property
 						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties.get(uiprop);
 						int numpos = t.getNumberOfStates();
+						boolean allowed = true;
 						for(int j=0;j<numpos;j++){
-							t.setStateValue(j, configprop.get(uiprop+MultiStateUIProperty.getStateName(j)));
+							String val =  configprop.get(uiprop+MultiStateUIProperty.getStateName(j));
+							t.setStateValue(j, val);
+
+							if(!t.isValueAllowed(val)){
+								allowed = false;
+							}
+						}
+
+						if(!allowed){
+							forbiddenValuesProp_.add(uiprop);
 						}
 					}
 				} else {
@@ -294,6 +317,14 @@ public class SystemController {
 					unallocatedprop_.add(uiprop);
 				}
 			} 
+		}
+
+		if(!forbiddenValuesProp_.isEmpty()){
+			SystemDialogs.showForbiddenValuesMessage(forbiddenValuesProp_);
+		}
+		
+		if(!unallocatedprop_.isEmpty()){
+			SystemDialogs.showUnallocatedMessage(unallocatedprop_);
 		}
 	}
 	

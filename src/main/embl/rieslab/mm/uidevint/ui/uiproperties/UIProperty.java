@@ -146,5 +146,11 @@ public class UIProperty {
 		return flag_.getPropertyFlag();
 	}
 	
+	public boolean isValueAllowed(String val){
+		if(allocated_){
+			return mmproperty_.isStringAllowed(val);
+		}
+		return true;
+	}
 
 }

@@ -477,4 +477,8 @@ public abstract class MMProperty<T> {
 	 */
 	protected abstract boolean isAllowed(T val);
 	
+	public boolean isStringAllowed(String val){
+		return isAllowed(convertToValue(val));
+	}
+	
 }
