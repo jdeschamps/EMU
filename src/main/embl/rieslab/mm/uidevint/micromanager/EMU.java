@@ -1,7 +1,10 @@
 package main.embl.rieslab.mm.uidevint.micromanager;
 
+import java.io.File;
+
 import javax.swing.SwingUtilities;
 
+import main.embl.rieslab.mm.uidevint.controller.SystemConstants;
 import main.embl.rieslab.mm.uidevint.controller.SystemController;
 
 import org.micromanager.api.MMPlugin;
@@ -52,6 +55,11 @@ public class EMU implements MMPlugin {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
+				// make sure the directory EMU exist
+				if(!(new File(SystemConstants.HOME)).exists()){
+					new File(SystemConstants.HOME).mkdirs();
+				}
+				
 				controller_ = new SystemController(gui_);
 				controller_.start();
 			}
