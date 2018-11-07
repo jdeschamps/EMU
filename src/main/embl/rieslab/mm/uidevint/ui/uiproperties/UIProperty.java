@@ -1,5 +1,6 @@
 package main.embl.rieslab.mm.uidevint.ui.uiproperties;
 
+import main.embl.rieslab.mm.uidevint.exceptions.AlreadyAllocatedUIProperty;
 import main.embl.rieslab.mm.uidevint.mmproperties.MMProperty;
 import main.embl.rieslab.mm.uidevint.ui.PropertyPanel;
 import main.embl.rieslab.mm.uidevint.ui.uiproperties.flag.NoFlag;
@@ -38,10 +39,14 @@ public class UIProperty {
 		return description_;
 	}
 	
-	public void setProperty(MMProperty prop){
+	public void setProperty(MMProperty prop) throws AlreadyAllocatedUIProperty{
 		if(!allocated_ && prop != null){
 			mmproperty_ = prop;
 			allocated_ = true;
+		} else if(prop == null){
+			throw new NullPointerException();
+		} else if(allocated_){
+			throw new AlreadyAllocatedUIProperty(name_);
 		}
 	}
 	

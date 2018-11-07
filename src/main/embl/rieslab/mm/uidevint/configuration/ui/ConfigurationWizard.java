@@ -237,7 +237,7 @@ public class ConfigurationWizard {
 		prop_ = propertytable_.getSettings();
 		param_ = parametertable_.getSettings();
 		
-		config_.setWizardSettings();
+		config_.applyWizardSettings(config_name_.getText(),plugin_name_,prop_,param_);
 		
 		frame_.dispose();
 		help_.disposeHelp();
@@ -267,13 +267,5 @@ public class ConfigurationWizard {
 			newConfiguration(maininterface, mmproperties);
 		}
 			
-	}
-
-	public String getConfigurationName() {
-		return config_name_.getText();
-	}
-
-	public String getPluginName() {
-		return plugin_name_;
 	}
 }

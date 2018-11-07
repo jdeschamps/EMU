@@ -125,34 +125,28 @@ public class ConfigurationController {
 	 * and writes them to the configuration file. It then calls the SystemController to update the system. This method is called by the ConfigurationWizard
 	 * upon saving of the configuration by the user.
 	 */
-	public void setWizardSettings() {
-		if (wizard_ != null) {
-			// Retrieves the Maps and the name
-			String name = wizard_.getConfigurationName();
-			String pluginName = wizard_.getPluginName();
-			Map<String, String> uiproperties = wizard_.getWizardProperties();
-			Map<String, String> uiparameters = wizard_.getWizardParameters();
+	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, Map<String, String> uiparameters) {
 
-			if(configuration_.getCurrentConfigurationName().equals(name)){
-				// the configuration has the same name
-				PluginConfiguration plugin = new PluginConfiguration();
-				plugin.configure(name, pluginName, uiproperties, uiparameters);
-				configuration_.substituteConfiguration(plugin);
-			} else {
-				// new configuration has a different name  
-				PluginConfiguration plugin = new PluginConfiguration();
-				plugin.configure(name, pluginName, uiproperties, uiparameters);
-				configuration_.addConfiguration(plugin);
-			}
-			
-			// set current configuration
-			configuration_.setCurrentConfiguration(name);
-			
-			writeConfiguration();
-
-			// update system
-			controller_.applyConfiguration();
+		if (configuration_.getCurrentConfigurationName().equals(configName)) {
+			// the configuration has the same name
+			PluginConfiguration plugin = new PluginConfiguration();
+			plugin.configure(configName, pluginName, uiproperties, uiparameters);
+			configuration_.substituteConfiguration(plugin);
+		} else {
+			// new configuration has a different name
+			PluginConfiguration plugin = new PluginConfiguration();
+			plugin.configure(configName, pluginName, uiproperties, uiparameters);
+			configuration_.addConfiguration(plugin);
 		}
+
+		// set current configuration
+		configuration_.setCurrentConfiguration(configName);
+
+		writeConfiguration();
+
+		// update system
+		controller_.applyConfiguration();
+
 	}
 	
 	public boolean setDefaultConfiguration(String configuration){

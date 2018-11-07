@@ -1,6 +1,5 @@
 package main.embl.rieslab.mm.uidevint.controller;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -166,52 +165,74 @@ public class SystemController {
 		}
 	}
 
-	/**
-	 * Loads new configuration.
-	 * 
-	 * @param f Configuration to be read
-	 * @return True if reading successful
-	 */
-	public boolean loadConfiguration(File f){
-		boolean read = config.readConfiguration(f);
+
+	public void loadConfiguration(String configuration){
 		
-		if(read){ // if read a configuration
-			// check if the default configuration is compatible with current UI
-			if(config.getConfiguration().getCurrentPluginName().equals(currentPlugin)){
-				
-				//load configuration
-				applyConfiguration();
-				
-			} else {
-				// get list of compatible configurations
-				String[] confs = config.getCompatibleConfigurations(currentPlugin);
-				
-				if(confs == null || confs.length == 0){
-					// launch wizard
-					config.startWizard(currentPlugin, interface_, mmproperties_);
-				} else if(confs.length == 1){
-					config.setDefaultConfiguration(confs[0]); // set as default 
-					applyConfiguration();
-				} else {
-					// if more than one, then let the user decide
-					String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(confs);
-					config.setDefaultConfiguration(configuration); // set as default and then launch wizard
+		// check if the default configuration is compatible with current UI
+		if (config.getConfiguration().getPluginConfiguration(configuration).getPluginName().equals(currentPlugin)) {
 
-					// load configuration
-					applyConfiguration();
-				}
-			}
+			pairs_ = new ArrayList<PropertyPair>();
+			unallocatedprop_ = new ArrayList<String>();
 			
-			return true;
-		} else {
+			// close mainframe
+			mainframe_.shutDownAllPropertyPanels();
+			
+			// empty mmproperties listeners
+			mmproperties_.clearAllListeners();
+			
+			// load plugin 
+			mainframe_ = pluginloader_.loadPlugin(currentPlugin);
+			
+			// extracts UI properties and parameters
+			interface_ = mainframe_.getInterface();
+			
+			config.setDefaultConfiguration(configuration); // set as default
+			
+			// load configuration
+			applyConfiguration();
 
-			return false;
+		} else {
+			// should throw exception
 		}
 	}
 	
-	public void loadPlugin(String string) {
-		// TODO Auto-generated method stub
+	public void loadPlugin(String newPlugin) {
+
+		if(!pluginloader_.isPluginAvailable(newPlugin)){
+			return;
+		}
 		
+		pairs_ = new ArrayList<PropertyPair>();
+		unallocatedprop_ = new ArrayList<String>();
+		currentPlugin = newPlugin;
+		
+		// close mainframe
+		mainframe_.shutDownAllPropertyPanels();
+		
+		// empty mmproperties listeners
+		mmproperties_.clearAllListeners();
+		
+		// load plugin 
+		mainframe_ = pluginloader_.loadPlugin(currentPlugin);
+		
+		// extracts UI properties and parameters
+		interface_ = mainframe_.getInterface();
+		
+		// get list of configurations corresponding to this plugin
+		String[] configs = config.getCompatibleConfigurations(currentPlugin);
+		
+		if(configs == null || configs.length == 0){
+			// launch new wizard
+			config.startWizard(currentPlugin, interface_, mmproperties_);
+		} else if(configs.length == 1){
+			config.setDefaultConfiguration(configs[0]); // set as default
+			applyConfiguration();
+		} else {
+			// if more than one, then let the user decide
+			String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
+			config.setDefaultConfiguration(configuration); // set as default and then launch wizard
+			applyConfiguration();
+		}
 	}
 	
 	
@@ -306,6 +327,9 @@ public class SystemController {
 
 		// update all properties and parameters
 		mainframe_.updateAllPropertyPanels();
+		
+		// update menu
+		mainframe_.updateMenu();
 	}
 	
 
@@ -502,6 +526,11 @@ public class SystemController {
 		}	
 		
 		String[] list = config.getCompatibleConfigurations(currentPlugin);
+		
+		if(list.length==1){
+			return new String[0];
+		}
+		
 		String[] others = new String[list.length-1];
 		int curr = 0;
 		for(int i=0;i<list.length;i++){

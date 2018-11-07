@@ -1,6 +1,7 @@
 package main.embl.rieslab.mm.uidevint.mmproperties;
 
 import java.util.HashMap;
+import java.util.Iterator;
 
 import mmcorej.CMMCore;
 import mmcorej.StrVector;
@@ -69,4 +70,10 @@ public class MMProperties {
 		return properties_.containsKey(hash);
 	}
 
+	public void clearAllListeners(){
+		Iterator<String> it = properties_.keySet().iterator();
+		while(it.hasNext()){
+			properties_.get(it.next()).clearAllListeners();
+		}
+	}
 }

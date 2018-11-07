@@ -40,6 +40,7 @@ public abstract class PropertyMainFrame extends JFrame {
 	private ArrayList<PropertyPanel> panels_;
 	private SystemController controller_;
 	private PropertyMainFrameInterface interface_;
+    private JMenu switch_plugin, switch_configuration;
 	
 	/**
 	 * 
@@ -59,68 +60,42 @@ public abstract class PropertyMainFrame extends JFrame {
     	    	shutDownAllPropertyPanels();
     	    }
     	});
-        
-    	setUpMenuBar();
+
+        setUpMenu();
 		initComponents();
 		linkInternalProperties();
 		interface_ = generateInterface();
 	}
 
-	private void setUpMenuBar(){
-        JMenu menu;
-        JMenuBar mb=new JMenuBar();  
+	private void setUpMenu() {
+
+		JMenuBar mb=new JMenuBar(); 
         
-        menu=new JMenu("Menu");  
-        JMenuItem wiz=new JMenuItem(new AbstractAction("Settings Wizard") {
+		JMenu menu = new JMenu("Menu");
+		JMenuItem wiz = new JMenuItem(new AbstractAction("Settings Wizard") {
 			private static final long serialVersionUID = -8992610502306964249L;
 
 			public void actionPerformed(ActionEvent e) {
 				boolean b = controller_.launchWizard();
-				if(!b){
-			        JOptionPane.showMessageDialog(null, "Configuration wizard already running.", "Information", JOptionPane.INFORMATION_MESSAGE);
+				if (!b) {
+					JOptionPane.showMessageDialog(null,
+							"Configuration wizard already running.",
+							"Information", JOptionPane.INFORMATION_MESSAGE);
 				}
-            }
-        });
+			}
+		});
 
-        // change plugin menu
-        JMenu switch_plugin = new JMenu("Switch plugin");
-        final String[] plugins = controller_.getOtherPluginsList();
-		for (int i = 0; i < plugins.length; i++) {
-			final int index = i;
-			JMenuItem item = new JMenuItem(new AbstractAction(plugins[index]) {
-				private static final long serialVersionUID = -4996932088885254278L;
+		switch_plugin = new JMenu("Switch plugin");
+		switch_configuration = new JMenu("Switch configuration");
 
-				public void actionPerformed(ActionEvent e) {
-					controller_.loadPlugin(plugins[index]);
-				}
-			});
-			switch_plugin.add(item);
-		}
-		
-        // change configuration menu
-        JMenu switch_configuration = new JMenu("Switch configuration");
-        final String[] confs = controller_.getCompatibleConfigurationList();
-		for (int i = 0; i < confs.length; i++) {
-			final int index = i;
-			JMenuItem item = new JMenuItem(new AbstractAction(confs[index]) {
-				private static final long serialVersionUID = -4996932088885254278L;
-
-				public void actionPerformed(ActionEvent e) {
-					controller_.loadPlugin(confs[index]);
-				}
-			});
-			switch_configuration.add(item);
-		}
-		
-		
-        menu.add(wiz); 
-        menu.add(switch_plugin);
-        menu.add(switch_configuration); 
-        mb.add(menu);  
+		menu.add(wiz);
+		menu.add(switch_plugin);
+		menu.add(switch_configuration);
+		mb.add(menu);
         
         this.setJMenuBar(mb); 
 	}
-	
+
 	public PropertyMainFrameInterface getInterface(){
 		return interface_;
 	}
@@ -234,5 +209,37 @@ public abstract class PropertyMainFrame extends JFrame {
 		
 	}
 	
+	public void updateMenu() {
+		switch_plugin.removeAll();
+		final String[] plugins = controller_.getOtherPluginsList();
+		for (int i = 0; i < plugins.length; i++) {
+			final int index = i;
+			JMenuItem item = new JMenuItem(new AbstractAction(plugins[index]) {
+				private static final long serialVersionUID = -4996932088885254278L;
+
+				public void actionPerformed(ActionEvent e) {
+					controller_.loadPlugin(plugins[index]);
+				}
+			});
+			switch_plugin.add(item);
+		}
+		
+		switch_configuration.removeAll();
+		final String[] confs = controller_.getOtherCompatibleConfigurationList();
+		for (int i = 0; i < confs.length; i++) {
+			final int index = i;
+			JMenuItem item = new JMenuItem(new AbstractAction(confs[index]) {
+				private static final long serialVersionUID = -4996932088885254278L;
+
+				public void actionPerformed(ActionEvent e) {
+					controller_.loadConfiguration(confs[index]);
+				}
+			});
+			switch_configuration.add(item);
+		}
+	}
+
+	
 	protected abstract void initComponents();
+
 }

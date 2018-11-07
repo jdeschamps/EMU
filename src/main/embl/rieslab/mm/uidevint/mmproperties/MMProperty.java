@@ -400,6 +400,10 @@ public abstract class MMProperty<T> {
 		listeners_.add(listener);
 	}
 	
+	public void clearAllListeners(){
+		listeners_.clear();
+	}
+	
 	/**
 	 * Notifies the UIProperty parents of a value update, excluding the UIProperty source of the 
 	 * update.
