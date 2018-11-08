@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
@@ -26,6 +25,7 @@ import main.embl.rieslab.emu.ui.PropertyPanel;
 import main.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusLockFlag;
+import main.embl.rieslab.emu.uiexamples.htsmlm.others.TogglePower;
 import main.embl.rieslab.emu.uiexamples.htsmlm.others.ToggleSlider;
 import main.embl.rieslab.emu.utils.ColorRepository;
 import main.embl.rieslab.emu.utils.utils;
@@ -151,7 +151,7 @@ public class FocusLockPanel  extends PropertyPanel {
 		
 		
 		// laser enable
-		togglebuttonLaser_ = new JToggleButton();
+		/*togglebuttonLaser_ = new JToggleButton();
 		togglebuttonLaser_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
@@ -169,8 +169,19 @@ public class FocusLockPanel  extends PropertyPanel {
 
 		togglebuttonLaser_.setIcon(new ImageIcon(getClass().getResource("/images/off.png")));
 		togglebuttonLaser_.setSelectedIcon(new ImageIcon(getClass().getResource("/images/on.png")));
-		togglebuttonLaser_.setDisabledIcon(new ImageIcon(getClass().getResource("/images/off.png")));	
-
+		togglebuttonLaser_.setDisabledIcon(new ImageIcon(getClass().getResource("/images/off.png")));	*/
+		togglebuttonLaser_ = new TogglePower();
+		togglebuttonLaser_.addItemListener(new ItemListener(){
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
+				} else if(e.getStateChange()==ItemEvent.DESELECTED){
+					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
+				}
+			}
+        });
+		
 		// Fine enable
 		togglesliderenableFine_ = new ToggleSlider();
 		togglesliderenableFine_.addItemListener(new ItemListener(){

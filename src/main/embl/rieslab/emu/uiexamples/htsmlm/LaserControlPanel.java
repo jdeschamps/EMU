@@ -14,7 +14,6 @@ import java.awt.event.ItemListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
@@ -26,6 +25,7 @@ import main.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.embl.rieslab.emu.uiexamples.htsmlm.flags.LaserFlag;
+import main.embl.rieslab.emu.uiexamples.htsmlm.others.TogglePower;
 import main.embl.rieslab.emu.utils.utils;
 
 public class LaserControlPanel extends PropertyPanel {
@@ -190,7 +190,7 @@ public class LaserControlPanel extends PropertyPanel {
         togglebutton1_.setMargin(new Insets(2,8,2,8));
         
 		///////////////////////////////////////////////////////////////////////// On/Off button
-		togglebuttonOnOff_ = new JToggleButton();
+		/*togglebuttonOnOff_ = new JToggleButton();
 		
 		togglebuttonOnOff_.addItemListener(new ItemListener(){
 			@Override
@@ -210,11 +210,24 @@ public class LaserControlPanel extends PropertyPanel {
 		togglebuttonOnOff_.setIcon(new ImageIcon(getClass().getResource("/images/off.png")));
 		togglebuttonOnOff_.setSelectedIcon(new ImageIcon(getClass().getResource("/images/on.png")));
 		togglebuttonOnOff_.setDisabledIcon(new ImageIcon(getClass().getResource("/images/off.png")));	
-		
+		*/
+        
+        togglebuttonOnOff_ = new TogglePower();
+		togglebuttonOnOff_.addItemListener(new ItemListener(){
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange()==ItemEvent.SELECTED){
+					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
+				} else if(e.getStateChange()==ItemEvent.DESELECTED){
+					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
+				}
+			}
+        });
+        
 		////// grid bag layout
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
-		c.weighty = 0.9;
+		c.weighty = 0.7;
 		c.weightx = 0.7;
 		c.insets = new Insets(2,15,2,15);
 		c.fill = GridBagConstraints.BOTH;
@@ -231,6 +244,7 @@ public class LaserControlPanel extends PropertyPanel {
 		this.add(togglebutton1_, c);
 		c.ipady = 0;
 		c.gridy = 5;
+		c.weighty = 1;
 		this.add(togglebuttonOnOff_, c);
 		
 	}
