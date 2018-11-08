@@ -202,12 +202,14 @@ public class SystemController {
 			// let the user decide
 			String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
 			
-			// then load system
-			try {
-				reloadSystem(newPlugin, configuration);
-				applyConfiguration();
-			} catch (IncompatiblePluginConfigurationException e) {
-				e.printStackTrace();
+			if(configuration != null){
+				// then load system
+				try {
+					reloadSystem(newPlugin, configuration);
+					applyConfiguration();
+				} catch (IncompatiblePluginConfigurationException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}

@@ -1,9 +1,15 @@
 package main.embl.rieslab.emu.plugin;
 
+import java.io.File;
+import java.io.FileFilter;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ServiceLoader;
 
+import main.embl.rieslab.emu.controller.SystemConstants;
 import main.embl.rieslab.emu.controller.SystemController;
 import main.embl.rieslab.emu.plugin.UIPlugin;
 import main.embl.rieslab.emu.ui.PropertyMainFrame;
@@ -17,7 +23,26 @@ public class UIPluginLoader {
 		controller_ = controller;
 		
 		plugins_ = new HashMap<String, UIPlugin>();
-		ServiceLoader<UIPlugin> serviceLoader = ServiceLoader.load(UIPlugin.class);
+		
+        File loc = new File(SystemConstants.HOME);
+
+        File[] flist = loc.listFiles(new FileFilter() {
+            public boolean accept(File file) {return file.getPath().toLowerCase().endsWith(".jar");}
+        });
+        
+        URL[] urls = new URL[flist.length];
+        for (int i = 0; i < flist.length; i++){
+            try {
+				urls[i] = flist[i].toURI().toURL();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
+        
+        URLClassLoader ucl = new URLClassLoader(urls);
+
+		ServiceLoader<UIPlugin> serviceLoader = ServiceLoader.load(UIPlugin.class,ucl);
 		for (UIPlugin uiPlugin : serviceLoader) {
 			plugins_.put(uiPlugin.getName(), uiPlugin);
 		}
