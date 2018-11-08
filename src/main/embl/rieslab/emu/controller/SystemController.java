@@ -176,11 +176,17 @@ public class SystemController {
 
 		// get list of configurations corresponding to this plugin
 		String[] configs = config.getCompatibleConfigurations(newPlugin);
-		
+
 		if(configs == null || configs.length == 0){ // no configuration corresponding to the plugin
+			currentPlugin = newPlugin;
+			
+			// close mainframe
+			mainframe_.shutDownAllPropertyPanels();
+			
+			mainframe_ = pluginloader_.loadPlugin(newPlugin);
 			
 			// launch new wizard
-			config.startWizard(currentPlugin, interface_, mmproperties_);
+			config.startWizard(newPlugin, mainframe_.getInterface(), mmproperties_);
 			
 		} else if(configs.length == 1){ // a single compatible configuration
 			
@@ -212,34 +218,31 @@ public class SystemController {
 			throw new IllegalArgumentException();
 		}
 		
-		
-		if(config.getConfiguration().getPluginConfiguration(configName).getPluginName().equals(pluginName)){
-			
-			if(!currentPlugin.equals(pluginName)){
-				currentPlugin = pluginName;
-			}
-			
-			if(!config.getDefaultConfiguration().equals(configName)){
-				config.setDefaultConfiguration(configName);
-			}
-			
-			config.writeConfiguration(); // to remember the default configuration
-						
-			// close mainframe
-			mainframe_.shutDownAllPropertyPanels();
-			
-			// empty mmproperties listeners
-			mmproperties_.clearAllListeners();
-			
-			// load plugin 
-			mainframe_ = pluginloader_.loadPlugin(pluginName);
-			
-			// extracts UI properties and parameters
-			interface_ = mainframe_.getInterface();
-			
-		} else {
+		if(!config.getConfiguration().getPluginConfiguration(configName).getPluginName().equals(pluginName)){
 			throw new IncompatiblePluginConfigurationException(pluginName, configName);
 		}
+		
+		if(!currentPlugin.equals(pluginName)){
+			currentPlugin = pluginName;
+		}
+		
+		if(!config.getDefaultConfiguration().equals(configName)){
+			config.setDefaultConfiguration(configName);
+		}
+		
+		config.writeConfiguration(); // to remember the default configuration
+					
+		// close mainframe
+		mainframe_.shutDownAllPropertyPanels();
+		
+		// empty mmproperties listeners
+		mmproperties_.clearAllListeners();
+		
+		// load plugin 
+		mainframe_ = pluginloader_.loadPlugin(pluginName);
+		
+		// extracts UI properties and parameters
+		interface_ = mainframe_.getInterface();
 	}
 
 	

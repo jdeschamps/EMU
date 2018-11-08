@@ -62,15 +62,8 @@ public class ConfigurationWizard {
 
 		plugin_name_ = "";
 	}
-	
-	/**
-	 * Creates a new Wizard configuration frame. 
-	 * 
-	 * @param uipropertySet HashMap containing the UI properties.
-	 * @param uiparameterSet HashMap containing the UI parameters.
-	 * @param mmproperties Object holding the device properties from Micro-manager.
-	 */
-	private void newConfiguration(final PropertyMainFrameInterface maininterface, final MMProperties mmproperties) {
+
+	private void newConfiguration(final String plugin_name, final PropertyMainFrameInterface maininterface, final MMProperties mmproperties) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@SuppressWarnings("rawtypes")
@@ -93,7 +86,7 @@ public class ConfigurationWizard {
 				globsettingstable_ = new GlobalSettingsTable(glob, help_);
 				globsettingstable_.setOpaque(true); 
 				
-				frame_ = createFrame("New configuration", propertytable_, parametertable_, globsettingstable_, help_);
+				frame_ = createFrame(plugin_name, propertytable_, parametertable_, globsettingstable_, help_);
 			}
 		});
 	}
@@ -115,8 +108,7 @@ public class ConfigurationWizard {
 			public void run() {
 				running_ = true;
 
-				help_ = new HelpWindow(
-						"Click on a row to display the description");
+				help_ = new HelpWindow("Click on a row to display the description");
 
 				// Table defining the properties using the  configuration
 				propertytable_ = new PropertiesTable(maininterface.getUIProperties(), mmproperties, configuration.getCurrentPluginConfiguration().getProperties(), help_);
@@ -286,7 +278,7 @@ public class ConfigurationWizard {
 		if(configuration.getCurrentPluginName() != null && configuration.getCurrentPluginName().equals(pluginName)){
 			existingConfiguration(maininterface, mmproperties, configuration);
 		} else {
-			newConfiguration(maininterface, mmproperties);
+			newConfiguration(pluginName, maininterface, mmproperties);
 		}
 			
 	}
