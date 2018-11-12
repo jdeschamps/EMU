@@ -272,6 +272,7 @@ public class SystemController {
 				if (configprop.get(uiprop).equals(GlobalConfiguration.KEY_UNALLOCATED)) {
 					// register missing allocation
 					unallocatedprop_.add(uiprop);
+					
 				} else if (mmproperties_.isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
 					// link the properties
 					addPair(uiproperties.get(uiprop),mmproperties_.getProperty(configprop.get(uiprop)));

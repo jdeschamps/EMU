@@ -65,6 +65,7 @@ public class UIProperty {
 		return "0";
 	}
 	
+	
 	public String getPropertyValue(){
 		return getMMPropertyValue();
 	}
