@@ -21,7 +21,7 @@ import main.embl.rieslab.emu.configuration.ui.GlobalSettingsTable;
 import main.embl.rieslab.emu.configuration.ui.HelpWindow;
 import main.embl.rieslab.emu.configuration.ui.ParametersTable;
 import main.embl.rieslab.emu.configuration.ui.PropertiesTable;
-import main.embl.rieslab.emu.mmproperties.MMProperties;
+import main.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
 import main.embl.rieslab.emu.ui.PropertyMainFrameInterface;
 
 /**

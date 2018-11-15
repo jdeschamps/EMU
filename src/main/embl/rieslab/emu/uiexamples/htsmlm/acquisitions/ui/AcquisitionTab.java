@@ -359,6 +359,7 @@ public class AcquisitionTab extends JPanel {
 		props = filt.filteredProperties(props);
 		
 		///////////////////////////////////////////////////////////////// This works on the assumption that all lasers are called "Laser #"
+		///////////////////////////////////////////////////////////////// to mark a border between them
 		if(temp.length>0){
 			
 			// fine laser number of the first file

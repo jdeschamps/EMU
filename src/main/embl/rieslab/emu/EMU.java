@@ -1,4 +1,4 @@
-package main.embl.rieslab.emu.micromanager;
+package main.embl.rieslab.emu;
 
 import java.io.File;
 

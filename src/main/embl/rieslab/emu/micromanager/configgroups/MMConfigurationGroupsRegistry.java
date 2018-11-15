@@ -1,4 +1,4 @@
-package main.embl.rieslab.emu.mmproperties;
+package main.embl.rieslab.emu.micromanager.configgroups;
 
 import java.util.HashMap;
 import java.util.Iterator;

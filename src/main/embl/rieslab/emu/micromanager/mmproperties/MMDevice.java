@@ -1,9 +1,10 @@
-package main.embl.rieslab.emu.mmproperties;
+package main.embl.rieslab.emu.micromanager.mmproperties;
 
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
+// used in the configuration wizard to get the mmproperties of each device
 public class MMDevice {
 
 	@SuppressWarnings("rawtypes")

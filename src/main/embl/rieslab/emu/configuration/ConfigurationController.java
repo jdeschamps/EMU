@@ -10,7 +10,7 @@ import java.util.TreeMap;
 import main.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSettings;
 import main.embl.rieslab.emu.controller.SystemConstants;
 import main.embl.rieslab.emu.controller.SystemController;
-import main.embl.rieslab.emu.mmproperties.MMProperties;
+import main.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
 import main.embl.rieslab.emu.ui.PropertyMainFrameInterface;
 import main.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;

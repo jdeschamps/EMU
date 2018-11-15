@@ -22,7 +22,7 @@ import javax.swing.table.TableModel;
 import main.embl.rieslab.emu.configuration.ConfigurationController;
 import main.embl.rieslab.emu.configuration.ConfigurationWizard;
 import main.embl.rieslab.emu.configuration.GlobalConfiguration;
-import main.embl.rieslab.emu.mmproperties.MMProperties;
+import main.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
 import main.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;

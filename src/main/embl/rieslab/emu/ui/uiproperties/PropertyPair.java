@@ -1,7 +1,7 @@
 package main.embl.rieslab.emu.ui.uiproperties;
 
 import main.embl.rieslab.emu.exceptions.AlreadyAllocatedUIProperty;
-import main.embl.rieslab.emu.mmproperties.MMProperty;
+import main.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 
 @SuppressWarnings("rawtypes")
 public class PropertyPair {

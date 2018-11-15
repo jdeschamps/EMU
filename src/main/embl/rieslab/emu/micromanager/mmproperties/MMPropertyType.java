@@ -1,4 +1,4 @@
-package main.embl.rieslab.emu.mmproperties;
+package main.embl.rieslab.emu.micromanager.mmproperties;
 
 public enum MMPropertyType { 
 	INTEGER("Integer"), FLOAT("Float"), STRING("String"), UNDEF("Undef"); 

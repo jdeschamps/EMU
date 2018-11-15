@@ -1,32 +1,31 @@
-package main.embl.rieslab.emu.mmproperties;
-
+package main.embl.rieslab.emu.micromanager.mmproperties;
 
 import mmcorej.CMMCore;
 
 /**
- * Wrapper for a Micro-manager device property with float value. The property can be
+ * Wrapper for a Micro-manager device property with integer value. The property can be
  * read-only or not, with limits or with a set of allowed values.
  * 
  * @author Joran Deschamps
  *
  */
-public class FloatMMProperty extends MMProperty<Float> {
+public class IntegerMMProperty extends MMProperty<Integer> {
 
 	/**
-	 * Builds a float MMProperty without limits or allowed values. The property can be read-only.
+	 * Builds an integer MMProperty without limits or allowed values. The property can be read-only.
 	 * @param core Micro-manager core.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
-	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
+	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
 		super(core, deviceLabel, propertyLabel, readOnly);
 		
-		type_ = MMPropertyType.FLOAT;
+		type_ = MMPropertyType.INTEGER;
 	}
 	
 	/**
-	 * Builds a float MMProperty with limits. 
+	 * Builds an integer MMProperty with limits. 
 	 * 
 	 * @param core Micro-manager core.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
@@ -34,50 +33,51 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 * @param upperLimit Upper limit of the device property value.
 	 * @param lowerLimit Lower limit of the device property value.
 	 */
-	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
+	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
 		super(core, deviceLabel, propertyLabel, upLimit, downLimit);
 		
-		type_ = MMPropertyType.FLOAT;
+		type_ = MMPropertyType.INTEGER;
 	}
 	
 	/**
-	 * Builds a float MMProperty with allowed values.
+	 * Builds an integer MMProperty with allowed values.
 	 * 
 	 * @param core Micro-manager core.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param allowedValues Array of allowed values.
 	 */
-	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
+	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
 		super(core, deviceLabel, propertyLabel, allowedValues);
 		
-		type_ = MMPropertyType.FLOAT;
+		type_ = MMPropertyType.INTEGER;
 	}
 
 	@Override
-	public Float convertToValue(String s) {
-		float val = 0;
+	public Integer convertToValue(String s) {
+		Double val = (double) 0;
 		try{
-			val = Float.parseFloat(s);
+			val = Double.parseDouble(s);
 		} catch(Exception e){
-			System.out.println("Error parsing float"); 			///// implement log
+			System.out.println("IntergerMMProperty: Error parsing int ["+s+"]"); 			///// implement log
 		}
-		return val;
+		return val.intValue();
 	}
 
 	@Override
-	public Float convertToValue(int s) {
-		return new Float(s);
+	public Integer convertToValue(int s) {
+		return s;
 	}
 
 	@Override
-	public Float convertToValue(double s) {
-		return new Float(s);
+	public Integer convertToValue(double s) {
+		Double val = new Double(s);
+		return val.intValue();
 	}
 
 	@Override
-	public Float[] arrayFromStrings(String[] s) {
-		Float[] allowedVal = new Float[s.length];
+	public Integer[] arrayFromStrings(String[] s) {
+		Integer[] allowedVal = new Integer[s.length];
 		for(int i=0;i<s.length;i++){
 			allowedVal[i] = convertToValue(s[i]);
 		}
@@ -85,15 +85,14 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	@Override
-	public String convertToString(Float val) {
+	public String convertToString(Integer val) {
 		return val.toString();
 	}
 
 	@Override
-	public boolean isInRange(Float val) {
+	public boolean isInRange(Integer val) {
 		if(hasLimits()){
-			if(val.compareTo(new Float(getLowerLimit()))>=0 && val.compareTo(new Float(getUpperLimit()))<=0 
-					&& val.compareTo(getMax())<=0 && val.compareTo(getMin())>=0){
+			if(val>=getLowerLimit() && val<=getUpperLimit() && val<=getMax() && val>=getMin()){
 				return true;
 			}
 			return false;
@@ -102,7 +101,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	@Override
-	public boolean isAllowed(Float val) {
+	public boolean isAllowed(Integer val) {
 		if(hasAllowedValues()){
 			for(int i=0;i<getAllowedValues().length;i++){
 				if(areEqual(val, getAllowedValues()[i])){
@@ -117,8 +116,8 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	@Override
-	public boolean areEqual(Float val1, Float val2) {
+	public boolean areEqual(Integer val1, Integer val2) {
 		return val1 == val2;
 	}
-	
+
 }
