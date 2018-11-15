@@ -152,11 +152,13 @@ public class AcquisitionTask implements Task<Integer>{
 								system_.setUpSystem(acq.getPropertyValues());
 								
 								// set configuration channel
-								String prev_config = null;
+								// TODO
+								
+								/*String prev_config = null;
 								if (acq.useConfig()) {
 									prev_config = core_.getCurrentConfigFromCache(acq.getConfigGroup());									
 									core_.setConfig(acq.getConfigGroup(),acq.getConfigName());
-								}
+								}*/
 								
 								// set-up special acquisition state
 								acq.preAcquisition();
@@ -187,9 +189,10 @@ public class AcquisitionTask implements Task<Integer>{
 								acq.postAcquisition();
 	
 								// Reset configuration
-								if (acq.useConfig() && prev_config != null) {
+								// TODO
+								/*if (acq.useConfig() && prev_config != null) {
 									core_.setConfig(acq.getConfigGroup(),prev_config);
-								}
+								}*/
 								
 								// close acq window
 								try {

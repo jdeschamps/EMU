@@ -1,7 +1,9 @@
 package main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
 
@@ -78,6 +80,7 @@ public class AcquisitionWizard {
 		
 		JLabel wait = new JLabel("Waiting (s)");
 		waitfield = new JTextField(String.valueOf(waitingtime));
+		waitfield.setPreferredSize(new Dimension(30,20));
 		
 		JLabel pos = new JLabel("Pos number");
 		numposfield = new JTextField(String.valueOf(numpos));
@@ -121,48 +124,51 @@ public class AcquisitionWizard {
 		c.insets = new Insets(2,4,2,4);
 		c.fill = GridBagConstraints.BOTH;
 
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 0;
 		c.gridwidth = 3;
 		pane.add(add, c);	
 
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 1;
 		pane.add(remove, c);	
 
-		c.gridx = 1;
-		c.gridy = 3;
-		c.gridwidth = 1;
-		pane.add(left, c);
-		
-		c.gridx = 3;
-		c.gridy = 3;
-		pane.add(right, c);	
+		JPanel leftright = new JPanel();
+		GridLayout gridlayout = new GridLayout(0,2);
+		leftright.setLayout(gridlayout);
 
-		c.gridx = 1;
+		leftright.add(left);
+		leftright.add(right);
+		
+		c.gridx = 0;
+		c.gridy = 3;
+		c.gridwidth = 3;
+		pane.add(leftright, c);	
+		
+		c.gridx = 0;
 		c.gridy = 3;
 		c.gridwidth = 1;
 		pane.add(Box.createHorizontalStrut(10), c);	
 
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 5;
 		pane.add(wait, c);	
 		
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 5;
 		c.gridwidth = 2;
 		pane.add(waitfield, c);	
 
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 6;
 		pane.add(pos, c);	
 		
-		c.gridx = 2;
+		c.gridx = 1;
 		c.gridy = 6;
 		c.gridwidth = 2;
 		pane.add(numposfield, c);	
 		
-		c.gridx = 1;
+		c.gridx = 0;
 		c.gridy = 8;
 		pane.add(save, c);	
 

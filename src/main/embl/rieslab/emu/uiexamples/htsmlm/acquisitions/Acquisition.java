@@ -1,7 +1,6 @@
 package main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
@@ -21,13 +20,12 @@ public abstract class Acquisition {
 	private ArrayList<Double> slices_;
 	private AcquisitionType type_;
 	private boolean useconfig_ = false;
-	private String group_, configname_, expname_, path_; 
+	private String expname_, path_; 
 	private HashMap<String,String> propvalues_;
-	private HashMap<String,String[]> configgroups_;
 	
 	public static final String ACQ_SETTINGS = "Acquisition settings";
 	
-	public Acquisition(AcquisitionType type, double exposure, HashMap<String,String[]> configgroups){
+	public Acquisition(AcquisitionType type, double exposure){
 		type_ = type;
 		
 		expname_ = "";
@@ -36,10 +34,6 @@ public abstract class Acquisition {
 		waitingtime_ = 3;
 		intervalMs_ = 0;
 		numFrames_ = 1;
-		
-		configgroups_ = configgroups;
-		configname_ = EMPTY[0];
-		group_ = EMPTY[0];
 		
 		path_ = "";
 		expname_ = "";
@@ -122,14 +116,6 @@ public abstract class Acquisition {
 		return useconfig_;
 	}
 	
-	public void setConfigurationGroup(String group, String configname){
-		if(group != null && configgroups_.containsKey(group)){
-			group_ = group;
-			configname_  = configname;
-			useconfig_ = true;
-		}
-	}
-	
 	public HashMap<String,String> getPropertyValues(){
 		return propvalues_;
 	}
@@ -150,41 +136,6 @@ public abstract class Acquisition {
 		expname_ = name;
 	}
 	
-	public String getConfigGroup(){
-		if(group_ != null){
-			return group_;
-		}
-		return EMPTY[0];
-	}
-	
-	public String getConfigName(){
-		return configname_;
-	}
-	
-	public String[] getConfigGroupList(){
-		int size = configgroups_.size();
-		String[] s = new String[size+1];
-		String[] temp = configgroups_.keySet().toArray(new String[0]);
-		Arrays.sort(temp);
-		
-		s[0] = EMPTY[0];
-		for(int i=0;i<size;i++){
-			s[i+1] = temp[i];
-		}
-		return s;
-	}
-	
-	public String[] getConfigGroupNames(String group){
-		if(!configgroups_.containsKey(group)){
-			return EMPTY;
-		}
-		
-		String[] array = configgroups_.get(group).clone();
-		Arrays.sort(array);
-		
-		return array;
-	}
-	
 	public abstract void preAcquisition();
 	public abstract void postAcquisition();
 	public abstract boolean stopCriterionReached();
@@ -194,6 +145,4 @@ public abstract class Acquisition {
 	public abstract PropertyFilter getPropertyFilter();
 	public abstract String[] getSpecialSettings();
 	public abstract String[][] getAdditionalJSONParameters();
-	
-
 }

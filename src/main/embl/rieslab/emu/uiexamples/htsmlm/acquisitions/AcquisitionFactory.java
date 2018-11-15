@@ -61,24 +61,24 @@ public class AcquisitionFactory {
 	
 	public Acquisition getAcquisition(String type){
 		if(type.equals(AcquisitionType.BFP.getTypeValue())){
-			return new BFPAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BFP)));
+			return new BFPAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BFP)));
 		} else if(type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
-			return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getMMConfigurationGroups());
+			return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
 		} else if(type.equals(AcquisitionType.TIME.getTypeValue())){
-			return new TimeAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups());
+			return new TimeAcquisition(controller_.getExposure());
 		} else if(type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
-			return new BrightFieldAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BRIGHTFIELD)));
+			return new BrightFieldAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BRIGHTFIELD)));
 		}  else if(type.equals(AcquisitionType.SNAP.getTypeValue())){
-			return new SnapAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups());
+			return new SnapAcquisition(controller_.getExposure());
 		} else if(type.equals(AcquisitionType.ZSTACK.getTypeValue())){
-			return new ZStackAcquisition(controller_.getExposure(), controller_.getMMConfigurationGroups(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
+			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
 		}
 			
 		return getDefaultAcquisition();
 	}
 	
 	private Acquisition getDefaultAcquisition() {
-		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure(), controller_.getMMConfigurationGroups());
+		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
 	}
 
 	public boolean writeAcquisitionList(Experiment exp, String path){
@@ -177,7 +177,6 @@ public class AcquisitionFactory {
 					AcquisitionWrapper acqw = acqwlist.get(i);
 					if(acqw.type.equals(AcquisitionType.BFP.getTypeValue())){
 						BFPAcquisition acq = (BFPAcquisition) getAcquisition(acqw.type);
-						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
 						acq.setExposureTime(acqw.exposure);
 						acq.setWaitingTime(acqw.waitingTime);
 						
@@ -189,11 +188,13 @@ public class AcquisitionFactory {
 						}
 						acq.setProperties(props);
 						
+						////// add configuration groups
+						// TODO
+						
 						acqlist.add(acq);
 						
 					} else if(acqw.type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
 						BrightFieldAcquisition acq = (BrightFieldAcquisition) getAcquisition(acqw.type);
-						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
 						acq.setExposureTime(acqw.exposure);
 						acq.setWaitingTime(acqw.waitingTime);
 						
@@ -209,7 +210,6 @@ public class AcquisitionFactory {
 						
 					} else if(acqw.type.equals(AcquisitionType.ZSTACK.getTypeValue())){
 						ZStackAcquisition acq = (ZStackAcquisition) getAcquisition(acqw.type);
-						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
 						acq.setExposureTime(acqw.exposure);
 						acq.setWaitingTime(acqw.waitingTime);	
 						
@@ -233,7 +233,6 @@ public class AcquisitionFactory {
 
 					} else if(acqw.type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
 						LocalizationAcquisition acq = (LocalizationAcquisition) getAcquisition(acqw.type);
-						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
 						acq.setExposureTime(acqw.exposure);
 						acq.setWaitingTime(acqw.waitingTime);	
 						
@@ -256,7 +255,6 @@ public class AcquisitionFactory {
 
 					} else if(acqw.type.equals(AcquisitionType.TIME.getTypeValue())){
 						TimeAcquisition acq = (TimeAcquisition) getAcquisition(acqw.type);
-						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
 						acq.setExposureTime(acqw.exposure);
 						acq.setWaitingTime(acqw.waitingTime);
 			
@@ -274,7 +272,6 @@ public class AcquisitionFactory {
 						acqlist.add(acq);
 					} else if(acqw.type.equals(AcquisitionType.SNAP.getTypeValue())){
 						SnapAcquisition acq = (SnapAcquisition) getAcquisition(acqw.type);
-						acq.setConfigurationGroup(acqw.configGroup, acqw.configName);
 						acq.setExposureTime(acqw.exposure);
 						acq.setWaitingTime(acqw.waitingTime);
 			

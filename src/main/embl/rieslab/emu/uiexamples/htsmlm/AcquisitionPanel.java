@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -302,24 +303,23 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		this.add(scroll, c);	 
 		
 		// lower part
+		JPanel lower = new JPanel();
+		GridLayout gridlayout = new GridLayout(0,4);
+		lower.setLayout(gridlayout);
+
+		lower.add(jToggle_startstop);
+		lower.add(jButton_configAcq);
+		lower.add(jButton_saveAcq);
+		lower.add(jButton_load);
+		
 		c.gridx = 0;
 		c.gridy = 8;
-		c.gridwidth = 1;
+		c.gridwidth = 4;
 		c.gridheight = 1;
 		c.weightx = 0;
 		c.weighty = 0;		
 		c.fill = GridBagConstraints.HORIZONTAL;
-		this.add(jToggle_startstop, c);	 
-
-		c.gridx = 1;
-		this.add(jButton_configAcq, c);	
-		
-		c.gridx = 2;
-		this.add(jButton_saveAcq, c);	 
-
-		c.gridx = 3;
-		c.weightx = 0.1;
-		this.add(jButton_load, c);	  
+		this.add(lower,c);
 	}
 		
 	private void showSelectPath(){

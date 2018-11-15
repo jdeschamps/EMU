@@ -4,13 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -28,13 +23,11 @@ public class ZStackAcquisition extends Acquisition {
 	
 	// Convenience constants		
 	private final static String PANE_NAME = "Zstack panel";
-	private final static String LABEL_GROUP = "Group:";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
 	private final static String LABEL_ZSTART = "Z start/end/step (um):";
 	private final static String LABEL_ZEND = "Z end (um):";
 	private final static String LABEL_ZSTEP = "Z step (um):";
-	private final static String LABEL_GROUPNAME = "GroupName";
 		
 	public final static String KEY_ZSTART = "Z start";
 	public final static String KEY_ZEND = "Z end";
@@ -45,8 +38,8 @@ public class ZStackAcquisition extends Acquisition {
 	
 	private double zstart, zend, zstep;
 	
-	public ZStackAcquisition(double exposure, HashMap<String,String[]> configgroups, UIProperty stabprop) {
-		super(AcquisitionType.ZSTACK, exposure, configgroups);
+	public ZStackAcquisition(double exposure, UIProperty stabprop) {
+		super(AcquisitionType.ZSTACK, exposure);
 
 		if(stabprop instanceof TwoStateUIProperty){
 			stabprop_ = (TwoStateUIProperty) stabprop;
@@ -90,36 +83,12 @@ public class ZStackAcquisition extends Acquisition {
 		
 		pane.setName(getPanelName());
 		
-		JLabel channellab, exposurelab, waitinglab, zstartlab;
-		JComboBox channelgroup;
-		final JComboBox channelname;
+		JLabel exposurelab, waitinglab, zstartlab;
 		JSpinner exposurespin, waitingspin, zstartspin, zendspin, zstepspin;
 		
-		channellab = new JLabel(LABEL_GROUP);
 		exposurelab = new JLabel(LABEL_EXPOSURE);
 		waitinglab = new JLabel(LABEL_PAUSE);
 		zstartlab = new JLabel(LABEL_ZSTART);
-		
-		channelgroup = new JComboBox(this.getConfigGroupList());
-		channelgroup.setName(LABEL_GROUP);
-		channelgroup.getModel().setSelectedItem(this.getConfigGroup());
-		
-		channelname = new JComboBox(this.getConfigGroupNames(this.getConfigGroup()));
-		channelname.setName(LABEL_GROUPNAME);
-		channelgroup.addActionListener(
-	            new ActionListener(){
-					@Override
-					public void actionPerformed(ActionEvent e) {
-	                    JComboBox combo = (JComboBox)e.getSource();
-	                    String current = (String)combo.getSelectedItem();
-	
-	                    DefaultComboBoxModel model = new DefaultComboBoxModel(getConfigGroupNames(current));
-	                    channelname.setModel( model );
-					}
-	            }            
-	    );
-		
-		channelname.getModel().setSelectedItem(this.getConfigName());	
 		
 		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(this.getExposure(),1), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
@@ -132,10 +101,8 @@ public class ZStackAcquisition extends Acquisition {
 		zstepspin = new JSpinner(new SpinnerNumberModel(zstep, -1000, 1000, 0.01));
 		zstepspin.setName(LABEL_ZSTEP);
 		
-		channelgroup.setPreferredSize(zstepspin.getPreferredSize());
-		channelname.setPreferredSize(zstepspin.getPreferredSize());
-		
-		int nrow = 3;
+
+		int nrow = 2;
 		int ncol = 4;
 		JPanel[][] panelHolder = new JPanel[nrow][ncol];    
 		pane.setLayout(new GridLayout(nrow,ncol));
@@ -148,16 +115,16 @@ public class ZStackAcquisition extends Acquisition {
 		}
 
 		panelHolder[0][0].add(exposurelab);
-		panelHolder[1][0].add(waitinglab);
-		panelHolder[2][0].add(zstartlab);
+		panelHolder[1][0].add(zstartlab);
+		
 		panelHolder[0][1].add(exposurespin);
-		panelHolder[1][1].add(waitingspin);
-		panelHolder[2][1].add(zstartspin);
-		panelHolder[0][2].add(channellab);
-		panelHolder[2][2].add(zendspin);
-		panelHolder[0][3].add(channelgroup);
-		panelHolder[1][3].add(channelname);
-		panelHolder[2][3].add(zstepspin);
+		panelHolder[1][1].add(zstartspin);
+		
+		panelHolder[0][2].add(waitinglab);
+		panelHolder[1][2].add(zendspin);
+		
+		panelHolder[0][3].add(waitingspin);
+		panelHolder[1][3].add(zstepspin);
 
 		return pane;
 	}
@@ -166,17 +133,13 @@ public class ZStackAcquisition extends Acquisition {
 	public void readOutParameters(JPanel pane) {
 		if(pane.getName().equals(getPanelName())){
 			Component[] pancomp = pane.getComponents();
-			String groupname="", groupmember="";
+
 			for(int j=0;j<pancomp.length;j++){
 				if(pancomp[j] instanceof JPanel){
 					Component[] comp = ((JPanel) pancomp[j]).getComponents();
 					for(int i=0;i<comp.length;i++){
 						if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
-							if(comp[i].getName().equals(LABEL_GROUP) && comp[i] instanceof JComboBox){
-								groupname = (String) ((JComboBox) comp[i]).getSelectedItem();
-							}else if(comp[i].getName().equals(LABEL_GROUPNAME) && comp[i] instanceof JComboBox){
-								groupmember = (String) ((JComboBox) comp[i]).getSelectedItem();
-							}else if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
+							if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
 								this.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
 								this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
@@ -192,7 +155,6 @@ public class ZStackAcquisition extends Acquisition {
 				}
 			}	
 			this.setSlices(zstart, zend, zstep);
-			this.setConfigurationGroup(groupname, groupmember);
 		}
 	}
 

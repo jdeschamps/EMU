@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public class AcquisitionWrapper {
 
-	public String type, configGroup, configName;
+	public String type;
 	public double exposure, interval;
 	public int numFrames, waitingTime;
 	public String[][] props;
@@ -13,8 +13,6 @@ public class AcquisitionWrapper {
 	
 	public AcquisitionWrapper(Acquisition acq){
         type = acq.getType();
-        configGroup= acq.getConfigGroup();
-        configName= acq.getConfigName();
         exposure=acq.getExposure();
         interval= acq.getIntervalMs();
         numFrames=acq.getNumberFrames();
