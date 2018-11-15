@@ -68,6 +68,7 @@ public class AcquisitionTab extends JPanel {
 		// Get the array of acquisition types and create a JComboBox
 		acqtypes_ = factory_.getAcquisitionTypeList();
 		acqtype_ = new JComboBox(acqtypes_);
+		acqtype_.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		acqtype_.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	            changeAcquisition((String) acqtype_.getSelectedItem());
