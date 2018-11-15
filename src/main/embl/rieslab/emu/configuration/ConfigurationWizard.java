@@ -77,7 +77,7 @@ public class ConfigurationWizard {
 				propertytable_.setOpaque(true); 
 
 				// and parameters
-				parametertable_ = new ParametersTable(maininterface.getUIParameters(), help_);
+				parametertable_ = new ParametersTable(maininterface.getUIParameters(), maininterface.getUIProperties(), help_);
 				parametertable_.setOpaque(true);
 				
 				// and global settings
@@ -111,11 +111,13 @@ public class ConfigurationWizard {
 				help_ = new HelpWindow("Click on a row to display the description");
 
 				// Table defining the properties using the  configuration
-				propertytable_ = new PropertiesTable(maininterface.getUIProperties(), mmproperties, configuration.getCurrentPluginConfiguration().getProperties(), help_);
+				propertytable_ = new PropertiesTable(maininterface.getUIProperties(), mmproperties, 
+						configuration.getCurrentPluginConfiguration().getProperties(), help_);
 				propertytable_.setOpaque(true);
 
 				// now parameters
-				parametertable_ = new ParametersTable(maininterface.getUIParameters(), configuration.getCurrentPluginConfiguration().getParameters(), help_);
+				parametertable_ = new ParametersTable(maininterface.getUIParameters(), 
+						configuration.getCurrentPluginConfiguration().getParameters(), maininterface.getUIProperties(), help_);
 				parametertable_.setOpaque(true);				
 				
 				// and global settings

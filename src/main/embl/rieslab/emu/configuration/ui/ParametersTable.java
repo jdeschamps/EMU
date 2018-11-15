@@ -61,9 +61,10 @@ public class ParametersTable extends JPanel{
 	 * @param help Help window
 	 */
 	@SuppressWarnings("rawtypes")
-	public ParametersTable(Map<String, UIParameter> uiparameterSet, HelpWindow help) {
+	public ParametersTable(Map<String, UIParameter> uiparameterSet, Map<String, UIProperty> uipropertySet, HelpWindow help) {
 		
 		uiparameterSet_ = uiparameterSet; 
+		uipropertySet_ = uipropertySet;
 		help_ = help;
 		
 		// Color combobox
@@ -107,9 +108,10 @@ public class ParametersTable extends JPanel{
 	 * @param help Help window
 	 */
 	@SuppressWarnings("rawtypes")
-	public ParametersTable(Map<String, UIParameter> uiparameterSet, Map<String, String> paramValues, HelpWindow help) {		
+	public ParametersTable(Map<String, UIParameter> uiparameterSet, Map<String, String> paramValues, Map<String, UIProperty> uipropertySet, HelpWindow help) {		
 		help_ = help;
 		uiparameterSet_ = uiparameterSet; 
+		uipropertySet_ = uipropertySet;
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
