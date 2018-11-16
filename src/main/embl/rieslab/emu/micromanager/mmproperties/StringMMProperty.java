@@ -18,10 +18,8 @@ public class StringMMProperty extends MMProperty<String> {
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
-	StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel) {
+	public StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel) {
 		super(core, deviceLabel, propertyLabel, true);
-		
-		type_ = MMPropertyType.STRING;
 	}
 	
 	/**
@@ -34,8 +32,6 @@ public class StringMMProperty extends MMProperty<String> {
 	 */
 	StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
 		super(core, deviceLabel, propertyLabel, allowedValues);
-		
-		type_ = MMPropertyType.STRING;
 	}
 
 	@Override

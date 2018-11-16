@@ -2,11 +2,11 @@ package main.embl.rieslab.emu.micromanager.mmproperties;
 
 import mmcorej.CMMCore;
 
-public class MMPropertyBuilder {
+public class MMPropertyFactory {
 	
 	CMMCore core_;
 	
-	public MMPropertyBuilder(CMMCore core){
+	public MMPropertyFactory(CMMCore core){
 		core_ = core;
 	}
 

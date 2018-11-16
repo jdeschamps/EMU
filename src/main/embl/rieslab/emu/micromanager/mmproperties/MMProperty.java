@@ -21,8 +21,6 @@ public abstract class MMProperty<T> {
 	private String devicelabel_;
 	private String hash_;
 	
-	protected MMPropertyType type_;
-	
 	private boolean readOnly;							
 	private boolean hasLimits;						
 	private boolean hasAllowedValues;
@@ -206,14 +204,6 @@ public abstract class MMProperty<T> {
 		return readOnly;
 	}
 	
-	/**
-	 * Returns the type of the MMproperty, has defined in the MMPropertyType enum.
-	 * 
-	 * @return 
-	 */
-	public String getType(){
-		return type_.getTypeValue();  
-	}
 
 	/**
 	 * Returns the array of allowed values.

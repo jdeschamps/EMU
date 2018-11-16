@@ -1,9 +1,17 @@
 package main.embl.rieslab.emu.micromanager.configgroups;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.micromanager.api.ScriptInterface;
+
+import main.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
+import main.embl.rieslab.emu.micromanager.mmproperties.MMDevice;
+import main.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
+import main.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import mmcorej.CMMCore;
+import mmcorej.Configuration;
 import mmcorej.StrVector;
 
 /**
@@ -15,7 +23,10 @@ import mmcorej.StrVector;
  */
 public class MMConfigurationGroupsRegistry {
 
+	public final static String KEY_MMCONFDEVICE = "Configurations";
+	
 	private CMMCore core_;
+	private ScriptInterface script_;
 	private HashMap<String, MMConfigurationGroup> groups_;
 	
 	/**
@@ -24,8 +35,9 @@ public class MMConfigurationGroupsRegistry {
 	 * 
 	 * @param core
 	 */
-	public MMConfigurationGroupsRegistry(CMMCore core){
+	public MMConfigurationGroupsRegistry(ScriptInterface script, CMMCore core){
 		core_ = core;
+		script_ = script;
 		
 		groups_ = new HashMap<String, MMConfigurationGroup>();
 		
@@ -84,6 +96,33 @@ public class MMConfigurationGroupsRegistry {
 		return null;
 	}
 	
+	
+	@SuppressWarnings("rawtypes")
+	public void registerMMConfAsDevice(MMProperties mmproperties){
+		MMDevice dev = new MMDevice(KEY_MMCONFDEVICE);
+
+		Iterator<String> it = groups_.keySet().iterator();
+		while(it.hasNext()){
+			String group = it.next();
+			String[] values = groups_.get(group).getConfigurations().toArray();
+			
+			ArrayList<MMProperty> affectedmmprops = new ArrayList<MMProperty>();
+			Configuration conf;
+			try {
+				conf = core_.getConfigGroupState(group);
+				for(int i=0;i<conf.size();i++){
+					affectedmmprops.add(mmproperties.getProperties().get(conf.getSetting(i).getDeviceLabel()+"-"+conf.getSetting(i).getPropertyName()));
+				}
+				
+				dev.registerProperty(new ConfigGroupAsMMProperty(script_, core_, KEY_MMCONFDEVICE, group, values, affectedmmprops));
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		mmproperties.addConfigGroupAsMMProperties(dev);
+	}
 	
 }
   

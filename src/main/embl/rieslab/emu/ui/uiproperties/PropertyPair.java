@@ -21,7 +21,6 @@ public class PropertyPair {
 			uiprop_.setProperty(mmprop_);
 			mmprop_.addListener(uiprop_);
 		} catch (AlreadyAllocatedUIProperty e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

@@ -18,10 +18,8 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
-	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
+	public IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
 		super(core, deviceLabel, propertyLabel, readOnly);
-		
-		type_ = MMPropertyType.INTEGER;
 	}
 	
 	/**
@@ -35,8 +33,6 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 */
 	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
 		super(core, deviceLabel, propertyLabel, upLimit, downLimit);
-		
-		type_ = MMPropertyType.INTEGER;
 	}
 	
 	/**
@@ -49,8 +45,6 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 */
 	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
 		super(core, deviceLabel, propertyLabel, allowedValues);
-		
-		type_ = MMPropertyType.INTEGER;
 	}
 
 	@Override

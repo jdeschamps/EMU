@@ -2,19 +2,21 @@ package main.embl.rieslab.emu.micromanager.mmproperties;
 
 import java.util.ArrayList;
 
+import org.micromanager.api.ScriptInterface;
+
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
-public class MMConfigGroupAsProperty extends MMProperty<String> {
+public class ConfigGroupAsMMProperty extends MMProperty<String> {
 
 	@SuppressWarnings("rawtypes")
 	private ArrayList<MMProperty> affectedmmprops_;
+	private ScriptInterface script_;
 	
 	@SuppressWarnings("rawtypes")
-	MMConfigGroupAsProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues, ArrayList<MMProperty> affectedmmprops) {
+	public ConfigGroupAsMMProperty(ScriptInterface script, CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues, ArrayList<MMProperty> affectedmmprops) {
 		super(core, deviceLabel, propertyLabel, allowedValues);
-
-		type_ = MMPropertyType.MMCONF;
+		script_ = script;
 		affectedmmprops_ = affectedmmprops;
 	}
 	
@@ -47,6 +49,8 @@ public class MMConfigGroupAsProperty extends MMProperty<String> {
 					getCore().setConfig(getMMPropertyLabel(), stringval);
 					notifyListeners(source, stringval);
 					notifyMMProperties();
+					
+					script_.refreshGUI();
 					
 				} catch (Exception e){
 					System.out.println("Error in setting configuration ["+getHash()+"] to ["+stringval+"] from ["+value+"]");
@@ -94,16 +98,20 @@ public class MMConfigGroupAsProperty extends MMProperty<String> {
 	@Override
 	public boolean isInRange(String val) {
 		// doesn't have a range
+		System.out.println("Call to in range");
 		return true;
 	}
 
 	@Override
 	public boolean isAllowed(String val) { // always have allowed values, so no checking here
 		for(int i=0;i<getAllowedValues().length;i++){
+			System.out.println(val+" vs "+getAllowedValues()[i]);
 			if(areEqual(val, getAllowedValues()[i])){
+				System.out.println("--- true");
 				return true;
 			}
 		}
+		System.out.println("--- false");
 		return false;
 	}
 

@@ -24,7 +24,7 @@ public class MMProperties {
 	public void initialize() {
 		StrVector deviceList = core_.getLoadedDevices();
 		StrVector propertyList;
-		MMPropertyBuilder builder = new MMPropertyBuilder(core_);
+		MMPropertyFactory builder = new MMPropertyFactory(core_);
 
 		for (String device : deviceList) {
 			if(!device.substring(0, 3).equals("COM")){
@@ -64,6 +64,13 @@ public class MMProperties {
 		String[] s = new String[devices_.size()];
 		devices_.keySet().toArray(s);
 		return s;
+	}
+	
+	public void addConfigGroupAsMMProperties(MMDevice mmconfdevice){
+		if(mmconfdevice.getProperties().size() > 0){
+			devices_.put(mmconfdevice.getLabel(),mmconfdevice);
+			properties_.putAll(mmconfdevice.getProperties());
+		}
 	}
 	
 	public boolean isProperty(String hash){

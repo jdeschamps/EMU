@@ -59,7 +59,10 @@ public class SystemController {
 	public void start() {		
 		// extracts MM properties
 		mmproperties_ = new MMProperties(core_);
-		mmconfiggroups_ = new MMConfigurationGroupsRegistry(core_);
+		mmconfiggroups_ = new MMConfigurationGroupsRegistry(script_, core_);
+		
+		// register mmconfigs as mmproperties
+		mmconfiggroups_.registerMMConfAsDevice(mmproperties_);
 
 		// load plugin list
 		pluginloader_ = new UIPluginLoader(this);

@@ -74,4 +74,9 @@ public class MMDevice {
 		return str;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public HashMap<String, MMProperty> getProperties(){
+		return properties_;
+	}
+	
 }
