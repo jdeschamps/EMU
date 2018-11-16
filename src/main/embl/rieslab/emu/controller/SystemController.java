@@ -1,7 +1,6 @@
 package main.embl.rieslab.emu.controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -11,7 +10,6 @@ import org.micromanager.api.ScriptInterface;
 import main.embl.rieslab.emu.configuration.ConfigurationController;
 import main.embl.rieslab.emu.configuration.GlobalConfiguration;
 import main.embl.rieslab.emu.exceptions.IncompatiblePluginConfigurationException;
-import main.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroup;
 import main.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
 import main.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
 import main.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
@@ -412,44 +410,12 @@ public class SystemController {
 		}
 	}
 	
-	/**
-	 * Returns a sorted array containing the name of all Micro-manager configuration groups.
-	 * 
-	 * @return
-	 */
-	public String[] getMMConfigGroups(){
-		String[] groups = mmconfiggroups_.getConfigurationGroups().keySet().toArray(new String[0]);
-		Arrays.sort(groups);
-		return groups;
+
+	public MMConfigurationGroupsRegistry getMMConfigGroupRegistry(){
+		return mmconfiggroups_;
 	}	
 	
-	/**
-	 * Returns an object wrapping a Micro-manager configuration group.
-	 * 
-	 * @param groupname Name of the group to return
-	 * @return 
-	 */
-	public MMConfigurationGroup getMMConfigGroup(String groupname){
-		if(mmconfiggroups_.getConfigurationGroups().containsKey(groupname)){
-			return mmconfiggroups_.getConfigurationGroups().get(groupname);
-		}		
-		return null;
-	}
-	
-	/**
-	 * Returns an array containing the names of each state of the specified Micro-manager configuration group.
-	 * 
-	 * @param groupname
-	 * @return
-	 */
-	public String[] getMMConfigNames(String groupname){
-		if(mmconfiggroups_.getConfigurationGroups().containsKey(groupname)){
-			return mmconfiggroups_.getConfigurationGroups().get(groupname).getConfigurations().toArray();
-		} 
-		String[] s = {"Empty"}; 
-		return s;
-	}
-	
+
 	/**
 	 * Sets the state of the UIProperties used as keys in propvalues to the corresponding value.
 	 * 
@@ -528,15 +494,6 @@ public class SystemController {
 	@SuppressWarnings("rawtypes")
 	public TaskHolder getTaskHolder(String taskname){
 		return interface_.getUITaskHolders().get(taskname);
-	}
-	
-	/**
-	 * 
-	 * 
-	 * @return
-	 */
-	public HashMap<String, String[]> getMMConfigurationGroups(){
-		return mmconfiggroups_.getConfigurationChannelsMap();
 	}
 	
 	public void refreshProperties(){

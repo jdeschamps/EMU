@@ -8,6 +8,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -26,6 +27,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
+import main.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
 import main.embl.rieslab.emu.ui.uiproperties.FixedStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
@@ -51,6 +53,8 @@ public class AcquisitionTab extends JPanel {
 	 */
 	private static final long serialVersionUID = 7966565586677957738L;
 
+	public final static String KEY_IGNORED = "Ignored";
+	
 	private AcquisitionWizard wizard_;
 	private AcquisitionFactory factory_;
 	private JPanel acqcard_;
@@ -80,7 +84,7 @@ public class AcquisitionTab extends JPanel {
 		this.setName(acqtypes_[currind]);
 		
 		// Filter out read-only properties from the system properties
-		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getController().getPropertiesMap());
+		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
 		Iterator<String> it = props_.keySet().iterator();
 		String s;
@@ -128,7 +132,7 @@ public class AcquisitionTab extends JPanel {
 		acqtype_.setSelectedIndex(currind);
 		
 		// Filter out read-only properties from the system properties
-		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getController().getPropertiesMap());
+		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
 		Iterator<String> it = props_.keySet().iterator();
 		String s;
@@ -157,6 +161,7 @@ public class AcquisitionTab extends JPanel {
 		
 	    CardLayout cl = (CardLayout)(acqcard_.getLayout());
 	    cl.show(acqcard_, acqtypes_[currind]);
+	   
 	}
 
 	private JPanel createPanel(JPanel acqpane, PropertyFilter filter) {
@@ -167,6 +172,14 @@ public class AcquisitionTab extends JPanel {
 		
 		// acquisition panel
 		pane.add(acqpane);	
+		pane.add(Box.createVerticalStrut(10));
+
+		// MM config groups		
+	    JPanel mmconfig = createMMConfigTable(wizard_.getMMConfigurationGroups());   
+	    mmconfig.setBorder(BorderFactory.createTitledBorder(null, "Configuration settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+		((TitledBorder) mmconfig.getBorder()).setTitleFont(((TitledBorder) mmconfig.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+		pane.add(mmconfig);
+		
 		pane.add(Box.createVerticalStrut(10));
 		
 		// get properties
@@ -180,7 +193,7 @@ public class AcquisitionTab extends JPanel {
 		props = filt.filteredProperties(props);
 		
 		if(temp.length>0){
-		    JPanel focstab = createTable(temp,true);
+		    JPanel focstab = createPropertyTable(temp,true);
 		    focstab.setBorder(BorderFactory.createTitledBorder(null, "Focus stabilization", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 			((TitledBorder) focstab.getBorder()).setTitleFont(((TitledBorder) focstab.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 			pane.add(focstab);
@@ -195,7 +208,7 @@ public class AcquisitionTab extends JPanel {
 		
 
 		if(temp.length>0){
-		    JPanel fw = createTable(temp,false);
+		    JPanel fw = createPropertyTable(temp,false);
 		    fw.setBorder(BorderFactory.createTitledBorder(null, "Filter wheel", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 			((TitledBorder) fw.getBorder()).setTitleFont(((TitledBorder) fw.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 			pane.add(fw);	
@@ -249,23 +262,23 @@ public class AcquisitionTab extends JPanel {
 				} else if(ind2 == ind && j == temp.length-1){
 					// create a jpanel
 					templaser.add(temp[j]);
-				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false);
+				    JPanel subpanel = createPropertyTable(templaser.toArray(new String[0]),false);
 				    lasertab.add(subpanel);
 				}else if(ind2 != ind && j == temp.length-1){
 					// create a jpanel
-				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false);
+				    JPanel subpanel = createPropertyTable(templaser.toArray(new String[0]),false);
 				    lasertab.add(subpanel);
 				    
 				    templaser = new ArrayList<String>();
 					templaser.add(temp[j]);
 					
-					subpanel = createTable(templaser.toArray(new String[0]),false);
+					subpanel = createPropertyTable(templaser.toArray(new String[0]),false);
 				    lasertab.add(subpanel);
 				} else {
 					ind = ind2;
 					
 					// create a jpanel
-				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false);
+				    JPanel subpanel = createPropertyTable(templaser.toArray(new String[0]),false);
 				    lasertab.add(subpanel);
 				    
 				    templaser = new ArrayList<String>();
@@ -283,7 +296,7 @@ public class AcquisitionTab extends JPanel {
 		props = filt.filteredProperties(props);
 		
 		if(temp.length>0){
-		    JPanel twostate = createTable(temp,false);
+		    JPanel twostate = createPropertyTable(temp,false);
 		    twostate.setBorder(BorderFactory.createTitledBorder(null, "Two-state", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 			((TitledBorder) twostate.getBorder()).setTitleFont(((TitledBorder) twostate.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 			pane.add(twostate);
@@ -318,6 +331,13 @@ public class AcquisitionTab extends JPanel {
 		
 		pane.add(Box.createVerticalStrut(10));
 
+		// MM config groups		
+	    JPanel mmconfig = createMMConfigTable(wizard_.getMMConfigurationGroups());   
+	    mmconfig.setBorder(BorderFactory.createTitledBorder(null, "Configuration settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+		((TitledBorder) mmconfig.getBorder()).setTitleFont(((TitledBorder) mmconfig.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+		pane.add(mmconfig);
+		
+		pane.add(Box.createVerticalStrut(10));
 		
 		// get properties
 		HashMap<String, UIProperty> props = filter.filterProperties(props_);
@@ -330,7 +350,7 @@ public class AcquisitionTab extends JPanel {
 		props = filt.filteredProperties(props);
 		
 		if(temp.length>0){
-		    JPanel focstab = createTable(temp,true,propertyValues);
+		    JPanel focstab = createPropertyTable(temp,true,propertyValues);
 		    focstab.setBorder(BorderFactory.createTitledBorder(null, "Focus stabilization", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 			((TitledBorder) focstab.getBorder()).setTitleFont(((TitledBorder) focstab.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 			pane.add(focstab);
@@ -345,7 +365,7 @@ public class AcquisitionTab extends JPanel {
 		
 
 		if(temp.length>0){
-		    JPanel fw = createTable(temp,false,propertyValues);
+		    JPanel fw = createPropertyTable(temp,false,propertyValues);
 		    fw.setBorder(BorderFactory.createTitledBorder(null, "Filter wheel", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 			((TitledBorder) fw.getBorder()).setTitleFont(((TitledBorder) fw.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 			pane.add(fw);	
@@ -400,23 +420,23 @@ public class AcquisitionTab extends JPanel {
 				} else if(ind2 == ind && j == temp.length-1){
 					// create a jpanel
 					templaser.add(temp[j]);
-				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false,propertyValues);
+				    JPanel subpanel = createPropertyTable(templaser.toArray(new String[0]),false,propertyValues);
 				    lasertab.add(subpanel);
 				}else if(ind2 != ind && j == temp.length-1){
 					// create a jpanel
-				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false,propertyValues);
+				    JPanel subpanel = createPropertyTable(templaser.toArray(new String[0]),false,propertyValues);
 				    lasertab.add(subpanel);
 				    
 				    templaser = new ArrayList<String>();
 					templaser.add(temp[j]);
 					
-					subpanel = createTable(templaser.toArray(new String[0]),false,propertyValues);
+					subpanel = createPropertyTable(templaser.toArray(new String[0]),false,propertyValues);
 				    lasertab.add(subpanel);
 				} else {
 					ind = ind2;
 					
 					// create a jpanel
-				    JPanel subpanel = createTable(templaser.toArray(new String[0]),false,propertyValues);
+				    JPanel subpanel = createPropertyTable(templaser.toArray(new String[0]),false,propertyValues);
 				    lasertab.add(subpanel);
 				    
 				    templaser = new ArrayList<String>();
@@ -434,7 +454,7 @@ public class AcquisitionTab extends JPanel {
 		props = filt.filteredProperties(props);
 		
 		if(temp.length>0){
-		    JPanel twostate = createTable(temp,false,propertyValues);
+		    JPanel twostate = createPropertyTable(temp,false,propertyValues);
 		    twostate.setBorder(BorderFactory.createTitledBorder(null, "Two-state", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 			((TitledBorder) twostate.getBorder()).setTitleFont(((TitledBorder) twostate.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 			pane.add(twostate);
@@ -475,6 +495,82 @@ public class AcquisitionTab extends JPanel {
 
 	}
 	
+	private JPanel createMMConfigTable(MMConfigurationGroupsRegistry mmconfigreg) {
+		JPanel pane = new JPanel();
+		
+		// Defines table model
+		DefaultTableModel model = new DefaultTableModel(new Object[] {"Property", "Value" }, 0);
+
+		final HashMap<String, String[]> map = mmconfigreg.getMMConfigurationChannelsMap();
+		String[] keys = map.keySet().toArray(new String[0]);
+		Arrays.sort(keys);
+		
+		// For each configuration group
+		for (int i = 0; i < keys.length; i++) {	
+			if(map.get(keys[i]) != null && map.get(keys[i]).length > 0){
+				String s = mmconfigreg.getMMConfigurationState(keys[i]);
+				if(s.length() > 0){
+					model.addRow(new Object[] {keys[i], s });
+				} else if(s != null) {
+					model.addRow(new Object[] {keys[i], KEY_IGNORED });
+				}
+			}
+		}
+				
+		JTable table = new JTable(model) {
+			private static final long serialVersionUID = -7528102943663023952L;
+
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int column) {
+				switch (column) {
+				case 0:
+					return new BoldTableCellRenderer(); // first column is written in bold font
+				case 1:
+					return new DefaultTableCellRenderer(); // column 1 takes a default renderer 
+				default:
+					return super.getCellRenderer(row, column);
+				}
+			}
+
+			@Override
+			public TableCellEditor getCellEditor(int row, int column) {
+				String s = (String) this.getValueAt(row, 0);
+
+				if(column == 1){
+					String[] states = map.get(s);
+					String[] states_ig = new String[states.length+1];
+					states_ig[0] = KEY_IGNORED;
+					for(int i=0; i<states.length; i++){
+						states_ig[i+1] = states[i];
+					}
+					
+					return new DefaultCellEditor(new JComboBox(states_ig));
+				} 
+
+				return super.getCellEditor(row, column);
+			}
+
+			@Override
+			public boolean isCellEditable(int row, int col) { // first column is non-editable and second as well if it is a field value row
+				if(col == 0){
+					return false;
+				}
+				return true;
+			}
+
+		};
+		
+		table.setAutoCreateRowSorter(false);	
+		table.setRowHeight(23);
+		table.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		table.setRowSelectionAllowed(false);
+		pane.setLayout(new GridLayout());
+		pane.add(table);
+		
+		return pane;
+	}
+	
+	
 	/**
 	 * Creates a JPanel holding a JTable of the filtered properties with default values
 	 * 
@@ -482,7 +578,7 @@ public class AcquisitionTab extends JPanel {
 	 * @param twostatedefault_ Default value for TwoStateProperties
 	 * @return
 	 */
-	private JPanel createTable(String[] filteredProperties, boolean twostatedefault_) {
+	private JPanel createPropertyTable(String[] filteredProperties, boolean twostatedefault_) {
 		JPanel pane = new JPanel();
 		
 		// Defines table model
@@ -491,6 +587,7 @@ public class AcquisitionTab extends JPanel {
 		// For each property of the UI
 		for (int i = 0; i < filteredProperties.length; i++) {	
 			UIProperty prop = props_.get(filteredProperties[i]);
+			System.out.println(prop.getFriendlyName());
 			if (prop.isTwoState()) {
 				model.addRow(new Object[] {prop.getFriendlyName(), twostatedefault_ });
 			} else if (prop.isSingleState()) {
@@ -570,7 +667,7 @@ public class AcquisitionTab extends JPanel {
 	 * @param propertyValues Property values of the current acquisition
 	 * @return
 	 */
-	private JPanel createTable(String[] filteredProperties, boolean twostatedefault_, HashMap<String, String> propertyValues) {
+	private JPanel createPropertyTable(String[] filteredProperties, boolean twostatedefault_, HashMap<String, String> propertyValues) {
 		JPanel pane = new JPanel();
 		
 		// Defines table model
@@ -669,7 +766,7 @@ public class AcquisitionTab extends JPanel {
 		return pane;
 	}
 	
-
+	/*
 	private HashMap<String, String> getProperties(JPanel pane){ 
 		HashMap<String, String> props = new HashMap<String, String>(); // <PropertyName, value>
 		
@@ -680,13 +777,14 @@ public class AcquisitionTab extends JPanel {
 				Component[] subcomps = ((JPanel) comps[i]).getComponents();
 				for(int j=0;j<subcomps.length;j++){	// loop over all their subcomponents
 					if(subcomps[j] instanceof JTable){	// if find a JTable
-						if (((JTable) subcomps[j]).isEditing()) ((JTable) subcomps[j]).getCellEditor().stopCellEditing();
-						TableModel model = ((JTable) subcomps[j]).getModel();
+						if (((JTable) subcomps[j]).isEditing()) {
+							((JTable) subcomps[j]).getCellEditor().stopCellEditing();
+						}
+						TableModel model = ((JTable) subcomps[j]).getModel();  
 						int nrow = model.getRowCount(); 
 						for(int k=0;k<nrow;k++){	// loop through the rows
 							if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
 								props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), (String) model.getValueAt(k, 1)); 
-								System.out.println(propsfriendlyname_.get((String) model.getValueAt(k, 0))+" and "+(String) model.getValueAt(k, 1));
 							} else {
 								if((Boolean) model.getValueAt(k, 1)){
 									props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOnStateName()); 
@@ -699,19 +797,18 @@ public class AcquisitionTab extends JPanel {
 						Component[] subsubcomps = ((JPanel) subcomps[j]).getComponents();
 						for(int l=0;l<subsubcomps.length;l++){	// loop over all their subcomponents
 							if(subsubcomps[l] instanceof JTable){	// if find a JTable
-								if (((JTable) subsubcomps[l]).isEditing()) ((JTable) subsubcomps[l]).getCellEditor().stopCellEditing();
+								if (((JTable) subsubcomps[l]).isEditing()){
+									((JTable) subsubcomps[l]).getCellEditor().stopCellEditing();
+								}
 								TableModel model = ((JTable) subsubcomps[l]).getModel();
 								int nrow = model.getRowCount(); 
 								for(int k=0;k<nrow;k++){	// loop through the rows
 									if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
 										props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), (String) model.getValueAt(k, 1)); 
-										System.out.println(propsfriendlyname_.get((String) model.getValueAt(k, 0))+" and "+(String) model.getValueAt(k, 1));
 									} else {
 										if((Boolean) model.getValueAt(k, 1)){
-											System.out.println(propsfriendlyname_.get((String) model.getValueAt(k, 0))+" and "+TwoStateUIProperty.getOnStateName());
 											props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOnStateName()); 
 										} else {
-											System.out.println(propsfriendlyname_.get((String) model.getValueAt(k, 0))+" and "+TwoStateUIProperty.getOffStateName());
 											props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOffStateName());
 										}
 									}
@@ -724,7 +821,37 @@ public class AcquisitionTab extends JPanel {
 		}
 		
 		return props;
+	}*/
+	
+	private HashMap<String, String> registerProperties(Component c, HashMap<String, String> properties){
+		if(c instanceof JTable){
+			if (((JTable) c).isEditing()) {
+				((JTable) c).getCellEditor().stopCellEditing();
+			}
+			TableModel model = ((JTable) c).getModel();  
+			int nrow = model.getRowCount(); 
+			for(int k=0;k<nrow;k++){	// loop through the rows
+				String s = (String) model.getValueAt(k, 0);
+				System.out.println(s);
+				if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
+					properties.put(propsfriendlyname_.get(s), (String) model.getValueAt(k, 1)); 
+				} else {
+					if((Boolean) model.getValueAt(k, 1)){
+						properties.put(propsfriendlyname_.get(s), TwoStateUIProperty.getOnStateName()); 
+					} else {
+						properties.put(propsfriendlyname_.get(s), TwoStateUIProperty.getOffStateName());
+					}
+				}
+			}
+		} else if(c instanceof JPanel){
+			Component[] subcomps = ((JPanel) c).getComponents();
+			for(int l=0;l<subcomps.length;l++){
+				registerProperties(subcomps[l], properties);
+			}
+		}
+		return properties;
 	}
+	
 
 	public String getTypeName(){
 		return acqtypes_[currind];
@@ -755,8 +882,11 @@ public class AcquisitionTab extends JPanel {
 		// get acquisition from factory with the right type
 		Acquisition acq = factory_.getAcquisition(acqtypes_[currind]);
 		
+		// set mm configuration groups
+		//acq.setGroups(getMMConfigGroups());
+		
 		// set properties value in the acquisition
-		acq.setProperties(getProperties(acqpanes_[currind]));
+		acq.setProperties(registerProperties(acqpanes_[currind], new HashMap<String, String>()));
 		
 		// read out the JPanel related to the acquisition
 		acq.readOutParameters(acqpanels_[currind]);

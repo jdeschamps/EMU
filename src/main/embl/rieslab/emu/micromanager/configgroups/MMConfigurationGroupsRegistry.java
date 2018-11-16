@@ -47,7 +47,7 @@ public class MMConfigurationGroupsRegistry {
 	 * 
 	 * @return
 	 */
-	public HashMap<String, MMConfigurationGroup> getConfigurationGroups(){
+	public HashMap<String, MMConfigurationGroup> getMMConfigurationGroups(){
 		return groups_;
 	}
 	
@@ -57,7 +57,7 @@ public class MMConfigurationGroupsRegistry {
 	 * 
 	 * @return
 	 */
-	public HashMap<String, String[]> getConfigurationChannelsMap(){
+	public HashMap<String, String[]> getMMConfigurationChannelsMap(){
 		HashMap<String, String[]> map = new HashMap<String, String[]>();
 		
 		Iterator<String> it = groups_.keySet().iterator();
@@ -67,6 +67,22 @@ public class MMConfigurationGroupsRegistry {
 			map.put(s, groups_.get(s).getConfigurations().toArray());
 		}
 		return map;
+	}
+	
+	public boolean hasMMConfigurationGroup(String mmconfig){
+		return groups_.containsKey(mmconfig);
+	}
+	
+	public String getMMConfigurationState(String mmconfig){
+		if(hasMMConfigurationGroup(mmconfig)){
+			try {
+				return core_.getCurrentConfig(mmconfig);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return null;
 	}
 }
   

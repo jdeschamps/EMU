@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -17,6 +18,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 
 import main.embl.rieslab.emu.controller.SystemController;
+import main.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
+import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Experiment;
@@ -302,8 +305,12 @@ public class AcquisitionWizard {
 		return (new AcquisitionFactory(owner_, controller_)).writeAcquisitionList(exp, path);
 	}
 	
-	public SystemController getController(){
-		return controller_;
+	public HashMap<String, UIProperty> getPropertiesMap(){
+		return controller_.getPropertiesMap();
+	}
+	
+	public MMConfigurationGroupsRegistry getMMConfigurationGroups(){
+		return controller_.getMMConfigGroupRegistry();
 	}
 	
 	public void shutDown() {

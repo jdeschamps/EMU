@@ -529,6 +529,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    int j=0;
 	    	    while(it.hasNext()){
 	    	    	s = it.next();  
+	    	    	System.out.println(s);
 	    	    	propval[j] = controller_.getProperty(s).getFriendlyName()+": "+acq.getPropertyValues().get(s);
 	    	    	j++;
 	    	    }
