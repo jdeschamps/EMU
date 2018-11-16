@@ -1,6 +1,8 @@
 package main.embl.rieslab.emu.uiexamples.htsmlm.tasks;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.SwingWorker;
@@ -153,12 +155,15 @@ public class AcquisitionTask implements Task<Integer>{
 								
 								// set configuration channel
 								// TODO
-								
-								/*String prev_config = null;
-								if (acq.useConfig()) {
-									prev_config = core_.getCurrentConfigFromCache(acq.getConfigGroup());									
-									core_.setConfig(acq.getConfigGroup(),acq.getConfigName());
-								}*/
+								// need testing
+								if(!acq.getMMConfGroupValues().isEmpty()) {
+									HashMap<String,String> configs = acq.getMMConfGroupValues();
+									Iterator<String> it = configs.keySet().iterator();
+									while(it.hasNext()){
+										String group = it.next();
+										core_.setConfig(group,configs.get(group));
+									}
+								}
 								
 								// set-up special acquisition state
 								acq.preAcquisition();

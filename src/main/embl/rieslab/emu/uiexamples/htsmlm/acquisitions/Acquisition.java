@@ -19,9 +19,8 @@ public abstract class Acquisition {
 	private int waitingtime_, numFrames_;
 	private ArrayList<Double> slices_;
 	private AcquisitionType type_;
-	private boolean useconfig_ = false;
 	private String expname_, path_; 
-	private HashMap<String,String> propvalues_;
+	private HashMap<String,String> propvalues_, mmconfgroups_;
 	
 	public static final String ACQ_SETTINGS = "Acquisition settings";
 	
@@ -37,6 +36,9 @@ public abstract class Acquisition {
 		
 		path_ = "";
 		expname_ = "";
+
+		propvalues_ = new HashMap<String,String>();
+		mmconfgroups_ = new HashMap<String,String>();
 	}
 
 
@@ -79,7 +81,11 @@ public abstract class Acquisition {
 	public void setProperties(HashMap<String,String> propvalues){
 		propvalues_ = propvalues;
 	}
-
+	
+	public void setGroups(HashMap<String, String> mmconfgroups) {
+		mmconfgroups_ = mmconfgroups;
+	}
+	
 	public void setNumberFrames(int numframes){
 		numFrames_ = numframes;
 	}
@@ -112,12 +118,12 @@ public abstract class Acquisition {
 		waitingtime_ = waiting;
 	}
 	
-	public boolean useConfig(){
-		return useconfig_;
-	}
-	
 	public HashMap<String,String> getPropertyValues(){
 		return propvalues_;
+	}
+	
+	public HashMap<String,String> getMMConfGroupValues(){
+		return mmconfgroups_;
 	}
 	
 	protected void setType(AcquisitionType type){

@@ -54,6 +54,7 @@ public class AcquisitionTab extends JPanel {
 	private static final long serialVersionUID = 7966565586677957738L;
 
 	public final static String KEY_IGNORED = "Ignored";
+	private final static String KEY_MMCONF = "Configuration settings";
 	
 	private AcquisitionWizard wizard_;
 	private AcquisitionFactory factory_;
@@ -176,7 +177,7 @@ public class AcquisitionTab extends JPanel {
 
 		// MM config groups		
 	    JPanel mmconfig = createMMConfigTable(wizard_.getMMConfigurationGroups());   
-	    mmconfig.setBorder(BorderFactory.createTitledBorder(null, "Configuration settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+	    mmconfig.setBorder(BorderFactory.createTitledBorder(null, KEY_MMCONF, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) mmconfig.getBorder()).setTitleFont(((TitledBorder) mmconfig.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 		pane.add(mmconfig);
 		
@@ -333,7 +334,7 @@ public class AcquisitionTab extends JPanel {
 
 		// MM config groups		
 	    JPanel mmconfig = createMMConfigTable(wizard_.getMMConfigurationGroups());   
-	    mmconfig.setBorder(BorderFactory.createTitledBorder(null, "Configuration settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+	    mmconfig.setBorder(BorderFactory.createTitledBorder(null, KEY_MMCONF, TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 		((TitledBorder) mmconfig.getBorder()).setTitleFont(((TitledBorder) mmconfig.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 		pane.add(mmconfig);
 		
@@ -497,6 +498,7 @@ public class AcquisitionTab extends JPanel {
 	
 	private JPanel createMMConfigTable(MMConfigurationGroupsRegistry mmconfigreg) {
 		JPanel pane = new JPanel();
+		pane.setName(KEY_MMCONF);
 		
 		// Defines table model
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"Property", "Value" }, 0);
@@ -765,63 +767,6 @@ public class AcquisitionTab extends JPanel {
 		return pane;
 	}
 	
-	/*
-	private HashMap<String, String> getProperties(JPanel pane){ 
-		HashMap<String, String> props = new HashMap<String, String>(); // <PropertyName, value>
-		
-		// find panels within and tables
-		Component[] comps = pane.getComponents();
-		for(int i=0;i<comps.length;i++){
-			if(comps[i] instanceof JPanel && comps[i].getName() == null){ // get JPanel which have not been given a name
-				Component[] subcomps = ((JPanel) comps[i]).getComponents();
-				for(int j=0;j<subcomps.length;j++){	// loop over all their subcomponents
-					if(subcomps[j] instanceof JTable){	// if find a JTable
-						if (((JTable) subcomps[j]).isEditing()) {
-							((JTable) subcomps[j]).getCellEditor().stopCellEditing();
-						}
-						TableModel model = ((JTable) subcomps[j]).getModel();  
-						int nrow = model.getRowCount(); 
-						for(int k=0;k<nrow;k++){	// loop through the rows
-							if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
-								props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), (String) model.getValueAt(k, 1)); 
-							} else {
-								if((Boolean) model.getValueAt(k, 1)){
-									props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOnStateName()); 
-								} else {
-									props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOffStateName());
-								}
-							}
-						}
-					} else if(subcomps[j] instanceof JPanel){
-						Component[] subsubcomps = ((JPanel) subcomps[j]).getComponents();
-						for(int l=0;l<subsubcomps.length;l++){	// loop over all their subcomponents
-							if(subsubcomps[l] instanceof JTable){	// if find a JTable
-								if (((JTable) subsubcomps[l]).isEditing()){
-									((JTable) subsubcomps[l]).getCellEditor().stopCellEditing();
-								}
-								TableModel model = ((JTable) subsubcomps[l]).getModel();
-								int nrow = model.getRowCount(); 
-								for(int k=0;k<nrow;k++){	// loop through the rows
-									if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
-										props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), (String) model.getValueAt(k, 1)); 
-									} else {
-										if((Boolean) model.getValueAt(k, 1)){
-											props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOnStateName()); 
-										} else {
-											props.put(propsfriendlyname_.get((String) model.getValueAt(k, 0)), TwoStateUIProperty.getOffStateName());
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-		
-		return props;
-	}*/
-	
 	private HashMap<String, String> registerProperties(Component c, HashMap<String, String> properties){
 		if(c instanceof JTable){
 			if (((JTable) c).isEditing()) {
@@ -831,7 +776,6 @@ public class AcquisitionTab extends JPanel {
 			int nrow = model.getRowCount(); 
 			for(int k=0;k<nrow;k++){	// loop through the rows
 				String s = (String) model.getValueAt(k, 0);
-				System.out.println(s);
 				if(!(model.getValueAt(k, 1) instanceof Boolean)){ // if second row is not a boolean property 
 					properties.put(propsfriendlyname_.get(s), (String) model.getValueAt(k, 1)); 
 				} else {
@@ -842,13 +786,37 @@ public class AcquisitionTab extends JPanel {
 					}
 				}
 			}
-		} else if(c instanceof JPanel){
+		} else if(c instanceof JPanel && (c.getName() == null || !c.getName().equals(KEY_MMCONF))){
 			Component[] subcomps = ((JPanel) c).getComponents();
 			for(int l=0;l<subcomps.length;l++){
 				registerProperties(subcomps[l], properties);
 			}
 		}
 		return properties;
+	}
+
+	private HashMap<String, String> registerMMConfGroups(Component c, HashMap<String, String> confgroups){
+		if(c instanceof JTable){
+			if (((JTable) c).isEditing()) {
+				((JTable) c).getCellEditor().stopCellEditing();
+			}
+			TableModel model = ((JTable) c).getModel();  
+			int nrow = model.getRowCount(); 
+			for(int k=0;k<nrow;k++){	// loop through the rows
+				String group = (String) model.getValueAt(k, 0);
+				String val = (String) model.getValueAt(k, 0);
+				
+				if(!val.equals(KEY_IGNORED)){
+					confgroups.put(group, val);
+				}
+			}
+		} else if(c instanceof JPanel && c.getName() != null && c.getName().equals(KEY_MMCONF)){
+			Component[] subcomps = ((JPanel) c).getComponents();
+			for(int l=0;l<subcomps.length;l++){
+				registerProperties(subcomps[l], confgroups);
+			}
+		}
+		return confgroups;
 	}
 	
 
@@ -882,7 +850,7 @@ public class AcquisitionTab extends JPanel {
 		Acquisition acq = factory_.getAcquisition(acqtypes_[currind]);
 		
 		// set mm configuration groups
-		//acq.setGroups(getMMConfigGroups());
+		acq.setGroups(registerMMConfGroups(acqpanes_[currind], new HashMap<String, String>()));
 		
 		// set properties value in the acquisition
 		acq.setProperties(registerProperties(acqpanes_[currind], new HashMap<String, String>()));
