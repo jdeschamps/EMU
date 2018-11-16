@@ -98,7 +98,7 @@ public abstract class MMProperty<T> {
 		this.label_ =  propertyLabel;
 		
 		this.allowedValues = arrayFromStrings(allowedValues);
-
+		
 		this.readOnly = false;
 		this.hasLimits = false;
 		this.hasAllowedValues = true;

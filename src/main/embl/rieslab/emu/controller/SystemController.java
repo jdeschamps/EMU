@@ -308,9 +308,9 @@ public class SystemController {
 						boolean allowed = true;
 						for(int j=0;j<numpos;j++){								
 							String val =  configprop.get(uiprop+MultiStateUIProperty.getStateName(j));
-
+							t.setStateValue(j, val);
+							
 							if(!t.isValueAllowed(val)){
-								t.setStateValue(j, val);
 								allowed = false;
 							}
 						}
