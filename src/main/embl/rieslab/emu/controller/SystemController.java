@@ -306,11 +306,11 @@ public class SystemController {
 						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties.get(uiprop);
 						int numpos = t.getNumberOfStates();
 						boolean allowed = true;
-						for(int j=0;j<numpos;j++){
+						for(int j=0;j<numpos;j++){								
 							String val =  configprop.get(uiprop+MultiStateUIProperty.getStateName(j));
-							t.setStateValue(j, val);
 
 							if(!t.isValueAllowed(val)){
+								t.setStateValue(j, val);
 								allowed = false;
 							}
 						}

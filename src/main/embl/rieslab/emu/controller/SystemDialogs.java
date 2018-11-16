@@ -117,7 +117,7 @@ public class SystemDialogs {
 	public static void showForbiddenValuesMessage(ArrayList<String> forbiddenvals) {
 		String title = "Forbidden values";
 		
-		String message = "The state values of the following UIproperties are forbidden: \n\n";
+		String message = "The state values of the following UIProperties are forbidden: \n\n";
 		Iterator<String> it = forbiddenvals.iterator();
 		message = message+it.next();
 		int count = 1;
