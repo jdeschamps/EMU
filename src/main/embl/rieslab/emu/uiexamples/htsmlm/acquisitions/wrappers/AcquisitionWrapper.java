@@ -1,7 +1,9 @@
-package main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers;
 
 import java.util.Arrays;
 import java.util.HashMap;
+
+import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 
 public class AcquisitionWrapper {
 

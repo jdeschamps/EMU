@@ -1,6 +1,6 @@
 package main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui;
 
-import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Experiment;
+import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 
 public interface AcquisitionUI {
 

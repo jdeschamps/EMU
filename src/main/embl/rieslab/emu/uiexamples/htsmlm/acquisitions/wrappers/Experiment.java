@@ -1,6 +1,8 @@
-package main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers;
 
 import java.util.ArrayList;
+
+import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 
 public class Experiment {
 

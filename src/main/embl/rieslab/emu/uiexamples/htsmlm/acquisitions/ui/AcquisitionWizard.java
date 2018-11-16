@@ -22,7 +22,7 @@ import main.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegi
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
-import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Experiment;
+import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import main.embl.rieslab.emu.utils.utils;
 
 public class AcquisitionWizard {

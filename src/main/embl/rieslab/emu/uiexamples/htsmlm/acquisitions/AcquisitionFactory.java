@@ -17,6 +17,9 @@ import main.embl.rieslab.emu.controller.SystemController;
 import main.embl.rieslab.emu.uiexamples.htsmlm.AcquisitionPanel;
 import main.embl.rieslab.emu.uiexamples.htsmlm.ActivationPanel;
 import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionUI;
+import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.AcquisitionWrapper;
+import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
+import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.ExperimentWrapper;
 import main.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.embl.rieslab.emu.utils.utils;
 

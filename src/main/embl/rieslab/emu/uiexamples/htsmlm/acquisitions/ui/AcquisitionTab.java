@@ -587,7 +587,6 @@ public class AcquisitionTab extends JPanel {
 		// For each property of the UI
 		for (int i = 0; i < filteredProperties.length; i++) {	
 			UIProperty prop = props_.get(filteredProperties[i]);
-			System.out.println(prop.getFriendlyName());
 			if (prop.isTwoState()) {
 				model.addRow(new Object[] {prop.getFriendlyName(), twostatedefault_ });
 			} else if (prop.isSingleState()) {
