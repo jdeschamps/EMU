@@ -28,7 +28,7 @@ public abstract class MMProperty<T> {
 	private boolean hasAllowedValues;
 	private double upperLimit, lowerLimit;
 	private T[] allowedValues;
-	private T value;
+	protected T value;
 	private T maxValue, minValue;
 	private ArrayList<UIProperty> listeners_;
 	
@@ -112,6 +112,11 @@ public abstract class MMProperty<T> {
 		getValue();
 	}
 
+	protected CMMCore getCore(){
+		return core_;
+	}
+	
+	
 	/** 
 	 * Returns the current value of the device property.
 	 * 
@@ -137,15 +142,11 @@ public abstract class MMProperty<T> {
 	public String getStringValue() {
 		// ask core for value
 		String val = "";
-		try {
-			val = core_.getProperty(devicelabel_, label_);			
 
-			if(val != null && !val.isEmpty()){
-				value = convertToValue(val);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(val != null && !val.isEmpty()){
+			val = convertToString(getValue());
 		}
+		
 		return val;
 	}
 
@@ -163,13 +164,13 @@ public abstract class MMProperty<T> {
 				try{
 					// set value
 					value = val;
-										
-					core_.setProperty(devicelabel_,label_,stringval);
+					
 					if(!core_.hasProperty(devicelabel_, label_)){
 						System.out.println("Device property ["+devicelabel_+","+label_+"] doesn't exist.");
-					} 
-					
-					notifyListeners(source, stringval);
+					} else {
+						core_.setProperty(devicelabel_,label_,stringval);
+						notifyListeners(source, stringval);
+					}
 				} catch (Exception e){
 					System.out.println("Error in setting property ["+getHash()+"] to ["+val+"] from ["+stringval+"]");
 
@@ -410,12 +411,16 @@ public abstract class MMProperty<T> {
 	 * @param source UIProperty that triggered the update.
 	 * @param value Updated value.
 	 */
-	private void notifyListeners(UIProperty source, String value){
+	protected void notifyListeners(UIProperty source, String value){
 		for(int i=0;i<listeners_.size();i++){
 			if(listeners_.get(i) != source){
 				listeners_.get(i).mmPropertyHasChanged(value);
 			}
 		}
+	}
+	
+	public void updateMMProperty(){
+		notifyListeners(null, getStringValue());
 	}
 	
 	/**

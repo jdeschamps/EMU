@@ -83,6 +83,7 @@ public class StringMMProperty extends MMProperty<String> {
 					return true;
 				}
 			}
+			return false;
 		} else if(hasLimits()){
 			return isInRange(val);
 		}

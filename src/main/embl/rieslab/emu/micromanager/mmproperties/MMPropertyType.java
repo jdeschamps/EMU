@@ -1,7 +1,7 @@
 package main.embl.rieslab.emu.micromanager.mmproperties;
 
 public enum MMPropertyType { 
-	INTEGER("Integer"), FLOAT("Float"), STRING("String"), UNDEF("Undef"); 
+	INTEGER("Integer"), FLOAT("Float"), STRING("String"), UNDEF("Undef"), MMCONF("MMConfiguration"); 
 	
 	private String value; 
 	

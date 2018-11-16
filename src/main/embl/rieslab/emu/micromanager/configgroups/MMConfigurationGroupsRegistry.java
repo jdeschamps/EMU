@@ -78,11 +78,12 @@ public class MMConfigurationGroupsRegistry {
 			try {
 				return core_.getCurrentConfig(mmconfig);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		return null;
 	}
+	
+	
 }
   
