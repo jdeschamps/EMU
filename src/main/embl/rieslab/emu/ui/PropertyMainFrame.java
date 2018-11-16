@@ -125,9 +125,29 @@ public abstract class PropertyMainFrame extends JFrame {
 			// there is no collision
 			uiprops.putAll(pan.getUIProperties()); 
 			
-			// adds all the UIParameters, here collision will be handled by the HashMap (overwrite entry)
-			uiparams.putAll(pan.getUIParameters());
-			
+			// adds all the UIParameters, in case of collision the first UIParameter has priority
+			// and substituted to the second UIParameter in its owner PropertyPanel: "same name" = "same parameter"
+			HashMap<String,UIParameter> panparam = pan.getUIParameters();
+			Iterator<String> paramit = panparam.keySet().iterator();
+			ArrayList<String> subst = new ArrayList<String>();
+			while(paramit.hasNext()){
+				String param = paramit.next();
+				
+				if(!uiparams.containsKey(param)){ // if param doesn't exist already, adds it
+					uiparams.put(param, panparam.get(param));
+				} else if(uiparams.get(param).getType().equals(panparam.get(param).getType())){
+					// if it already exists and the new parameter is of the same type than the one
+					// previously added to the HashMap, then add to array subst
+					subst.add(param);
+				} 
+				// if it is not of the same type, it is then ignored
+			}
+			// avoid concurrent modification of the hashmap, by substituting the UIParameter in the 
+			// second PropertyPanel
+			for(int i=0;i<subst.size();i++){
+				pan.substituteParameter(subst.get(i), uiparams.get(subst.get(i)));
+			}
+
 			// gets tasks
 			if(pan instanceof TaskHolder){
 				tasks.put(((TaskHolder) pan).getTaskName(), (TaskHolder) pan);

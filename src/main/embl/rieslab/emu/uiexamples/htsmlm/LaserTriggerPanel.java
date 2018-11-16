@@ -228,9 +228,9 @@ public class LaserTriggerPanel extends PropertyPanel {
 
 	@Override
 	protected void initializeParameters() {
-		title_="Laser";
-		sequence_=BinaryConverter.getBinary16bits(HTSMLMConstants.FPGA_MAX_SEQUENCE);
-		color_=Color.black;		
+		title_ = "Laser";
+		sequence_ = BinaryConverter.getBinary16bits(HTSMLMConstants.FPGA_MAX_SEQUENCE);
+		color_ = Color.black;		
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Name of the laser.",title_));
 		addUIParameter(new ComboUIParameter(this, PARAM_DEF_BEHAVIOUR,"Default trigger behaviour of the laser (see Micro-Mojo FPGA).",HTSMLMConstants.FPGA_BEHAVIOURS,4));
