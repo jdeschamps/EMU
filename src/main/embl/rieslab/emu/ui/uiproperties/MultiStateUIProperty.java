@@ -38,7 +38,18 @@ public class MultiStateUIProperty extends UIProperty{
 	 * 
 	 * @param vals Array of values.
 	 */
-	public void setStateValues(String[] vals){
+	public boolean setStateValues(String[] vals){
+		if(vals == null){
+			return false;
+		}
+		
+		for(int i=0;i<vals.length;i++){
+			if(vals[i] == null || !isValueAllowed(vals[i])){
+				return false;
+			}
+		}
+		
+		
 		if(vals.length == states_.length){
 			states_ = vals;
 		} else if (vals.length > states_.length){
@@ -50,6 +61,7 @@ public class MultiStateUIProperty extends UIProperty{
 				states_[i] = vals[i];
 			}
 		}
+		return true;
 	}
 	
 	public void setStatesName(String[] vals){
@@ -63,24 +75,6 @@ public class MultiStateUIProperty extends UIProperty{
 			for(int i=0; i<vals.length;i++){
 				statesname_[i] = vals[i];
 			}
-		}
-	}
-	
-	/**
-	 * Sets the value of a specific state.
-	 * 
-	 * @param state State to modify.
-	 * @param value Value to set the state to.
-	 */
-	public void setStateValue(int state, String value){
-		if(state<states_.length){
-			states_[state] = value;
-		}
-	}
-	
-	public void setStateName(int state, String value){
-		if(state<statesname_.length){
-			statesname_[state] = value;
 		}
 	}
 	

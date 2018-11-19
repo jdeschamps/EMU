@@ -50,13 +50,13 @@ public class FloatMMProperty extends MMProperty<Float> {
 
 	@Override
 	public Float convertToValue(String s) {
-		float val = 0;
 		try{
-			val = Float.parseFloat(s);
+			Float val = Float.parseFloat(s);
+			return val;
 		} catch(Exception e){
-			System.out.println("Error parsing float"); 			///// implement log
+			System.out.println(getDeviceLabel()+" - "+getMMPropertyLabel()+": error parsing float "+s); 			
 		}
-		return val;
+		return null;
 	}
 
 	@Override
@@ -97,6 +97,10 @@ public class FloatMMProperty extends MMProperty<Float> {
 
 	@Override
 	public boolean isAllowed(Float val) {
+		if(val == null){
+			return false;
+		}
+		
 		if(hasAllowedValues()){
 			for(int i=0;i<getAllowedValues().length;i++){
 				if(areEqual(val, getAllowedValues()[i])){

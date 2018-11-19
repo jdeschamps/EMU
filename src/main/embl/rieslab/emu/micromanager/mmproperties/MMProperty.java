@@ -157,21 +157,22 @@ public abstract class MMProperty<T> {
 	 */
 	public void setStringValue(String stringval, UIProperty source){
 		if(!isReadOnly()){
+			if(stringval == null){
+				return;
+			}
+			
 			T val = convertToValue(stringval);
 			if(isAllowed(val)){
 				try{
 					// set value
 					value = val;
 					
-					if(!core_.hasProperty(devicelabel_, label_)){
-						System.out.println("Device property ["+devicelabel_+","+label_+"] doesn't exist.");
-					} else {
+					if(core_.hasProperty(devicelabel_, label_)){
 						core_.setProperty(devicelabel_,label_,stringval);
 						notifyListeners(source, stringval);
 					}
 				} catch (Exception e){
 					System.out.println("Error in setting property ["+getHash()+"] to ["+val+"] from ["+stringval+"]");
-
 					e.printStackTrace(); 
 				}
 			} else {
@@ -360,17 +361,6 @@ public abstract class MMProperty<T> {
 	}
 	
 	/**
-	 * Tests if the value strval is allowed for the device property.
-	 * 
-	 * @param strval Value to be tested.
-	 * @return True if strval is allowed, false otherwise.
-	 */
-	protected boolean isAllowed(String strval){
-		T val = convertToValue(strval);
-		return isAllowed(val);
-	}
-
-	/**
 	 * Tests if the value strval is in range of the device property limits (if applicable).
 	 * 
 	 * @param strval
@@ -473,6 +463,10 @@ public abstract class MMProperty<T> {
 	protected abstract boolean isAllowed(T val);
 	
 	public boolean isStringAllowed(String val){
+		if(val == null){
+			return false;
+		}
+		
 		return isAllowed(convertToValue(val));
 	}
 	

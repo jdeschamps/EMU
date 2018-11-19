@@ -17,8 +17,12 @@ public class SingleStateUIProperty extends UIProperty{
 		super(owner, name, description);
 	}
 
-	public void setStateValue(String v){
-		state_ = v;
+	public boolean setStateValue(String v){
+		if(isValueAllowed(v)){
+			state_ = v;
+			return true;
+		}
+		return false;
 	}
 	
 	public String getStateValue(){

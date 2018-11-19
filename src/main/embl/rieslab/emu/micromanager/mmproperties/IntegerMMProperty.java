@@ -49,13 +49,13 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 
 	@Override
 	public Integer convertToValue(String s) {
-		Double val = (double) 0;
 		try{
-			val = Double.parseDouble(s);
+			Integer val = Integer.parseInt(s);
+			return val;
 		} catch(Exception e){
-			System.out.println("IntergerMMProperty: Error parsing int ["+s+"]"); 			///// implement log
+			System.out.println(getDeviceLabel()+" - "+getMMPropertyLabel()+": error parsing int "+s); 
 		}
-		return val.intValue();
+		return null;
 	}
 
 	@Override
@@ -96,6 +96,10 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 
 	@Override
 	public boolean isAllowed(Integer val) {
+		if(val == null){
+			return false;
+		}
+		
 		if(hasAllowedValues()){
 			for(int i=0;i<getAllowedValues().length;i++){
 				if(areEqual(val, getAllowedValues()[i])){

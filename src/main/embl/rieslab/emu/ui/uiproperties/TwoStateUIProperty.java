@@ -32,12 +32,20 @@ public class TwoStateUIProperty extends UIProperty{
 		return OFF;
 	}
 
-	public void setOnStateValue(String on){
-		onstate_ = on;
+	public boolean setOnStateValue(String on){
+		if(isValueAllowed(on)){
+			onstate_ = on;	
+			return true;
+		}
+		return false;
 	}
 	
-	public void setOffStateValue(String off){
-		offstate_ = off;
+	public boolean setOffStateValue(String off){
+		if(isValueAllowed(off)){
+			offstate_ = off;
+			return true;
+		}
+		return false;
 	}
 
 	public String getOnStateValue(){

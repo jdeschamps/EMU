@@ -285,10 +285,7 @@ public class SystemController {
 						String offval = configprop.get(uiprop+TwoStateUIProperty.getOffStateName());
 						String onval = configprop.get(uiprop+TwoStateUIProperty.getOnStateName());
 						
-						t.setOnStateValue(onval);
-						t.setOffStateValue(offval);
-						
-						if(!t.isValueAllowed(onval) || !t.isValueAllowed(offval)){
+						if(!t.setOnStateValue(onval) || !t.setOffStateValue(offval)){
 							forbiddenValuesProp_.add(uiprop);
 						}
 
@@ -296,26 +293,20 @@ public class SystemController {
 						// extract the state value
 						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
 						String value = configprop.get(uiprop+SingleStateUIProperty.getValueName());
-						t.setStateValue(value);
 						
-						if(!t.isValueAllowed(value)){
+						if(!t.setStateValue(value)){
 							forbiddenValuesProp_.add(uiprop);
 						}
 						
 					} else if (uiproperties.get(uiprop).isMultiState()) {// if it is a multistate property
 						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties.get(uiprop);
 						int numpos = t.getNumberOfStates();
-						boolean allowed = true;
+						String[] val = new String[numpos];
 						for(int j=0;j<numpos;j++){								
-							String val =  configprop.get(uiprop+MultiStateUIProperty.getStateName(j));
-							t.setStateValue(j, val);
-							
-							if(!t.isValueAllowed(val)){
-								allowed = false;
-							}
+							val[j] =  configprop.get(uiprop+MultiStateUIProperty.getStateName(j));
 						}
 
-						if(!allowed){
+						if(!t.setStateValues(val)){
 							forbiddenValuesProp_.add(uiprop);
 						}
 					}
