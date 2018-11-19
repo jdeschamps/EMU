@@ -36,6 +36,7 @@ import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.filters.AllocatedPropertyFilter;
 import main.embl.rieslab.emu.ui.uiproperties.filters.AntiFlagPropertyFilter;
 import main.embl.rieslab.emu.ui.uiproperties.filters.FlagPropertyFilter;
+import main.embl.rieslab.emu.ui.uiproperties.filters.NoneConfigGroupPropertyFilter;
 import main.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.emu.ui.uiproperties.filters.ReadOnlyPropertyFilter;
 import main.embl.rieslab.emu.ui.uiproperties.filters.TwoStatePropertyFilter;
@@ -85,7 +86,7 @@ public class AcquisitionTab extends JPanel {
 		this.setName(acqtypes_[currind]);
 		
 		// Filter out read-only properties from the system properties
-		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getPropertiesMap());
+		props_ = (new NoneConfigGroupPropertyFilter(new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()))).filterProperties(wizard_.getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
 		Iterator<String> it = props_.keySet().iterator();
 		String s;
@@ -133,7 +134,7 @@ public class AcquisitionTab extends JPanel {
 		acqtype_.setSelectedIndex(currind);
 		
 		// Filter out read-only properties from the system properties
-		props_ = new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()).filterProperties(wizard_.getPropertiesMap());
+		props_ = (new NoneConfigGroupPropertyFilter(new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()))).filterProperties(wizard_.getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
 		Iterator<String> it = props_.keySet().iterator();
 		String s;

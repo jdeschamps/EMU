@@ -154,4 +154,7 @@ public class UIProperty {
 		return true;
 	}
 
+	public MMProperty getMMProperty(){
+		return mmproperty_;
+	}
 }
