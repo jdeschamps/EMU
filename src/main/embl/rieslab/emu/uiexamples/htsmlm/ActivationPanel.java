@@ -638,6 +638,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 		}
 		
 		if(activate_){
+			
 			changeProperty(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
 		}
 		

@@ -70,6 +70,7 @@ public class AcquisitionTask implements Task<Integer>{
 		}
 	}
 
+	@Override
 	public void notifyHolder(Integer[] outputs) {
 		holder_.update(outputs);
 	}
@@ -277,9 +278,5 @@ public class AcquisitionTask implements Task<Integer>{
 		}
 	}
 
-	@Override
-	public void setSaveData(boolean savedata) {
-		// Ignore
-	}
 }
 

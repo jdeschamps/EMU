@@ -97,31 +97,6 @@ public class FocusPanel extends PropertyPanel {
 		initLeftPanel();
 		initCentralPanel();
 		initRightPanel();
-		
-/*
-		GridBagConstraints c = new GridBagConstraints();
-
-		c.gridx = 0;
-		c.gridy = 0;
-		c.weightx = 0.05;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		this.add(panelLeftControl_,c);
-
-		c.gridx = 1;
-		c.gridwidth = 3;
-		c.weightx = 1.8;
-		c.gridheight = 1;
-		c.fill = GridBagConstraints.BOTH;
-		this.add(panelGraph_,c);
-
-		c.gridx = 4;
-		c.gridwidth = 1;
-		c.gridheight = 1;
-		c.weightx = 0.05;
-		c.fill = GridBagConstraints.NONE;
-		this.add(panelRightControl_,c);
-		*/
 
 		this.add(panelLeftControl_);
 		this.add(panelGraph_);

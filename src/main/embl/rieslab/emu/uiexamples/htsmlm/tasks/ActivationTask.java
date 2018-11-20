@@ -39,8 +39,6 @@ public class ActivationTask implements Task<Double> {
 	private int idletime_;
 	private AutomatedActivation worker_;
 	private boolean running_;
-	@SuppressWarnings("unused")
-	private boolean saveData_;  
 	private Double[] output_;
 	private ImageProcessor ip_;
 	
@@ -48,7 +46,6 @@ public class ActivationTask implements Task<Double> {
 	
 	public ActivationTask(TaskHolder<Double> holder, CMMCore core, int idle){
 		running_ = false;
-		saveData_ = false;
 		
 		core_ = core;
 		idletime_ = idle;
@@ -216,7 +213,8 @@ public class ActivationTask implements Task<Double> {
 		previous_pulse_ = npulse;
 		output_[OUTPUT_NEWPULSE] = Math.floor(npulse);
 	}
-	
+
+	@Override
 	public void notifyHolder(Double[] outputs) {
 		holder_.update(outputs);
 	}
@@ -277,8 +275,4 @@ public class ActivationTask implements Task<Double> {
 		// do nothing
 	}
 
-	@Override
-	public void setSaveData(boolean savedata) {
-		saveData_ = savedata;
-	}
 }

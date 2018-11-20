@@ -30,7 +30,7 @@ import main.embl.rieslab.emu.uiexamples.htsmlm.others.ToggleSlider;
 import main.embl.rieslab.emu.utils.ColorRepository;
 import main.embl.rieslab.emu.utils.utils;
 
-public class FocusLockPanel  extends PropertyPanel {
+public class FocusLockPanel extends PropertyPanel {
 
 	/**
 	 * 
