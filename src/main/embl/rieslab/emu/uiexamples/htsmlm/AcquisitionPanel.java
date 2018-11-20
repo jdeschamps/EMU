@@ -380,7 +380,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	
 	private void showAcquisitionConfiguration(){
 		if(!exp_.getAcquisitionList().isEmpty()){
-			System.out.println("is not empty");
 			wizard_ = new AcquisitionWizard(controller_, this, exp_);
 		} else {
 			wizard_ = new AcquisitionWizard(controller_, this);
@@ -483,23 +482,13 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	
 	private JPanel getPropertiesTree(){
 		DefaultMutableTreeNode top = new DefaultMutableTreeNode("List of experiments to be performed at each stage position:");
-		createNodes(top);
-		JTree tree = new JTree(top);
-		JScrollPane treeView = new JScrollPane(tree);
-		JPanel pane = new JPanel();
-		pane.setBorder(BorderFactory.createTitledBorder(null, "Summary", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black));
-		pane.add(treeView);
-		return pane;
-	}
-	
-	private void createNodes(DefaultMutableTreeNode top) {
+
 	    DefaultMutableTreeNode expnode = null;
 	    DefaultMutableTreeNode setting = null;
 
 	    if(ready_){
 	    	Acquisition acq;
 	    	String s;
-	    	String[] propval, specificsettings;
 
     	    expnode = new DefaultMutableTreeNode("Pause between acquisitions (s): "+exp_.getPauseTime());
             top.add(expnode);
@@ -518,21 +507,37 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    expnode = new DefaultMutableTreeNode((i+1)+": "+acq.getType());
 	            top.add(expnode);
 
-	            specificsettings = acq.getSpecialSettings();
+	            ///////// settings specific to each acq
+	            String[] specificsettings = acq.getSpecialSettings();
 	    	    for(int j=0;j<specificsettings.length;j++){
 	   	    		setting = new DefaultMutableTreeNode(specificsettings[j]);
 	   	    		expnode.add(setting);
 	    	    }
 	            
-	    	    propval = new String[acq.getPropertyValues().size()];
-	    	    Iterator<String> it = acq.getPropertyValues().keySet().iterator();
+	    	    //////// MM configuration groups
+	    	    String[] confgroup = new String[acq.getMMConfGroupValues().size()];
+	    	    Iterator<String> it = acq.getMMConfGroupValues().keySet().iterator();
 	    	    int j=0;
+	    	    while(it.hasNext()){
+	    	    	s = it.next();  
+	    	    	confgroup[j] = s+": "+acq.getMMConfGroupValues().get(s);
+	    	    	j++;
+	    	    }
+	    	    Arrays.sort(confgroup);
+	    	    for(j=0;j<confgroup.length;j++){
+	   	    		setting = new DefaultMutableTreeNode(confgroup[j]);
+	   	    		expnode.add(setting);
+	    	    }
+	    	    
+	    	    //////// UIProperties values
+	    	    String[] propval = new String[acq.getPropertyValues().size()];
+	    	    it = acq.getPropertyValues().keySet().iterator();
+	    	    j=0;
 	    	    while(it.hasNext()){
 	    	    	s = it.next();  
 	    	    	propval[j] = controller_.getProperty(s).getFriendlyName()+": "+acq.getPropertyValues().get(s);
 	    	    	j++;
 	    	    }
-	    	    
 	    	    Arrays.sort(propval);
 	    	    for(j=0;j<propval.length;j++){
 	   	    		setting = new DefaultMutableTreeNode(propval[j]);
@@ -543,7 +548,15 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     	    expnode = new DefaultMutableTreeNode("No acquisition defined");
             top.add(expnode);
 	    }
+		
+		JTree tree = new JTree(top);
+		JScrollPane treeView = new JScrollPane(tree);
+		JPanel pane = new JPanel();
+		pane.setBorder(BorderFactory.createTitledBorder(null, "Summary", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black));
+		pane.add(treeView);
+		return pane;
 	}
+
 	
 	/////////////////////////////////////////////////////////////////////////////
 	//////

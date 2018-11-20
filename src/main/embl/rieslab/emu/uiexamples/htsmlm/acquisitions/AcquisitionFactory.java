@@ -170,124 +170,55 @@ public class AcquisitionFactory {
 		try {
 			ExperimentWrapper expw = objectMapper.readValue(new FileInputStream(path), ExperimentWrapper.class);			
 
-			ArrayList<AcquisitionWrapper> acqwlist = expw.acqwlist;	
+			ArrayList<AcquisitionWrapper> acqwlist = expw.acquisitionList;	
 
-			waitingtime = expw.pausetime;
-			numpos = expw.numberpositions;
+			waitingtime = expw.pauseTime;
+			numpos = expw.numberPositions;
 			
 			if(acqwlist != null && !acqwlist.isEmpty()){
 				for(int i=0;i<acqwlist.size();i++){
 					AcquisitionWrapper acqw = acqwlist.get(i);
 					if(acqw.type.equals(AcquisitionType.BFP.getTypeValue())){
 						BFPAcquisition acq = (BFPAcquisition) getAcquisition(acqw.type);
-						acq.setExposureTime(acqw.exposure);
-						acq.setWaitingTime(acqw.waitingTime);
-						
-						HashMap<String,String> props = new HashMap<String,String>();
-						if(acqw.props != null){
-							for(int j=0;j<acqw.props.length;j++){
-								props.put(acqw.props[j][0], acqw.props[j][1]);
-							}
-						}
-						acq.setProperties(props);
-						
-						////// add configuration groups
-						// TODO
-						
+						configureGeneralAcquistion(acq, acqw);
+					
 						acqlist.add(acq);
 						
 					} else if(acqw.type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
 						BrightFieldAcquisition acq = (BrightFieldAcquisition) getAcquisition(acqw.type);
-						acq.setExposureTime(acqw.exposure);
-						acq.setWaitingTime(acqw.waitingTime);
-						
-						HashMap<String,String> props = new HashMap<String,String>();
-						if(acqw.props != null){
-							for(int j=0;j<acqw.props.length;j++){
-								props.put(acqw.props[j][0], acqw.props[j][1]);
-							}
-						}
-						acq.setProperties(props);
+						configureGeneralAcquistion(acq, acqw);
 						
 						acqlist.add(acq);
 						
 					} else if(acqw.type.equals(AcquisitionType.ZSTACK.getTypeValue())){
 						ZStackAcquisition acq = (ZStackAcquisition) getAcquisition(acqw.type);
-						acq.setExposureTime(acqw.exposure);
-						acq.setWaitingTime(acqw.waitingTime);	
+						configureGeneralAcquistion(acq, acqw);
 						
-						HashMap<String,String> props = new HashMap<String,String>();
-						if(acqw.props != null){
-							for(int j=0;j<acqw.props.length;j++){
-								props.put(acqw.props[j][0], acqw.props[j][1]);
-							}
-						}
-						acq.setProperties(props);
-						
-						acq.setSlices(Double.parseDouble(acqw.additionalParams[0][1]), Double.parseDouble(acqw.additionalParams[1][1]), Double.parseDouble(acqw.additionalParams[2][1]));
-						acq.setZStart(Double.parseDouble(acqw.additionalParams[0][1]));
-						acq.setZEnd(Double.parseDouble(acqw.additionalParams[1][1]));
-						acq.setZStep(Double.parseDouble(acqw.additionalParams[2][1]));
-						
-						acq.setNumberFrames(acqw.numFrames);
-						acq.setIntervalMs(acqw.interval);
+						acq.setSlices(Double.parseDouble(acqw.additionalParameters[0][1]), Double.parseDouble(acqw.additionalParameters[1][1]), Double.parseDouble(acqw.additionalParameters[2][1]));
+						acq.setZStart(Double.parseDouble(acqw.additionalParameters[0][1]));
+						acq.setZEnd(Double.parseDouble(acqw.additionalParameters[1][1]));
+						acq.setZStep(Double.parseDouble(acqw.additionalParameters[2][1]));
 						
 						acqlist.add(acq);
 
 					} else if(acqw.type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
 						LocalizationAcquisition acq = (LocalizationAcquisition) getAcquisition(acqw.type);
-						acq.setExposureTime(acqw.exposure);
-						acq.setWaitingTime(acqw.waitingTime);	
+						configureGeneralAcquistion(acq, acqw);
 						
-						HashMap<String,String> props = new HashMap<String,String>();
-						if(acqw.props != null){
-							for(int j=0;j<acqw.props.length;j++){
-								props.put(acqw.props[j][0], acqw.props[j][1]);
-							}
-						}
-						acq.setProperties(props);
-						
-						acq.setUseActivation(Boolean.parseBoolean(acqw.additionalParams[0][1]));
-						acq.setUseStopOnMaxUV(Boolean.parseBoolean(acqw.additionalParams[1][1]));
-						acq.setUseStopOnMaxUVDelay(Integer.parseInt(acqw.additionalParams[2][1]));
-
-						acq.setNumberFrames(acqw.numFrames);
-						acq.setIntervalMs(acqw.interval);
+						acq.setUseActivation(Boolean.parseBoolean(acqw.additionalParameters[0][1]));
+						acq.setUseStopOnMaxUV(Boolean.parseBoolean(acqw.additionalParameters[1][1]));
+						acq.setUseStopOnMaxUVDelay(Integer.parseInt(acqw.additionalParameters[2][1]));
 						
 						acqlist.add(acq);
 
 					} else if(acqw.type.equals(AcquisitionType.TIME.getTypeValue())){
 						TimeAcquisition acq = (TimeAcquisition) getAcquisition(acqw.type);
-						acq.setExposureTime(acqw.exposure);
-						acq.setWaitingTime(acqw.waitingTime);
-			
-						HashMap<String,String> props = new HashMap<String,String>();
-						if(acqw.props != null){
-							for(int j=0;j<acqw.props.length;j++){
-								props.put(acqw.props[j][0], acqw.props[j][1]);
-							}
-						}
-						acq.setProperties(props);
-						
-						acq.setNumberFrames(acqw.numFrames);
-						acq.setIntervalMs(acqw.interval);		
+						configureGeneralAcquistion(acq, acqw);
 						
 						acqlist.add(acq);
 					} else if(acqw.type.equals(AcquisitionType.SNAP.getTypeValue())){
 						SnapAcquisition acq = (SnapAcquisition) getAcquisition(acqw.type);
-						acq.setExposureTime(acqw.exposure);
-						acq.setWaitingTime(acqw.waitingTime);
-			
-						HashMap<String,String> props = new HashMap<String,String>();
-						if(acqw.props != null){
-							for(int j=0;j<acqw.props.length;j++){
-								props.put(acqw.props[j][0], acqw.props[j][1]);
-							}
-						}
-						acq.setProperties(props);
-						
-						acq.setNumberFrames(acqw.numFrames);
-						acq.setIntervalMs(acqw.interval);		
+						configureGeneralAcquistion(acq, acqw);		
 						
 						acqlist.add(acq);
 					}
@@ -309,5 +240,29 @@ public class AcquisitionFactory {
 		}
 		
 		return new Experiment(waitingtime, numpos, acqlist);
+	}
+	
+	private void configureGeneralAcquistion(Acquisition acq, AcquisitionWrapper acqw){
+		acq.setExposureTime(acqw.exposure);
+		acq.setWaitingTime(acqw.waitingTime);
+		
+		HashMap<String,String> confs = new HashMap<String,String>();
+		if(acqw.configurations != null){
+			for(int j=0;j<acqw.configurations.length;j++){
+				confs.put(acqw.configurations[j][0], acqw.configurations[j][1]);
+			}
+		}
+		acq.setConfigurationGroups(confs);
+		
+		HashMap<String,String> props = new HashMap<String,String>();
+		if(acqw.properties != null){
+			for(int j=0;j<acqw.properties.length;j++){
+				props.put(acqw.properties[j][0], acqw.properties[j][1]);
+			}
+		}
+		acq.setProperties(props);
+		
+		acq.setNumberFrames(acqw.numFrames);
+		acq.setIntervalMs(acqw.interval);		
 	}
 }

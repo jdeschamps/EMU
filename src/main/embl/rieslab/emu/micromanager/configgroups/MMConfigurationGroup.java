@@ -59,9 +59,9 @@ public class MMConfigurationGroup {
 	 * @param s Name of the configuration
 	 * @return True if the configuration is part of the group, false otherwise.
 	 */
-	public boolean hasConfiguration(String s){
+	public boolean hasConfiguration(String s){	
 		for(int i=0;i<configs_.size();i++){
-			if(s.equals(configs_.get(i))){
+			if(configs_.get(i).equals(s)){
 				return true;
 			}
 		}

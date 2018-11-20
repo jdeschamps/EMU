@@ -126,4 +126,15 @@ public class SnapAcquisition extends Acquisition {
 	public String[][] getAdditionalJSONParameters() {
 		return null;
 	}
+	
+
+	@Override
+	public void setNumberFrames(int numframes){
+		numFrames_ = 1;
+	}
+
+	@Override
+	public void setIntervalMs(double interval){
+		intervalMs_ = 0;
+	}
 }

@@ -15,8 +15,10 @@ public abstract class Acquisition {
 
 	public final static String[] EMPTY = {"Empty"};
 
-	private double exposure_, intervalMs_;
-	private int waitingtime_, numFrames_;
+	private double exposure_;
+	protected double intervalMs_;
+	private int waitingtime_;
+	protected int numFrames_;
 	private ArrayList<Double> slices_;
 	private AcquisitionType type_;
 	private String expname_, path_; 
@@ -82,7 +84,7 @@ public abstract class Acquisition {
 		propvalues_ = propvalues;
 	}
 	
-	public void setGroups(HashMap<String, String> mmconfgroups) {
+	public void setConfigurationGroups(HashMap<String, String> mmconfgroups) {
 		mmconfgroups_ = mmconfgroups;
 	}
 	

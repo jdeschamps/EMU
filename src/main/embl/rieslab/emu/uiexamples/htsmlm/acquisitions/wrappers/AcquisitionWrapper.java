@@ -10,8 +10,13 @@ public class AcquisitionWrapper {
 	public String type;
 	public double exposure, interval;
 	public int numFrames, waitingTime;
-	public String[][] props;
-	public String[][] additionalParams;
+	public String[][] configurations;
+	public String[][] properties;
+	public String[][] additionalParameters;
+	
+	public AcquisitionWrapper(){
+		// necessary for JSON deserialization
+	}
 	
 	public AcquisitionWrapper(Acquisition acq){
         type = acq.getType();
@@ -20,15 +25,26 @@ public class AcquisitionWrapper {
         numFrames=acq.getNumberFrames();
         waitingTime= acq.getWaitingTime();
         
+        
+        HashMap<String,String> conf = acq.getMMConfGroupValues();
+        String[] confkeys = conf.keySet().toArray(new String[0]);
+        Arrays.sort(confkeys);
+        configurations = new String[confkeys.length][2];
+       	for(int j=0;j<confkeys.length;j++){
+       		configurations[j][0] = confkeys[j];
+       		configurations[j][1] = conf.get(confkeys[j]);
+       	}
+
+        
         HashMap<String,String> prop = acq.getPropertyValues();
         String[] propkeys = prop.keySet().toArray(new String[0]);
         Arrays.sort(propkeys);
-        props = new String[propkeys.length][2];
+        properties = new String[propkeys.length][2];
        	for(int j=0;j<propkeys.length;j++){
-          	props[j][0] = propkeys[j];
-          	props[j][1] = prop.get(propkeys[j]);
+          	properties[j][0] = propkeys[j];
+          	properties[j][1] = prop.get(propkeys[j]);
        	}
        	
-       	additionalParams = acq.getAdditionalJSONParameters();
+       	additionalParameters = acq.getAdditionalJSONParameters();
 	}
 }

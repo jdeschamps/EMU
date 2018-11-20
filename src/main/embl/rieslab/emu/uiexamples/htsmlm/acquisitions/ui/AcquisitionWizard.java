@@ -263,7 +263,7 @@ public class AcquisitionWizard {
     }
     	
     protected void saveAcqList() {
-		owner_.setExperiment(new Experiment(getWaitingTime(), getNumberPositions(),getAcquisitionList()));
+		owner_.setExperiment(new Experiment(getWaitingTime(), getNumberPositions(), getAcquisitionList()));
 		shutDown();		
 	}
     
