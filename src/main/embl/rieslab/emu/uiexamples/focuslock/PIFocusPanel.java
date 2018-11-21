@@ -28,7 +28,6 @@ import main.embl.rieslab.emu.ui.graph.TimeChart;
 import main.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
 import main.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.embl.rieslab.emu.uiexamples.htsmlm.tasks.SimpleFocusMaintainingTask;
 import main.embl.rieslab.emu.updaters.TimeChartUpdater;
 import main.embl.rieslab.emu.utils.utils;
 

@@ -1,4 +1,4 @@
-package main.embl.rieslab.emu.uiexamples.htsmlm.tasks;
+package main.embl.rieslab.emu.uiexamples.focuslock;
 
 
 import javax.swing.SwingUtilities;
