@@ -3,7 +3,6 @@ package main.embl.rieslab.emu.uiexamples.focuslock;
 import javax.swing.BoxLayout;
 import main.embl.rieslab.emu.controller.SystemController;
 import main.embl.rieslab.emu.ui.PropertyMainFrame;
-import main.embl.rieslab.emu.uiexamples.lasers.LasersMainFrame;
 
 public class FocusLockMainFrame extends PropertyMainFrame{
 
@@ -29,13 +28,13 @@ public class FocusLockMainFrame extends PropertyMainFrame{
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(LasersMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FocusLockMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(LasersMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FocusLockMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(LasersMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FocusLockMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(LasersMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FocusLockMainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         setupPanels();
