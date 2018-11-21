@@ -457,6 +457,7 @@ public class FocusPanel extends PropertyPanel {
 	@Override
 	public void shutDown() {
 		updater_.stopUpdater();
+		changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOffStateName());
 	}
 
 	@Override
