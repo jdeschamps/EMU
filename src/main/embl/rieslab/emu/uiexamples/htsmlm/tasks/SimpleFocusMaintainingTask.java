@@ -1,22 +1,24 @@
 package main.embl.rieslab.emu.uiexamples.htsmlm.tasks;
 
 
+import javax.swing.SwingUtilities;
+
 import main.embl.rieslab.emu.tasks.Task;
 import main.embl.rieslab.emu.tasks.TaskHolder;
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
-public class FocusMaintainingTask implements Task<Double> {
+public class SimpleFocusMaintainingTask implements Task<Double> {
 	
 	private TaskHolder<Double> holder_;
 	private int idletime_;
-	private PID worker_;
+	private PI worker_;
 	private boolean running_;
 	private UIProperty signal_, target_;
 	
-	private double Kp, Ki, Kd, setpoint, scaling_;
+	private double Kp, Ki, setpoint, scaling_;
 	
-	public FocusMaintainingTask(TaskHolder<Double> holder, UIProperty signal, UIProperty target, 
-			int idle, double Kp, double Ki, double Kd, double setpoint, double scaling){
+	public SimpleFocusMaintainingTask(TaskHolder<Double> holder, UIProperty signal, UIProperty target, 
+			int idle, double Kp, double Ki, double setpoint, double scaling){
 		running_ = false;
 		this.signal_ = signal;
 		this.target_ = target;
@@ -26,7 +28,6 @@ public class FocusMaintainingTask implements Task<Double> {
 				
 		this.Kp = Kp;
 		this.Ki = Ki;
-		this.Kd = Kd;
 		this.setpoint = setpoint;
 	}
 	
@@ -37,9 +38,9 @@ public class FocusMaintainingTask implements Task<Double> {
 
 	@Override
 	public void startTask() {
-		worker_ = new PID();
+		worker_ = new PI();
 		running_ = true;
-		worker_.run();
+		worker_.start();
 	}
 
 	@Override
@@ -76,26 +77,24 @@ public class FocusMaintainingTask implements Task<Double> {
 		holder_.update(outputs);
 	}
 	
-	private class PID extends Thread {
+	private class PI extends Thread {
 		
 		@Override
 		public void run() {
-			double prev_err = 0;
 			double integ = 0;
-			double error, derivative;
+			double error;
 			double newpos;
 			
 			while(running_){ 
+				System.out.println("tadaaa "+SwingUtilities.isEventDispatchThread());
 				double pos = Double.parseDouble(signal_.getPropertyValue());
 				
 				error = setpoint - pos;
-				integ = integ + error * idletime_ / 1000;
-				derivative = 1000*(error - prev_err) / idletime_;
-						  
-				newpos = (Kp * error + Ki * integ + Kd * derivative - setpoint) / scaling_; // to get -1-1 um for the controller
-				prev_err = error;
+				integ = integ + error; // dt = 1
+				newpos = (Kp * error + Ki * integ - setpoint) / scaling_; // to get -1-1 um for the controller
 				
-				target_.setPropertyValue(String.valueOf(newpos));
+				double stagepos = Double.valueOf(target_.getPropertyValue()) + newpos;
+				target_.setPropertyValue(String.valueOf(stagepos));
 				
 				try {
 					Thread.sleep(idletime_);

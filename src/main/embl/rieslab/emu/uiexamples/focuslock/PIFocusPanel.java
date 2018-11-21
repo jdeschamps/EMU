@@ -1,4 +1,4 @@
-package main.embl.rieslab.emu.uiexamples.htsmlm;
+package main.embl.rieslab.emu.uiexamples.focuslock;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -27,9 +27,8 @@ import main.embl.rieslab.emu.ui.PropertyPanel;
 import main.embl.rieslab.emu.ui.graph.TimeChart;
 import main.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
 import main.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
-import main.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.embl.rieslab.emu.uiexamples.htsmlm.tasks.FocusMaintainingTask;
+import main.embl.rieslab.emu.uiexamples.htsmlm.tasks.SimpleFocusMaintainingTask;
 import main.embl.rieslab.emu.updaters.TimeChartUpdater;
 import main.embl.rieslab.emu.utils.utils;
 
@@ -37,7 +36,7 @@ import main.embl.rieslab.emu.utils.utils;
  *
  * @author Joran Deschamps
  */
-public class PIDFocusPanel extends PropertyPanel implements TaskHolder<Double> {
+public class PIFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 
 	/**
 	 * 
@@ -64,7 +63,7 @@ public class PIDFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 	
 	//////// Thread
 	private TimeChartUpdater updater_;
-	private FocusMaintainingTask task_;
+	private SimpleFocusMaintainingTask task_;
 
 	//////// Properties
 	public final static String FOCUS_POSITION = "Z stage position";
@@ -75,21 +74,20 @@ public class PIDFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 	public final static String PARAM_SMALLSTEP = "Small step";
 	public final static String PARAM_IDLE = "Idle time (ms)";
 	public final static String PARAM_NPOS = "Number of points";
-	public final static String PARAM_PID_SETPOINT = "PID setpoint";
-	public final static String PARAM_PID_SCALING = "PID scaling";
-	public final static String PARAM_PID_KP = "PID Kp";
-	public final static String PARAM_PID_KI = "PID Ki";
-	public final static String PARAM_PID_KD = "PID Kd";
-	public final static String PARAM_PID_IDLE = "PID idle time (ms)";
+	public final static String PARAM_PI_SETPOINT = "PI setpoint";
+	public final static String PARAM_PI_SCALING = "PI scaling";
+	public final static String PARAM_PI_KP = "PI Kp";
+	public final static String PARAM_PI_KI = "PI Ki";
+	public final static String PARAM_PI_IDLE = "PI idle time (ms)";
 	
 	//////// Default parameters
 	private double smallstep_, largestep_;
-	private int idlePID_;
-	private double kiPID_, kpPID_, kdPID_, setpointPID_,scalingPID_;
+	private int idlePI_;
+	private double kiPI_, kpPI_, setpointPI_,scalingPI_;
 	private int idle_, npos_; 
 	private boolean initialised = false; // used only for initial textfield value
 	
-	public PIDFocusPanel(String label) {
+	public PIFocusPanel(String label) {
 		super(label);
 	}
 	
@@ -364,9 +362,11 @@ public class PIDFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 
 	protected void lockPosition(boolean b) {
 		if(b){
-			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOnStateName());
+			//changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOnStateName());
+			this.startTask();
 		} else {
-			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOffStateName());
+			this.stopTask();
+			//changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOffStateName());
 		}
 	}
 
@@ -412,19 +412,17 @@ public class PIDFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time in ms of the stage position monitoring.",idle_)); // thread idle time
 		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
 
-		idlePID_ = 1000;
-		kiPID_ = 1;
-		kpPID_ = 1;
-		kdPID_ = 1;
-		setpointPID_ = 512;
-		scalingPID_ = 1024;
+		idlePI_ = 500;
+		kiPI_ = 1;
+		kpPI_ = 1;
+		setpointPI_ = 512;
+		scalingPI_ = 1024;
 
-		addUIParameter(new IntUIParameter(this, PARAM_PID_IDLE,"",idlePID_));
-		addUIParameter(new DoubleUIParameter(this, PARAM_PID_KI,"",kiPID_));
-		addUIParameter(new DoubleUIParameter(this, PARAM_PID_KP,"",kpPID_));
-		addUIParameter(new DoubleUIParameter(this, PARAM_PID_KD,"",kdPID_));
-		addUIParameter(new DoubleUIParameter(this, PARAM_PID_SETPOINT,"",setpointPID_));
-		addUIParameter(new DoubleUIParameter(this, PARAM_PID_SCALING,"",scalingPID_));
+		addUIParameter(new IntUIParameter(this, PARAM_PI_IDLE,"",idlePI_));
+		addUIParameter(new DoubleUIParameter(this, PARAM_PI_KI,"",kiPI_));
+		addUIParameter(new DoubleUIParameter(this, PARAM_PI_KP,"",kpPI_));
+		addUIParameter(new DoubleUIParameter(this, PARAM_PI_SETPOINT,"",setpointPI_));
+		addUIParameter(new DoubleUIParameter(this, PARAM_PI_SCALING,"",scalingPI_));
 	}
 	
 	@Override
@@ -470,18 +468,16 @@ public class PIDFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 				panelGraph_.updateUI();
 				updater_.changeChart(graph_);
 			}
-		} else if(label.equals(PARAM_PID_IDLE)){
-			idlePID_ = ((IntUIParameter) getUIParameter(PARAM_PID_IDLE)).getValue();
-		} else if(label.equals(PARAM_PID_KI)){
-			kiPID_ = ((DoubleUIParameter) getUIParameter(PARAM_PID_KI)).getValue();
-		} else if(label.equals(PARAM_PID_KP)){
-			kpPID_ = ((DoubleUIParameter) getUIParameter(PARAM_PID_KP)).getValue();
-		} else if(label.equals(PARAM_PID_KD)){
-			kdPID_ = ((DoubleUIParameter) getUIParameter(PARAM_PID_KD)).getValue();
-		} else if(label.equals(PARAM_PID_SETPOINT)){
-			setpointPID_ = ((DoubleUIParameter) getUIParameter(PARAM_PID_SETPOINT)).getValue();
-		}else if(label.equals(PARAM_PID_SCALING)){
-			scalingPID_ = ((DoubleUIParameter) getUIParameter(PARAM_PID_SCALING)).getValue();
+		} else if(label.equals(PARAM_PI_IDLE)){
+			idlePI_ = ((IntUIParameter) getUIParameter(PARAM_PI_IDLE)).getValue();
+		} else if(label.equals(PARAM_PI_KI)){
+			kiPI_ = ((DoubleUIParameter) getUIParameter(PARAM_PI_KI)).getValue();
+		} else if(label.equals(PARAM_PI_KP)){
+			kpPI_ = ((DoubleUIParameter) getUIParameter(PARAM_PI_KP)).getValue();
+		} else if(label.equals(PARAM_PI_SETPOINT)){
+			setpointPI_ = ((DoubleUIParameter) getUIParameter(PARAM_PI_SETPOINT)).getValue();
+		}else if(label.equals(PARAM_PI_SCALING)){
+			scalingPI_ = ((DoubleUIParameter) getUIParameter(PARAM_PI_SCALING)).getValue();
 		}
 	}
 
@@ -526,8 +522,8 @@ public class PIDFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 	@Override
 	public void startTask() {
 		if(task_ == null){
-			task_ = new FocusMaintainingTask(this, getUIProperty(FOCUS_POSITION), getUIProperty(FOCUS_STABILIZATION), 
-				idlePID_, kpPID_, kiPID_, kdPID_, setpointPID_, scalingPID_);
+			task_ = new SimpleFocusMaintainingTask(this, getUIProperty(FOCUS_POSITION), getUIProperty(FOCUS_STABILIZATION), 
+				idlePI_, kpPI_, kiPI_, setpointPI_, scalingPI_);
 		}
 		
 		if(!task_.isRunning()){
