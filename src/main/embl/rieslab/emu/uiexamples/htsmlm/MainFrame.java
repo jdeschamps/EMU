@@ -19,6 +19,7 @@ public class MainFrame extends PropertyMainFrame{
 	 */
 	private static final long serialVersionUID = -7647811940748674013L;
 
+	private AdditionalFiltersPanel addFiltersPanel;
 	private FocusPanel focusPanel;
 	private QPDPanel qpdPanel;
 	private FocusLockPanel focuslockpanel;
@@ -155,9 +156,14 @@ public class MainFrame extends PropertyMainFrame{
 		}
 		tab.add("Trigger", lasertrigg);
 		
+		/// Additional filters tab
+		addFiltersPanel = new AdditionalFiltersPanel("Additional filters");
+		tab.add("Additional filters", addFiltersPanel);
+		
 		/// Acquisition tab
 		acqPanel = new AcquisitionPanel(getController(), this);
 		tab.add("Acquisition", acqPanel);
+		
 		
 		/*c3.gridx = 0;
 		c3.gridy = 0;
@@ -198,6 +204,7 @@ public class MainFrame extends PropertyMainFrame{
         registerPropertyPanel(addcontrolPanel);
         registerPropertyPanel(activationPanel);
         registerPropertyPanel(acqPanel);
+        registerPropertyPanel(addFiltersPanel);
     }
     
     public Point getAcquisitionPanelLocation(){
