@@ -5,10 +5,10 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 
+import org.micromanager.acquisition.SequenceSettings;
+
 import main.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.embl.rieslab.emu.utils.utils;
-
-import org.micromanager.api.SequenceSettings;
 
 public abstract class Acquisition {
 

@@ -41,7 +41,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 	private JLabel labelbehaviour_;
 	private JLabel labelpulselength_;
 	private JLabel labelsequence_;
-	private JComboBox combobehaviour_;	
+	private JComboBox<String> combobehaviour_;	
 	//private JCheckBox usesequence_;
 	private JTextField textfieldpulselength_;
 	private JTextField textfieldsequence_;
@@ -82,7 +82,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 		labelsequence_ = new JLabel("Trigger sequence:");
 
 		/////////////////////////////////////////////////////// behaviour combobox
-		combobehaviour_ = new JComboBox(HTSMLMConstants.FPGA_BEHAVIOURS);
+		combobehaviour_ = new JComboBox<String>(HTSMLMConstants.FPGA_BEHAVIOURS);
 		//combobehaviour_.setMinimumSize(new Dimension(40,10));
 		combobehaviour_.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){

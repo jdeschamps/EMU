@@ -5,7 +5,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.micromanager.api.ScriptInterface;
+import org.micromanager.Studio;
+import mmcorej.CMMCore;
 
 import main.embl.rieslab.emu.configuration.ConfigurationController;
 import main.embl.rieslab.emu.configuration.GlobalConfiguration;
@@ -24,11 +25,10 @@ import main.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import main.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import mmcorej.CMMCore;
 
 public class SystemController {
 
-	private ScriptInterface script_;
+	private static Studio studio_;
 	private CMMCore core_;
 	private MMProperties mmproperties_;
 	private MMConfigurationGroupsRegistry mmconfiggroups_;
@@ -42,9 +42,9 @@ public class SystemController {
 	
 	private String currentPlugin;
 		
-	public SystemController(ScriptInterface script){
-		script_ = script;
-		core_ = script_.getMMCore();
+	public SystemController(Studio studio){
+		studio_ = studio;
+		core_ = studio_.core();
 		pairs_ = new ArrayList<PropertyPair>();
 
 		unallocatedprop_ = new ArrayList<String>();
@@ -59,7 +59,7 @@ public class SystemController {
 	public void start() {		
 		// extracts MM properties
 		mmproperties_ = new MMProperties(core_);
-		mmconfiggroups_ = new MMConfigurationGroupsRegistry(script_, core_);
+		mmconfiggroups_ = new MMConfigurationGroupsRegistry(studio_.app(), core_);
 		
 		// register mmconfigs as mmproperties
 		mmconfiggroups_.registerMMConfAsDevice(mmproperties_);
@@ -452,12 +452,12 @@ public class SystemController {
 	}
 
 	/**
-	 * Returns Micro-Maanager ScriptInterface.
+	 * Returns Micro-Manager ScriptInterface.
 	 * 
 	 * @return
 	 */
-	public ScriptInterface getScriptInterface(){
-		return script_;
+	public Studio getStudio(){
+		return studio_;
 	}
 	
 	/**

@@ -13,16 +13,19 @@ import main.embl.rieslab.emu.tasks.TaskHolder;
 import main.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 import mmcorej.CMMCore;
 
-import org.micromanager.api.IAcquisitionEngine2010;
-import org.micromanager.api.MultiStagePosition;
-import org.micromanager.api.PositionList;
-import org.micromanager.api.ScriptInterface;
-import org.micromanager.utils.MMScriptException;
+import org.micromanager.MultiStagePosition;
+import org.micromanager.PositionList;
+import org.micromanager.PositionListManager;
+import org.micromanager.Studio;
+import org.micromanager.acquisition.AcquisitionManager;
+import org.micromanager.data.Datastore;
 
 public class AcquisitionTask implements Task<Integer>{
 
-	private ScriptInterface script_;
+	private Studio studio_;
 	private CMMCore core_;
+	private AcquisitionManager acqmanager_;
+	private PositionListManager posmanager_;
 	private boolean running_ =  false;
 	private SystemController system_;
 	private AcquisitionRun t;
@@ -31,9 +34,11 @@ public class AcquisitionTask implements Task<Integer>{
 	
 	public AcquisitionTask(TaskHolder<Integer> holder, SystemController system){
 		system_ = system;
-		script_ = system_.getScriptInterface();
-		core_ = script_.getMMCore();
-		
+		studio_ = system_.getStudio();
+		core_ = studio_.getCMMCore();
+		acqmanager_ = studio_.getAcquisitionManager();
+		posmanager_ = studio_.getPositionListManager();
+				
 		registerHolder(holder);
 	}
 	
@@ -93,7 +98,7 @@ public class AcquisitionTask implements Task<Integer>{
 	class AcquisitionRun extends SwingWorker<Integer, Integer> {
 
 		private ArrayList<Acquisition> acqlist_;
-		private String currAcq;
+		private Datastore currAcq;
 		private boolean stop_ = false;
 
 		public AcquisitionRun(ArrayList<Acquisition> acqlist) {
@@ -113,120 +118,104 @@ public class AcquisitionTask implements Task<Integer>{
 				return 0;
 			}
 			
-			if(acqlist_.size() > 0) {
-				try {
-					// clear all previous acquisitions
-					script_.closeAllAcquisitions();
-					script_.clearMessageWindow();
+			if (acqlist_.size() > 0) {
+				// clear all previous acquisitions
+				studio_.getDisplayManager().closeAllDisplayWindows(true); // prompt to save
+				// use to have a clear windows message here
 
-					PositionList poslist = script_.getPositionList();
-					int numPosition = poslist.getNumberOfPositions();
-					
-					if(numPosition>0){		
-						MultiStagePosition currPos;
-	
-						String xystage = script_.getXYStageName();
-	
-						// retrieve max number of positions
-						int maxNumPosition = numPosition;
-						if(param[1] > 0){
-							maxNumPosition = param[1];
-						}
-						
-						for (int i = 0; i < maxNumPosition; i++) {
-							// move to next stage position
-							currPos = poslist.getPosition(i);
-							core_.setXYPosition(xystage, currPos.getX(),currPos.getY());
-	
+				PositionList poslist = posmanager_.getPositionList();
+				int numPosition = poslist.getNumberOfPositions();
+
+				if (numPosition > 0) {
+					MultiStagePosition currPos;
+
+					String xystage = core_.getXYStageDevice();
+
+					// retrieve max number of positions
+					int maxNumPosition = numPosition;
+					if (param[1] > 0) {
+						maxNumPosition = param[1];
+					}
+
+					for (int i = 0; i < maxNumPosition; i++) {
+						// move to next stage position
+						currPos = poslist.getPosition(i);
+						try {
+							core_.setXYPosition(xystage, currPos.getX(), currPos.getY());
+							
 							// let time for the stage to move to position
-							Thread.sleep(param[0]*1000);
-	
+							Thread.sleep(param[0] * 1000);
+
 							// perform each acquisition sequentially
 							for (int k = 0; k < acqlist_.size(); k++) {
 								final Acquisition acq = acqlist_.get(k);
 
 								// set acquisition settings
-								script_.setAcquisitionSettings(acq.getSettings());
-	
+								acqmanager_.setAcquisitionSettings(acq.getSettings());
+
 								// set acquisition name
 								final String acqname = createAcqName(acq, i);
-	
+
 								// set-up system
 								system_.setUpSystem(acq.getPropertyValues());
-								
-								// set configuration channel
-								// TODO
-								// need testing
-								if(!acq.getMMConfGroupValues().isEmpty()) {
-									HashMap<String,String> configs = acq.getMMConfGroupValues();
+
+								// set configuration settings
+								if (!acq.getMMConfGroupValues().isEmpty()) {
+									HashMap<String, String> configs = acq.getMMConfGroupValues();
 									Iterator<String> it = configs.keySet().iterator();
-									while(it.hasNext()){
+									while (it.hasNext()) {
 										String group = it.next();
 										core_.setConfig(group,configs.get(group));
 									}
 								}
-								
+
 								// set-up special acquisition state
 								acq.preAcquisition();
-	
+
 								// let time for the system to adjust
-								Thread.sleep(acq.getWaitingTime()*1000);
-	
+								Thread.sleep(acq.getWaitingTime() * 1000);
+
 								// run acquisition
 								Thread t = new Thread() {
 									public void run() {
-										try {
-											currAcq = script_.runAcquisition(acqname, acq.getPath());
-										} catch (MMScriptException e) {
-											e.printStackTrace();
-										}
+										currAcq = acqmanager_.runAcquisition(acqname, acq.getPath());
 									}
 								};
 								t.start();
-	
+
 								while (t.isAlive()) {
 									Thread.sleep(1000);
 									if (acq.stopCriterionReached()) {
 										interruptAcquistion();
 									}
 								}
-	
+
 								// set-up special post-acquisition state
 								acq.postAcquisition();
-	
-								// Reset configuration
-								// TODO
-								/*if (acq.useConfig() && prev_config != null) {
-									core_.setConfig(acq.getConfigGroup(),prev_config);
-								}*/
-								
+
 								// close acq window
-								try {
-									script_.closeAcquisitionWindow(currAcq);
-								} catch (MMScriptException e) {
-									// ?
-								}
-	
+								studio_.getDisplayManager().closeDisplaysFor(
+										currAcq);
+
 								if (stop_) {
 									break;
 								}
 							}
-	
+
 							if (stop_) {
 								break;
 							}
-	
+
 							// show progress
 							publish(i);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
-					} else {
-						System.out.println("Position list empty");
 					}
-
-				} catch (MMScriptException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
+				} else {
+					System.out.println("Position list empty");
 				}
 			}
 			
@@ -253,9 +242,8 @@ public class AcquisitionTask implements Task<Integer>{
 		}
 
 		protected void interruptAcquistion() {
-			IAcquisitionEngine2010 aq = script_.getAcquisitionEngine2010();
-			aq.stop();
-			while (!aq.isFinished()) {
+			acqmanager_.haltAcquisition();
+			while (!acqmanager_.isAcquisitionRunning()) {
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {

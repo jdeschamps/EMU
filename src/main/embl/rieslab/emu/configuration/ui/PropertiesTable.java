@@ -42,7 +42,7 @@ public class PropertiesTable extends JPanel {
 	 */
 	private static final long serialVersionUID = 4663110661135902728L;
 	
-	private JComboBox devices;
+	private JComboBox<String> devices;
 	private JTable table;
 		
 	private Map<String, UIProperty> uipropertySet_;
@@ -65,7 +65,7 @@ public class PropertiesTable extends JPanel {
 
 
 		// Combobox holding the devices name sorted alphabetically
-		devices = new JComboBox();
+		devices = new JComboBox<String>();
 		String[] strarray = mmproperties_.getDevicesList().clone();
 		Arrays.sort(strarray);
 		
@@ -129,7 +129,7 @@ public class PropertiesTable extends JPanel {
 		help_ = help;
 
 		// ComboBox holding the devices name sorted alphabetically
-		devices = new JComboBox();
+		devices = new JComboBox<String>();
 		String[] strarray = mmproperties_.getDevicesList().clone();
 		Arrays.sort(strarray);
 		
@@ -301,8 +301,8 @@ public class PropertiesTable extends JPanel {
 	
 
 	// Creates a JComboBox containing all the Micro-manager device properties corresponding to the device.
-	private JComboBox getDevicePropertiesComboBox(String device) {
-		JComboBox cb = new JComboBox();
+	private JComboBox<String> getDevicePropertiesComboBox(String device) {
+		JComboBox<String>  cb = new JComboBox<String> ();
 		cb.addItem(GlobalConfiguration.KEY_UNALLOCATED);
 
 		if (!device.equals(GlobalConfiguration.KEY_UNALLOCATED)) {

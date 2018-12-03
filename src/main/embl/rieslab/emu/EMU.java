@@ -4,21 +4,25 @@ import java.io.File;
 
 import javax.swing.SwingUtilities;
 
+import org.micromanager.MenuPlugin;
+import org.micromanager.Studio;
+import org.scijava.plugin.Plugin;
+import org.scijava.plugin.SciJavaPlugin;
+
 import main.embl.rieslab.emu.controller.SystemConstants;
 import main.embl.rieslab.emu.controller.SystemController;
 
-import org.micromanager.api.MMPlugin;
-import org.micromanager.api.ScriptInterface;
 
-public class EMU implements MMPlugin {
+@Plugin(type = MenuPlugin.class)
+public class EMU implements MenuPlugin, SciJavaPlugin {
 
-	private ScriptInterface gui_;
 	private SystemController controller_;
-
-	private static String copyright = "LGPL";
-	private static String description = "Interface UIs with Micro-manager device properties.";
-	private static String info = "Joran Deschamps, EMBL, 2016-2019.";
-	private static String version = "v1";
+	private static Studio mmAPI_;
+	
+	private static String name = "EMU";
+	private static String description = "Easier Micro-manager User interface: loads its own plugins and interface their UI with Micro-manager device properties.";
+	private static String copyright = "Joran Deschamps, EMBL, 2016-2019.";
+	private static String version = "0.1";
 
 	@Override
 	public String getCopyright() {
@@ -26,32 +30,27 @@ public class EMU implements MMPlugin {
 	}
 
 	@Override
-	public String getDescription() {
+	public String getHelpText() {
 		return description;
 	}
 
 	@Override
-	public String getInfo() {
-		return info;
+	public String getName() {
+		return name;
 	}
 
 	@Override
-	public String getVersion() {
-		return version;
+	public void setContext(Studio mmAPI) {
+		mmAPI_ = mmAPI;
 	}
 
 	@Override
-	public void dispose() {
-		controller_.shutDown();
+	public String getSubMenu() {
+		return "";
 	}
 
 	@Override
-	public void setApp(ScriptInterface app) {
-	      gui_ = app;
-	}
-
-	@Override
-	public void show() {
+	public void onPluginSelected() {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -60,10 +59,15 @@ public class EMU implements MMPlugin {
 					new File(SystemConstants.HOME).mkdirs();
 				}
 				
-				controller_ = new SystemController(gui_);
+				controller_ = new SystemController(mmAPI_);
 				controller_.start();
 			}
 		});
+	}
+
+	@Override
+	public String getVersion() {
+		return version;
 	}
 
 }

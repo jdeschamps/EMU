@@ -38,8 +38,6 @@ import javax.swing.border.TitledBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.micromanager.utils.MMScriptException;
-
 import main.embl.rieslab.emu.controller.SystemController;
 import main.embl.rieslab.emu.tasks.Task;
 import main.embl.rieslab.emu.tasks.TaskHolder;
@@ -657,16 +655,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			
 			setStartText();
 			jProgressBar_progress.setValue(0);
-			
-			try {
-				int numpos = controller_.getScriptInterface().getPositionList().getNumberOfPositions();
-				if(numpos>0){
-					jProgressBar_progress.setMaximum(numpos);
-				} else {
-					taskDone();
-				}
-			} catch (MMScriptException e) {
-				// Do nothing
+
+			int numpos = controller_.getStudio().getPositionListManager().getPositionList().getNumberOfPositions();
+			if (numpos > 0) {
+				jProgressBar_progress.setMaximum(numpos);
+			} else {
+				taskDone();
 			}
 		}
 	}

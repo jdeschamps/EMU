@@ -2,7 +2,7 @@ package main.embl.rieslab.emu.micromanager.mmproperties;
 
 import java.util.ArrayList;
 
-import org.micromanager.api.ScriptInterface;
+import org.micromanager.Application;
 
 import main.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
@@ -11,12 +11,12 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 
 	@SuppressWarnings("rawtypes")
 	private ArrayList<MMProperty> affectedmmprops_;
-	private ScriptInterface script_;
+	private Application app_;
 	
 	@SuppressWarnings("rawtypes")
-	public ConfigGroupAsMMProperty(ScriptInterface script, CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues, ArrayList<MMProperty> affectedmmprops) {
+	public ConfigGroupAsMMProperty(Application app, CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues, ArrayList<MMProperty> affectedmmprops) {
 		super(core, deviceLabel, propertyLabel, allowedValues);
-		script_ = script;
+		app_ = app;
 		affectedmmprops_ = affectedmmprops;
 	}
 	
@@ -50,7 +50,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 					notifyListeners(source, stringval);
 					notifyMMProperties();
 					
-					script_.refreshGUI();
+					app_.refreshGUI();
 					
 				} catch (Exception e){
 					System.out.println("Error in setting configuration ["+getHash()+"] to ["+stringval+"] from ["+value+"]");

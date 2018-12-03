@@ -46,7 +46,7 @@ public class ParametersTable extends JPanel{
 	private static final long serialVersionUID = 1094849697965112381L;
 	
 	private JTable table;
-	private JComboBox color;
+	private JComboBox<String>  color;
 	
 	@SuppressWarnings("rawtypes")
 	private Map<String, UIParameter> uiparameterSet_;
@@ -69,7 +69,7 @@ public class ParametersTable extends JPanel{
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
-		color = new JComboBox();
+		color = new JComboBox<String>();
 		String[] colors = ColorRepository.getColors();
 		for(int k=0; k<colors.length;k++){
 			color.addItem(colors[k]);
@@ -115,7 +115,7 @@ public class ParametersTable extends JPanel{
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
-		color = new JComboBox();
+		color = new JComboBox<String>();
 		String[] colors = ColorRepository.getColors();
 		for(int k=0; k<colors.length;k++){
 			color.addItem(colors[k]);
@@ -192,11 +192,11 @@ public class ParametersTable extends JPanel{
 					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){
 						return new DefaultCellEditor(color);
 					} else if (uiparameterSet_.get(s) instanceof ComboUIParameter) {
-						return new DefaultCellEditor(new JComboBox( ((ComboUIParameter) uiparameterSet_.get(s)).getComboValues() ));
+						return new DefaultCellEditor(new JComboBox<String>(((ComboUIParameter) uiparameterSet_.get(s)).getComboValues()));
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) {
 						return super.getDefaultEditor(Boolean.class);
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.UIPROPERTY.getTypeValue())) {
-						return new DefaultCellEditor(new JComboBox(getAvailableProperties((UIPropertyParameter) uiparameterSet_.get(s))));
+						return new DefaultCellEditor(new JComboBox<String>(getAvailableProperties((UIPropertyParameter) uiparameterSet_.get(s))));
 					} else {
 						return new DefaultCellEditor(new JTextField()); 
 					}

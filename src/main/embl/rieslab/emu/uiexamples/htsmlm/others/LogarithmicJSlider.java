@@ -440,13 +440,17 @@ public class LogarithmicJSlider extends JSlider {
      */
     protected void createLabels(Hashtable table, int increment, int start) {
         for (int labelIndex = start; labelIndex <= getMaximum(); labelIndex *= increment) {
-
             table.put(new Integer(labelIndex), new LabelUIResource("" + labelIndex, JLabel.CENTER));
         }
     }
 
     protected class LabelUIResource extends JLabel implements UIResource {
-        public LabelUIResource(String text, int alignment) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = -6596091800647376305L;
+
+		public LabelUIResource(String text, int alignment) {
             super(text, alignment);
             setName("Slider.label");
         }

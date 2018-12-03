@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.micromanager.api.ScriptInterface;
+import org.micromanager.Application;
 
 import main.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
 import main.embl.rieslab.emu.micromanager.mmproperties.MMDevice;
@@ -26,7 +26,7 @@ public class MMConfigurationGroupsRegistry {
 	public final static String KEY_MMCONFDEVICE = "Configurations";
 	
 	private CMMCore core_;
-	private ScriptInterface script_;
+	private Application app_;
 	private HashMap<String, MMConfigurationGroup> groups_;
 	
 	/**
@@ -35,9 +35,9 @@ public class MMConfigurationGroupsRegistry {
 	 * 
 	 * @param core
 	 */
-	public MMConfigurationGroupsRegistry(ScriptInterface script, CMMCore core){
+	public MMConfigurationGroupsRegistry(Application app, CMMCore core){
 		core_ = core;
-		script_ = script;
+		app_ = app;
 		
 		groups_ = new HashMap<String, MMConfigurationGroup>();
 		
@@ -114,7 +114,7 @@ public class MMConfigurationGroupsRegistry {
 					affectedmmprops.add(mmproperties.getProperties().get(conf.getSetting(i).getDeviceLabel()+"-"+conf.getSetting(i).getPropertyName()));
 				}
 				
-				dev.registerProperty(new ConfigGroupAsMMProperty(script_, core_, KEY_MMCONFDEVICE, group, values, affectedmmprops));
+				dev.registerProperty(new ConfigGroupAsMMProperty(app_, core_, KEY_MMCONFDEVICE, group, values, affectedmmprops));
 
 			} catch (Exception e) {
 				e.printStackTrace();
