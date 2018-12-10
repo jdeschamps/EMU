@@ -13,6 +13,7 @@ import main.java.embl.rieslab.emu.controller.SystemConstants;
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.plugin.UIPlugin;
 import main.java.embl.rieslab.emu.ui.PropertyMainFrame;
+import main.java.embl.rieslab.emu.uiexamples.ExamplePlugins;
 
 public class UIPluginLoader {
 	
@@ -22,7 +23,7 @@ public class UIPluginLoader {
 	public UIPluginLoader(SystemController controller){
 		controller_ = controller;
 		
-		plugins_ = new HashMap<String, UIPlugin>();
+		plugins_ = ExamplePlugins.getExamplePlugins();
 
         File loc = new File(SystemConstants.HOME);
 
@@ -41,8 +42,7 @@ public class UIPluginLoader {
         }
         
         URLClassLoader ucl = new URLClassLoader(urls);
-		//ServiceLoader<UIPlugin> serviceLoader = ServiceLoader.load(UIPlugin.class,ucl);
-		ServiceLoader<UIPlugin> serviceLoader = ServiceLoader.load(UIPlugin.class);
+		ServiceLoader<UIPlugin> serviceLoader = ServiceLoader.load(UIPlugin.class,ucl);
 		for (UIPlugin uiPlugin : serviceLoader) {
 			plugins_.put(uiPlugin.getName(), uiPlugin);
 		}
