@@ -153,6 +153,9 @@ public class AcquisitionTask implements Task<Integer>{
 								// set acquisition settings
 								acqmanager_.setAcquisitionSettings(acq.getSettings());
 
+								// set acquisition
+								core_.setExposure(acq.getExposure());
+								
 								// set acquisition name
 								final String acqname = createAcqName(acq, i);
 
@@ -182,10 +185,11 @@ public class AcquisitionTask implements Task<Integer>{
 									}
 								};
 								t.start();
-
+								
 								while (t.isAlive()) {
 									Thread.sleep(1000);
 									if (acq.stopCriterionReached()) {
+										System.out.println("Stop criterion reached");
 										interruptAcquistion();
 									}
 								}
@@ -194,15 +198,16 @@ public class AcquisitionTask implements Task<Integer>{
 								acq.postAcquisition();
 
 								// close acq window
-								studio_.getDisplayManager().closeDisplaysFor(
-										currAcq);
+								studio_.getDisplayManager().closeDisplaysFor(currAcq);
 
 								if (stop_) {
+									System.out.println("Stop is true in acquisition");
 									break;
 								}
 							}
 
 							if (stop_) {
+								System.out.println("Stop is true in position");
 								break;
 							}
 
@@ -242,6 +247,7 @@ public class AcquisitionTask implements Task<Integer>{
 		}
 
 		protected void interruptAcquistion() {
+			System.out.println("interrupt acq requested");
 			acqmanager_.haltAcquisition();
 			while (!acqmanager_.isAcquisitionRunning()) {
 				try {
