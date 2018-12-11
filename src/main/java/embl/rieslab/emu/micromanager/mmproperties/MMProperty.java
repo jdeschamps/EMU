@@ -140,11 +140,12 @@ public abstract class MMProperty<T> {
 	public String getStringValue() {
 		// ask core for value
 		String val = "";
-
-		if(val != null && !val.isEmpty()){
-			val = convertToString(getValue());
+		try {
+			val = core_.getProperty(devicelabel_, label_);
+			value = convertToValue(val);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
 		return val;
 	}
 

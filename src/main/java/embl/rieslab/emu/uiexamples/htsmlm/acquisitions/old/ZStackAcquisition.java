@@ -1,10 +1,7 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old;
 
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -16,15 +13,9 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.SinglePropertyFilter;
-import main.java.embl.rieslab.emu.utils.utils;
 
-import org.micromanager.Studio;
-import org.micromanager.data.Coords;
-import org.micromanager.data.Datastore;
-import org.micromanager.data.Image;
-import org.micromanager.data.internal.DefaultCoords;
-
-public class ZStackAcquisition implements Acquisition {
+public class ZStackAcquisition extends Acquisition {
+	
 	
 	// Convenience constants		
 	private final static String PANE_NAME = "Zstack panel";
@@ -40,123 +31,42 @@ public class ZStackAcquisition implements Acquisition {
 	
 	// UI property
 	private TwoStateUIProperty stabprop_;
-	private UIProperty stagepos_;
 	
 	private double zstart, zend, zstep;
-	private boolean zstab_; 
-	private GenericAcquisitionParameters params_;
-	private volatile boolean stopAcq_, running_;
 	
-	public ZStackAcquisition(double exposure, UIProperty stageposition, TwoStateUIProperty stabprop) {
+	public ZStackAcquisition(double exposure, UIProperty stabprop) {
+		super(AcquisitionType.ZSTACK, exposure);
 
-		if(stageposition == null){
-			throw new NullPointerException();
-		}
-		stagepos_ = stageposition;
-		
-		stabprop_ = stabprop;
-		if(stabprop_ == null){
-			zstab_ = false;
+		if(stabprop instanceof TwoStateUIProperty){
+			stabprop_ = (TwoStateUIProperty) stabprop;
 		} else {
-			zstab_ = true;
+			stabprop_ = null;
 		}
+		
+		this.setNumberFrames(1);
+		this.setIntervalMs(0);
 		
 		zstart=-2;
 		zend=2;
 		zstep=0.05;
-		
-		stopAcq_ = false;
-		running_ = false;
-		
-		params_ = new GenericAcquisitionParameters(exposure, 0, 3, 1, new HashMap<String,String>(), new HashMap<String,String>(), setSlices(zstart, zend, zstep));
-	}
-	
-	public ArrayList<Double> setSlices(double zstart, double zend, double zstep){
-		ArrayList<Double> slices = new ArrayList<Double>();
-		double z = utils.round(zstart-zstep,2);
-		
-		while (z<=zend){
-			z += zstep;
-			slices.add(utils.round(z,2));
-		}
-		
-		return slices;
-	}
-	
-	@Override
-	public GenericAcquisitionParameters getParameters() {
-		return params_;
 	}
 
 	@Override
-	public Datastore startAcquisition(Studio studio) {
-		stopAcq_ = false;
-		running_ = true;
-		
-		if(zstab_){
+	public void preAcquisition() {
+		if(stabprop_ != null){
 			stabprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		}
-		
-		Datastore store = studio.data().createRAMDatastore();
-		studio.displays().createDisplay(store);
-		
-		Image image;
-		Coords.CoordsBuilder builder = new DefaultCoords.Builder();
-		builder.time(0).channel(0).stagePosition(0);
-		
-		try{
-			double z0 = Double.parseDouble(stagepos_.getMMPropertyValue());
-			
-			for(int i=0;i<params_.getZSlices().size();i++){
-				
-				// set stage position
-				double pos = z0 + params_.getZSlices().get(i);
-				stagepos_.setPropertyValue(String.valueOf(pos));
-				
-				builder = builder.z(i);
-				image = studio.live().snap(false).get(0);
-				image = image.copyAtCoords(builder.build());
-				
-				try {
-					store.putImage(image);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				
-				// check if exit
-				if(stopAcq_){
-					break;
-				}
-			
-			}
-			running_ = false;
-			
-			// go back to original position
-			stagepos_.setPropertyValue(String.valueOf(z0));
-			
-		} catch (Exception e){
-			e.printStackTrace();
-		}
-		
-		if(zstab_){
+	}
+
+	@Override
+	public void postAcquisition() {
+		if(stabprop_ != null){
 			stabprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 		}
-		
-		return store; 
 	}
 
 	@Override
-	public void stopAcquisition() {
-		stopAcq_ = true;
-	}
-
-	@Override
-	public boolean isRunning() {
-		return running_;
-	}
-
-	@Override
-	public boolean skipPosition() {
+	public boolean stopCriterionReached() {
 		return false;
 	}
 
@@ -173,9 +83,9 @@ public class ZStackAcquisition implements Acquisition {
 		waitinglab = new JLabel(LABEL_PAUSE);
 		zstartlab = new JLabel(LABEL_ZSTART);
 		
-		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(params_.getExposureTime(),1), 1, 10000000, 1));
+		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(this.getExposureTime(),1), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(params_.getWaitingTime(), 0, 10000000, 1)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 1)); 
 		waitingspin.setName(LABEL_PAUSE);
 		zstartspin = new JSpinner(new SpinnerNumberModel(zstart, -1000, 1000, 0.05)); 
 		zstartspin.setName(LABEL_ZSTART);
@@ -223,9 +133,9 @@ public class ZStackAcquisition implements Acquisition {
 					for(int i=0;i<comp.length;i++){
 						if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
 							if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
-								params_.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
+								this.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
-								params_.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
+								this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_ZSTART) && comp[i] instanceof JSpinner){
 								zstart = ((Double) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_ZEND) && comp[i] instanceof JSpinner){
@@ -251,18 +161,30 @@ public class ZStackAcquisition implements Acquisition {
 
 	@Override
 	public String[] getSpecialSettings() {
-		String[] s = new String[5];
-		s[0] = "Exposure = "+params_.getExposureTime()+" ms";
-		s[1] = "Stage = "+stagepos_.getMMProperty().getDeviceLabel();
-		s[2] = "Zstart = "+zstart+" um";
-		s[3] = "Zend = "+zend+" um";
-		s[4] = "Zstep = "+zstep+" um";
+		String[] s = new String[4];
+		s[0] = "Exposure = "+this.getExposureTime()+" ms";
+		s[1] = "Zstart = "+zstart+" um";
+		s[2] = "Zend = "+zend+" um";
+		s[3] = "Zstep = "+zstep+" um";
 		return s;
 	}
 
 	@Override
 	public String getPanelName() {
 		return PANE_NAME;
+	}
+
+	
+	public void setZStart(double val){
+		zstart = val;
+	}
+	
+	public void setZEnd(double val){
+		zend = val;
+	}
+	
+	public void setZStep(double val){
+		zstep = val;
 	}
 	
 	@Override
@@ -278,5 +200,4 @@ public class ZStackAcquisition implements Acquisition {
 		
 		return s;
 	}
-
 }

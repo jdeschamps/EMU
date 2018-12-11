@@ -44,14 +44,14 @@ import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.PropertyPanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.TwoStateFlag;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionUI;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionWizard;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.AcquisitionTask;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.AcquisitionTaskOld;
 
 public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Integer>, AcquisitionUI{
 
@@ -72,7 +72,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     
 	///// Task
 	private final static String TASK_NAME = "Unsupervised acquisitions";
-	private AcquisitionTask acqengine_;
+	private AcquisitionTaskOld acqengine_;
 	
     ///// Convenience variables
 	private String paramBFP_, paramLocking_, paramBrightField_;
@@ -513,12 +513,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    }
 	            
 	    	    //////// MM configuration groups
-	    	    String[] confgroup = new String[acq.getMMConfGroupValues().size()];
-	    	    Iterator<String> it = acq.getMMConfGroupValues().keySet().iterator();
+	    	    String[] confgroup = new String[acq.getMMConfigurationGroups().size()];
+	    	    Iterator<String> it = acq.getMMConfigurationGroups().keySet().iterator();
 	    	    int j=0;
 	    	    while(it.hasNext()){
 	    	    	s = it.next();  
-	    	    	confgroup[j] = s+": "+acq.getMMConfGroupValues().get(s);
+	    	    	confgroup[j] = s+": "+acq.getMMConfigurationGroups().get(s);
 	    	    	j++;
 	    	    }
 	    	    Arrays.sort(confgroup);
@@ -621,7 +621,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			final String path = jTextField_path.getText();
 			final String name = jTextField_expname.getText();
 			final AcquisitionFactory factory = new AcquisitionFactory(this, controller_);
-			acqengine_ = new AcquisitionTask(this, controller_);
+			acqengine_ = new AcquisitionTaskOld(this, controller_);
 
 			Thread t = new Thread("Set-up acquisition") {
 				public void run() {

@@ -2,7 +2,7 @@ package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers;
 
 import java.util.ArrayList;
 
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
 
 public class Experiment {
 

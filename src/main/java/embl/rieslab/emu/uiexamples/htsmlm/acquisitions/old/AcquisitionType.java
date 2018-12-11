@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old;
 
 public enum AcquisitionType { 
 	TIME("Time"), BFP("BFP"), BRIGHTFIELD("Bright-field"), LOCALIZATION("Localization"), ZSTACK("Z-stack"), SNAP("Snapshot"), CUSTOM("Custom"); 

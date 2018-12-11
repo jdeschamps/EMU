@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -252,7 +252,7 @@ public class AcquisitionFactory {
 				confs.put(acqw.configurations[j][0], acqw.configurations[j][1]);
 			}
 		}
-		acq.setConfigurationGroups(confs);
+		acq.setMMConfigurationGroups(confs);
 		
 		HashMap<String,String> props = new HashMap<String,String>();
 		if(acqw.properties != null){

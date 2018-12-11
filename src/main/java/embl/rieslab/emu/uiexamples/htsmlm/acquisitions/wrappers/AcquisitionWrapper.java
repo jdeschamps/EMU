@@ -3,7 +3,7 @@ package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
 
 public class AcquisitionWrapper {
 
@@ -20,13 +20,13 @@ public class AcquisitionWrapper {
 	
 	public AcquisitionWrapper(Acquisition acq){
         type = acq.getType();
-        exposure=acq.getExposure();
+        exposure=acq.getExposureTime();
         interval= acq.getIntervalMs();
         numFrames=acq.getNumberFrames();
         waitingTime= acq.getWaitingTime();
         
         
-        HashMap<String,String> conf = acq.getMMConfGroupValues();
+        HashMap<String,String> conf = acq.getMMConfigurationGroups();
         String[] confkeys = conf.keySet().toArray(new String[0]);
         Arrays.sort(confkeys);
         configurations = new String[confkeys.length][2];

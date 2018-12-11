@@ -1,30 +1,25 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old;
 
+import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
-import java.io.IOException;
-import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.border.TitledBorder;
 
 import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 
-import org.micromanager.Studio;
-import org.micromanager.data.Coords;
-import org.micromanager.data.Datastore;
-import org.micromanager.data.Image;
-import org.micromanager.data.internal.DefaultCoords;
+public class LocalizationAcquisition extends Acquisition {
 
-public class LocalizationAcquisition implements Acquisition{
-	
-	private GenericAcquisitionParameters params_;
-	
+
 	private final static String PANE_NAME = "Localization panel";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
@@ -39,28 +34,53 @@ public class LocalizationAcquisition implements Acquisition{
 	public final static String KEY_STOPDELAY = "Stop on max delay";
 	
 	@SuppressWarnings("rawtypes")
-	private TaskHolder activationTask_;
-	private boolean useactivation_, stoponmax_, nonNUllActivation_;
-	private volatile boolean stopAcq_, running_;
+	private TaskHolder activation_;
+	private boolean useactivation_, stoponmax_, activationtask_;
 	private int stoponmaxdelay_;
 	
 	@SuppressWarnings("rawtypes")
 	public LocalizationAcquisition(TaskHolder activationtask, double exposure) {
-		
-		activationTask_ = activationtask;
-		if(activationTask_ == null){
-			nonNUllActivation_ = true;
+		super(AcquisitionType.LOCALIZATION, exposure);
+
+		activation_ = activationtask;
+		if(activation_ != null){
+			activationtask_ = true;
 		} else {
-			nonNUllActivation_ = false;
+			activationtask_ = false;
 		}
 		
-		stopAcq_ = false;
-		running_ = false;
 		useactivation_ = true;
 		stoponmax_ = true;
 		stoponmaxdelay_ = 5;
+		this.setNumberFrames(30000);
+	}
 
-		params_ = new GenericAcquisitionParameters(exposure, 0, 3, 30000, new HashMap<String,String>(), new HashMap<String,String>());
+	@Override
+	public void preAcquisition() {
+		if(activationtask_ && useactivation_){			
+			activation_.initializeTask();
+			activation_.resumeTask();
+		}
+	}
+
+	@Override
+	public void postAcquisition() {
+		if(activationtask_ && useactivation_){			
+			activation_.pauseTask();
+		}
+	}
+
+	@Override
+	public boolean stopCriterionReached() {
+		if(activationtask_ && useactivation_ && stoponmax_ && activation_.isCriterionReached()){
+			try {
+				Thread.sleep(stoponmaxdelay_*1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -79,13 +99,13 @@ public class LocalizationAcquisition implements Acquisition{
 		intervallab = new JLabel(LABEL_INTERVAL);
 		waitonmaxlab = new JLabel(LABEL_MAXUVTIME);
 		
-		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(params_.getExposureTime(),1), 1, 10000000, 1));
+		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(this.getExposureTime(),1), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(params_.getWaitingTime(), 0, 10000000, 1)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(this.getWaitingTime(), 0, 10000000, 1)); 
 		waitingspin.setName(LABEL_PAUSE);
-		numframespin = new JSpinner(new SpinnerNumberModel(params_.getNumberFrames(), 1, 10000000, 1)); 
+		numframespin = new JSpinner(new SpinnerNumberModel(this.getNumberFrames(), 1, 10000000, 1)); 
 		numframespin.setName(LABEL_NUMFRAME);
-		intervalspin = new JSpinner(new SpinnerNumberModel(params_.getIntervalMs(), 0, 10000000, 1));
+		intervalspin = new JSpinner(new SpinnerNumberModel(this.getIntervalMs(), 0, 10000000, 1));
 		intervalspin.setName(LABEL_INTERVAL);
 		waitonmaxspin = new JSpinner(new SpinnerNumberModel(stoponmaxdelay_, 0, 10000, 1));
 		waitonmaxspin.setName(LABEL_MAXUVTIME);
@@ -151,13 +171,13 @@ public class LocalizationAcquisition implements Acquisition{
 					for(int i=0;i<comp.length;i++){
 						if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
 							if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
-								params_.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
+								this.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
-								params_.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
+								this.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_NUMFRAME) && comp[i] instanceof JSpinner){
-								params_.setNumberFrames((Integer) ((JSpinner) comp[i]).getValue());
+								this.setNumberFrames((Integer) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_INTERVAL) && comp[i] instanceof JSpinner){
-								params_.setIntervalMs((Double) ((JSpinner) comp[i]).getValue());
+								this.setIntervalMs((Double) ((JSpinner) comp[i]).getValue());
 							}else if(comp[i].getName().equals(LABEL_USEACTIVATION) && comp[i] instanceof JCheckBox){
 								this.setUseActivation(((JCheckBox) comp[i]).isSelected());
 							}else if(comp[i].getName().equals(LABEL_USESTOPONMAXUV) && comp[i] instanceof JCheckBox){
@@ -180,9 +200,9 @@ public class LocalizationAcquisition implements Acquisition{
 	@Override
 	public String[] getSpecialSettings() {
 		String[] s = new String[6];
-		s[0] = "Exposure = "+params_.getExposureTime()+" ms";
-		s[1] = "Interval = "+params_.getIntervalMs()+" ms";
-		s[2] = "Number of frames = "+params_.getNumberFrames();
+		s[0] = "Exposure = "+this.getExposureTime()+" ms";
+		s[1] = "Interval = "+this.getIntervalMs()+" ms";
+		s[2] = "Number of frames = "+this.getNumberFrames();
 		s[3] = "Use activation = "+useactivation_;
 		s[4] = "Stop on max UV = "+stoponmax_;
 		s[5] = "Stop on max delay = "+stoponmaxdelay_+" s";
@@ -208,86 +228,4 @@ public class LocalizationAcquisition implements Acquisition{
 		return s;
 	}
 
-	@Override
-	public GenericAcquisitionParameters getParameters() {
-		return params_;
-	}
-
-	@Override
-	public Datastore startAcquisition(Studio studio) {
-		
-		if(useactivation_ && !nonNUllActivation_){
-			throw new NullPointerException();
-		}
-		
-		if(useactivation_){			
-			activationTask_.initializeTask();
-			activationTask_.resumeTask();
-		}
-		
-		stopAcq_ = false;
-		running_ = true;
-		
-		// get approximation for the stop on max delay in terms of frames
-		int stopAfterN = (int) (1000*stoponmaxdelay_/params_.getExposureTime());
-		int stopCounter = 0;
-		
-		Datastore store = studio.data().createRAMDatastore();
-		studio.displays().createDisplay(store);
-		
-		Image image;
-		Coords.CoordsBuilder builder = new DefaultCoords.Builder();
-		builder.channel(0).z(0).stagePosition(0);
-		
-		for(int i=0;i<params_.getNumberFrames();i++){
-			
-			builder = builder.time(i);
-			image = studio.live().snap(false).get(0);
-			image = image.copyAtCoords(builder.build());
-			
-			try {
-				store.putImage(image);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			// check if stop criterion reached
-			if(useactivation_ && stoponmax_ && activationTask_.isCriterionReached()){
-				stopCounter ++;
-				
-				if(stopCounter == stopAfterN){
-					break; // exit loop
-				}
-			}
-			
-			// check if exit
-			if(stopAcq_){
-				break;
-			}
-		
-		}
-		
-		if(useactivation_){			
-			activationTask_.pauseTask();
-		}
-		
-		running_ = false;
-		
-		return store; 
-	}
-
-	@Override
-	public void stopAcquisition() {
-		stopAcq_ = true;
-	}
-
-	@Override
-	public boolean isRunning() {
-		return running_;
-	}
-
-	@Override
-	public boolean skipPosition() {
-		return false;
-	}
 }

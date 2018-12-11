@@ -40,8 +40,8 @@ import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoneConfigGroupPropert
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.ReadOnlyPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.TwoStatePropertyFilter;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FilterWheelFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusLockFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
@@ -61,7 +61,7 @@ public class AcquisitionTab extends JPanel {
 	private AcquisitionFactory factory_;
 	private JPanel acqcard_;
 	private JPanel[] acqpanes_, acqpanels_;
-	private JComboBox acqtype_;
+	private JComboBox<String> acqtype_;
 	private String[] acqtypes_;
 	private int currind;
 	private HashMap<String, UIProperty> props_;
@@ -73,7 +73,7 @@ public class AcquisitionTab extends JPanel {
 		
 		// Get the array of acquisition types and create a JComboBox
 		acqtypes_ = factory_.getAcquisitionTypeList();
-		acqtype_ = new JComboBox(acqtypes_);
+		acqtype_ = new JComboBox<String>(acqtypes_);
 		acqtype_.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 		acqtype_.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
@@ -100,7 +100,13 @@ public class AcquisitionTab extends JPanel {
 		acqpanes_ = new JPanel[acqtypes_.length];
 		acqpanels_ = new JPanel[acqtypes_.length];
 		for(int i=0;i<acqtypes_.length;i++){
-			acqpanels_[i] = factory_.getAcquisition(acqtypes_[i]).getPanel();
+
+			JPanel pane = factory_.getAcquisition(acqtypes_[i]).getPanel();
+			
+			pane.setBorder(BorderFactory.createTitledBorder(null, "Acquisition Settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+			((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+			
+			acqpanels_[i] = pane;
 			acqpanes_[i] = createPanel(acqpanels_[i],factory_.getAcquisition(acqtypes_[i]).getPropertyFilter(), new HashMap<String,String>(), new HashMap<String,String>());
 			acqcard_.add(acqpanes_[i],acqtypes_[i]);			
 		}
@@ -115,7 +121,7 @@ public class AcquisitionTab extends JPanel {
 		
 		// Get the array of acquisition types and create a JComboBox
 		acqtypes_ = factory_.getAcquisitionTypeList();
-		acqtype_ = new JComboBox(acqtypes_);
+		acqtype_ = new JComboBox<String>(acqtypes_);
 		acqtype_.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	            changeAcquisition((String) acqtype_.getSelectedItem());
@@ -149,8 +155,12 @@ public class AcquisitionTab extends JPanel {
 		acqpanels_ = new JPanel[acqtypes_.length];
 		for(int i=0;i<acqtypes_.length;i++){
 			if(i==currind){
-				acqpanels_[i] = acquisition.getPanel();
-				acqpanes_[i] = createPanel(acqpanels_[i],acquisition.getPropertyFilter(), acquisition.getMMConfGroupValues(), acquisition.getPropertyValues());
+				JPanel pane = acquisition.getPanel();
+				
+				pane.setBorder(BorderFactory.createTitledBorder(null, "Acquisition Settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
+				((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
+				acqpanels_[i] = pane;
+				acqpanes_[i] = createPanel(acqpanels_[i],acquisition.getPropertyFilter(), acquisition.getMMConfigurationGroups(), acquisition.getPropertyValues());
 				acqcard_.add(acqpanes_[i],acqtypes_[i]);
 			} else {
 				acqpanels_[i] = factory_.getAcquisition(acqtypes_[i]).getPanel();
@@ -395,7 +405,7 @@ public class AcquisitionTab extends JPanel {
 						states_ig[i+1] = states[i];
 					}
 					
-					return new DefaultCellEditor(new JComboBox(states_ig));
+					return new DefaultCellEditor(new JComboBox<String>(states_ig));
 				} 
 
 				return super.getCellEditor(row, column);
@@ -496,11 +506,11 @@ public class AcquisitionTab extends JPanel {
 					if (getValueAt(row, column) instanceof Boolean) {
 						return super.getDefaultEditor(Boolean.class);
 					} else if (props_.get(propsfriendlyname_.get(s)).isMultiState()) { 
-						return new DefaultCellEditor(new JComboBox(((MultiStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
+						return new DefaultCellEditor(new JComboBox<String>(((MultiStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
 					} else if (props_.get(propsfriendlyname_.get(s)).isFixedState()) { 
-						return new DefaultCellEditor(new JComboBox(((FixedStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
+						return new DefaultCellEditor(new JComboBox<String>(((FixedStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
 					} else if (props_.get(propsfriendlyname_.get(s)).hasMMPropertyAllowedValues()){
-						return new DefaultCellEditor(new JComboBox(props_.get(propsfriendlyname_.get(s)).getAllowedValues()));
+						return new DefaultCellEditor(new JComboBox<String>(props_.get(propsfriendlyname_.get(s)).getAllowedValues()));
 					} else {
 						super.getCellEditor(row, column);
 					}
@@ -612,7 +622,7 @@ public class AcquisitionTab extends JPanel {
 		Acquisition acq = factory_.getAcquisition(acqtypes_[currind]);
 		
 		// set mm configuration groups
-		acq.setConfigurationGroups(registerMMConfGroups(acqpanes_[currind], new HashMap<String, String>()));
+		acq.setMMConfigurationGroups(registerMMConfGroups(acqpanes_[currind], new HashMap<String, String>()));
 		
 		// set properties value in the acquisition
 		acq.setProperties(registerProperties(acqpanes_[currind], new HashMap<String, String>()));

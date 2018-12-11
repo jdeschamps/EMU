@@ -7,6 +7,12 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
+import main.java.embl.rieslab.emu.controller.SystemController;
+import main.java.embl.rieslab.emu.tasks.Task;
+import main.java.embl.rieslab.emu.tasks.TaskHolder;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
+import mmcorej.CMMCore;
+
 import org.micromanager.MultiStagePosition;
 import org.micromanager.PositionList;
 import org.micromanager.PositionListManager;
@@ -14,14 +20,7 @@ import org.micromanager.Studio;
 import org.micromanager.acquisition.AcquisitionManager;
 import org.micromanager.data.Datastore;
 
-import main.java.embl.rieslab.emu.controller.SystemController;
-import main.java.embl.rieslab.emu.tasks.Task;
-import main.java.embl.rieslab.emu.tasks.TaskHolder;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.AcquisitionTaskOld.AcquisitionRun;
-import mmcorej.CMMCore;
-
-public class AcquisitionTask  implements Task<Integer>{
+public class AcquisitionTaskOld implements Task<Integer>{
 
 	private Studio studio_;
 	private CMMCore core_;
@@ -33,7 +32,7 @@ public class AcquisitionTask  implements Task<Integer>{
 	private TaskHolder<Integer> holder_;
 	ArrayList<Acquisition> acqlist_;
 	
-	public AcquisitionTask(TaskHolder<Integer> holder, SystemController system){
+	public AcquisitionTaskOld(TaskHolder<Integer> holder, SystemController system){
 		system_ = system;
 		studio_ = system_.getStudio();
 		core_ = studio_.getCMMCore();
@@ -43,53 +42,59 @@ public class AcquisitionTask  implements Task<Integer>{
 		registerHolder(holder);
 	}
 	
-	@Override
-	public void registerHolder(TaskHolder<Integer> holder) {
-		holder_ = holder;		
+	public boolean isRunning(){
+		return running_;
+	}
+	
+	public void setAcquisitionList(ArrayList<Acquisition> acqlist){
+		acqlist_ = acqlist;
 	}
 
 	@Override
-	public void notifyHolder(Integer[] outputs) {
-		
+	public void registerHolder(TaskHolder<Integer> holder) {
+		holder_ = holder;
 	}
 
 	@Override
 	public void startTask() {
-		// TODO Auto-generated method stub
-		
+		if(acqlist_ != null && !acqlist_.isEmpty()){
+			System.out.println("Acq start in Engine");
+
+			t = new AcquisitionRun(acqlist_);
+			t.execute();
+			running_ = true;
+		} else {
+			System.out.println("Acquisition list is empty or null");
+		}
 	}
 
 	@Override
 	public void stopTask() {
-		// TODO Auto-generated method stub
-		
+		if(t != null && !t.isDone()){
+			t.stop();
+		}
 	}
 
 	@Override
-	public boolean isRunning() {
-		// TODO Auto-generated method stub
-		return false;
+	public void notifyHolder(Integer[] outputs) {
+		holder_.update(outputs);
 	}
 
 	@Override
 	public boolean isPausable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void pauseTask() {
-		// TODO Auto-generated method stub
-		
+		// Do nothing
 	}
 
 	@Override
 	public void resumeTask() {
-		// TODO Auto-generated method stub
-		
+		// Do nothing
 	}
 	
-
 	class AcquisitionRun extends SwingWorker<Integer, Integer> {
 
 		private ArrayList<Acquisition> acqlist_;
@@ -114,6 +119,9 @@ public class AcquisitionTask  implements Task<Integer>{
 			}
 			
 			if (acqlist_.size() > 0) {
+				// clear all previous acquisitions
+				studio_.getDisplayManager().closeAllDisplayWindows(true); // prompt to save
+				// use to have a clear windows message here
 
 				PositionList poslist = posmanager_.getPositionList();
 				int numPosition = poslist.getNumberOfPositions();
@@ -142,12 +150,21 @@ public class AcquisitionTask  implements Task<Integer>{
 							for (int k = 0; k < acqlist_.size(); k++) {
 								final Acquisition acq = acqlist_.get(k);
 
+								// set acquisition settings
+								acqmanager_.setAcquisitionSettings(acq.getSettings());
+
+								// set acquisition
+								core_.setExposure(acq.getExposureTime());
+								
+								// set acquisition name
+								final String acqname = createAcqName(acq, i);
+
 								// set-up system
-								system_.setUpSystem(acq.getParameters().mmconfgroups_);
+								system_.setUpSystem(acq.getPropertyValues());
 
 								// set configuration settings
-								if (!acq.getParameters().mmconfgroups_.isEmpty()) {
-									HashMap<String, String> configs = acq.getParameters().mmconfgroups_;
+								if (!acq.getMMConfigurationGroups().isEmpty()) {
+									HashMap<String, String> configs = acq.getMMConfigurationGroups();
 									Iterator<String> it = configs.keySet().iterator();
 									while (it.hasNext()) {
 										String group = it.next();
@@ -155,8 +172,27 @@ public class AcquisitionTask  implements Task<Integer>{
 									}
 								}
 
-								// run acquisition
+								// set-up special acquisition state
+								acq.preAcquisition();
 
+								// let time for the system to adjust
+								Thread.sleep(acq.getWaitingTime() * 1000);
+
+								// run acquisition
+								Thread t = new Thread() {
+									public void run() {
+										currAcq = acqmanager_.runAcquisition(acqname, acq.getPath());
+									}
+								};
+								t.start();
+								
+								while (t.isAlive()) {
+									Thread.sleep(1000);
+									if (acq.stopCriterionReached()) {
+										System.out.println("Stop criterion reached");
+										interruptAcquistion();
+									}
+								}
 
 								// set-up special post-acquisition state
 								acq.postAcquisition();
@@ -237,3 +273,4 @@ public class AcquisitionTask  implements Task<Integer>{
 	}
 
 }
+
