@@ -867,11 +867,11 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 
 	@Override
 	public boolean isPropertyEnabled(AcquisitionType type) {
-		if(type.equals(AcquisitionType.BFP) && paramBFP_ != UIPropertyParameter.NO_PROPERTY){
+		if(type.equals(AcquisitionType.BFP) && !paramBFP_.equals(UIPropertyParameter.NO_PROPERTY)){
 			return true;
-		} else if(type.equals(AcquisitionType.BF) && paramBrightField_ != UIPropertyParameter.NO_PROPERTY){
+		} else if(type.equals(AcquisitionType.BF) && !paramBrightField_.equals(UIPropertyParameter.NO_PROPERTY)){
 			return true;
-		}  else if(type.equals(AcquisitionType.ZSTACK) && paramfocus_ != UIPropertyParameter.NO_PROPERTY){
+		}  else if(type.equals(AcquisitionType.ZSTACK) && !paramfocus_.equals(UIPropertyParameter.NO_PROPERTY)){
 			return true;
 		} 
 		return false;

@@ -227,7 +227,7 @@ public class AcquisitionTask  implements Task<Integer>{
 		protected void interruptAcquistion() {
 			System.out.println("interrupt acq requested");
 			// TODO
-			while (!acqmanager_.isAcquisitionRunning()) {
+			while (acqmanager_.isAcquisitionRunning()) {
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {

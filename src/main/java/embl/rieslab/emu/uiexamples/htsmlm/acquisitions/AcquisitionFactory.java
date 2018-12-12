@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -40,18 +39,24 @@ public class AcquisitionFactory {
 	}
 
 	private String[] getEnabledAcquisitionList(){
-		List<String> list = Arrays.asList(AcquisitionType.getList());
-		
+		ArrayList<String> list = new ArrayList<>(Arrays.asList(AcquisitionType.getList()));
+				
 		if(!acqpane_.isPropertyEnabled(AcquisitionType.BF)){
 			list.remove(AcquisitionType.BF.getTypeValue());
 		}
 		if(!acqpane_.isPropertyEnabled(AcquisitionType.BFP)){
+			System.out.println("remove bfp");
 			list.remove(AcquisitionType.BFP.getTypeValue());
 		}
 		if(!acqpane_.isPropertyEnabled(AcquisitionType.ZSTACK)){
+			System.out.println("remove z");
 			list.remove(AcquisitionType.ZSTACK.getTypeValue());
 		}
 		
+		for(int i=0;i<list.size();i++){
+			System.out.println(list.get(i));
+		}
+		System.out.println("------");
 		return list.toArray(new String[0]);
 	}
 	
