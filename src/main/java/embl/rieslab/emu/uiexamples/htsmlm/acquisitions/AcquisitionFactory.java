@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,28 +34,7 @@ public class AcquisitionFactory {
 		acqpane_ = acqpane;
 		controller_ = controller;
 		
-		acqtypelist_ = extractAcquisitionTypes();
-	}
-	
-	private String[] extractAcquisitionTypes() {
-		String[] temp = AcquisitionType.getList();
-		ArrayList<String> finalacq = new ArrayList<String>();
-		
-		for(int i=0;i<temp.length;i++){
-			if(temp[i].equals(AcquisitionType.BFP.getTypeValue())){ // if the acquisition is of type BFP
-				if(acqpane_.isPropertyEnabled(AcquisitionPanel.PARAM_BFP)){ // if enabled in the configuration
-					finalacq.add(temp[i]); // then add BFP to the list of possible acquisition
-				}
-			} else if(temp[i].equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
-				if(acqpane_.isPropertyEnabled(AcquisitionPanel.PARAM_BRIGHTFIELD)){ 
-					finalacq.add(temp[i]); 
-				}
-			} else {
-				finalacq.add(temp[i]); 
-			}
-		}
-		
-		return finalacq.toArray(new String[0]);
+		acqtypelist_ = AcquisitionType.getList();
 	}
 
 	public String[] getAcquisitionTypeList(){
@@ -63,18 +42,15 @@ public class AcquisitionFactory {
 	}
 	
 	public Acquisition getAcquisition(String type){
-		if(type.equals(AcquisitionType.BFP.getTypeValue())){
-			return new BFPAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BFP)));
-		} else if(type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
+		if(type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
 			return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
 		} else if(type.equals(AcquisitionType.TIME.getTypeValue())){
 			return new TimeAcquisition(controller_.getExposure());
-		} else if(type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
-			return new BrightFieldAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_BRIGHTFIELD)));
-		}  else if(type.equals(AcquisitionType.SNAP.getTypeValue())){
+		} else if(type.equals(AcquisitionType.SNAP.getTypeValue())){
 			return new SnapAcquisition(controller_.getExposure());
 		} else if(type.equals(AcquisitionType.ZSTACK.getTypeValue())){
-			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
+			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)),
+					controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.S)));
 		}
 			
 		return getDefaultAcquisition();
@@ -265,4 +241,24 @@ public class AcquisitionFactory {
 		acq.setNumberFrames(acqw.numFrames);
 		acq.setIntervalMs(acqw.interval);		
 	}
+	
+	public enum AcquisitionType { 
+		TIME("Time"), SNAP("Snapshot"), LOCALIZATION("Localization"), ZSTACK("Z-stack"), AUTOFOCUS("Autofocus"), ROIEVAL("ROI evaluation"); 
+		
+		private String value; 
+		
+		private AcquisitionType(String value) { 
+			this.value = value; 
+		}
+
+		public String getTypeValue() {
+			return value;
+		} 
+		
+		public static String[] getList(){
+			String[] s = {AcquisitionType.LOCALIZATION.getTypeValue(),AcquisitionType.SNAP.getTypeValue(),
+					AcquisitionType.ZSTACK.getTypeValue(),AcquisitionType.TIME.getTypeValue(),AcquisitionType.AUTOFOCUS.getTypeValue(),AcquisitionType.ROIEVAL.getTypeValue()};
+			return s;
+		}
+	}; 
 }

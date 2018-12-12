@@ -44,8 +44,8 @@ import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.PropertyPanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.TwoStateFlag;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionUI;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionWizard;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
@@ -115,7 +115,6 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 					summaryframe_.toFront();
 					summaryframe_.repaint();
 				}
-
             }
           });
 		

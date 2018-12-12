@@ -20,8 +20,8 @@ import javax.swing.JTextField;
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import main.java.embl.rieslab.emu.utils.utils;
 

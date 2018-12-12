@@ -49,13 +49,6 @@ public abstract class PropertyPanel extends JPanel{
 	
 	public HashMap<String,UIParameter> getUIParameters(){
 		return parameters_;
-	}
-	
-	public UIProperty getUIProperty(String name){
-		if(properties_.containsKey(name)){
-			return properties_.get(name);
-		}
-		return null;
 	}	
 	
 	public InternalProperty getInternalProperty(String name){
@@ -66,7 +59,24 @@ public abstract class PropertyPanel extends JPanel{
 	}	
 	
 	public String getUIPropertyValue(String name){
-		return getUIProperty(name).getPropertyValue();
+		if(properties_.containsKey(name)){
+			return properties_.get(name).getPropertyValue();
+		}
+		return null;
+	}
+	
+	public void setUIPropertyValue(String name, String value){
+		// makes sure the call does NOT run on EDT
+		Thread t = new Thread("Property change: " + name) {
+			public void run() {
+				if (properties_.containsKey(name)) {
+					properties_.get(name).setPropertyValue(value);
+				}
+			}
+
+		};
+		t.start();
+
 	}
 	
 	public UIParameter getUIParameter(String name){
@@ -145,7 +155,15 @@ public abstract class PropertyPanel extends JPanel{
 	public abstract void setupPanel();
 	protected abstract void changeProperty(String name, String value);
 	protected abstract void changeInternalProperty(String name, String value);
+	
+	/**
+	 * Notify the PropertyPanel that one of its UIProperty has changed. This function is called on the EDT.
+	 * 
+	 * @param name
+	 * @param newvalue
+	 */
 	protected abstract void propertyhasChanged(String name, String newvalue);
+	
 	public abstract void parameterhasChanged(String label);
 	public abstract void internalpropertyhasChanged(String label);
 	public abstract void shutDown();
