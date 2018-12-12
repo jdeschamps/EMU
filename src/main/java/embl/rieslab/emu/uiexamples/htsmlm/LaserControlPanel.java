@@ -279,7 +279,7 @@ public class LaserControlPanel extends PropertyPanel {
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(LASER_PERCENTAGE) || name.equals(LASER_OPERATION)){
-			getUIProperty(getLabel()+" "+name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		}		
 	}
 

@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -14,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
+import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.AcquisitionPanel;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.ActivationPanel;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionUI;
@@ -33,14 +36,29 @@ public class AcquisitionFactory {
 	public AcquisitionFactory(AcquisitionUI acqpane, SystemController controller){
 		acqpane_ = acqpane;
 		controller_ = controller;
-		
-		acqtypelist_ = AcquisitionType.getList();
+		acqtypelist_ = getEnabledAcquisitionList();
 	}
 
+	private String[] getEnabledAcquisitionList(){
+		List<String> list = Arrays.asList(AcquisitionType.getList());
+		
+		if(!acqpane_.isPropertyEnabled(AcquisitionType.BF)){
+			list.remove(AcquisitionType.BF.getTypeValue());
+		}
+		if(!acqpane_.isPropertyEnabled(AcquisitionType.BFP)){
+			list.remove(AcquisitionType.BFP.getTypeValue());
+		}
+		if(!acqpane_.isPropertyEnabled(AcquisitionType.ZSTACK)){
+			list.remove(AcquisitionType.ZSTACK.getTypeValue());
+		}
+		
+		return list.toArray(new String[0]);
+	}
+	
 	public String[] getAcquisitionTypeList(){
 		return acqtypelist_;
 	}
-	
+	 
 	public Acquisition getAcquisition(String type){
 		if(type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
 			return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
@@ -49,8 +67,14 @@ public class AcquisitionFactory {
 		} else if(type.equals(AcquisitionType.SNAP.getTypeValue())){
 			return new SnapAcquisition(controller_.getExposure());
 		} else if(type.equals(AcquisitionType.ZSTACK.getTypeValue())){
-			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)),
-					controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.S)));
+			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_FOCUS)),
+					(TwoStateUIProperty) controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
+		} else if(type.equals(AcquisitionType.BFP.getTypeValue())){
+			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_FOCUS)),
+					(TwoStateUIProperty) controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
+		} else if(type.equals(AcquisitionType.BF.getTypeValue())){
+			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_FOCUS)),
+					(TwoStateUIProperty) controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
 		}
 			
 		return getDefaultAcquisition();
@@ -67,7 +91,7 @@ public class AcquisitionFactory {
 			aqwlist.add(new AcquisitionWrapper(acqlist.get(i)));
 		}
 		
-		ExperimentWrapper expw = new ExperimentWrapper(exp.getPauseTime(), exp.getNumberPositions(), aqwlist);
+		ExperimentWrapper expw = new ExperimentWrapper(exp.getName(), exp.getPath(), exp.getPauseTime(), exp.getNumberPositions(), aqwlist);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -140,6 +164,9 @@ public class AcquisitionFactory {
 		int waitingtime = 3;
 		int numpos = 0;
 
+		String expname = "";
+		String exppath = "";
+		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
@@ -148,6 +175,8 @@ public class AcquisitionFactory {
 
 			ArrayList<AcquisitionWrapper> acqwlist = expw.acquisitionList;	
 
+			expname = expw.name;
+			exppath = expw.path;
 			waitingtime = expw.pauseTime;
 			numpos = expw.numberPositions;
 			
@@ -160,7 +189,7 @@ public class AcquisitionFactory {
 					
 						acqlist.add(acq);
 						
-					} else if(acqw.type.equals(AcquisitionType.BRIGHTFIELD.getTypeValue())){
+					} else if(acqw.type.equals(AcquisitionType.BF.getTypeValue())){
 						BrightFieldAcquisition acq = (BrightFieldAcquisition) getAcquisition(acqw.type);
 						configureGeneralAcquistion(acq, acqw);
 						
@@ -215,12 +244,12 @@ public class AcquisitionFactory {
 			e.printStackTrace();
 		}
 		
-		return new Experiment(waitingtime, numpos, acqlist);
+		return new Experiment(expname,exppath,waitingtime, numpos, acqlist);
 	}
 	
 	private void configureGeneralAcquistion(Acquisition acq, AcquisitionWrapper acqw){
-		acq.setExposureTime(acqw.exposure);
-		acq.setWaitingTime(acqw.waitingTime);
+		acq.getParameters().setExposureTime(acqw.exposure);
+		acq.getParameters().setWaitingTime(acqw.waitingTime);
 		
 		HashMap<String,String> confs = new HashMap<String,String>();
 		if(acqw.configurations != null){
@@ -228,7 +257,7 @@ public class AcquisitionFactory {
 				confs.put(acqw.configurations[j][0], acqw.configurations[j][1]);
 			}
 		}
-		acq.setMMConfigurationGroups(confs);
+		acq.getParameters().setMMConfigurationGroupValues(confs);
 		
 		HashMap<String,String> props = new HashMap<String,String>();
 		if(acqw.properties != null){
@@ -236,14 +265,14 @@ public class AcquisitionFactory {
 				props.put(acqw.properties[j][0], acqw.properties[j][1]);
 			}
 		}
-		acq.setProperties(props);
+		acq.getParameters().setPropertyValues(props);
 		
-		acq.setNumberFrames(acqw.numFrames);
-		acq.setIntervalMs(acqw.interval);		
+		acq.getParameters().setNumberFrames(acqw.numFrames);
+		acq.getParameters().setIntervalMs(acqw.interval);		
 	}
 	
 	public enum AcquisitionType { 
-		TIME("Time"), SNAP("Snapshot"), LOCALIZATION("Localization"), ZSTACK("Z-stack"), AUTOFOCUS("Autofocus"), ROIEVAL("ROI evaluation"); 
+		TIME("Time"), BFP("BFP"), BF("Bright-field"), SNAP("Snapshot"), LOCALIZATION("Localization"), ZSTACK("Z-stack"); 
 		
 		private String value; 
 		
@@ -256,8 +285,8 @@ public class AcquisitionFactory {
 		} 
 		
 		public static String[] getList(){
-			String[] s = {AcquisitionType.LOCALIZATION.getTypeValue(),AcquisitionType.SNAP.getTypeValue(),
-					AcquisitionType.ZSTACK.getTypeValue(),AcquisitionType.TIME.getTypeValue(),AcquisitionType.AUTOFOCUS.getTypeValue(),AcquisitionType.ROIEVAL.getTypeValue()};
+			String[] s = {AcquisitionType.LOCALIZATION.getTypeValue(), AcquisitionType.BFP.getTypeValue(), AcquisitionType.BF.getTypeValue(),
+					AcquisitionType.ZSTACK.getTypeValue(), AcquisitionType.SNAP.getTypeValue(),AcquisitionType.TIME.getTypeValue()};
 			return s;
 		}
 	}; 

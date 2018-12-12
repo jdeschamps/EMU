@@ -324,7 +324,7 @@ public class FocusLockPanel extends PropertyPanel {
 	protected void changeProperty(String name, String value) {
 		if(name.equals(LASER_OPERATION) || name.equals(LASER_ENABLEFINE) || name.equals(LASER_POWER) || name.equals(LASER_PERCFINEA)
 				 || name.equals(LASER_PERCFINEB)){
-			getUIProperty(getLabel()+" "+name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		}	
 	}
 

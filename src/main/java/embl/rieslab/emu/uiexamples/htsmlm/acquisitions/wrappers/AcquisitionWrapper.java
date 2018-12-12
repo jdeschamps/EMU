@@ -3,7 +3,7 @@ package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 
 public class AcquisitionWrapper {
 
@@ -19,14 +19,14 @@ public class AcquisitionWrapper {
 	}
 	
 	public AcquisitionWrapper(Acquisition acq){
-        type = acq.getType();
-        exposure=acq.getExposureTime();
-        interval= acq.getIntervalMs();
-        numFrames=acq.getNumberFrames();
-        waitingTime= acq.getWaitingTime();
+        type = acq.getParameters().getAcquisitionType().getTypeValue();
+        exposure=acq.getParameters().getExposureTime();
+        interval= acq.getParameters().getIntervalMs();
+        numFrames=acq.getParameters().getNumberFrames();
+        waitingTime= acq.getParameters().getWaitingTime();
         
         
-        HashMap<String,String> conf = acq.getMMConfigurationGroups();
+        HashMap<String,String> conf = acq.getParameters().getMMConfigurationGroupValues();
         String[] confkeys = conf.keySet().toArray(new String[0]);
         Arrays.sort(confkeys);
         configurations = new String[confkeys.length][2];
@@ -36,7 +36,7 @@ public class AcquisitionWrapper {
        	}
 
         
-        HashMap<String,String> prop = acq.getPropertyValues();
+        HashMap<String,String> prop = acq.getParameters().getPropertyValues();
         String[] propkeys = prop.keySet().toArray(new String[0]);
         Arrays.sort(propkeys);
         properties = new String[propkeys.length][2];

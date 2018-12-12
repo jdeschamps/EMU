@@ -250,9 +250,9 @@ public class AdditionalFiltersPanel extends PropertyPanel {
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(SLIDER1_POSITION)){
-			getUIProperty(name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		} else if(name.equals(SLIDER2_POSITION)){
-			getUIProperty(name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		} 	
 	}
 

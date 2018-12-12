@@ -16,6 +16,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.SinglePropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 import main.java.embl.rieslab.emu.utils.utils;
 
 import org.micromanager.Studio;
@@ -47,14 +48,14 @@ public class ZStackAcquisition implements Acquisition {
 	private GenericAcquisitionParameters params_;
 	private volatile boolean stopAcq_, running_;
 	
-	public ZStackAcquisition(double exposure, UIProperty stageposition, TwoStateUIProperty stabprop) {
+	public ZStackAcquisition(double exposure, UIProperty stageposition, TwoStateUIProperty twoStateUIProperty) {
 
 		if(stageposition == null){
 			throw new NullPointerException();
 		}
 		stagepos_ = stageposition;
 		
-		stabprop_ = stabprop;
+		stabprop_ = twoStateUIProperty;
 		if(stabprop_ == null){
 			zstab_ = false;
 		} else {
@@ -68,7 +69,8 @@ public class ZStackAcquisition implements Acquisition {
 		stopAcq_ = false;
 		running_ = false;
 		
-		params_ = new GenericAcquisitionParameters(exposure, 0, 3, 1, new HashMap<String,String>(), new HashMap<String,String>(), setSlices(zstart, zend, zstep));
+		params_ = new GenericAcquisitionParameters(AcquisitionType.ZSTACK, 
+				exposure, 0, 3, 1, new HashMap<String,String>(), new HashMap<String,String>(), setSlices(zstart, zend, zstep));
 	}
 	
 	public ArrayList<Double> setSlices(double zstart, double zend, double zstep){
@@ -130,6 +132,9 @@ public class ZStackAcquisition implements Acquisition {
 			
 			}
 			running_ = false;
+			
+			// close display
+			studio.displays().closeDisplaysFor(store);
 			
 			// go back to original position
 			stagepos_.setPropertyValue(String.valueOf(z0));
@@ -279,4 +284,20 @@ public class ZStackAcquisition implements Acquisition {
 		return s;
 	}
 
+	public void setZStart(double val){
+		zstart = val;
+	}
+	
+	public void setZEnd(double val){
+		zend = val;
+	}
+	
+	public void setZStep(double val){
+		zstep = val;
+	}
+	
+	@Override
+	public AcquisitionType getType() {
+		return AcquisitionType.ZSTACK;
+	}
 }

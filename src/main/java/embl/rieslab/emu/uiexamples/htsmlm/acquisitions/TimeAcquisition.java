@@ -12,6 +12,7 @@ import javax.swing.SpinnerNumberModel;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 
 import org.micromanager.Studio;
 import org.micromanager.data.Coords;
@@ -35,7 +36,8 @@ public class TimeAcquisition implements Acquisition{
 		stopAcq_ = false;
 		running_ = false;
 
-		params_ = new GenericAcquisitionParameters(exposure, 0, 3, 30000, new HashMap<String,String>(), new HashMap<String,String>());
+		params_ = new GenericAcquisitionParameters(AcquisitionType.TIME, 
+				exposure, 0, 3, 30000, new HashMap<String,String>(), new HashMap<String,String>());
 	}
 
 	@Override
@@ -177,6 +179,9 @@ public class TimeAcquisition implements Acquisition{
 		}
 		running_ = false;
 		
+		// close display
+		studio.displays().closeDisplaysFor(store);
+		
 		return store; 
 	}
 
@@ -193,5 +198,10 @@ public class TimeAcquisition implements Acquisition{
 	@Override
 	public boolean skipPosition() {
 		return false;
+	}
+	
+	@Override
+	public AcquisitionType getType() {
+		return AcquisitionType.TIME;
 	}
 }

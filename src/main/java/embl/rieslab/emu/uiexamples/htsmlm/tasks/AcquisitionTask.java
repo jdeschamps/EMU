@@ -18,7 +18,6 @@ import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.tasks.Task;
 import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.AcquisitionTaskOld.AcquisitionRun;
 import mmcorej.CMMCore;
 
 public class AcquisitionTask  implements Task<Integer>{
@@ -33,14 +32,28 @@ public class AcquisitionTask  implements Task<Integer>{
 	private TaskHolder<Integer> holder_;
 	ArrayList<Acquisition> acqlist_;
 	
-	public AcquisitionTask(TaskHolder<Integer> holder, SystemController system){
+	private String expname_, exppath_; 
+	
+	public AcquisitionTask(TaskHolder<Integer> holder, SystemController system, String expname, String exppath){
 		system_ = system;
 		studio_ = system_.getStudio();
 		core_ = studio_.getCMMCore();
 		acqmanager_ = studio_.getAcquisitionManager();
 		posmanager_ = studio_.getPositionListManager();
 				
+		expname_ = expname;
+		exppath_ = exppath;
+		
 		registerHolder(holder);
+	}
+	
+	public void setAcquisitionList(ArrayList<Acquisition> acqlist){
+		if(acqlist == null){
+			throw new NullPointerException();
+		} else if(acqlist.size() == 0){
+			throw new IllegalArgumentException();
+		}
+		acqlist_ = acqlist;
 	}
 	
 	@Override
@@ -55,14 +68,18 @@ public class AcquisitionTask  implements Task<Integer>{
 
 	@Override
 	public void startTask() {
-		// TODO Auto-generated method stub
-		
+		if(acqlist_.size() > 0){
+			t = new AcquisitionRun(acqlist_);
+			t.execute();
+			running_ = true;
+		}
 	}
 
 	@Override
 	public void stopTask() {
-		// TODO Auto-generated method stub
-		
+		if(t != null){
+			t.stop();
+		}
 	}
 
 	@Override
@@ -133,7 +150,7 @@ public class AcquisitionTask  implements Task<Integer>{
 						// move to next stage position
 						currPos = poslist.getPosition(i);
 						try {
-							core_.setXYPosition(xystage, currPos.getX(), currPos.getY());
+							core_.setXYPosition(xystage, currPos.getX(), currPos.getY()); // what about z?
 							
 							// let time for the stage to move to position
 							Thread.sleep(param[0] * 1000);
@@ -143,11 +160,11 @@ public class AcquisitionTask  implements Task<Integer>{
 								final Acquisition acq = acqlist_.get(k);
 
 								// set-up system
-								system_.setUpSystem(acq.getParameters().mmconfgroups_);
+								system_.setUpSystem(acq.getParameters().getPropertyValues());
 
 								// set configuration settings
-								if (!acq.getParameters().mmconfgroups_.isEmpty()) {
-									HashMap<String, String> configs = acq.getParameters().mmconfgroups_;
+								if (!acq.getParameters().getMMConfigurationGroupValues().isEmpty()) {
+									HashMap<String, String> configs = acq.getParameters().getMMConfigurationGroupValues();
 									Iterator<String> it = configs.keySet().iterator();
 									while (it.hasNext()) {
 										String group = it.next();
@@ -156,10 +173,7 @@ public class AcquisitionTask  implements Task<Integer>{
 								}
 
 								// run acquisition
-
-
-								// set-up special post-acquisition state
-								acq.postAcquisition();
+								currAcq = acq.startAcquisition(studio_);
 
 								// close acq window
 								studio_.getDisplayManager().closeDisplaysFor(currAcq);
@@ -196,11 +210,11 @@ public class AcquisitionTask  implements Task<Integer>{
 		public String createAcqName(Acquisition acq, int i){
 			String acqname;
 			if (i < 10) {
-				acqname = "00" + i + "_" + acq.getExperimentName() + "_"+ acq.getType();
+				acqname = "00" + i + "_" + expname_ + "_"+ acq.getType();
 			} else if (i < 100) {
-				acqname = "0" + i + "_" + acq.getExperimentName() + "_"+ acq.getType();
+				acqname = "0" + i + "_" + expname_ + "_"+ acq.getType();
 			} else {
-				acqname = i + "_" + acq.getExperimentName() + "_"+ acq.getType();
+				acqname = i + "_" + expname_ + "_"+ acq.getType();
 			}
 			return acqname;
 		}
@@ -212,7 +226,7 @@ public class AcquisitionTask  implements Task<Integer>{
 
 		protected void interruptAcquistion() {
 			System.out.println("interrupt acq requested");
-			
+			// TODO
 			while (!acqmanager_.isAcquisitionRunning()) {
 				try {
 					Thread.sleep(500);

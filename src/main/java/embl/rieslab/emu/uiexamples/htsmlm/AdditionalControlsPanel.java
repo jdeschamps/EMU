@@ -151,7 +151,7 @@ public class AdditionalControlsPanel extends PropertyPanel{
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(DEVICE_1) || name.equals(DEVICE_2) || name.equals(DEVICE_3) || name.equals(DEVICE_4)){
-			getUIProperty(name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		}
 	}
 

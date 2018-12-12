@@ -405,7 +405,7 @@ public class FocusPanel extends PropertyPanel {
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(FOCUS_POSITION) || name.equals(FOCUS_STABILIZATION)){
-			getUIProperty(name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		}
 	}
 

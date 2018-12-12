@@ -44,14 +44,16 @@ import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.PropertyPanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.TwoStateFlag;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionUI;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionWizard;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.AcquisitionTaskOld;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.AcquisitionTask;
 
 public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Integer>, AcquisitionUI{
 
@@ -67,15 +69,16 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
     
     ///// Parameters
     public final static String PARAM_LOCKING = "Focus stabilization";
+    public final static String PARAM_FOCUS = "Z stage position";
     public final static String PARAM_BFP = "BFP lens";
     public final static String PARAM_BRIGHTFIELD = "Bright field";
     
 	///// Task
 	private final static String TASK_NAME = "Unsupervised acquisitions";
-	private AcquisitionTaskOld acqengine_;
+	private AcquisitionTask acqengine_;
 	
     ///// Convenience variables
-	private String paramBFP_, paramLocking_, paramBrightField_;
+	private String paramBFP_, paramLocking_, paramBrightField_, paramfocus_;
 	
     private boolean ready_;
     private JFrame summaryframe_;
@@ -102,7 +105,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		super("Acquisitions");
 		controller_ = controller;
 		ready_ = false;
-		
+
 		// set dummy experiment
 		exp_ = new Experiment(3,0,new ArrayList<Acquisition>());
 		
@@ -338,7 +341,7 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	@Override
 	public void setExperiment(Experiment exp){
 		if(exp.getAcquisitionList() == null){
-			exp_ = new Experiment(3,0,new ArrayList<Acquisition>());
+			exp_ = new Experiment("", "", exp);
 			return;
 		}
 		
@@ -366,6 +369,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			return paramLocking_;
 		} else if(acqtype.equals(PARAM_BRIGHTFIELD)){
 			return paramBrightField_;
+		}else if(acqtype.equals(PARAM_FOCUS)){
+			return paramfocus_;
 		}
 		return "";
 	}
@@ -397,14 +402,29 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			if(wizard_ == null){
 				wizard_ = new AcquisitionWizard(controller_, this);
 			}
-			Experiment exp = wizard_.loadAcquisitionList(path);		
-			
+			Experiment exp = wizard_.loadAcquisitionList(path);	
+
 			if(exp.getAcquisitionList() != null){
 				exp_ = exp;
 				ready_ = true;
 				addText(TEXT_LOADED);	
 				setSummaryText();
+				
+				String exppath = jTextField_path.getText();
+				String expname = jTextField_expname.getText();
+				if(exppath == null || exppath.compareTo("") == 0){
+					jTextField_path.setText(exp_.getPath());
+				} else {
+					exp_.setPath(exppath);
+				}
+				
+				if(expname == null || expname.compareTo("") == 0){
+					jTextField_expname.setText(exp_.getName());
+				} else {
+					exp_.setName(expname);
+				}
 			}
+
 	    }
 	}
 	
@@ -413,6 +433,9 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			showNoAcquisitionToBeSaved();
 			return;
 		}
+
+		exp_.setName(jTextField_expname.getText());
+		exp_.setPath(jTextField_path.getText());
 		
 		JFileChooser fileChooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Acquisition list", HTSMLMConstants.ACQ_EXT);
@@ -443,9 +466,13 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	public String getLockingPropertyName(){
 		return paramLocking_;
 	}
-	
+
 	public String getWhiteLightPropertyName(){
 		return paramBrightField_;
+	}
+	
+	public String getFocusPropertyName(){
+		return paramfocus_;
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////
@@ -512,12 +539,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    }
 	            
 	    	    //////// MM configuration groups
-	    	    String[] confgroup = new String[acq.getMMConfigurationGroups().size()];
-	    	    Iterator<String> it = acq.getMMConfigurationGroups().keySet().iterator();
+	    	    String[] confgroup = new String[acq.getParameters().getMMConfigurationGroupValues().size()];
+	    	    Iterator<String> it = acq.getParameters().getMMConfigurationGroupValues().keySet().iterator();
 	    	    int j=0;
 	    	    while(it.hasNext()){
 	    	    	s = it.next();  
-	    	    	confgroup[j] = s+": "+acq.getMMConfigurationGroups().get(s);
+	    	    	confgroup[j] = s+": "+acq.getParameters().getMMConfigurationGroupValues().get(s);
 	    	    	j++;
 	    	    }
 	    	    Arrays.sort(confgroup);
@@ -527,12 +554,12 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 	    	    }
 	    	    
 	    	    //////// UIProperties values
-	    	    String[] propval = new String[acq.getPropertyValues().size()];
-	    	    it = acq.getPropertyValues().keySet().iterator();
+	    	    String[] propval = new String[acq.getParameters().getPropertyValues().size()];
+	    	    it = acq.getParameters().getPropertyValues().keySet().iterator();
 	    	    j=0;
 	    	    while(it.hasNext()){
 	    	    	s = it.next();  
-	    	    	propval[j] = controller_.getProperty(s).getFriendlyName()+": "+acq.getPropertyValues().get(s);
+	    	    	propval[j] = controller_.getProperty(s).getFriendlyName()+": "+acq.getParameters().getPropertyValues().get(s);
 	    	    	j++;
 	    	    }
 	    	    Arrays.sort(propval);
@@ -620,15 +647,11 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			final String path = jTextField_path.getText();
 			final String name = jTextField_expname.getText();
 			final AcquisitionFactory factory = new AcquisitionFactory(this, controller_);
-			acqengine_ = new AcquisitionTaskOld(this, controller_);
-
+			acqengine_ = new AcquisitionTask(this, controller_, name, path);
+			
 			Thread t = new Thread("Set-up acquisition") {
 				public void run() {
 					ArrayList<Acquisition> acqlist = exp_.getAcquisitionList();
-					for(int i=0;i<acqlist.size();i++){
-						acqlist.get(i).setName(name);
-						acqlist.get(i).setPath(path);
-					}
 					
 					// save the acquisition list to the destination folder
 					boolean b = true;
@@ -779,9 +802,11 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		paramBFP_ = UIPropertyParameter.NO_PROPERTY;
 		paramLocking_ = UIPropertyParameter.NO_PROPERTY;
 		paramBrightField_ = UIPropertyParameter.NO_PROPERTY;	
+		paramfocus_ = UIPropertyParameter.NO_PROPERTY;	
 		
 		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens.", TwoStateFlag.TWOSTATE_FLAG));
 		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.", FocusStabFlag.FOCUSSTAB_FLAG)); 
+		addUIParameter(new UIPropertyParameter(this, PARAM_FOCUS,"UIProperty corresponding to the focusing stage position.", FocusFlag.FOCUS_FLAG)); 
 		addUIParameter(new UIPropertyParameter(this, PARAM_BRIGHTFIELD,"UIProperty corresponding to the triggering of the white light illumination.", TwoStateFlag.TWOSTATE_FLAG)); 
 	}
 
@@ -813,6 +838,8 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 			paramLocking_ = ((UIPropertyParameter) getUIParameter(PARAM_LOCKING)).getValue();
 		} else if(label.equals(PARAM_BRIGHTFIELD)){
 			paramBrightField_ = ((UIPropertyParameter) getUIParameter(PARAM_BRIGHTFIELD)).getValue();
+		} else if(label.equals(PARAM_FOCUS)){
+			paramfocus_ = ((UIPropertyParameter) getUIParameter(PARAM_FOCUS)).getValue();
 		}
 	}
 	
@@ -837,13 +864,16 @@ public class AcquisitionPanel extends PropertyPanel implements TaskHolder<Intege
 		return "";
 	}
 
+
 	@Override
-	public boolean isPropertyEnabled(String label) {
-		if(label.equals(PARAM_BFP) || label.equals(PARAM_LOCKING) || label.equals(PARAM_BRIGHTFIELD)){
-			if(!getUIPropertyName(label).equals(UIPropertyParameter.NO_PROPERTY)){
-				return true;
-			}
-		}
+	public boolean isPropertyEnabled(AcquisitionType type) {
+		if(type.equals(AcquisitionType.BFP) && paramBFP_ != UIPropertyParameter.NO_PROPERTY){
+			return true;
+		} else if(type.equals(AcquisitionType.BF) && paramBrightField_ != UIPropertyParameter.NO_PROPERTY){
+			return true;
+		}  else if(type.equals(AcquisitionType.ZSTACK) && paramfocus_ != UIPropertyParameter.NO_PROPERTY){
+			return true;
+		} 
 		return false;
 	}
 }

@@ -40,8 +40,8 @@ import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoneConfigGroupPropert
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.ReadOnlyPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.TwoStatePropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.old.Acquisition;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FilterWheelFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusLockFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
@@ -160,7 +160,8 @@ public class AcquisitionTab extends JPanel {
 				pane.setBorder(BorderFactory.createTitledBorder(null, "Acquisition Settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 				((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 				acqpanels_[i] = pane;
-				acqpanes_[i] = createPanel(acqpanels_[i],acquisition.getPropertyFilter(), acquisition.getMMConfigurationGroups(), acquisition.getPropertyValues());
+				acqpanes_[i] = createPanel(acqpanels_[i],acquisition.getPropertyFilter(), 
+						acquisition.getParameters().getMMConfigurationGroupValues(), acquisition.getParameters().getPropertyValues());
 				acqcard_.add(acqpanes_[i],acqtypes_[i]);
 			} else {
 				acqpanels_[i] = factory_.getAcquisition(acqtypes_[i]).getPanel();
@@ -622,10 +623,10 @@ public class AcquisitionTab extends JPanel {
 		Acquisition acq = factory_.getAcquisition(acqtypes_[currind]);
 		
 		// set mm configuration groups
-		acq.setMMConfigurationGroups(registerMMConfGroups(acqpanes_[currind], new HashMap<String, String>()));
+		acq.getParameters().setMMConfigurationGroupValues(registerMMConfGroups(acqpanes_[currind], new HashMap<String, String>()));
 		
 		// set properties value in the acquisition
-		acq.setProperties(registerProperties(acqpanes_[currind], new HashMap<String, String>()));
+		acq.getParameters().setPropertyValues(registerProperties(acqpanes_[currind], new HashMap<String, String>()));
 		
 		// read out the JPanel related to the acquisition
 		acq.readOutParameters(acqpanels_[currind]);

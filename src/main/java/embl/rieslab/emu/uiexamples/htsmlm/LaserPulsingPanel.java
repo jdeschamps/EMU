@@ -242,7 +242,7 @@ public class LaserPulsingPanel extends PropertyPanel {
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(LASER_PULSE)){
-			getUIProperty(name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		}
 	}
 

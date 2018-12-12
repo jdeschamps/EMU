@@ -144,7 +144,7 @@ public class FiltersPanel extends PropertyPanel {
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(FW_POSITION)){
-			getUIProperty(name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		}		
 	}
 

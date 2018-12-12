@@ -241,7 +241,7 @@ public class LaserTriggerPanel extends PropertyPanel {
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(TRIGGER_BEHAVIOUR) || name.equals(PULSE_LENGTH) || name.equals(TRIGGER_SEQUENCE)){
-			getUIProperty(getLabel()+" "+name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		} 
 	}
 

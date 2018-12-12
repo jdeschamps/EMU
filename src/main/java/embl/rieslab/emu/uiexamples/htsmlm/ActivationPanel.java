@@ -513,7 +513,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	}
 	
 	public boolean isActivationAtMax(){
-		String val = getUIProperty(LASER_PULSE).getPropertyValue();
+		String val = getUIPropertyValue(LASER_PULSE);
 		if(utils.isNumeric(val)){
 			if(Double.parseDouble(val)>=maxpulse_){
 				return true;
@@ -548,7 +548,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(LASER_PULSE)){
-			getUIProperty(name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		}
 	}
 

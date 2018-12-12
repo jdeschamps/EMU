@@ -427,7 +427,7 @@ public class PIFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 	@Override
 	protected void changeProperty(String name, String value) {
 		if(name.equals(FOCUS_POSITION)){
-			getUIProperty(name).setPropertyValue(value);
+			setUIPropertyValue(name,value);
 		}
 	}
 

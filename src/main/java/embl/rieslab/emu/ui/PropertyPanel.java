@@ -10,6 +10,11 @@ import main.java.embl.rieslab.emu.ui.internalproperty.InternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
+/////////////////////
+//
+// need to maybe modify the API to not expose the UIProperties to the property panel is order to prevent EDT from lengthy calls?
+
+
 @SuppressWarnings("rawtypes")
 public abstract class PropertyPanel extends JPanel{
 
@@ -58,6 +63,20 @@ public abstract class PropertyPanel extends JPanel{
 		return null;
 	}	
 	
+	public void setUIPropertyFriendlyName(String name, String friendlyname){
+		if(properties_.containsKey(name)){
+			properties_.get(name).setFriendlyName(friendlyname);
+		}
+	}
+	
+	// maybe this should not be exposed to avoid modifying the property value on the EDT
+	public UIProperty getUIProperty(String name){
+		if(properties_.containsKey(name)){
+			return properties_.get(name);
+		}
+		return null;
+	}
+	
 	public String getUIPropertyValue(String name){
 		if(properties_.containsKey(name)){
 			return properties_.get(name).getPropertyValue();
@@ -73,10 +92,8 @@ public abstract class PropertyPanel extends JPanel{
 					properties_.get(name).setPropertyValue(value);
 				}
 			}
-
 		};
 		t.start();
-
 	}
 	
 	public UIParameter getUIParameter(String name){
@@ -115,7 +132,7 @@ public abstract class PropertyPanel extends JPanel{
 	public void updateAllParameters(){
 		Iterator<String> it = parameters_.keySet().iterator();
 		while(it.hasNext()){
-			parameterhasChanged(parameters_.get(it.next()).getLabel());
+			triggerParameterHasChanged(parameters_.get(it.next()).getLabel());
 		}
 	}
 	
@@ -139,12 +156,21 @@ public abstract class PropertyPanel extends JPanel{
 	public void turnOnPropertyChange(){
 		propertychange_ = true;
 	}
-	
+
 	public void triggerPropertyHasChanged(final String name, final String newvalue){
 		// Makes sure that the updating runs on EDT
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				propertyhasChanged(name, newvalue);
+			}
+		});
+	}
+	
+	public void triggerParameterHasChanged(final String name){
+		// Makes sure that the updating runs on EDT
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				parameterhasChanged(name);
 			}
 		});
 	}
@@ -157,14 +183,19 @@ public abstract class PropertyPanel extends JPanel{
 	protected abstract void changeInternalProperty(String name, String value);
 	
 	/**
-	 * Notify the PropertyPanel that one of its UIProperty has changed. This function is called on the EDT.
+	 * Notifies the PropertyPanel that one of its UIProperty has changed. This function is called on the EDT.
 	 * 
 	 * @param name
 	 * @param newvalue
 	 */
 	protected abstract void propertyhasChanged(String name, String newvalue);
 	
-	public abstract void parameterhasChanged(String label);
+	/**
+	 * runs on edt
+	 * 
+	 * @param label
+	 */
+	protected abstract void parameterhasChanged(String label);
 	public abstract void internalpropertyhasChanged(String label);
 	public abstract void shutDown();
 	public abstract String getDescription();
