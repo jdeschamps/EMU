@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -21,23 +21,23 @@ import org.micromanager.data.Datastore;
 import org.micromanager.data.Image;
 import org.micromanager.data.internal.DefaultCoords;
 
-public class BFPAcquisition implements Acquisition{
+public class BrightFieldAcquisition implements Acquisition{
 	
 	private GenericAcquisitionParameters params_;
 	
-	private final static String PANE_NAME = "BFP panel";
+	private final static String PANE_NAME = "Bright-field panel";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
 	
-	private TwoStateUIProperty bfpprop_;
+	private TwoStateUIProperty bfprop_;
 		
-	public BFPAcquisition(double exposure, TwoStateUIProperty bfpprop) {
-		if(bfpprop == null){
+	public BrightFieldAcquisition(double exposure, TwoStateUIProperty bfprop) {
+		if(bfprop == null){
 			throw new NullPointerException();
 		}
-		bfpprop_ = bfpprop;
+		bfprop_ = bfprop;
 		
-		params_ = new GenericAcquisitionParameters(AcquisitionType.BFP, 
+		params_ = new GenericAcquisitionParameters(AcquisitionType.BF, 
 				exposure, 0, 3, 1, new HashMap<String,String>(), new HashMap<String,String>());
 	}
 
@@ -106,7 +106,7 @@ public class BFPAcquisition implements Acquisition{
 
 	@Override
 	public PropertyFilter getPropertyFilter() {
-		return new SinglePropertyFilter(bfpprop_.getName());
+		return new SinglePropertyFilter(bfprop_.getName());
 	}
 
 	@Override
@@ -128,8 +128,8 @@ public class BFPAcquisition implements Acquisition{
 
 	@Override
 	public Datastore startAcquisition(Studio studio) {
-		// turn on BFP
-		bfpprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
+		// turn on BF
+		bfprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 
 		
 		Datastore store = studio.data().createRAMDatastore();
@@ -152,11 +152,12 @@ public class BFPAcquisition implements Acquisition{
 		// close display
 		studio.displays().closeDisplaysFor(store);
 		
-		// turn off BFP
-		bfpprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
+		// turn off BF
+		bfprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		
 		return store; 
 	}
+
 
 	@Override
 	public void stopAcquisition() {
@@ -175,7 +176,6 @@ public class BFPAcquisition implements Acquisition{
 
 	@Override
 	public AcquisitionType getType() {
-		return AcquisitionType.BFP;
+		return AcquisitionType.BF;
 	}
-
 }

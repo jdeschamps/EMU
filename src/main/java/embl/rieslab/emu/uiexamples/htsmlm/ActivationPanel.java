@@ -671,7 +671,7 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 	 * 
 	 */
 	@Override
-	public void startTask() {
+	public boolean startTask() {
 		if(task_.isRunning()){ // if task is running 
 			if(!activate_){ // but not changing the pulse
 				 Runnable checkactivate = new Runnable() {
@@ -713,7 +713,8 @@ public class ActivationPanel extends PropertyPanel implements TaskHolder<Double>
 					  EventQueue.invokeLater(checkactivate);
 				 }
 			}
-		} 
+		}
+		return true;
 	}
 
 	@Override

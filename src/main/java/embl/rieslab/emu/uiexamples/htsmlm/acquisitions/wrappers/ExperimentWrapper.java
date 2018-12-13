@@ -22,6 +22,12 @@ public class ExperimentWrapper {
 		this.numberPositions = numberpositions;
 		this.acquisitionList = acqwlist;
 	}
-	
-	
+
+	public ExperimentWrapper(String name, String path, Experiment e){
+		this.name = name;
+		this.path = path;
+		this.pauseTime = e.getPauseTime();
+		this.numberPositions = e.getNumberPositions();
+		this.acquisitionList = e.getAcquisitionWrapperList();
+	}
 }

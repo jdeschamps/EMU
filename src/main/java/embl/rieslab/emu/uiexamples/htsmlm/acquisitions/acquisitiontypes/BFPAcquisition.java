@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -13,6 +13,7 @@ import javax.swing.SpinnerNumberModel;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.SinglePropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 
 import org.micromanager.Studio;
@@ -21,23 +22,23 @@ import org.micromanager.data.Datastore;
 import org.micromanager.data.Image;
 import org.micromanager.data.internal.DefaultCoords;
 
-public class BrightFieldAcquisition implements Acquisition{
+public class BFPAcquisition implements Acquisition{
 	
 	private GenericAcquisitionParameters params_;
 	
-	private final static String PANE_NAME = "Bright-field panel";
+	private final static String PANE_NAME = "BFP panel";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
 	
-	private TwoStateUIProperty bfprop_;
+	private TwoStateUIProperty bfpprop_;
 		
-	public BrightFieldAcquisition(double exposure, TwoStateUIProperty bfprop) {
-		if(bfprop == null){
+	public BFPAcquisition(double exposure, TwoStateUIProperty bfpprop) {
+		if(bfpprop == null){
 			throw new NullPointerException();
 		}
-		bfprop_ = bfprop;
+		bfpprop_ = bfpprop;
 		
-		params_ = new GenericAcquisitionParameters(AcquisitionType.BF, 
+		params_ = new GenericAcquisitionParameters(AcquisitionType.BFP, 
 				exposure, 0, 3, 1, new HashMap<String,String>(), new HashMap<String,String>());
 	}
 
@@ -106,7 +107,7 @@ public class BrightFieldAcquisition implements Acquisition{
 
 	@Override
 	public PropertyFilter getPropertyFilter() {
-		return new SinglePropertyFilter(bfprop_.getName());
+		return new SinglePropertyFilter(bfpprop_.getName());
 	}
 
 	@Override
@@ -128,8 +129,8 @@ public class BrightFieldAcquisition implements Acquisition{
 
 	@Override
 	public Datastore startAcquisition(Studio studio) {
-		// turn on BF
-		bfprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
+		// turn on BFP
+		bfpprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 
 		
 		Datastore store = studio.data().createRAMDatastore();
@@ -152,12 +153,11 @@ public class BrightFieldAcquisition implements Acquisition{
 		// close display
 		studio.displays().closeDisplaysFor(store);
 		
-		// turn off BF
-		bfprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
+		// turn off BFP
+		bfpprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		
 		return store; 
 	}
-
 
 	@Override
 	public void stopAcquisition() {
@@ -176,6 +176,7 @@ public class BrightFieldAcquisition implements Acquisition{
 
 	@Override
 	public AcquisitionType getType() {
-		return AcquisitionType.BF;
+		return AcquisitionType.BFP;
 	}
+
 }

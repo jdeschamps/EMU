@@ -40,8 +40,8 @@ import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoneConfigGroupPropert
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.ReadOnlyPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.TwoStatePropertyFilter;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.Acquisition;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FilterWheelFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusLockFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;

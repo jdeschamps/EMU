@@ -4,7 +4,7 @@ public interface TaskHolder<T> {
 
 	public void update(T[] output);
 	public T[] retrieveAllParameters();
-	public void startTask();
+	public boolean startTask();
 	public void stopTask();
 	public boolean isPausable();
 	public void pauseTask();

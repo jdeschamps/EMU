@@ -17,43 +17,34 @@ import org.micromanager.data.Datastore;
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.tasks.Task;
 import main.java.embl.rieslab.emu.tasks.TaskHolder;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import mmcorej.CMMCore;
 
 public class AcquisitionTask  implements Task<Integer>{
 
 	private Studio studio_;
 	private CMMCore core_;
-	private AcquisitionManager acqmanager_;
 	private PositionListManager posmanager_;
 	private boolean running_ =  false;
 	private SystemController system_;
 	private AcquisitionRun t;
 	private TaskHolder<Integer> holder_;
-	ArrayList<Acquisition> acqlist_;
+	private Experiment exp_;
 	
 	private String expname_, exppath_; 
 	
-	public AcquisitionTask(TaskHolder<Integer> holder, SystemController system, String expname, String exppath){
+	public AcquisitionTask(TaskHolder<Integer> holder, SystemController system, Experiment exp, String expname, String exppath){
 		system_ = system;
 		studio_ = system_.getStudio();
 		core_ = studio_.getCMMCore();
-		acqmanager_ = studio_.getAcquisitionManager();
 		posmanager_ = studio_.getPositionListManager();
 				
+		exp_ = exp;
 		expname_ = expname;
 		exppath_ = exppath;
 		
 		registerHolder(holder);
-	}
-	
-	public void setAcquisitionList(ArrayList<Acquisition> acqlist){
-		if(acqlist == null){
-			throw new NullPointerException();
-		} else if(acqlist.size() == 0){
-			throw new IllegalArgumentException();
-		}
-		acqlist_ = acqlist;
 	}
 	
 	@Override
@@ -63,13 +54,13 @@ public class AcquisitionTask  implements Task<Integer>{
 
 	@Override
 	public void notifyHolder(Integer[] outputs) {
-		
+		holder_.update(outputs);
 	}
 
 	@Override
 	public void startTask() {
-		if(acqlist_.size() > 0){
-			t = new AcquisitionRun(acqlist_);
+		if(!exp_.getAcquisitionList().isEmpty()){
+			t = new AcquisitionRun(exp_);
 			t.execute();
 			running_ = true;
 		}
@@ -84,130 +75,131 @@ public class AcquisitionTask  implements Task<Integer>{
 
 	@Override
 	public boolean isRunning() {
-		// TODO Auto-generated method stub
-		return false;
+		return running_;
 	}
 
 	@Override
 	public boolean isPausable() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public void pauseTask() {
-		// TODO Auto-generated method stub
-		
+		// do nothing
 	}
 
 	@Override
 	public void resumeTask() {
-		// TODO Auto-generated method stub
-		
+		// do nothin
 	}
 	
-
 	class AcquisitionRun extends SwingWorker<Integer, Integer> {
 
-		private ArrayList<Acquisition> acqlist_;
-		private Datastore currAcq;
+		private Experiment exp_;
+		private Datastore currAcqStore;
+		private Acquisition currAcq;
 		private boolean stop_ = false;
 
-		public AcquisitionRun(ArrayList<Acquisition> acqlist) {
-			acqlist_ = acqlist;
+		public AcquisitionRun(Experiment exp) {
+			exp_ = exp;
 		}
 
 		@Override
 		protected Integer doInBackground() throws Exception {
-			return runAcquisitions();
+			return runExperiment();
 		}
 
-		public Integer runAcquisitions() {
+		private Integer runExperiment() {
 			Integer[] param = holder_.retrieveAllParameters();
-			
-			if(acqlist_ == null){
-				System.out.println("Acquisition list is null");
-				return 0;
-			}
-			
-			if (acqlist_.size() > 0) {
+		
+			PositionList poslist = posmanager_.getPositionList();
+			int numPosition = poslist.getNumberOfPositions();
 
-				PositionList poslist = posmanager_.getPositionList();
-				int numPosition = poslist.getNumberOfPositions();
+			if (numPosition > 0) {
+				MultiStagePosition currPos;
 
-				if (numPosition > 0) {
-					MultiStagePosition currPos;
+				String xystage = core_.getXYStageDevice();
 
-					String xystage = core_.getXYStageDevice();
-
-					// retrieve max number of positions
-					int maxNumPosition = numPosition;
-					if (param[1] > 0) {
-						maxNumPosition = param[1];
-					}
-
-					for (int i = 0; i < maxNumPosition; i++) {
-						// move to next stage position
-						currPos = poslist.getPosition(i);
-						try {
-							core_.setXYPosition(xystage, currPos.getX(), currPos.getY()); // what about z?
-							
-							// let time for the stage to move to position
-							Thread.sleep(param[0] * 1000);
-
-							// perform each acquisition sequentially
-							for (int k = 0; k < acqlist_.size(); k++) {
-								final Acquisition acq = acqlist_.get(k);
-
-								// set-up system
-								system_.setUpSystem(acq.getParameters().getPropertyValues());
-
-								// set configuration settings
-								if (!acq.getParameters().getMMConfigurationGroupValues().isEmpty()) {
-									HashMap<String, String> configs = acq.getParameters().getMMConfigurationGroupValues();
-									Iterator<String> it = configs.keySet().iterator();
-									while (it.hasNext()) {
-										String group = it.next();
-										core_.setConfig(group,configs.get(group));
-									}
-								}
-
-								// run acquisition
-								currAcq = acq.startAcquisition(studio_);
-
-								// close acq window
-								studio_.getDisplayManager().closeDisplaysFor(currAcq);
-
-								if (stop_) {
-									System.out.println("Stop is true in acquisition");
-									break;
-								}
-							}
-
-							if (stop_) {
-								System.out.println("Stop is true in position");
-								break;
-							}
-
-							// show progress
-							publish(i);
-						} catch (InterruptedException e) {
-							e.printStackTrace();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
-					}
-				} else {
-					System.out.println("Position list empty");
+				// retrieve max number of positions
+				int maxNumPosition = numPosition;
+				if (exp_.getNumberPositions() > 0) {
+					maxNumPosition = exp_.getNumberPositions();
 				}
+
+				for (int i = 0; i < maxNumPosition; i++) {
+					// move to next stage position
+					currPos = poslist.getPosition(i);
+					try {
+						core_.setXYPosition(xystage, currPos.getX(), currPos.getY()); 
+						core_.setPosition(core_.getFocusDevice(), currPos.getZ());
+
+						// let time for the stage to move to position
+						Thread.sleep(param[0] * 1000);
+
+						// perform acquisitions
+						performAcquisitions();
+						
+						if (stop_) {
+							System.out.println("Stop is true in position");
+							break;
+						}
+
+						// show progress
+						publish(i);
+						
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			} else { // eprform on current position
+				System.out.println("Position list empty");
 			}
-			
+
 			publish(-1);
 			
 			return 0;
 		}
 
-		public String createAcqName(Acquisition acq, int i){
+		private void performAcquisitions(){
+			
+			// perform each acquisition sequentially
+			for (int k = 0; k < exp_.getAcquisitionList().size(); k++) {
+				currAcq = exp_.getAcquisitionList().get(k);
+
+				// set-up system
+				system_.setUpSystem(currAcq.getParameters().getPropertyValues());
+
+				// set configuration settings
+				if (!currAcq.getParameters().getMMConfigurationGroupValues().isEmpty()) {
+					HashMap<String, String> configs = currAcq.getParameters().getMMConfigurationGroupValues();
+					Iterator<String> it = configs.keySet().iterator();
+					while (it.hasNext()) {
+						String group = it.next();
+						try {
+							core_.setConfig(group, configs.get(group));
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+
+				// run acquisition
+				currAcqStore = currAcq.startAcquisition(studio_);
+
+				// save store
+				
+				if (stop_) {
+					System.out
+							.println("Stop is true in acquisition");
+					break;
+				}
+			}
+		}
+		
+		private String createAcqName(Acquisition acq, int i){
 			String acqname;
 			if (i < 10) {
 				acqname = "00" + i + "_" + expname_ + "_"+ acq.getType();
@@ -224,10 +216,9 @@ public class AcquisitionTask  implements Task<Integer>{
 			interruptAcquistion();
 		}
 
-		protected void interruptAcquistion() {
-			System.out.println("interrupt acq requested");
-			// TODO
-			while (acqmanager_.isAcquisitionRunning()) {
+		private void interruptAcquistion() {
+			while (currAcq.isRunning()) {
+				currAcq.stopAcquisition();
 				try {
 					Thread.sleep(500);
 				} catch (InterruptedException e) {

@@ -18,45 +18,52 @@ import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.AcquisitionPanel;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.ActivationPanel;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui.AcquisitionUI;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.BFPAcquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.BrightFieldAcquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.LocalizationAcquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.SnapAcquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.TimeAcquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.ZStackAcquisition;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.AcquisitionWrapper;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.ExperimentWrapper;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.java.embl.rieslab.emu.utils.utils;
+import mmcorej.DeviceType;
+import mmcorej.StrVector;
 
 public class AcquisitionFactory {
 	
-	private AcquisitionUI acqpane_;
+	private AcquisitionController acqcontroller_;
 	private SystemController controller_;
-	
 	private String[] acqtypelist_;
+	private String[] zdevices_;
 	
-	public AcquisitionFactory(AcquisitionUI acqpane, SystemController controller){
-		acqpane_ = acqpane;
+	public AcquisitionFactory(AcquisitionController acqcontroller, SystemController controller){
+		acqcontroller_ = acqcontroller;
 		controller_ = controller;
+		
 		acqtypelist_ = getEnabledAcquisitionList();
+		
+		zdevices_ = getZDevices();
+	}
+	
+	private String[] getZDevices(){
+		StrVector devices = controller_.getCore().getLoadedDevicesOfType(DeviceType.StageDevice);
+		return devices.toArray();
 	}
 
 	private String[] getEnabledAcquisitionList(){
 		ArrayList<String> list = new ArrayList<>(Arrays.asList(AcquisitionType.getList()));
 				
-		if(!acqpane_.isPropertyEnabled(AcquisitionType.BF)){
+		if(!acqcontroller_.isAcquistionPropertyEnabled(AcquisitionType.BF)){
 			list.remove(AcquisitionType.BF.getTypeValue());
 		}
-		if(!acqpane_.isPropertyEnabled(AcquisitionType.BFP)){
-			System.out.println("remove bfp");
+		if(!acqcontroller_.isAcquistionPropertyEnabled(AcquisitionType.BFP)){
 			list.remove(AcquisitionType.BFP.getTypeValue());
 		}
-		if(!acqpane_.isPropertyEnabled(AcquisitionType.ZSTACK)){
-			System.out.println("remove z");
-			list.remove(AcquisitionType.ZSTACK.getTypeValue());
-		}
 		
-		for(int i=0;i<list.size();i++){
-			System.out.println(list.get(i));
-		}
-		System.out.println("------");
 		return list.toArray(new String[0]);
 	}
 	
@@ -72,14 +79,14 @@ public class AcquisitionFactory {
 		} else if(type.equals(AcquisitionType.SNAP.getTypeValue())){
 			return new SnapAcquisition(controller_.getExposure());
 		} else if(type.equals(AcquisitionType.ZSTACK.getTypeValue())){
-			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_FOCUS)),
-					(TwoStateUIProperty) controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
+			return new ZStackAcquisition(controller_.getExposure(), zdevices_, controller_.getCore().getFocusDevice(),
+					(TwoStateUIProperty) controller_.getProperty(acqcontroller_.getAcquisitionParameterValue(AcquisitionPanel.PARAM_LOCKING)));
 		} else if(type.equals(AcquisitionType.BFP.getTypeValue())){
-			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_FOCUS)),
-					(TwoStateUIProperty) controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
+			return new BFPAcquisition(controller_.getExposure(),
+					(TwoStateUIProperty) controller_.getProperty(acqcontroller_.getAcquisitionParameterValue(AcquisitionPanel.PARAM_BFP)));
 		} else if(type.equals(AcquisitionType.BF.getTypeValue())){
-			return new ZStackAcquisition(controller_.getExposure(), controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_FOCUS)),
-					(TwoStateUIProperty) controller_.getProperty(acqpane_.getUIPropertyName(AcquisitionPanel.PARAM_LOCKING)));
+			return new BrightFieldAcquisition(controller_.getExposure(),
+					(TwoStateUIProperty) controller_.getProperty(acqcontroller_.getAcquisitionParameterValue(AcquisitionPanel.PARAM_BRIGHTFIELD)));
 		}
 			
 		return getDefaultAcquisition();
@@ -89,39 +96,34 @@ public class AcquisitionFactory {
 		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
 	}
 
-	public boolean writeAcquisitionList(Experiment exp, String path){
-		ArrayList<Acquisition> acqlist = exp.getAcquisitionList();
-		ArrayList<AcquisitionWrapper> aqwlist = new ArrayList<AcquisitionWrapper>();
-		for(int i=0;i<acqlist.size();i++){
-			aqwlist.add(new AcquisitionWrapper(acqlist.get(i)));
-		}
+	public boolean writeAcquisitionList(Experiment exp, String name, String path, String filepath){
 		
-		ExperimentWrapper expw = new ExperimentWrapper(exp.getName(), exp.getPath(), exp.getPauseTime(), exp.getNumberPositions(), aqwlist);
+		ExperimentWrapper expw = new ExperimentWrapper(name, path, exp);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
-		String name;
-		if(path.endsWith(HTSMLMConstants.ACQ_EXT)){
-			name = path;
-		} else if(!path.endsWith("/")){
-			name = path+"/"+HTSMLMConstants.ACQ_NAME;
+		String filename;
+		if(filepath.endsWith(HTSMLMConstants.ACQ_EXT)){
+			filename = filepath;
+		} else if(!filepath.endsWith("/")){
+			filename = filepath+"/"+HTSMLMConstants.ACQ_NAME;
 		} else {
-			name = path+HTSMLMConstants.ACQ_NAME;
+			filename = filepath+HTSMLMConstants.ACQ_NAME;
 		}
 		
 		boolean fileExists = true;
 		while(fileExists){
-			File f = new File(name);
+			File f = new File(filename);
 			if(f.exists()) { 
-			    name = incrementAcquisitionFileName(name);
+			    filename = incrementAcquisitionFileName(filename);
 			} else {
 				fileExists = false;
 			}
 		}
 		
 		try {
-			objectMapper.writeValue(new FileOutputStream(name), expw);
+			objectMapper.writeValue(new FileOutputStream(filename), expw);
 			
 			return true;
 		} catch (JsonGenerationException e) {
@@ -169,9 +171,6 @@ public class AcquisitionFactory {
 		int waitingtime = 3;
 		int numpos = 0;
 
-		String expname = "";
-		String exppath = "";
-		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
@@ -180,8 +179,8 @@ public class AcquisitionFactory {
 
 			ArrayList<AcquisitionWrapper> acqwlist = expw.acquisitionList;	
 
-			expname = expw.name;
-			exppath = expw.path;
+			// for the moment ignore name and path Strings
+			
 			waitingtime = expw.pauseTime;
 			numpos = expw.numberPositions;
 			
@@ -249,7 +248,7 @@ public class AcquisitionFactory {
 			e.printStackTrace();
 		}
 		
-		return new Experiment(expname,exppath,waitingtime, numpos, acqlist);
+		return new Experiment(waitingtime, numpos, acqlist);
 	}
 	
 	private void configureGeneralAcquistion(Acquisition acq, AcquisitionWrapper acqw){

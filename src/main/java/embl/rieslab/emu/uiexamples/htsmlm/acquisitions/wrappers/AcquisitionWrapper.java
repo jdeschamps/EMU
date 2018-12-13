@@ -3,7 +3,7 @@ package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers;
 import java.util.Arrays;
 import java.util.HashMap;
 
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.Acquisition;
 
 public class AcquisitionWrapper {
 

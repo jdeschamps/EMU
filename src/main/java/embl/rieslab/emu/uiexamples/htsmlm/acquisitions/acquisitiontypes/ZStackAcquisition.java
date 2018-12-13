@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
@@ -16,6 +17,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.SinglePropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 import main.java.embl.rieslab.emu.utils.utils;
 
@@ -34,27 +36,25 @@ public class ZStackAcquisition implements Acquisition {
 	private final static String LABEL_ZSTART = "Z start/end/step (um):";
 	private final static String LABEL_ZEND = "Z end (um):";
 	private final static String LABEL_ZSTEP = "Z step (um):";
+	private final static String LABEL_ZDEVICE = "Z stage:";
 		
 	public final static String KEY_ZSTART = "Z start";
 	public final static String KEY_ZEND = "Z end";
 	public final static String KEY_ZSTEP = "Z step";
+	public final static String KEY_ZDEVICE = "Z stage";
 	
 	// UI property
 	private TwoStateUIProperty stabprop_;
-	private UIProperty stagepos_;
-	
+
+	private String zdevice_;
+	private String[] zdevices_;
 	private double zstart, zend, zstep;
 	private boolean zstab_; 
 	private GenericAcquisitionParameters params_;
 	private volatile boolean stopAcq_, running_;
 	
-	public ZStackAcquisition(double exposure, UIProperty stageposition, TwoStateUIProperty twoStateUIProperty) {
+	public ZStackAcquisition(double exposure, String[] zdevices, String defaultzdevice, TwoStateUIProperty twoStateUIProperty) {
 
-		if(stageposition == null){
-			throw new NullPointerException();
-		}
-		stagepos_ = stageposition;
-		
 		stabprop_ = twoStateUIProperty;
 		if(stabprop_ == null){
 			zstab_ = false;
@@ -65,6 +65,9 @@ public class ZStackAcquisition implements Acquisition {
 		zstart=-2;
 		zend=2;
 		zstep=0.05;
+
+		zdevice_ = defaultzdevice;
+		zdevices_ = zdevices;
 		
 		stopAcq_ = false;
 		running_ = false;
@@ -107,13 +110,13 @@ public class ZStackAcquisition implements Acquisition {
 		builder.time(0).channel(0).stagePosition(0);
 		
 		try{
-			double z0 = Double.parseDouble(stagepos_.getMMPropertyValue());
+			double z0 = studio.getCMMCore().getPosition(zdevice_);
 			
 			for(int i=0;i<params_.getZSlices().size();i++){
 				
 				// set stage position
 				double pos = z0 + params_.getZSlices().get(i);
-				stagepos_.setPropertyValue(String.valueOf(pos));
+				studio.getCMMCore().setPosition(zdevice_, pos);
 				
 				builder = builder.z(i);
 				image = studio.live().snap(false).get(0);
@@ -137,7 +140,7 @@ public class ZStackAcquisition implements Acquisition {
 			studio.displays().closeDisplaysFor(store);
 			
 			// go back to original position
-			stagepos_.setPropertyValue(String.valueOf(z0));
+			studio.getCMMCore().setPosition(zdevice_, z0);
 			
 		} catch (Exception e){
 			e.printStackTrace();
@@ -171,12 +174,13 @@ public class ZStackAcquisition implements Acquisition {
 		
 		pane.setName(getPanelName());
 		
-		JLabel exposurelab, waitinglab, zstartlab;
+		JLabel exposurelab, waitinglab, zstartlab, zdevicelabel;
 		JSpinner exposurespin, waitingspin, zstartspin, zendspin, zstepspin;
 		
 		exposurelab = new JLabel(LABEL_EXPOSURE);
 		waitinglab = new JLabel(LABEL_PAUSE);
 		zstartlab = new JLabel(LABEL_ZSTART);
+		zdevicelabel = new JLabel(LABEL_ZDEVICE);
 		
 		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(params_.getExposureTime(),1), 1, 10000000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
@@ -189,8 +193,11 @@ public class ZStackAcquisition implements Acquisition {
 		zstepspin = new JSpinner(new SpinnerNumberModel(zstep, -1000, 1000, 0.01));
 		zstepspin.setName(LABEL_ZSTEP);
 		
+		JComboBox<String> zdevices = new JComboBox<String>(zdevices_);
+		zdevices.setSelectedItem(zdevice_);
+		zdevices.setName(LABEL_ZDEVICE);
 
-		int nrow = 2;
+		int nrow = 3;
 		int ncol = 4;
 		JPanel[][] panelHolder = new JPanel[nrow][ncol];    
 		pane.setLayout(new GridLayout(nrow,ncol));
@@ -202,17 +209,20 @@ public class ZStackAcquisition implements Acquisition {
 		   }
 		}
 
-		panelHolder[0][0].add(exposurelab);
-		panelHolder[1][0].add(zstartlab);
+		panelHolder[0][0].add(zdevicelabel);
+		panelHolder[0][1].add(zdevices);
 		
-		panelHolder[0][1].add(exposurespin);
-		panelHolder[1][1].add(zstartspin);
+		panelHolder[1][0].add(exposurelab);
+		panelHolder[2][0].add(zstartlab);
 		
-		panelHolder[0][2].add(waitinglab);
-		panelHolder[1][2].add(zendspin);
+		panelHolder[1][1].add(exposurespin);
+		panelHolder[2][1].add(zstartspin);
 		
-		panelHolder[0][3].add(waitingspin);
-		panelHolder[1][3].add(zstepspin);
+		panelHolder[1][2].add(waitinglab);
+		panelHolder[2][2].add(zendspin);
+		
+		panelHolder[1][3].add(waitingspin);
+		panelHolder[2][3].add(zstepspin);
 
 		return pane;
 	}
@@ -229,14 +239,16 @@ public class ZStackAcquisition implements Acquisition {
 						if(!(comp[i] instanceof JLabel) && comp[i].getName() != null){
 							if(comp[i].getName().equals(LABEL_EXPOSURE) && comp[i] instanceof JSpinner){
 								params_.setExposureTime((Double) ((JSpinner) comp[i]).getValue());
-							}else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
+							} else if(comp[i].getName().equals(LABEL_PAUSE) && comp[i] instanceof JSpinner){
 								params_.setWaitingTime((Integer) ((JSpinner) comp[i]).getValue());
-							}else if(comp[i].getName().equals(LABEL_ZSTART) && comp[i] instanceof JSpinner){
+							} else if(comp[i].getName().equals(LABEL_ZSTART) && comp[i] instanceof JSpinner){
 								zstart = ((Double) ((JSpinner) comp[i]).getValue());
-							}else if(comp[i].getName().equals(LABEL_ZEND) && comp[i] instanceof JSpinner){
+							} else if(comp[i].getName().equals(LABEL_ZEND) && comp[i] instanceof JSpinner){
 								zend = ((Double) ((JSpinner) comp[i]).getValue());
-							}else if(comp[i].getName().equals(LABEL_ZSTEP) && comp[i] instanceof JSpinner){
+							} else if(comp[i].getName().equals(LABEL_ZSTEP) && comp[i] instanceof JSpinner){
 								zstep = ((Double) ((JSpinner) comp[i]).getValue());
+							} else if(comp[i].getName().equals(LABEL_ZDEVICE) && comp[i] instanceof JComboBox){
+								zdevice_ = ((String) ((JComboBox) comp[i]).getSelectedItem());
 							}
 						}
 					}
@@ -258,7 +270,7 @@ public class ZStackAcquisition implements Acquisition {
 	public String[] getSpecialSettings() {
 		String[] s = new String[5];
 		s[0] = "Exposure = "+params_.getExposureTime()+" ms";
-		s[1] = "Stage = "+stagepos_.getMMProperty().getDeviceLabel();
+		s[1] = "Stage = "+zdevice_;
 		s[2] = "Zstart = "+zstart+" um";
 		s[3] = "Zend = "+zend+" um";
 		s[4] = "Zstep = "+zstep+" um";
@@ -272,7 +284,7 @@ public class ZStackAcquisition implements Acquisition {
 	
 	@Override
 	public String[][] getAdditionalJSONParameters() {
-		String[][] s = new String[3][2];
+		String[][] s = new String[4][2];
 
 		s[0][0] = KEY_ZSTART;
 		s[0][1] = String.valueOf(zstart);
@@ -280,6 +292,8 @@ public class ZStackAcquisition implements Acquisition {
 		s[1][1] = String.valueOf(zend);
 		s[2][0] = KEY_ZSTEP;
 		s[2][1] = String.valueOf(zstep);
+		s[2][0] = KEY_ZDEVICE;
+		s[2][1] = zdevice_;
 		
 		return s;
 	}
@@ -294,6 +308,10 @@ public class ZStackAcquisition implements Acquisition {
 	
 	public void setZStep(double val){
 		zstep = val;
+	}
+	
+	public void setZDevice(String zdevice){
+		zdevice_ = zdevice;
 	}
 	
 	@Override

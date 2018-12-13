@@ -519,7 +519,7 @@ public class PIFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 	}
 
 	@Override
-	public void startTask() {
+	public boolean startTask() {
 		if(task_ == null){
 			task_ = new SimpleFocusMaintainingTask(this, getUIProperty(FOCUS_POSITION), getUIProperty(FOCUS_STABILIZATION), 
 				idlePI_, kpPI_, kiPI_, setpointPI_, scalingPI_);
@@ -528,6 +528,8 @@ public class PIFocusPanel extends PropertyPanel implements TaskHolder<Double> {
 		if(!task_.isRunning()){
 			task_.startTask();
 		}
+		
+		return true;
 	}
 
 	@Override

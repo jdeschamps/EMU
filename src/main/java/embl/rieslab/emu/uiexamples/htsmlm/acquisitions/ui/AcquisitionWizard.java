@@ -20,14 +20,15 @@ import javax.swing.JTextField;
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionController;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.Acquisition;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import main.java.embl.rieslab.emu.utils.utils;
 
 public class AcquisitionWizard {
 
-	private AcquisitionUI owner_;
+	private AcquisitionController owner_;
 	private JFrame frame_;
 	private ArrayList<AcquisitionTab> tabs_;
 	private JTabbedPane tabbedpane_;
@@ -35,13 +36,13 @@ public class AcquisitionWizard {
 	private JTextField numposfield;
 	private SystemController controller_;
 	
-	public AcquisitionWizard(SystemController controller, AcquisitionUI owner){
+	public AcquisitionWizard(SystemController controller, AcquisitionController owner){
 		owner_ = owner;
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
 	}
 	
-	public AcquisitionWizard(SystemController controller, AcquisitionUI owner, Experiment exp) {
+	public AcquisitionWizard(SystemController controller, AcquisitionController owner, Experiment exp) {
 		owner_ = owner;
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
@@ -295,14 +296,6 @@ public class AcquisitionWizard {
 
 	public boolean isRunning(){
 		return frame_.isActive();
-	}
-	
-	public Experiment loadAcquisitionList(String path) {		
-    	return (new AcquisitionFactory(owner_, controller_)).readAcquisitionList(path);
-	}
-
-	public boolean saveAcquisitionList(Experiment exp, String path) {
-		return (new AcquisitionFactory(owner_, controller_)).writeAcquisitionList(exp, path);
 	}
 	
 	public HashMap<String, UIProperty> getPropertiesMap(){

@@ -3,7 +3,7 @@ package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.ui;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 
-public interface AcquisitionUI {
+public interface AcquisitionUIOld {
 
 	public void setExperiment(Experiment experiment);
 	public Experiment getExperiment();
