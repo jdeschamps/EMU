@@ -190,6 +190,13 @@ public class AcquisitionTask  implements Task<Integer>{
 				currAcqStore = currAcq.startAcquisition(studio_);
 
 				// save store
+				// TODO
+				// TODO
+				// TODO
+				// TODO
+				// TODO
+				// TODO
+				// TODO
 				
 				if (stop_) {
 					System.out

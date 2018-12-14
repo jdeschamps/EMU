@@ -40,6 +40,8 @@ public class AcquisitionWizard {
 		owner_ = owner;
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
+		
+		setUpFrame(0, 3);
 	}
 	
 	public AcquisitionWizard(SystemController controller, AcquisitionController owner, Experiment exp) {
@@ -47,14 +49,6 @@ public class AcquisitionWizard {
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
 
-		startWizard(exp);
-	}
-
-	public void startWizard(){
-		setUpFrame(3,0);  
-	}	
-	
-	public void startWizard(Experiment exp){
 		setUpFrame(exp.getPauseTime(),exp.getNumberPositions());
 		setAcquisitions(exp.getAcquisitionList());
 	}

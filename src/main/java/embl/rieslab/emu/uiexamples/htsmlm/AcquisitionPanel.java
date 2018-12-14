@@ -74,7 +74,6 @@ public class AcquisitionPanel extends PropertyPanel{
 		super("Acquisitions");
 		controller_ = controller;
 		
-		jTextPane_progress = new JTextPane();
 		acqcontroller_ = new AcquisitionController(controller, this, new AcquisitionInformationPanel(jTextPane_progress));
 		
 		// listen to window movement to place the summary panel at the right place
@@ -209,6 +208,7 @@ public class AcquisitionPanel extends PropertyPanel{
 	    jTextField_expname = new JTextField();
 	    jTextField_path = new JTextField();
 	    
+		jTextPane_progress = new JTextPane();
 	    jTextPane_progress.setBackground(this.getBackground());
 	    
 	    JScrollPane scroll = new JScrollPane(jTextPane_progress);

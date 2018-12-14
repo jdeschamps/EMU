@@ -131,7 +131,7 @@ public class AcquisitionTab extends JPanel {
 		// Set current acquisition to the acquisition passed as parameter
 		currind = 0;
 		for(int i=0;i<acqtypes_.length;i++){
-			if(acqtypes_[i].equals(acquisition.getType())){
+			if(acqtypes_[i].equals(acquisition.getType().getTypeValue())){
 				currind = i;
 				break;
 			}

@@ -182,10 +182,8 @@ public class AcquisitionController implements TaskHolder<Integer>{
 			System.out.println("is not empty");
 			wizard_ = new AcquisitionWizard(controller_, this, exp_);
 		} else {
-			wizard_ = new AcquisitionWizard(controller_, this);
-			wizard_.startWizard();
+			wizard_ = new AcquisitionWizard(controller_, this);	
 		}
-
 	}
 
 	public void loadExperiment(String path) {
@@ -221,6 +219,7 @@ public class AcquisitionController implements TaskHolder<Integer>{
 	
 	public void setExperiment(Experiment exp){
 		exp_ = exp;
+		infopanel_.setSummaryText(exp_);
 	}
 
 	public void shutDown() {
