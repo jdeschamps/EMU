@@ -153,8 +153,10 @@ public class AcquisitionTask  implements Task<Integer>{
 						e.printStackTrace();
 					}
 				}
-			} else { // eprform on current position
+			} else { // perform on current position
 				System.out.println("Position list empty");
+				
+				// TODO show message?
 			}
 
 			publish(-1);
@@ -199,8 +201,7 @@ public class AcquisitionTask  implements Task<Integer>{
 				// TODO
 				
 				if (stop_) {
-					System.out
-							.println("Stop is true in acquisition");
+					System.out.println("Stop is true in acquisition");
 					break;
 				}
 			}

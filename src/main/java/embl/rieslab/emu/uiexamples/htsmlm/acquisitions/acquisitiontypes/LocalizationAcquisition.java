@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -21,6 +22,7 @@ import org.micromanager.data.Coords;
 import org.micromanager.data.Datastore;
 import org.micromanager.data.Image;
 import org.micromanager.data.internal.DefaultCoords;
+import org.micromanager.display.DisplayWindow;
 
 public class LocalizationAcquisition implements Acquisition{
 	
@@ -280,6 +282,7 @@ public class LocalizationAcquisition implements Acquisition{
 		
 		// close display
 		studio.displays().closeDisplaysFor(store);
+		//List<DisplayWindow> ds = studio.displays().getDisplays(store);
 		
 		return store; 
 	}

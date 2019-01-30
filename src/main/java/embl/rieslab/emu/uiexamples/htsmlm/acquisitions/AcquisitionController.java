@@ -57,7 +57,9 @@ public class AcquisitionController implements TaskHolder<Integer>{
 
 	@Override
 	public Integer[] retrieveAllParameters() {
-		return null;
+		Integer[] params = new Integer[1];
+		params[0] = exp_.getPauseTime();
+		return params;
 	}
 
 	@Override
@@ -65,8 +67,8 @@ public class AcquisitionController implements TaskHolder<Integer>{
 		// this is running on the EDT
 		
 		// set path and experiment name in acquisition
-		final String path = owner_.getExperimentName();
-		final String name = owner_.getExperimentPath();
+		final String name = owner_.getExperimentName();
+		final String path = owner_.getExperimentPath();
 		
 		if(!isAcquisitionListEmpty() && path != null && name != null && !path.equals("")){	
 			final AcquisitionFactory factory = new AcquisitionFactory(this,controller_);
