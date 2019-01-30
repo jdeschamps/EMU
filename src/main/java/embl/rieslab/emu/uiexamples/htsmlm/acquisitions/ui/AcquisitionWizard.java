@@ -41,7 +41,7 @@ public class AcquisitionWizard {
 		controller_ = controller;
 		tabs_ = new ArrayList<AcquisitionTab>();
 		
-		setUpFrame(0, 3);
+		setUpFrame(0, 0);
 	}
 	
 	public AcquisitionWizard(SystemController controller, AcquisitionController owner, Experiment exp) {

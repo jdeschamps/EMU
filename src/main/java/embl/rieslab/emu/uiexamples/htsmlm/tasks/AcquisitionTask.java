@@ -1,6 +1,6 @@
 package main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -11,8 +11,8 @@ import org.micromanager.MultiStagePosition;
 import org.micromanager.PositionList;
 import org.micromanager.PositionListManager;
 import org.micromanager.Studio;
-import org.micromanager.acquisition.AcquisitionManager;
 import org.micromanager.data.Datastore;
+import org.micromanager.data.Datastore.SaveMode;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.tasks.Task;
@@ -42,7 +42,7 @@ public class AcquisitionTask  implements Task<Integer>{
 				
 		exp_ = exp;
 		expname_ = expname;
-		exppath_ = exppath;
+		exppath_ = exppath+"/"+expname+"/";
 		
 		registerHolder(holder);
 	}
@@ -137,7 +137,7 @@ public class AcquisitionTask  implements Task<Integer>{
 						Thread.sleep(param[0] * 1000);
 
 						// perform acquisitions
-						performAcquisitions();
+						performAcquisitions(i);
 						
 						if (stop_) {
 							System.out.println("Stop is true in position");
@@ -164,7 +164,7 @@ public class AcquisitionTask  implements Task<Integer>{
 			return 0;
 		}
 
-		private void performAcquisitions(){
+		private void performAcquisitions(int pos){
 			
 			// perform each acquisition sequentially
 			for (int k = 0; k < exp_.getAcquisitionList().size(); k++) {
@@ -187,18 +187,33 @@ public class AcquisitionTask  implements Task<Integer>{
 						}
 					}
 				}
+				
+				// build name
+				String name = "Pos"+String.valueOf(pos)+"_"+expname_+"_"+currAcq.getShortName();
 
 				// run acquisition
-				currAcqStore = currAcq.startAcquisition(studio_);
+				SaveMode sm = studio_.data().getPreferredSaveMode();
+				if(sm == SaveMode.MULTIPAGE_TIFF){
+					try {
+						currAcqStore = studio_.data().createMultipageTIFFDatastore(exppath_+name, true, true);
+						currAcq.startAcquisition(studio_, currAcqStore);
 
-				// save store
-				// TODO
-				// TODO
-				// TODO
-				// TODO
-				// TODO
-				// TODO
-				// TODO
+					} catch (IOException e) {
+						stop_ = true;
+						System.out.println("Failed to create multi page TIFF");
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						currAcqStore = studio_.data().createSinglePlaneTIFFSeriesDatastore(exppath_+name);
+						currAcq.startAcquisition(studio_, currAcqStore);
+					} catch (IOException e) {
+						stop_ = true;
+						System.out.println("Failed to create single page TIFF");
+						e.printStackTrace();
+					}
+				}
+				
 				
 				if (stop_) {
 					System.out.println("Stop is true in acquisition");
@@ -206,7 +221,7 @@ public class AcquisitionTask  implements Task<Integer>{
 				}
 			}
 		}
-		
+		/*
 		private String createAcqName(Acquisition acq, int i){
 			String acqname;
 			if (i < 10) {
@@ -217,7 +232,7 @@ public class AcquisitionTask  implements Task<Integer>{
 				acqname = i + "_" + expname_ + "_"+ acq.getType();
 			}
 			return acqname;
-		}
+		}*/
 		
 		public void stop() {
 			stop_ = true;

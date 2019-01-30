@@ -11,7 +11,7 @@ public class AcquisitionInformationPanel {
 
     private final static String TEXT_INIT = "No configured acquisition list.\n";
     private final static String TEXT_START = "Starting acquisition.\n";
-    private final static String TEXT_NEW = "Stage position done: ";
+    private final static String TEXT_NEWPOS = "Stage position done: ";
     private final static String TEXT_FINISHED = "Acquisition finished.";
     private final static String TEXT_STOP = "Stopping acquisition. \n";
     private final static String TEXT_SUMMARY = "Acquisition summary: \n";
@@ -44,7 +44,7 @@ public class AcquisitionInformationPanel {
 	}
 	
 	public void setPositionDoneText(int i){
-		addText(TEXT_NEW+i);
+		addText(TEXT_NEWPOS+i+".\n");
 	}
 	
 	public void setSummaryText(Experiment exp){

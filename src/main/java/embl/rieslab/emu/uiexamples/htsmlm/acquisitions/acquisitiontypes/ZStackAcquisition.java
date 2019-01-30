@@ -13,11 +13,9 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.SinglePropertyFilter;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 import main.java.embl.rieslab.emu.utils.utils;
 
@@ -94,7 +92,7 @@ public class ZStackAcquisition implements Acquisition {
 	}
 
 	@Override
-	public Datastore startAcquisition(Studio studio) {
+	public void startAcquisition(Studio studio, Datastore store) {
 		stopAcq_ = false;
 		running_ = true;
 		
@@ -102,7 +100,6 @@ public class ZStackAcquisition implements Acquisition {
 			stabprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		}
 		
-		Datastore store = studio.data().createRAMDatastore();
 		studio.displays().createDisplay(store);
 		
 		Image image;
@@ -149,8 +146,6 @@ public class ZStackAcquisition implements Acquisition {
 		if(zstab_){
 			stabprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 		}
-		
-		return store; 
 	}
 
 	@Override
@@ -254,6 +249,8 @@ public class ZStackAcquisition implements Acquisition {
 					}
 				}
 			}	
+			
+			System.out.println(zstart+" - "+ zend+" - "+ zstep);
 			this.setSlices(zstart, zend, zstep);
 		}
 	}
@@ -317,5 +314,10 @@ public class ZStackAcquisition implements Acquisition {
 	@Override
 	public AcquisitionType getType() {
 		return AcquisitionType.ZSTACK;
+	}
+
+	@Override
+	public String getShortName() {
+		return "Z";
 	}
 }

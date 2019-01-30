@@ -13,7 +13,6 @@ import javax.swing.SpinnerNumberModel;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.SinglePropertyFilter;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 
 import org.micromanager.Studio;
@@ -128,12 +127,10 @@ public class BFPAcquisition implements Acquisition{
 	}
 
 	@Override
-	public Datastore startAcquisition(Studio studio) {
+	public void startAcquisition(Studio studio, Datastore store) {
 		// turn on BFP
 		bfpprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 
-		
-		Datastore store = studio.data().createRAMDatastore();
 		studio.displays().createDisplay(store);
 		
 		Image image;
@@ -154,9 +151,7 @@ public class BFPAcquisition implements Acquisition{
 		studio.displays().closeDisplaysFor(store);
 		
 		// turn off BFP
-		bfpprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
-		
-		return store; 
+		bfpprop_.setPropertyValue(TwoStateUIProperty.getOffStateName()); 
 	}
 
 	@Override
@@ -179,4 +174,8 @@ public class BFPAcquisition implements Acquisition{
 		return AcquisitionType.BFP;
 	}
 
+	@Override
+	public String getShortName() {
+		return "BFP";
+	}
 }

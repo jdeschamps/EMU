@@ -12,7 +12,6 @@ import javax.swing.SpinnerNumberModel;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 
 import org.micromanager.Studio;
@@ -148,12 +147,11 @@ public class TimeAcquisition implements Acquisition{
 	}
 
 	@Override
-	public Datastore startAcquisition(Studio studio) {
+	public void startAcquisition(Studio studio, Datastore store) {
 		
 		stopAcq_ = false;
 		running_ = true;
 		
-		Datastore store = studio.data().createRAMDatastore();
 		studio.displays().createDisplay(store);
 		
 		Image image;
@@ -183,7 +181,6 @@ public class TimeAcquisition implements Acquisition{
 		// close display
 		studio.displays().closeDisplaysFor(store);
 		
-		return store; 
 	}
 
 	@Override
@@ -204,5 +201,10 @@ public class TimeAcquisition implements Acquisition{
 	@Override
 	public AcquisitionType getType() {
 		return AcquisitionType.TIME;
+	}
+
+	@Override
+	public String getShortName() {
+		return "t";
 	}
 }

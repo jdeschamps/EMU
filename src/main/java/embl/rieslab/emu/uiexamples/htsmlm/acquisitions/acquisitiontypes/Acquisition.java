@@ -12,7 +12,7 @@ public interface Acquisition {
 	
 	public abstract GenericAcquisitionParameters getParameters();
 	
-	public abstract Datastore startAcquisition(Studio studio);
+	public abstract void startAcquisition(Studio studio, Datastore store); // should make sure that the store is empty
 	
 	public abstract void stopAcquisition(); 
 	
@@ -31,6 +31,8 @@ public interface Acquisition {
 	public abstract String[] getSpecialSettings();
 	
 	public abstract String[][] getAdditionalJSONParameters();
+	
+	public abstract String getShortName();
 
 	public abstract AcquisitionType getType();
 

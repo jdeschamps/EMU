@@ -12,7 +12,6 @@ import javax.swing.SpinnerNumberModel;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 
 import org.micromanager.Studio;
@@ -114,9 +113,8 @@ public class SnapAcquisition implements Acquisition{
 	}
 
 	@Override
-	public Datastore startAcquisition(Studio studio) {
-		
-		Datastore store = studio.data().createRAMDatastore();
+	public void startAcquisition(Studio studio, Datastore store) {
+
 		studio.displays().createDisplay(store);
 		
 		Image image;
@@ -136,7 +134,6 @@ public class SnapAcquisition implements Acquisition{
 		// close display
 		studio.displays().closeDisplaysFor(store);
 		
-		return store; 
 	}
 
 	@Override
@@ -162,5 +159,10 @@ public class SnapAcquisition implements Acquisition{
 	@Override
 	public AcquisitionType getType() {
 		return AcquisitionType.SNAP;
+	}
+
+	@Override
+	public String getShortName() {
+		return "Snap";
 	}
 }

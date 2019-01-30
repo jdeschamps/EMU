@@ -96,9 +96,9 @@ public class AcquisitionFactory {
 		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
 	}
 
-	public boolean writeAcquisitionList(Experiment exp, String name, String path, String filepath){
+	public boolean writeAcquisitionList(Experiment exp, String name, String filepath){
 		
-		ExperimentWrapper expw = new ExperimentWrapper(name, path, exp);
+		ExperimentWrapper expw = new ExperimentWrapper(name, filepath, exp);
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
@@ -202,7 +202,7 @@ public class AcquisitionFactory {
 					} else if(acqw.type.equals(AcquisitionType.ZSTACK.getTypeValue())){
 						ZStackAcquisition acq = (ZStackAcquisition) getAcquisition(acqw.type);
 						configureGeneralAcquistion(acq, acqw);
-						
+
 						acq.setSlices(Double.parseDouble(acqw.additionalParameters[0][1]), Double.parseDouble(acqw.additionalParameters[1][1]), Double.parseDouble(acqw.additionalParameters[2][1]));
 						acq.setZStart(Double.parseDouble(acqw.additionalParameters[0][1]));
 						acq.setZEnd(Double.parseDouble(acqw.additionalParameters[1][1]));

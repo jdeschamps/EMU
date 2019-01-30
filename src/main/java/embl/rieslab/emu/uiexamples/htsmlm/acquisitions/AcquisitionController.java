@@ -80,9 +80,9 @@ public class AcquisitionController implements TaskHolder<Integer>{
 					// save the acquisition list to the destination folder
 					boolean b = true;
 					if (wizard_ != null) {
-						b = saveAcquisitionList(exp_, name, path, path + "/");
+						b = saveAcquisitionList(exp_, name, path + "/");
 					} else {
-						b = factory.writeAcquisitionList(exp_, name, path, path + "/");
+						b = factory.writeAcquisitionList(exp_, name, path + "/");
 					}
 	
 					if (!b) {
@@ -204,15 +204,15 @@ public class AcquisitionController implements TaskHolder<Integer>{
     	return (new AcquisitionFactory(this, controller_)).readAcquisitionList(path);
 	}
 
-	private boolean saveAcquisitionList(Experiment exp, String expname, String exppath, String path) {
-		return (new AcquisitionFactory(this, controller_)).writeAcquisitionList(exp, expname, exppath, path);
+	private boolean saveAcquisitionList(Experiment exp, String exppath, String path) {
+		return (new AcquisitionFactory(this, controller_)).writeAcquisitionList(exp, exppath, path);
 	}
 	
 	public void saveExperiment(String path) {
 		if (!path.endsWith("." + HTSMLMConstants.ACQ_EXT)) {
 			path = path + "." + HTSMLMConstants.ACQ_EXT;
 		}
-		saveAcquisitionList(exp_, owner_.getExperimentName(), owner_.getExperimentPath(), path);
+		saveAcquisitionList(exp_, owner_.getExperimentName()+"/"+owner_.getExperimentPath(), path);
 	}
 
 	public Experiment getExperiment() {

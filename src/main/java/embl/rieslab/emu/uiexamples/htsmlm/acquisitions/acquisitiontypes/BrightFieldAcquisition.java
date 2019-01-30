@@ -127,12 +127,10 @@ public class BrightFieldAcquisition implements Acquisition{
 	}
 
 	@Override
-	public Datastore startAcquisition(Studio studio) {
+	public void startAcquisition(Studio studio, Datastore store) {
 		// turn on BF
 		bfprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 
-		
-		Datastore store = studio.data().createRAMDatastore();
 		studio.displays().createDisplay(store);
 		
 		Image image;
@@ -155,7 +153,6 @@ public class BrightFieldAcquisition implements Acquisition{
 		// turn off BF
 		bfprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		
-		return store; 
 	}
 
 
@@ -177,5 +174,10 @@ public class BrightFieldAcquisition implements Acquisition{
 	@Override
 	public AcquisitionType getType() {
 		return AcquisitionType.BF;
+	}
+	
+	@Override
+	public String getShortName() {
+		return "BrightF";
 	}
 }
