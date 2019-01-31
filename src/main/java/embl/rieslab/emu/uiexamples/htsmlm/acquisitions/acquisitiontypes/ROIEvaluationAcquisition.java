@@ -3,6 +3,7 @@ package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontyp
 import javax.swing.JPanel;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 
 import org.micromanager.Studio;
 import org.micromanager.data.Datastore;
@@ -16,9 +17,8 @@ public class ROIEvaluationAcquisition implements Acquisition {
 	}
 
 	@Override
-	public Datastore startAcquisition(Studio studio) {
+	public void startAcquisition(Studio studio, Datastore store) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -71,6 +71,18 @@ public class ROIEvaluationAcquisition implements Acquisition {
 
 	@Override
 	public String[][] getAdditionalJSONParameters() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getShortName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AcquisitionType getType() {
 		// TODO Auto-generated method stub
 		return null;
 	}

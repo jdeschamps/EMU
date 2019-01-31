@@ -7,7 +7,9 @@ import javax.swing.JPanel;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
 import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 
 import org.micromanager.Studio;
 import org.micromanager.data.Coords;
@@ -16,7 +18,6 @@ import org.micromanager.data.Image;
 import org.micromanager.data.internal.DefaultCoords;
 
 public class AutofocusAcquistion implements Acquisition{
-
 
 	private GenericAcquisitionParameters params_;
 	private UIProperty stagepos_;
@@ -40,7 +41,7 @@ public class AutofocusAcquistion implements Acquisition{
 		stopAcq_ = false;
 		running_ = false;
 	
-		params_ = new GenericAcquisitionParameters(exposure, 0, 3, 0, new HashMap<String,String>(), new HashMap<String,String>());
+		params_ = new GenericAcquisitionParameters(this.getType(), exposure, 0, 3, 0, new HashMap<String,String>(), new HashMap<String,String>());
 	}
 	
 	@Override
@@ -49,7 +50,7 @@ public class AutofocusAcquistion implements Acquisition{
 	}
 
 	@Override
-	public Datastore startAcquisition(Studio studio) {
+	public void startAcquisition(Studio studio, Datastore store) {
 		stopAcq_ = false;
 		running_ = true;
 		
@@ -57,7 +58,6 @@ public class AutofocusAcquistion implements Acquisition{
 			stabprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		}
 		
-		Datastore store = studio.data().createRAMDatastore();
 		studio.displays().createDisplay(store);
 		
 		Image image;
@@ -102,7 +102,6 @@ public class AutofocusAcquistion implements Acquisition{
 			stabprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 		}
 		
-		return store; 
 	}
 
 	@Override
@@ -122,38 +121,45 @@ public class AutofocusAcquistion implements Acquisition{
 
 	@Override
 	public JPanel getPanel() {
-		// TODO Auto-generated method stub
+
+		// create panel with list of the metrics
+		
 		return null;
 	}
 
 	@Override
 	public String getPanelName() {
-		// TODO Auto-generated method stub
-		return null;
+		return "Autofocus";
 	}
 
 	@Override
 	public void readOutParameters(JPanel pane) {
-		// TODO Auto-generated method stub
-		
+		// get name
 	}
 
 	@Override
 	public PropertyFilter getPropertyFilter() {
-		// TODO Auto-generated method stub
-		return null;
+		return new NoPropertyFilter();
 	}
 
 	@Override
 	public String[] getSpecialSettings() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String[][] getAdditionalJSONParameters() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String getShortName() {
+		return "AutoFocus";
+	}
+
+	@Override
+	public AcquisitionType getType() {
+		return AcquisitionType.AUTOFOCUS;
 	}
 
 }

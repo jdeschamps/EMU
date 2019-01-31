@@ -276,7 +276,7 @@ public class AcquisitionFactory {
 	}
 	
 	public enum AcquisitionType { 
-		TIME("Time"), BFP("BFP"), BF("Bright-field"), SNAP("Snapshot"), LOCALIZATION("Localization"), ZSTACK("Z-stack"); 
+		TIME("Time"), BFP("BFP"), BF("Bright-field"), SNAP("Snapshot"), LOCALIZATION("Localization"), ZSTACK("Z-stack"), AUTOFOCUS("Autofocus"), ROISELECT("ROI decision"); 
 		
 		private String value; 
 		
