@@ -101,13 +101,14 @@ public class AcquisitionTab extends JPanel {
 		acqpanels_ = new JPanel[acqtypes_.length];
 		for(int i=0;i<acqtypes_.length;i++){
 
-			JPanel pane = factory_.getAcquisition(acqtypes_[i]).getPanel();
+			Acquisition acq = factory_.getAcquisition(acqtypes_[i]);
+			JPanel pane = acq.getPanel();
 			
 			pane.setBorder(BorderFactory.createTitledBorder(null, "Acquisition Settings", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(0,0,0)));
 			((TitledBorder) pane.getBorder()).setTitleFont(((TitledBorder) pane.getBorder()).getTitleFont().deriveFont(Font.BOLD, 12));
 			
 			acqpanels_[i] = pane;
-			acqpanes_[i] = createPanel(acqpanels_[i],factory_.getAcquisition(acqtypes_[i]).getPropertyFilter(), new HashMap<String,String>(), new HashMap<String,String>());
+			acqpanes_[i] = createPanel(acqpanels_[i],acq.getPropertyFilter(), new HashMap<String,String>(), new HashMap<String,String>());
 			acqcard_.add(acqpanes_[i],acqtypes_[i]);			
 		}
 		

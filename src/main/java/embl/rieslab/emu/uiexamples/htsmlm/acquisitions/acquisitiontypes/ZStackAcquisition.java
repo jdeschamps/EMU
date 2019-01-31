@@ -71,10 +71,10 @@ public class ZStackAcquisition implements Acquisition {
 		running_ = false;
 		
 		params_ = new GenericAcquisitionParameters(AcquisitionType.ZSTACK, 
-				exposure, 0, 3, 1, new HashMap<String,String>(), new HashMap<String,String>(), setSlices(zstart, zend, zstep));
+				exposure, 0, 3, 1, new HashMap<String,String>(), new HashMap<String,String>(), getSlices(zstart, zend, zstep));
 	}
 	
-	public ArrayList<Double> setSlices(double zstart, double zend, double zstep){
+	public ArrayList<Double> getSlices(double zstart, double zend, double zstep){
 		ArrayList<Double> slices = new ArrayList<Double>();
 		double z = utils.round(zstart-zstep,2);
 		
@@ -82,8 +82,12 @@ public class ZStackAcquisition implements Acquisition {
 			z += zstep;
 			slices.add(utils.round(z,2));
 		}
-		
+
 		return slices;
+	}
+	
+	public void setSlices(double zstart, double zend, double zstep){
+		params_.setZSlices(getSlices(zstart,zend,zstep));
 	}
 	
 	@Override
@@ -250,7 +254,6 @@ public class ZStackAcquisition implements Acquisition {
 				}
 			}	
 			
-			System.out.println(zstart+" - "+ zend+" - "+ zstep);
 			this.setSlices(zstart, zend, zstep);
 		}
 	}

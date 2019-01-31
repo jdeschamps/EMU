@@ -240,7 +240,7 @@ public class AcquisitionTask  implements Task<Integer>{
 		}
 
 		private void interruptAcquistion() {
-			while (currAcq.isRunning()) {
+			while (currAcq != null && currAcq.isRunning()) {
 				currAcq.stopAcquisition();
 				try {
 					Thread.sleep(500);
