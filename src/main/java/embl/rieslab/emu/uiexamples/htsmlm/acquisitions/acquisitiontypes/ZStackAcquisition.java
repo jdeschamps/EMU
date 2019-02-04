@@ -29,10 +29,10 @@ import org.micromanager.data.internal.DefaultCoords;
 public class ZStackAcquisition implements Acquisition {
 	
 	// Convenience constants		
-	private final static String PANE_NAME = "Zstack panel";
+	private final static String PANE_NAME = "Autofocus panel";
 	private final static String LABEL_EXPOSURE = "Exposure (ms):";
 	private final static String LABEL_PAUSE = "Pause (s):";
-	private final static String LABEL_ZSTART = "Z start/end/step (um):";
+	private final static String LABEL_ZSTART = "Z start:";
 	private final static String LABEL_ZEND = "Z end (um):";
 	private final static String LABEL_ZSTEP = "Z step (um):";
 	private final static String LABEL_ZDEVICE = "Z stage:";
@@ -94,7 +94,7 @@ public class ZStackAcquisition implements Acquisition {
 		return slices;
 	}
 	
-	public void setSlices(double zstart, double zend, double zstep){
+	private void setSlices(double zstart, double zend, double zstep){
 		params_.setZSlices(getSlices(zstart,zend,zstep));
 	}
 	
@@ -316,16 +316,12 @@ public class ZStackAcquisition implements Acquisition {
 		return s;
 	}
 
-	public void setZStart(double val){
-		zstart = val;
-	}
-	
-	public void setZEnd(double val){
-		zend = val;
-	}
-	
-	public void setZStep(double val){
-		zstep = val;
+	public void setZRange(double zstart, double zend, double zstep){
+		this.zstart = zstart;
+		this.zend = zend;
+		this.zstep = zstep;
+		
+		this.setSlices(zstart,zend,zstep);
 	}
 
 	public void setZDevice(String zdevice){

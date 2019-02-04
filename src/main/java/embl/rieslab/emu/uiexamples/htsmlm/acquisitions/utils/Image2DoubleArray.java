@@ -6,7 +6,7 @@ import main.java.embl.rieslab.emu.uiexamples.htsmlm.autopilot.image.DoubleArrayI
 
 public class Image2DoubleArray {
 
-	public DoubleArrayImage convert(Image im){
+	public static DoubleArrayImage convert(Image im){
 
 		double[] pixels = new double[im.getWidth()+im.getHeight()];
 		for(int i=0;i<im.getWidth();i++){
