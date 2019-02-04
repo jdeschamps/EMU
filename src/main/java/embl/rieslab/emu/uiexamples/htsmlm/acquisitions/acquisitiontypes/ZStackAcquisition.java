@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -35,11 +36,13 @@ public class ZStackAcquisition implements Acquisition {
 	private final static String LABEL_ZEND = "Z end (um):";
 	private final static String LABEL_ZSTEP = "Z step (um):";
 	private final static String LABEL_ZDEVICE = "Z stage:";
+	private final static String LABEL_CHECK = "Focus-lock";
 		
 	public final static String KEY_ZSTART = "Z start";
 	public final static String KEY_ZEND = "Z end";
 	public final static String KEY_ZSTEP = "Z step";
 	public final static String KEY_ZDEVICE = "Z stage";
+	public final static String KEY_USEFL = "Use focus-lock";
 	
 	// UI property
 	private TwoStateUIProperty stabprop_;
@@ -47,17 +50,22 @@ public class ZStackAcquisition implements Acquisition {
 	private String zdevice_;
 	private String[] zdevices_;
 	private double zstart, zend, zstep;
-	private boolean zstab_; 
+	private boolean zstab_, zstabuse_; 
 	private GenericAcquisitionParameters params_;
 	private volatile boolean stopAcq_, running_;
 	
 	public ZStackAcquisition(double exposure, String[] zdevices, String defaultzdevice, TwoStateUIProperty twoStateUIProperty) {
 
-		stabprop_ = twoStateUIProperty;
+		if(twoStateUIProperty.isAllocated()){
+			stabprop_ = twoStateUIProperty;
+		}
+		
 		if(stabprop_ == null){
 			zstab_ = false;
+			zstabuse_ = false;
 		} else {
 			zstab_ = true;
+			zstabuse_ = true;
 		}
 		
 		zstart=-2;
@@ -100,7 +108,7 @@ public class ZStackAcquisition implements Acquisition {
 		stopAcq_ = false;
 		running_ = true;
 		
-		if(zstab_){
+		if(zstab_ && zstabuse_){
 			stabprop_.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		}
 		
@@ -147,7 +155,7 @@ public class ZStackAcquisition implements Acquisition {
 			e.printStackTrace();
 		}
 		
-		if(zstab_){
+		if(zstab_ && zstabuse_){
 			stabprop_.setPropertyValue(TwoStateUIProperty.getOnStateName());
 		}
 	}
@@ -176,14 +184,18 @@ public class ZStackAcquisition implements Acquisition {
 		JLabel exposurelab, waitinglab, zstartlab, zdevicelabel;
 		JSpinner exposurespin, waitingspin, zstartspin, zendspin, zstepspin;
 		
+		JCheckBox usefocuslocking = new JCheckBox(LABEL_CHECK);
+		usefocuslocking.setName(LABEL_CHECK);
+		usefocuslocking.setEnabled(zstab_);
+		
 		exposurelab = new JLabel(LABEL_EXPOSURE);
 		waitinglab = new JLabel(LABEL_PAUSE);
 		zstartlab = new JLabel(LABEL_ZSTART);
 		zdevicelabel = new JLabel(LABEL_ZDEVICE);
 		
-		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(params_.getExposureTime(),1), 1, 10000000, 1));
+		exposurespin = new JSpinner(new SpinnerNumberModel(Math.max(params_.getExposureTime(),1), 1, 10000, 1));
 		exposurespin.setName(LABEL_EXPOSURE);
-		waitingspin = new JSpinner(new SpinnerNumberModel(params_.getWaitingTime(), 0, 10000000, 1)); 
+		waitingspin = new JSpinner(new SpinnerNumberModel(params_.getWaitingTime(), 0, 10000, 1)); 
 		waitingspin.setName(LABEL_PAUSE);
 		zstartspin = new JSpinner(new SpinnerNumberModel(zstart, -1000, 1000, 0.05)); 
 		zstartspin.setName(LABEL_ZSTART);
@@ -210,6 +222,7 @@ public class ZStackAcquisition implements Acquisition {
 
 		panelHolder[0][0].add(zdevicelabel);
 		panelHolder[0][1].add(zdevices);
+		panelHolder[0][2].add(usefocuslocking);
 		
 		panelHolder[1][0].add(exposurelab);
 		panelHolder[2][0].add(zstartlab);
@@ -248,6 +261,8 @@ public class ZStackAcquisition implements Acquisition {
 								zstep = ((Double) ((JSpinner) comp[i]).getValue());
 							} else if(comp[i].getName().equals(LABEL_ZDEVICE) && comp[i] instanceof JComboBox){
 								zdevice_ = ((String) ((JComboBox) comp[i]).getSelectedItem());
+							}else if(comp[i].getName().equals(LABEL_CHECK) && comp[i] instanceof JCheckBox){
+								zstabuse_ = ((JCheckBox) comp[i]).isSelected();
 							}
 						}
 					}
@@ -268,12 +283,13 @@ public class ZStackAcquisition implements Acquisition {
 
 	@Override
 	public String[] getSpecialSettings() {
-		String[] s = new String[5];
+		String[] s = new String[6];
 		s[0] = "Exposure = "+params_.getExposureTime()+" ms";
 		s[1] = "Stage = "+zdevice_;
 		s[2] = "Zstart = "+zstart+" um";
 		s[3] = "Zend = "+zend+" um";
 		s[4] = "Zstep = "+zstep+" um";
+		s[5] = "Use focus-lock = "+String.valueOf(zstabuse_);
 		return s;
 	}
 
@@ -284,7 +300,7 @@ public class ZStackAcquisition implements Acquisition {
 	
 	@Override
 	public String[][] getAdditionalJSONParameters() {
-		String[][] s = new String[4][2];
+		String[][] s = new String[5][2];
 
 		s[0][0] = KEY_ZSTART;
 		s[0][1] = String.valueOf(zstart);
@@ -292,8 +308,10 @@ public class ZStackAcquisition implements Acquisition {
 		s[1][1] = String.valueOf(zend);
 		s[2][0] = KEY_ZSTEP;
 		s[2][1] = String.valueOf(zstep);
-		s[2][0] = KEY_ZDEVICE;
-		s[2][1] = zdevice_;
+		s[3][0] = KEY_ZDEVICE;
+		s[3][1] = zdevice_;
+		s[4][0] = KEY_USEFL;
+		s[4][1] = String.valueOf(zstabuse_);
 		
 		return s;
 	}
@@ -309,9 +327,13 @@ public class ZStackAcquisition implements Acquisition {
 	public void setZStep(double val){
 		zstep = val;
 	}
-	
+
 	public void setZDevice(String zdevice){
 		zdevice_ = zdevice;
+	}
+
+	public void setUseFocusLock(boolean zstabuse){
+		zstabuse_ = zstabuse;
 	}
 	
 	@Override
