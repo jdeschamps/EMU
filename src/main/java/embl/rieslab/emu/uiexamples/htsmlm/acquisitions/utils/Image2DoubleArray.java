@@ -8,7 +8,7 @@ public class Image2DoubleArray {
 
 	public static DoubleArrayImage convert(Image im){
 
-		double[] pixels = new double[im.getWidth()+im.getHeight()];
+		double[] pixels = new double[im.getWidth()*im.getHeight()];
 		for(int i=0;i<im.getWidth();i++){
 			for(int j=0;j<im.getHeight();j++){
 				pixels[j+i*im.getHeight()] = (double) im.getIntensityAt(i, j);
