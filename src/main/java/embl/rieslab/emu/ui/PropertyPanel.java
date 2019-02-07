@@ -149,6 +149,13 @@ public abstract class PropertyPanel extends JPanel{
 		return propertychange_;
 	}
 
+	/**
+	 * Upon loading the UI, the properties are updated according to the value of the linked MM property.
+	 * Turning off the property change in the beginning of propertyhasChanged() allows changing the state
+	 * of the UI components without triggering their own actionListeners. Note that it requires the UI
+	 * components to call isPropertyChangeAllowed in their actionListeners. Before returning, propertyhasChanged
+	 * need to turn on the property change again. 
+	 */
 	public void turnOffPropertyChange(){
 		propertychange_ = false;
 	}
