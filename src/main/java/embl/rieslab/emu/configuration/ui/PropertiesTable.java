@@ -29,7 +29,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 /**
- * JPanel displaying a table allowing the user to allocate device properties from Micro-manager with
+ * JPanel displaying a table allowing the user to allocate device properties from Micro-Manager with
  * UIProperty from the current UI. 
  * 
  * @author Joran Deschamps
@@ -413,9 +413,6 @@ public class PropertiesTable extends JPanel {
 	
 	public static class ColoredUneditedTableRenderer extends DefaultTableCellRenderer {
 
-	    /**
-		 * 
-		 */
 		private static final long serialVersionUID = -8629607160286367931L;
 
 		@Override

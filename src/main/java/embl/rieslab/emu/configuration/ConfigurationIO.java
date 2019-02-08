@@ -12,15 +12,30 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
+/**
+ * Reads/Writes a {@link GlobalConfigurationWrapper} from/to a file using jackson ObjectMapper.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class ConfigurationIO {
 
-	public static GlobalConfiguration read(File file) {
+	/**
+	 * Reads a {@link GlobalConfigurationWrapper} object from the file {@code fileToReadFrom}. It then
+	 * instantiates and returns a @link GlobalConfiguration}.
+	 * 
+	 * @see GlobalConfiguration
+	 * 
+	 * @param fileToReadFrom File to read the GlobalConfiguration from.
+	 * @return GlobalConfiguration from the file. null if no GlobalConfiguration could be read.
+	 */
+	public static GlobalConfiguration read(File fileToReadFrom) {
 		
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
 		try {
-			GlobalConfiguration config = new GlobalConfiguration(objectMapper.readValue(new FileInputStream(file), GlobalConfigurationWrapper.class));
+			GlobalConfiguration config = new GlobalConfiguration(objectMapper.readValue(new FileInputStream(fileToReadFrom), GlobalConfigurationWrapper.class));
 			return config;
 			
 		} catch (JsonParseException e) {
@@ -36,13 +51,21 @@ public class ConfigurationIO {
 		return null;
 	}
 
-	public static boolean write(File file, GlobalConfigurationWrapper configuration) {
+	/**
+	 * Writes a {@link GlobalConfigurationWrapper} object to the file {@code fileToWriteTo}.
+	 * 
+	 * @param fileToWriteTo File in which to save the {@code configuration}.
+	 * @param configuration GlobalConfiguration to be saved.
+	 * @return True if the save was successful, false otherwise.
+	 */
+	public static boolean write(File fileToWriteTo, GlobalConfiguration configuration) {
 
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
 		try {
-			objectMapper.writeValue(new FileOutputStream(file), configuration);
+			// should write a GlobalConfigurationWrapper, not a GlobalConfiguration
+			objectMapper.writeValue(new FileOutputStream(fileToWriteTo), configuration.getGlobalConfigurationWrapper()); 
 			return true;
 			
 		} catch (JsonGenerationException e) {

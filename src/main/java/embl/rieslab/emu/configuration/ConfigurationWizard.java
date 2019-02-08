@@ -16,7 +16,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import main.java.embl.rieslab.emu.configuration.globalsettings.GlobalSettings;
+import main.java.embl.rieslab.emu.configuration.globalsettings.GlobalSetting;
 import main.java.embl.rieslab.emu.configuration.ui.GlobalSettingsTable;
 import main.java.embl.rieslab.emu.configuration.ui.HelpWindow;
 import main.java.embl.rieslab.emu.configuration.ui.ParametersTable;
@@ -81,7 +81,7 @@ public class ConfigurationWizard {
 				parametertable_.setOpaque(true);
 				
 				// and global settings
-				HashMap<String, GlobalSettings> glob = new HashMap<String, GlobalSettings>();
+				HashMap<String, GlobalSetting> glob = new HashMap<String, GlobalSetting>();
 				glob.put(config_.getEnableUnallocatedWarnings().getName(), config_.getEnableUnallocatedWarnings());
 				globsettingstable_ = new GlobalSettingsTable(glob, help_);
 				globsettingstable_.setOpaque(true); 
@@ -121,7 +121,7 @@ public class ConfigurationWizard {
 				parametertable_.setOpaque(true);				
 				
 				// and global settings
-				HashMap<String, GlobalSettings> glob = new HashMap<String, GlobalSettings>();
+				HashMap<String, GlobalSetting> glob = new HashMap<String, GlobalSetting>();
 				glob.put(config_.getEnableUnallocatedWarnings().getName(), config_.getEnableUnallocatedWarnings());
 				globsettingstable_ = new GlobalSettingsTable(glob, help_);
 				globsettingstable_.setOpaque(true); 

@@ -224,7 +224,7 @@ public class SystemController {
 	
 	private void reloadSystem(String pluginName, String configName) throws IncompatiblePluginConfigurationException {
 		
-		if(!pluginloader_.isPluginAvailable(pluginName) || !config.isValidConfiguration(configName)){
+		if(!pluginloader_.isPluginAvailable(pluginName) || !config.doesConfigurationExist(configName)){
 			throw new IllegalArgumentException();
 		}
 		
@@ -549,11 +549,6 @@ public class SystemController {
 		}
 		
 		return others;
-	}
-
-	
-	public String[] getCompatibleConfigurationList() {
-		return config.getCompatibleConfigurations(currentPlugin);
 	}
 
 }

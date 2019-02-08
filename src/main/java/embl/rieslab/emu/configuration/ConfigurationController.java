@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import main.java.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSettings;
+import main.java.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
 import main.java.embl.rieslab.emu.controller.SystemConstants;
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
@@ -16,11 +16,17 @@ import main.java.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 
+/**
+ * Controller class for the configuration of the current UI. This class  
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class ConfigurationController {
 	
-	private SystemController controller_;
-	private ConfigurationWizard wizard_;
-	private GlobalConfiguration configuration_;
+	private SystemController controller_; // overall controller
+	private ConfigurationWizard wizard_; // graphical interface to edit the current configuration
+	private GlobalConfiguration configuration_; // configurations of the UI
 	
 	public ConfigurationController(SystemController controller){
 		controller_ = controller;
@@ -53,22 +59,22 @@ public class ConfigurationController {
 	}
 
 	public boolean writeConfiguration(){
-		return ConfigurationIO.write(getDefaultConfigurationFile(), getConfiguration().getGlobalConfiguration());
+		return ConfigurationIO.write(getDefaultConfigurationFile(), getConfiguration());
 	}
 
 	public boolean writeConfiguration(File f){
-		return ConfigurationIO.write(f, getConfiguration().getGlobalConfiguration());
+		return ConfigurationIO.write(f, getConfiguration());
 	}
 
 	public GlobalConfiguration getConfiguration(){
 		return configuration_;
 	}
 
-	public boolean isValidConfiguration(String configName){
+	public boolean doesConfigurationExist(String configName){
 		if(configuration_ == null){
 			return false;
 		}
-		return configuration_.isValidConfiguration(configName);
+		return configuration_.doesConfigurationExist(configName);
 	}
 	
 	public String[] getCompatibleConfigurations(String pluginName){
@@ -236,11 +242,11 @@ public class ConfigurationController {
 		return false;
 	}
 
-	public BoolGlobalSettings getEnableUnallocatedWarnings(){
+	public BoolGlobalSetting getEnableUnallocatedWarnings(){
 		if(configuration_ == null){
 			return null;
 		}
 		
-		return configuration_.getEnableUnallocatedWarnings();
+		return configuration_.getEnableUnallocatedWarningsSetting();
 	}
 }

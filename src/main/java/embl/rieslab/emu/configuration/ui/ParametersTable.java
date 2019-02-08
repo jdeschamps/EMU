@@ -20,9 +20,9 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import main.java.embl.rieslab.emu.configuration.ui.misc.ColorIcon;
-import main.java.embl.rieslab.emu.configuration.ui.misc.IconListRenderer;
-import main.java.embl.rieslab.emu.configuration.ui.misc.IconTableRenderer;
+import main.java.embl.rieslab.emu.configuration.ui.utils.ColorIcon;
+import main.java.embl.rieslab.emu.configuration.ui.utils.IconListRenderer;
+import main.java.embl.rieslab.emu.configuration.ui.utils.IconTableCellRenderer;
 import main.java.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
@@ -33,16 +33,13 @@ import main.java.embl.rieslab.emu.utils.ColorRepository;
 import main.java.embl.rieslab.emu.utils.utils;
 
 /**
- * JPanel displaying a table allowing the user to set the values of the UI parameters.
+ * JPanel displaying a table allowing the user to set the values of the UIParameters.
  * 
  * @author Joran Deschamps
  *
  */
 public class ParametersTable extends JPanel{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1094849697965112381L;
 	
 	private JTable table;
@@ -57,7 +54,7 @@ public class ParametersTable extends JPanel{
 	/**
 	 * Constructor called when no configuration exists. All the parameter values are set to default values.
 	 * 
-	 * @param uiparameterSet Map of the UI parameters, indexed by their name
+	 * @param uiparameterSet Map of the UIParameters, indexed by their name
 	 * @param help Help window
 	 */
 	@SuppressWarnings("rawtypes")
@@ -67,7 +64,7 @@ public class ParametersTable extends JPanel{
 		uipropertySet_ = uipropertySet;
 		help_ = help;
 		
-		// Color combobox
+		// Color JComboBox: available colors within the EMU
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
 		color = new JComboBox<String>();
 		String[] colors = ColorRepository.getColors();
@@ -77,18 +74,18 @@ public class ParametersTable extends JPanel{
 		}
 		color.setRenderer(new IconListRenderer(icons));
 		        		
-		// Extract uiparameters names
+		// Extracts UIParameters' name
 		uiparamkeys_ = new String[uiparameterSet_.size()];
 		String[] temp = new String[uiparameterSet_.size()]; 
 		uiparamkeys_ = uiparameterSet_.keySet().toArray(temp);
 		Arrays.sort(uiparamkeys_);
 		
-		// Define table
+		// Defines table
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"UI parameter", "Value" }, 0);
 		for(int i=0;i<uiparamkeys_.length;i++){
-			if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){
+			if(uiparameterSet_.get(uiparamkeys_[i]) instanceof BoolUIParameter){ // if bool, just passes the value
 				model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getValue()});
-			} else {
+			} else { // else, converts the value to a String
 				model.addRow(new Object[] {uiparamkeys_[i], uiparameterSet_.get(uiparamkeys_[i]).getStringValue()});
 			}
 		}
@@ -96,7 +93,7 @@ public class ParametersTable extends JPanel{
 		createTable(model);
 
 		JScrollPane sc = new JScrollPane(table);
-		//sc.setPreferredSize(new Dimension(280,590));
+		//sc.setPreferredSize(new Dimension(280,590));  
 		this.add(sc);
 	}
 	
@@ -171,7 +168,7 @@ public class ParametersTable extends JPanel{
 				case 1:
 					String s = (String) table.getValueAt(row, 0);
 					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){ // if Color parameter
-						return new IconTableRenderer();
+						return new IconTableCellRenderer();
 					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) { // if checkbox
 						return super.getDefaultRenderer(Boolean.class);
 					} else {
@@ -295,9 +292,6 @@ public class ParametersTable extends JPanel{
 	 */
 	class BoldTableCellRenderer extends DefaultTableCellRenderer {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 7284712630858433079L;
 
 		public Component getTableCellRendererComponent(JTable table,

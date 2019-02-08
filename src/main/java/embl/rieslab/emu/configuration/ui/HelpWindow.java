@@ -10,7 +10,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 /**
- * JFrame wrapper that displays a String in a frame and hides/displays it.
+ * This class hides or displays a JFrame containing a String.
  * 
  * @author Joran Deschamps
  *
@@ -47,7 +47,7 @@ public class HelpWindow {
 	}
 
 	/**
-	 * Shows window.
+	 * Shows or hides the window.
 	 * 
 	 * @param b True if the window is to be displayed, false otherwise.
 	 */
@@ -65,14 +65,14 @@ public class HelpWindow {
 	}
 	
 	/**
-	 * Disposes of the frame.
+	 * Disposes of the JFrame.
 	 */
 	public void disposeHelp(){
 		frame.dispose();
 	}
 
 	/**
-	 * Updates the frame with a new text.
+	 * Updates the JFrame with a new text.
 	 * @param newtext Text to be displayed.
 	 */
 	public void update(String newtext){

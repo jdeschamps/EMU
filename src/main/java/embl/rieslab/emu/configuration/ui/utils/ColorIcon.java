@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.configuration.ui.misc;
+package main.java.embl.rieslab.emu.configuration.ui.utils;
 
 //
 //
@@ -16,6 +16,12 @@ import java.awt.Insets;
 
 import javax.swing.Icon;
 
+/**
+ * Defines an colored icon.  
+ * 
+ * @author Andrea Carboni
+ *
+ */
 public class ColorIcon implements Icon {
 	private int iWidth;
 	private int iHeight;

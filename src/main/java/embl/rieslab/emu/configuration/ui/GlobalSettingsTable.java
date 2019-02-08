@@ -17,21 +17,30 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import main.java.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSettings;
-import main.java.embl.rieslab.emu.configuration.globalsettings.GlobalSettings;
+import main.java.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
+import main.java.embl.rieslab.emu.configuration.globalsettings.GlobalSetting;
 
+/**
+ * A JPanel containing a JTable tailored for GlobalSettings. The first column contains the names of the settings, 
+ * is non editable and displayed in bold text. The second column contains the values. The latter's cells are rendered
+ * with a JCheckbox in case of a BoolGlobalSetting and normal text if the setting is a StringGlobalSetting.
+ * This class is used in the settings menu of EMU.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class GlobalSettingsTable extends JPanel{
 
 	private static final long serialVersionUID = -4373947956592815819L;
 
 	private JTable table;
 	@SuppressWarnings("rawtypes")
-	private Map<String, GlobalSettings> globalsettings_;
+	private Map<String, GlobalSetting> globalsettings_;
 	private String[] namesettings_;
 	private HelpWindow help_;
 	
 	@SuppressWarnings("rawtypes")
-	public GlobalSettingsTable(Map<String, GlobalSettings> globalsettings, HelpWindow help) {
+	public GlobalSettingsTable(Map<String, GlobalSetting> globalsettings, HelpWindow help) {
 		globalsettings_ = globalsettings;
 		help_ = help;
 		
@@ -66,7 +75,7 @@ public class GlobalSettingsTable extends JPanel{
 					return new BoldTableCellRenderer();
 				case 1:
 					String s = (String) table.getValueAt(row, 0);
-					if(globalsettings_.get(s) instanceof BoolGlobalSettings){ // if bool global settings
+					if(globalsettings_.get(s) instanceof BoolGlobalSetting){ // if bool global settings
 						return super.getDefaultRenderer(Boolean.class);
 					} else {
 						return new DefaultTableCellRenderer(); 
@@ -83,7 +92,7 @@ public class GlobalSettingsTable extends JPanel{
 					return super.getCellEditor(row, column);
 				case 1:
 					String s = (String) table.getValueAt(row, 0);
-					if(globalsettings_.get(s) instanceof BoolGlobalSettings) {
+					if(globalsettings_.get(s) instanceof BoolGlobalSetting) {
 						return super.getDefaultEditor(Boolean.class);
 					} else {
 						return new DefaultCellEditor(new JTextField()); 
@@ -121,7 +130,7 @@ public class GlobalSettingsTable extends JPanel{
 	/**
 	 * Shows the help window and updates its content with the description of the parameter currently selected.
 	 * 
-	 * @param b True if the window is to be displayed, false otherwise.
+	 * @param b True if the window is to be displayed, false if it needs to be hidden.
 	 */
 	public void showHelp(boolean b){
 		help_.showHelp(b);
@@ -136,7 +145,7 @@ public class GlobalSettingsTable extends JPanel{
 	/**
 	 * Returns the map of the GlobalSettings names (keys) and their values (values).
 	 * 
-	 * @return
+	 * @return HashMap<String,String> containing the values of the GlobalSettings indexed by their name.
 	 */
 	public HashMap<String,String> getSettings(){
 		HashMap<String,String> settings = new HashMap<String,String>();
@@ -156,13 +165,10 @@ public class GlobalSettingsTable extends JPanel{
 	}
 	
 	/**
-	 * Renders cell text with a bold font. Adapted from: https://stackoverflow.com/questions/22325138/cellrenderer-making-text-bold
+	 * Renders cells' text with a bold font. Adapted from: <a href="https://stackoverflow.com/questions/22325138/cellrenderer-making-text-bold"stackoverflow</a>
 	 */
 	class BoldTableCellRenderer extends DefaultTableCellRenderer {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 7284712630858433079L;
 
 		public Component getTableCellRendererComponent(JTable table,

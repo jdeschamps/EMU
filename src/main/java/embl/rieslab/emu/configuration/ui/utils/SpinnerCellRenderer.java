@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.configuration.ui.misc;
+package main.java.embl.rieslab.emu.configuration.ui.utils;
 
 import java.awt.Component;
 
@@ -8,15 +8,16 @@ import javax.swing.SpinnerModel;
 import javax.swing.table.TableCellRenderer;
 
 /**
- * Spinner cell renderer
+ * TableCellRenderer for JSpinner.
+ * 
+ * @author Joran Deschamps
+ *
  */
-public class SpinnerRenderer extends JSpinner implements TableCellRenderer {
-	/**
-	 * 
-	 */
+public class SpinnerCellRenderer extends JSpinner implements TableCellRenderer {
+
 	private static final long serialVersionUID = 4236114754335086999L;
 
-	public SpinnerRenderer() {
+	public SpinnerCellRenderer() {
 		setOpaque(true);
 	}
 

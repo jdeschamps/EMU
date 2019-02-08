@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.configuration.ui.misc;
+package main.java.embl.rieslab.emu.configuration.ui.utils;
 
 import java.awt.Component;
 import java.util.Map;
@@ -8,8 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 /**
- * Renders icon within a list. Adapted from http://helpdesk.objects.com.au. The text is not displayed, 
- * and the icons are set to ColorIcon.
+ * Renders {@link ColorIcon} without text within a list. Adapted from <a href="http://helpdesk.objects.com.au"http://helpdesk.objects.com.au</a>. 
  */
 public class IconListRenderer extends DefaultListCellRenderer {
 
