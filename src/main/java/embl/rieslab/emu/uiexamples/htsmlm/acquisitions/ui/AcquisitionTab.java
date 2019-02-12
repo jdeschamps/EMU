@@ -359,14 +359,14 @@ public class AcquisitionTab extends JPanel {
 		// Defines table model
 		DefaultTableModel model = new DefaultTableModel(new Object[] {"Property", "Value" }, 0);
 
-		final HashMap<String, String[]> map = mmconfigreg.getMMConfigurationChannelsMap();
+		final HashMap<String, String[]> map = mmconfigreg.getMMConfigurationChannels();
 		String[] keys = map.keySet().toArray(new String[0]);
 		Arrays.sort(keys);
 		
 		// For each configuration group
 		for (int i = 0; i < keys.length; i++) {	
 			if(map.get(keys[i]) != null && map.get(keys[i]).length > 0){
-				String s = mmconfigreg.getMMConfigurationState(keys[i]);
+				String s = mmconfigreg.getCurrentMMConfigurationChannel(keys[i]);
 				if(s.length() > 0){
 					model.addRow(new Object[] {keys[i], s });
 				} else if(s != null) {

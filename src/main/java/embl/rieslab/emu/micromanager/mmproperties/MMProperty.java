@@ -7,11 +7,11 @@ import mmcorej.CMMCore;
 
 /**
  * Abstract wrapper for a Micro-manager device property. This class allows retrieving and modifying
- * the value of a device property, within its limits or allowed values as defined by Micro-manager. 
+ * the value of a device property, within its limits, or allowed values, as defined by Micro-manager. 
  * 
  * @author Joran Deschamps
  *
- * @param <T>
+ * @param <T> Type of the Micro-manager property.
  */
 public abstract class MMProperty<T> {
 
@@ -114,11 +114,10 @@ public abstract class MMProperty<T> {
 		return core_;
 	}
 	
-	
 	/** 
 	 * Returns the current value of the device property.
 	 * 
-	 * @return
+	 * @return Current value.
 	 */
 	public T getValue() {
 		// ask core for value
@@ -135,7 +134,7 @@ public abstract class MMProperty<T> {
 	/**
 	 * Returns the current value of the device property as a String.
 	 * 
-	 * @return
+	 * @return Current String value.
 	 */
 	public String getStringValue() {
 		// ask core for value
@@ -151,7 +150,7 @@ public abstract class MMProperty<T> {
 
 	/**
 	 * Sets the value of the device property and updates all parent UIProperties. This method is called by a parent UIProperty, and the source
-	 * is excluded from the notification.
+	 * is excluded from the notification (using {@link #notifyListeners(UIProperty, String)}).
 	 * 
 	 * @param stringval New value.
 	 * @param source UIProperty at the origin of the update.
@@ -183,6 +182,7 @@ public abstract class MMProperty<T> {
 	}
 	
 	/**
+	 * Checks if the MMProperty has limits.
 	 * 
 	 * @return True if the device property has limits, false otherwise.
 	 */
@@ -191,6 +191,7 @@ public abstract class MMProperty<T> {
 	}
 	
 	/**
+	 * Checks if the Micro-manager property has allowed values.
 	 * 
 	 * @return True if the device property has allowed values, false otherwise.
 	 */
@@ -199,6 +200,7 @@ public abstract class MMProperty<T> {
 	}
 	
 	/**
+	 * Checks if the Micro-manager property is read-only.
 	 * 
 	 * @return True if the device property is read only, false otherwise.
 	 */
@@ -208,9 +210,9 @@ public abstract class MMProperty<T> {
 	
 
 	/**
-	 * Returns the array of allowed values.
+	 * Returns the array of allowed values. This array can be null if the MMProperty has no allowed value.
 	 * 
-	 * @return
+	 * @return Allowed values, null if it has none.
 	 */
 	public T[] getAllowedValues(){
 		if(hasAllowedValues()){
@@ -220,9 +222,9 @@ public abstract class MMProperty<T> {
 	}
 	
 	/**
-	 * Returns the array of allowed values as Strings.
+	 * Returns the array of allowed values as Strings. In particular, the array is of size 0 if it has no allowed value.
 	 * 
-	 * @return
+	 * @return Allowed values as Strings, array of size 0 if it has none.
 	 */
 	public String[] getStringAllowedValues(){
 		if(hasAllowedValues()){
@@ -232,14 +234,15 @@ public abstract class MMProperty<T> {
 			}
 			return s;
 		}
-		return null;
+		return new String[0];
 	}
 	
 	/**
 	 * Sets a maximum to the value of the device property. The maximum should be smaller than
-	 * the upper limit. Maximum value is only used in device property that have limits.
+	 * the upper limit. Maximum value is only used in device property that have limits. If these
+	 * conditions are not met, nothing happens.
 	 * 
-	 * @param val
+	 * @param val Maximum value.
 	 */
 	public void setMax(T val){
 		if(hasLimits() && isInRange(val)){
@@ -249,9 +252,10 @@ public abstract class MMProperty<T> {
 	
 	/**
 	 * Sets a minimum to the value of the device property. The minimum should be larger than
-	 * the lower limit. Minimum value is only used in device property that have limits.
+	 * the lower limit. Minimum value is only used in device property that have limits. If these
+	 * conditions are not met, nothing happens.
 	 * 
-	 * @param val
+	 * @param val Minimum value.
 	 */
 	public void setMin(T val){
 		if(hasLimits() && isInRange(val)){
@@ -273,7 +277,7 @@ public abstract class MMProperty<T> {
 	}
 	
 	/**
-	 * Returns the mimimum value has a String. If the device property doesn't have limits, then
+	 * Returns the minimum value has a String. If the device property doesn't have limits, then
 	 * the method returns null.
 	 * 
 	 * @return Minimum value, or null if the device property doesn't have limits.
@@ -339,7 +343,8 @@ public abstract class MMProperty<T> {
 	
 	/**
 	 * Returns the parent device label.
-	 * @return
+	 * 
+	 * @return Device label.
 	 */
 	public String getDeviceLabel(){
 		return devicelabel_;
@@ -347,7 +352,8 @@ public abstract class MMProperty<T> {
 
 	/**
 	 * Returns the device property label.
-	 * @return
+	 * 
+	 * @return Property label.
 	 */
 	public String getMMPropertyLabel(){
 		return label_;
@@ -355,16 +361,17 @@ public abstract class MMProperty<T> {
 	
 	/**
 	 * Returns the MMProperty hash, which is "{device label}-{property label}".
-	 * @return
+	 * 
+	 * @return Property's hash
 	 */
 	public String getHash(){
 		return hash_;
 	}
 	
 	/**
-	 * Tests if the value strval is in range of the device property limits (if applicable).
+	 * Tests if the value {@code strval} is in range of the device property limits (if applicable).
 	 * 
-	 * @param strval
+	 * @param strval Value
 	 * @return True if in range, false otherwise.
 	 */
 	protected boolean isInRange(String strval){
@@ -382,6 +389,10 @@ public abstract class MMProperty<T> {
 		listeners_.add(listener);
 	}
 	
+	/**
+	 * Clear all listeners from the property. Used upon reloading the UI or changing the configuration.
+	 * 
+	 */
 	public void clearAllListeners(){
 		listeners_.clear();
 	}
@@ -389,6 +400,7 @@ public abstract class MMProperty<T> {
 	/**
 	 * Notifies the UIProperty parents of a value update, excluding the UIProperty source of the 
 	 * update.
+	 * 
 	 * @param source UIProperty that triggered the update.
 	 * @param value Updated value.
 	 */
@@ -400,6 +412,10 @@ public abstract class MMProperty<T> {
 		}
 	}
 	
+	/**
+	 * Updates all listeners with the current MMProperty value.
+	 * 
+	 */
 	public void updateMMProperty(){
 		notifyListeners(null, getStringValue());
 	}
@@ -407,62 +423,74 @@ public abstract class MMProperty<T> {
 	/**
 	 * Convert the String s to the MMProperty type.
 	 * 
-	 * @param s
-	 * @return
+	 * @param s String to be converted.
+	 * @return Converted value
 	 */
 	protected abstract T convertToValue(String s);
+	
 	/**
 	 * Convert the int i to the MMProperty type.
-	 * @param s
-	 * @return
+	 * @param s Integer to be converted
+	 * @return Converted value
 	 */
 	protected abstract T convertToValue(int i);
+	
 	/**
 	 * Convert the double d to the MMProperty type. 
-	 * @param d
-	 * @return
+	 * @param d Double to be converted
+	 * @return Converted value
 	 */
 	protected abstract T convertToValue(double d);
+	
 	/**
 	 * Converts an array of String to the MMProperty type.
-	 * @param s
-	 * @return
+	 * @param s Array to be converted
+	 * @return Converted array
 	 */
 	protected abstract T[] arrayFromStrings(String[] s);
 	
 	/**
 	 * Converts a value from the MMProperty type to String.
-	 * @param val
-	 * @return
+	 * @param val Value to be converted
+	 * @return Converted String
 	 */
 	protected abstract String convertToString(T val);
 	
 	/**
-	 * Tests if equal
-	 * @param val1
-	 * @param val2
+	 * Tests if equal two values are equal.
+	 * 
+	 * @param val1 First value
+	 * @param val2 Second value
 	 * @return True if equal, false otherwise. 
 	 */
 	protected abstract boolean areEqual(T val1, T val2);
+	
 	/**
-	 * Tests if val in the allowed range of the MMProperty, that is to say is smaller
+	 * Tests if {@code val} in the allowed range of the MMProperty, that is to say is smaller
 	 * than the upper limit and larger than the lower limit. If minimum and maximum have 
-	 * been set to values different than the upper and lower limit, then val is in range 
+	 * been set to values different than the upper and lower limit, then {@code val} is in range 
 	 * if it is contained between the minimum and the maximum. If the property doesn't have
 	 * limits, this method should return true.
-	 * @param val
-	 * @return 
+	 * @param val Value to be checked
+	 * @return True if in range, false otherwise
 	 */
 	protected abstract boolean isInRange(T val);
+	
 	/**
-	 * Tests if val is allowed. If the property has neither limits nor allowed values,
+	 * Tests if {@code val} is allowed. If the property has neither limits nor allowed values,
 	 * then the method should return true. If the property has limits, then this method
 	 * should be equivalent to isInRange().
-	 * @param val
-	 * @return
+	 * @param val Value to be checked
+	 * @return True if allowed, false otherwise.
 	 */
 	protected abstract boolean isAllowed(T val);
 	
+	/**
+	 * Checks if the String {@code val} is allowed.
+	 * 
+	 * @param val String to check
+	 * @return True if {@code val} is allowed, false otherwise.
+	 */
 	public boolean isStringAllowed(String val){
 		if(val == null){
 			return false;

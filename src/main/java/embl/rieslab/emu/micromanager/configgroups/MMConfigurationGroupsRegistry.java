@@ -7,7 +7,7 @@ import mmcorej.CMMCore;
 import mmcorej.StrVector;
 
 /**
- * Class holding a HashMap of the ConfigurationGroups and their name as present in the 
+ * Class holding a HashMap of the {@link MMConfigurationGroup}s and their name as displayed in the 
  * current Micro-manager session.
  * 
  * @author Joran Deschamps
@@ -24,7 +24,7 @@ public class MMConfigurationGroupsRegistry {
 	 * The constructor receives the current Micro-manager core instance and extracts all the
 	 * configuration groups, building a HashMap<group name, ConfigurationGroup>.
 	 * 
-	 * @param core
+	 * @param core Micro-manager CMMCore instance.
 	 */
 	public MMConfigurationGroupsRegistry(CMMCore core){
 		core_ = core;
@@ -45,9 +45,9 @@ public class MMConfigurationGroupsRegistry {
 	}
 	
 	/**
-	 * Returns the configuration groups HashMap
+	 * Returns the {@link MMConfigurationGroup}s indexed in a map by their name.
 	 * 
-	 * @return
+	 * @return HashMap of the {@link MMConfigurationGroup}s.
 	 */
 	public HashMap<String, MMConfigurationGroup> getMMConfigurationGroups(){
 		return groups_;
@@ -57,9 +57,9 @@ public class MMConfigurationGroupsRegistry {
 	 * Returns a HashMap mapping the configuration group names (keys) and an array of 
 	 * string representing the names of the different configuration within each group.
 	 * 
-	 * @return
+	 * @return HashMap of the channels of each {@link MMConfigurationGroup} indexed by the name of the group.
 	 */
-	public HashMap<String, String[]> getMMConfigurationChannelsMap(){
+	public HashMap<String, String[]> getMMConfigurationChannels(){
 		HashMap<String, String[]> map = new HashMap<String, String[]>();
 		
 		Iterator<String> it = groups_.keySet().iterator();
@@ -71,14 +71,26 @@ public class MMConfigurationGroupsRegistry {
 		return map;
 	}
 	
+	/**
+	 * Checks if the configuration group {@code mmconfig} exists.
+	 * 
+	 * @param mmconfig Name of a {@link MMConfigurationGroup}
+	 * @return True if {@code mmconfig} exists, false otherwise.
+	 */
 	public boolean hasMMConfigurationGroup(String mmconfig){
 		return groups_.containsKey(mmconfig);
 	}
 	
-	public String getMMConfigurationState(String mmconfig){
-		if(hasMMConfigurationGroup(mmconfig)){
+	/**
+	 * Returns the current configuration of the MM configuration group {@code mmConfigurationGroup}.
+	 * 
+	 * @param mmConfigurationGroup MM configuration group/
+	 * @return The state of mmConfigurationGroup.
+	 */
+	public String getCurrentMMConfigurationChannel(String mmConfigurationGroup){
+		if(hasMMConfigurationGroup(mmConfigurationGroup)){
 			try {
-				return core_.getCurrentConfig(mmconfig);
+				return core_.getCurrentConfig(mmConfigurationGroup);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

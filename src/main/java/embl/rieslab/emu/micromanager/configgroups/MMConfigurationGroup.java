@@ -2,8 +2,10 @@ package main.java.embl.rieslab.emu.micromanager.configgroups;
 
 import mmcorej.StrVector;
 
+// I am a bit confused with the micromanager terminology (configuration, group and channel) and I am not sure if it was conserved in MM2.
+
 /**
- * Wraps a configuration group from Micro-manager into an object.
+ * Class wrapper for a Micro-manager configuration group.
  * 
  * @author Joran Deschamps
  *
@@ -17,7 +19,7 @@ public class MMConfigurationGroup {
 	 * Constructor
 	 * 
 	 * @param name Name of the configuration group
-	 * @param config StrVector returned by Micro-manager and representing the different configurations in the group.
+	 * @param config StrVector returned by Micro-manager and representing the different channels in the configuration group.
 	 */
 	public MMConfigurationGroup(String name, StrVector config){
 		name_ = name;
@@ -27,7 +29,7 @@ public class MMConfigurationGroup {
 	/**
 	 * Returns the different configurations in the group.
 	 * 
-	 * @return
+	 * @return Vector of the group's configurations.
 	 */
 	public StrVector getConfigurations(){
 		return configs_;
@@ -35,7 +37,8 @@ public class MMConfigurationGroup {
 	
 	/**
 	 * Return the size of the configuration group.
-	 * @return
+	 * 
+	 * @return Size of the configuration group.
 	 */
 	public int getGroupSize(){
 		return (int) configs_.size();
@@ -71,7 +74,7 @@ public class MMConfigurationGroup {
 	/**
 	 * Gets the name of the configuration group.
 	 * 
-	 * @return
+	 * @return Name of the configuration group.
 	 */
 	public String getName(){
 		return name_;
