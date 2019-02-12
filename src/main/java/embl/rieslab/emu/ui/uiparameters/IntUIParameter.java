@@ -1,13 +1,13 @@
 package main.java.embl.rieslab.emu.ui.uiparameters;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 import main.java.embl.rieslab.emu.utils.utils;
 
 public class IntUIParameter extends UIParameter<Integer>{
 
-	public IntUIParameter(PropertyPanel owner, String name, String description, int value) {
+	public IntUIParameter(ConfigurablePanel owner, String name, String description, int value) {
 		super(owner, name, description);
 		
 		setValue(value);

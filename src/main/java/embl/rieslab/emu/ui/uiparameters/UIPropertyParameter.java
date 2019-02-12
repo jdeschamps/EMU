@@ -1,6 +1,6 @@
 package main.java.embl.rieslab.emu.ui.uiparameters;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 
@@ -10,7 +10,7 @@ public class UIPropertyParameter extends UIParameter<String>{
 	
 	private String propertyflag_;
 
-	public UIPropertyParameter(PropertyPanel owner, String name, String description, String propertyflag) {
+	public UIPropertyParameter(ConfigurablePanel owner, String name, String description, String propertyflag) {
 		super(owner, name, description);
 		
 		propertyflag_ = propertyflag;

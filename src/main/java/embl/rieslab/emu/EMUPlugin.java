@@ -20,9 +20,9 @@ public class EMUPlugin implements MenuPlugin, SciJavaPlugin {
 	private static Studio mmAPI_;
 	
 	private static String name = "EMU";
-	private static String description = "Easier Micro-manager User interface: loads its own plugins and interface their UI with Micro-manager device properties.";
+	private static String description = "Easier Micro-manager User interface: loads its own plugins and interfaces their UI with Micro-manager device properties.";
 	private static String copyright = "Joran Deschamps, EMBL, 2016-2019.";
-	private static String version = "0.1";
+	private static String version = "1.0";
 
 	@Override
 	public String getCopyright() {

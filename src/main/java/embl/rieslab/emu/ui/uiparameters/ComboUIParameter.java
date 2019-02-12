@@ -1,6 +1,6 @@
 package main.java.embl.rieslab.emu.ui.uiparameters;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 
@@ -8,7 +8,7 @@ public class ComboUIParameter extends UIParameter<String> {
 
 	private String[] combovalues_;
 	
-	public ComboUIParameter(PropertyPanel owner, String name, String description, String[] combovalues, int ind) {
+	public ComboUIParameter(ConfigurablePanel owner, String name, String description, String[] combovalues, int ind) {
 		super(owner, name, description);
 		
 		combovalues_ = combovalues;

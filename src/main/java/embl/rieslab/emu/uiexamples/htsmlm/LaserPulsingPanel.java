@@ -18,7 +18,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.internalproperty.IntInternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
@@ -28,7 +28,7 @@ import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.CameraExpFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.others.LogarithmicJSlider;
 import main.java.embl.rieslab.emu.utils.utils;
 
-public class LaserPulsingPanel extends PropertyPanel {
+public class LaserPulsingPanel extends ConfigurablePanel {
 	
 	/**
 	 * 

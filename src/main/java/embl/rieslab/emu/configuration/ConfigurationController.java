@@ -10,14 +10,14 @@ import java.util.TreeMap;
 import main.java.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
 import main.java.embl.rieslab.emu.controller.SystemConstants;
 import main.java.embl.rieslab.emu.controller.SystemController;
-import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
-import main.java.embl.rieslab.emu.ui.PropertyMainFrameInterface;
-import main.java.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
-import main.java.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
-import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
+import main.java.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import main.java.embl.rieslab.emu.ui.ConfigurableFrame;
 
 /**
- * Controller class for the configuration of the current UI. This class  
+ * Controller class for the configuration of the current UI. This class bridges the {@ main.java.embl.rieslab.emu.controller.SystemController}
+ * with the {@link ConfigurationWizard}, the {@link GlobalConfiguration}. The ConfigurationController starts the configuration wizard to allow
+ * the user to modify the current configuration. It also contains inform the SystemController on the different configurations. Finally, it
+ * calls the {@link ConfigurationIO} to read and write the configurations from/to files.
  * 
  * @author Joran Deschamps
  *
@@ -25,21 +25,36 @@ import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 public class ConfigurationController {
 	
 	private SystemController controller_; // overall controller
-	private ConfigurationWizard wizard_; // graphical interface to edit the current configuration
+	private ConfigurationWizard wizard_; // graphical interface to create/edit the current configuration
 	private GlobalConfiguration configuration_; // configurations of the UI
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param controller System controller.
+	 */
 	public ConfigurationController(SystemController controller){
 		controller_ = controller;
 	}
 
+	/**
+	 * Returns the default path to the configuration file as defined in {@link main.java.embl.rieslab.emu.controller.SystemConstants}.
+	 * 
+	 * @return Default configuration file.
+	 */
 	public File getDefaultConfigurationFile() {
 		return new File(SystemConstants.CONFIG_NAME);
 	}
 
+	/**
+	 * Reads the default configuration file.
+	 * 
+	 * @return True if the configuration has been successfully read, false otherwise.
+	 */
 	public boolean readDefaultConfiguration(){
 		if(getDefaultConfigurationFile().exists()){
 			configuration_ = ConfigurationIO.read(getDefaultConfigurationFile());
-			if(configuration_ == null){
+			if(configuration_ == null){  
 				return false;
 			}
 			return true;
@@ -47,6 +62,12 @@ public class ConfigurationController {
 		return false;
 	}
 	
+	/**
+	 * Reads a configuration file {@code f}.
+	 * 
+	 * @param f File to read
+	 * @return True if a configuration was successfully read, false otherwise.
+	 */
 	public boolean readConfiguration(File f){	
 		if(f.exists()){	
 			configuration_ = ConfigurationIO.read(f);
@@ -58,18 +79,40 @@ public class ConfigurationController {
 		return false;
 	}
 
+	/**
+	 * Writes the configurations to the default configuration file.
+	 * 
+	 * @return True if successfully written, false otherwise.
+	 */
 	public boolean writeConfiguration(){
 		return ConfigurationIO.write(getDefaultConfigurationFile(), getConfiguration());
 	}
 
+	/**
+	 * Writes the configurations to {@code f}.
+	 * 
+	 * @param f File to write the configuration to.
+	 * @return True if successfully written, false otherwise.
+	 */
 	public boolean writeConfiguration(File f){
 		return ConfigurationIO.write(f, getConfiguration());
 	}
 
+	/**
+	 * Returns the {@link GlobalConfiguration}.
+	 * 
+	 * @return Global configuration.
+	 */
 	public GlobalConfiguration getConfiguration(){
 		return configuration_;
 	}
 
+	/**
+	 * Checks if a configuration called {@code configName} exists in the {@link GlobalConfiguration}.
+	 *  
+	 * @param configName Name of the configuration.
+	 * @return True if the configuration exists, false otherwise.
+	 */
 	public boolean doesConfigurationExist(String configName){
 		if(configuration_ == null){
 			return false;
@@ -77,46 +120,69 @@ public class ConfigurationController {
 		return configuration_.doesConfigurationExist(configName);
 	}
 	
+	/**
+	 * Returns an array containing the names of configurations compatible with {@code pluginName}.
+	 * 
+	 * @param pluginName Plugin under consideration.
+	 * @return Array of compatible configuration names. The array can be of size 0. 
+	 */
 	public String[] getCompatibleConfigurations(String pluginName){
 		if(configuration_ != null){
 			return configuration_.getCompatibleConfigurations(pluginName);
 		}
-		return null; 
+		return new String[0]; 
 	}
 
-	public boolean sanityCheck(PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
+	/**
+	 * Checks if the configuration contains all the properties and parameters as defined in the {@link main.java.embl.rieslab.emu.ui.ConfigurableFrame}.
+	 * 
+	 * @param maininterface Current plugin' ConfigurableFrame. 
+	 * @return True if the current configuration contains all the properties and parameters defined in the plugin's ConfigurableFrame. 
+	 */
+	public boolean sanityCheck(ConfigurableFrame maininterface) {
 		if(configuration_ == null){
 			return false;
+		} else {
+			// just check if some UIProperties or UIParameters are missing from the configuration.
+			// When editing the settings, the PropertiesTable only displays the ConfigurableFrame properties, therefore properties
+			// present in the configuration but not in the ConfigurableFrame will be ignored. The same mechanism applies when
+			// the controller pairs the UI and MM properties. As a result the sanity check only makes sense with respect to the 
+			// actual UIProperties and UIParameters of the ConfigurableFrame.
+			
+			// check if the plugin configuration contains all the UIProperties
+			Set<String> uipropkeys =  new HashSet<String>(maininterface.getUIProperties().keySet());
+			uipropkeys.removeAll(configuration_.getCurrentPluginConfiguration().getProperties().keySet());
+			if(uipropkeys.size() > 0){
+				return false;
+			}
+			
+			// check if the plugin configuration contains all the UIParameters
+			Set<String> uiparamkeys =   new HashSet<String>(maininterface.getUIParameters().keySet());
+			uiparamkeys.removeAll(configuration_.getCurrentPluginConfiguration().getParameters().keySet());
+			if(uiparamkeys.size() > 0){
+				return false;
+			}
+			
+			return true;
 		}
-		
-		// just check if something is missing. When editing the settings, the PropertiesTable takes care
-		// of removing old properties and such.
-		
-		// check if the plugin configuration contains all the UIProperties
-		Set<String> uipropkeys =  new HashSet<String>(maininterface.getUIProperties().keySet());
-		uipropkeys.removeAll(configuration_.getCurrentPluginConfiguration().getProperties().keySet());
-		if(uipropkeys.size() > 0){
-			return false;
-		}
-		
-		// check if the plugin configuration contains all the UIParameters
-		Set<String> uiparamkeys =   new HashSet<String>(maininterface.getUIParameters().keySet());
-		uiparamkeys.removeAll(configuration_.getCurrentPluginConfiguration().getParameters().keySet());
-		if(uiparamkeys.size() > 0){
-			return false;
-		}
-		
-		return true;
 	}
 	
-	public boolean startWizard(String pluginName, PropertyMainFrameInterface maininterface, MMProperties mmproperties){
+	/**
+	 * Starts a new configuration wizard. If a wizard is already running, then does nothing and returns {@code false}.
+	 * 
+	 * @param pluginName Current plugin's name.
+	 * @param maininterface plugin's ConfigurableFrame.
+	 * @param mmproperties Micro-manager properties.
+	 * @return True if a new wizard was started, false if it was already running. 
+	 */
+	public boolean startWizard(String pluginName, ConfigurableFrame maininterface, MMPropertiesRegistry mmproperties){
 		// launch wizard
 		if(!isWizardRunning()){	
 			wizard_ = new ConfigurationWizard(this);
 			
-			if(configuration_ != null){
+			if(configuration_ != null){ // start a wizard with the current configuration loaded
 				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
-			} else {
+			} else { // start a fresh wizard
 				configuration_ = new GlobalConfiguration();				
 				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
 			}
@@ -139,10 +205,15 @@ public class ConfigurationController {
 	}
 
 	/**
-	 * Retrieves the pairs of UIProperty name and MMProperty names (or UIProperty state values), as well as the pairs UIParameter names and values,
-	 * and writes them to the configuration file. It then calls the SystemController to update the system. This method is called by the ConfigurationWizard
-	 * upon saving of the configuration by the user.
-	 * @param globset_ 
+	 * Retrieves the pairs of UIProperty name and MMProperty names (and UIProperty state values), as well as the pairs of UIParameter names and values,
+	 * and writes them to the configuration file. It then calls the {@link main.java.embl.rieslab.emu.controller.SystemController} to update the system. 
+	 * This method is called by the {@link ConfigurationWizard} upon saving of the configuration by the user.
+	 * 
+	 * @param configName Name of the configuration.
+	 * @param pluginName Name of the current plugin.
+	 * @param uiproperties Mapping of the UIProperties with MMProperties and their states.
+	 * @param uiparameters Mapping of the UIParameters' states.
+	 * @param globset_ Mapping of the GlobalSettings' states.
 	 */
 	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, Map<String, String> uiparameters, HashMap<String, String> globset_) {
 		if(configuration_ == null){
@@ -173,14 +244,25 @@ public class ConfigurationController {
 		controller_.loadConfiguration(configName);
 	}
 	
-	public boolean setDefaultConfiguration(String configuration){
+	/**
+	 * Sets the default configuration to {@code newDefault}.
+	 * 
+	 * @param configuration New default configuration.
+	 * @return True if the configuration was changed, false otherwise.
+	 */
+	public boolean setDefaultConfiguration(String newDefault){
 		if(configuration_ == null){
 			return false;
 		}
 		
-		return configuration_.setCurrentConfiguration(configuration);
+		return configuration_.setCurrentConfiguration(newDefault);
 	}
 	
+	/**
+	 * Returns the default configuration's name. Null if there is no configuration yet.
+	 * 
+	 * @return
+	 */
 	public String getDefaultConfiguration(){
 		if(configuration_ == null){
 			return null;
@@ -190,7 +272,7 @@ public class ConfigurationController {
 	}
 	
 	/**
-	 * Returns the properties configuration.
+	 * Returns the properties configuration. Null if there is none.
 	 * 
 	 * @return Pairs of UIProperty names (keys) and MMProperty names (values), as well as UIProperty state names (keys)
 	 * and UIProperty state values (values)
@@ -204,7 +286,7 @@ public class ConfigurationController {
 	}
 	
 	/**
-	 * Returns the parameters configuration/
+	 * Returns the parameters configuration. Null if there is none.
 	 * 
 	 * @return Pairs of UIParameter names (keys) and their value (values)
 	 */
@@ -227,21 +309,10 @@ public class ConfigurationController {
 	}
 	
 	/**
-	 * Tests if the string has been generated by a SingelStateUIProperty, a TwoStateUIProperty or a MultiStateUIProperty.
+	 * Returns the GlobalSetting corresponding to the enabling or disabling of the unallocated properties warning.
 	 * 
-	 * @param s String to test, value in the first column of the table
-	 * @return True if corresponds to a field value.
+	 * @return BoolGlobalSetting
 	 */
-	public static boolean isStateValue(String s){
-		if (s.contains(SingleStateUIProperty.getValueName())
-				|| s.contains(TwoStateUIProperty.getOnStateName()) 
-				|| s.contains(TwoStateUIProperty.getOffStateName())
-				|| s.matches(".*"+MultiStateUIProperty.getGenericStateName()+".*")){
-			return true;
-		}
-		return false;
-	}
-
 	public BoolGlobalSetting getEnableUnallocatedWarnings(){
 		if(configuration_ == null){
 			return null;

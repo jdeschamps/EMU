@@ -21,7 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.graph.TimeChart;
 import main.java.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
@@ -35,7 +35,7 @@ import main.java.embl.rieslab.emu.utils.utils;
  *
  * @author Joran Deschamps
  */
-public class FocusPanel extends PropertyPanel {
+public class FocusPanel extends ConfigurablePanel {
 
 	/**
 	 * 

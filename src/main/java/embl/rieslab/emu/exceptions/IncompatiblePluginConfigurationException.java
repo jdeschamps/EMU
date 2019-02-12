@@ -1,5 +1,12 @@
 package main.java.embl.rieslab.emu.exceptions;
 
+/**
+ * Exception thrown when the {@link main.java.embl.rieslab.emu.controller.SystemController} is asked
+ * to reload the system with a UIPlugin and PluginConfiguration that are not compatible.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class IncompatiblePluginConfigurationException extends Exception {
 
 	static final long serialVersionUID = 4685765568955853230L;

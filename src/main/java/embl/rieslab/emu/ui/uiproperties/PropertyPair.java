@@ -1,6 +1,6 @@
 package main.java.embl.rieslab.emu.ui.uiproperties;
 
-import main.java.embl.rieslab.emu.exceptions.AlreadyAllocatedUIProperty;
+import main.java.embl.rieslab.emu.exceptions.AlreadyAllocatedUIPropertyException;
 import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
@@ -21,7 +21,7 @@ public class PropertyPair {
 		try {
 			uiprop_.setProperty(mmprop_);
 			mmprop_.addListener(uiprop_);
-		} catch (AlreadyAllocatedUIProperty e) {
+		} catch (AlreadyAllocatedUIPropertyException e) {
 			e.printStackTrace();
 		}
 	}

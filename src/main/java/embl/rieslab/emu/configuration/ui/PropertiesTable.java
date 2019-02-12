@@ -19,14 +19,14 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import main.java.embl.rieslab.emu.configuration.ConfigurationController;
 import main.java.embl.rieslab.emu.configuration.ConfigurationWizard;
 import main.java.embl.rieslab.emu.configuration.GlobalConfiguration;
-import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
+import main.java.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import main.java.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.ui.uiproperties.utils.UIPropertyUtils;
 
 /**
  * JPanel displaying a table allowing the user to allocate device properties from Micro-Manager with
@@ -46,7 +46,7 @@ public class PropertiesTable extends JPanel {
 	private JTable table;
 		
 	private Map<String, UIProperty> uipropertySet_;
-	private MMProperties mmproperties_;
+	private MMPropertiesRegistry mmproperties_;
 	private String[] uipropkeys_;
 	private HelpWindow help_;
 
@@ -57,7 +57,7 @@ public class PropertiesTable extends JPanel {
 	 * @param mmproperties Object containing the device properties from the current Micro-manager session. 
 	 * @param help Help window.
 	 */
-	public PropertiesTable(Map<String, UIProperty> uipropertySet, MMProperties mmproperties, HelpWindow help) {
+	public PropertiesTable(Map<String, UIProperty> uipropertySet, MMPropertiesRegistry mmproperties, HelpWindow help) {
 
 		uipropertySet_ = uipropertySet;
 		mmproperties_ = mmproperties;
@@ -122,7 +122,7 @@ public class PropertiesTable extends JPanel {
 	 * @param propertymapping Mapping of UI and MM properties as read from a configuration.
 	 * @param help Help window.
 	 */
-	public PropertiesTable(Map<String, UIProperty> uipropertySet, MMProperties mmproperties, Map<String, String> propertymapping, HelpWindow help) {
+	public PropertiesTable(Map<String, UIProperty> uipropertySet, MMPropertiesRegistry mmproperties, Map<String, String> propertymapping, HelpWindow help) {
 
 		uipropertySet_ = uipropertySet;
 		mmproperties_ = mmproperties;
@@ -248,7 +248,7 @@ public class PropertiesTable extends JPanel {
 			@Override
 			public TableCellEditor getCellEditor(int row, int column) {
 				String s = (String) table.getValueAt(row, 0);
-				if (column == 2 && ConfigurationController.isStateValue(s)) { 
+				if (column == 2 && UIPropertyUtils.isStateValue(s)) { 
 					// if in the last column and corresponds to a field value, returns a textfield cell editor
 					return new DefaultCellEditor(new JTextField(ConfigurationWizard.KEY_ENTERVALUE));
 				} else {
@@ -271,7 +271,7 @@ public class PropertiesTable extends JPanel {
 				String s = (String) table.getValueAt(row, 0);
 				if (col < 1) {
 					return false;
-				} else if (col == 1 && ConfigurationController.isStateValue(s)) {
+				} else if (col == 1 && UIPropertyUtils.isStateValue(s)) {
 					return false;
 				} else {
 					return true;
@@ -369,7 +369,7 @@ public class PropertiesTable extends JPanel {
 		
 		for(int i=0;i<nrow;i++){
 			// if device column is not empty (from state property, e.g. single state value or multistates) and is not unallocated
-			if (!ConfigurationController.isStateValue((String) model.getValueAt(i, 0)) && !((String) model.getValueAt(i, 1)).equals(GlobalConfiguration.KEY_UNALLOCATED)) { 
+			if (!UIPropertyUtils.isStateValue((String) model.getValueAt(i, 0)) && !((String) model.getValueAt(i, 1)).equals(GlobalConfiguration.KEY_UNALLOCATED)) { 
 				String propertyname = (String) model.getValueAt(i, 2);
 				if( mmproperties_.getDevice((String) model.getValueAt(i, 1)).hasFriendlyProperty(propertyname)){
 					String hash = mmproperties_.getDevice((String) model.getValueAt(i, 1)).getFriendlyPropertyHash(propertyname);

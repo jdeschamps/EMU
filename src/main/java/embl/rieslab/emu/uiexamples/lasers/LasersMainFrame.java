@@ -8,9 +8,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
-import main.java.embl.rieslab.emu.ui.PropertyMainFrame;
+import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
 
-public class LasersMainFrame extends PropertyMainFrame{
+public class LasersMainFrame extends ConfigurableMainFrame{
 
 	/**
 	 * 

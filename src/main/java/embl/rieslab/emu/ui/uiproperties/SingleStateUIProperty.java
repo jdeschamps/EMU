@@ -1,6 +1,6 @@
 package main.java.embl.rieslab.emu.ui.uiproperties;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
@@ -10,11 +10,11 @@ public class SingleStateUIProperty extends UIProperty{
 	
 	private String state_ = "";
 
-	public SingleStateUIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag) {
+	public SingleStateUIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag) {
 		super(owner, name, description, flag);
 	}
 
-	public SingleStateUIProperty(PropertyPanel owner, String name, String description) {
+	public SingleStateUIProperty(ConfigurablePanel owner, String name, String description) {
 		super(owner, name, description);
 	}
 

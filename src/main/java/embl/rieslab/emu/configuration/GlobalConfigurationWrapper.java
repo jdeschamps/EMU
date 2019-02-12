@@ -3,6 +3,13 @@ package main.java.embl.rieslab.emu.configuration;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Wraps a {@link GlobalConfiguration} in a simple class in order to write and
+ * read the class using jackson ObjectMapper.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class GlobalConfigurationWrapper {
 
 	private String defaultConfigurationName;

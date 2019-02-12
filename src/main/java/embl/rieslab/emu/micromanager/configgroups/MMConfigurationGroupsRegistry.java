@@ -1,17 +1,9 @@
 package main.java.embl.rieslab.emu.micromanager.configgroups;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import org.micromanager.Application;
-
-import main.java.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
-import main.java.embl.rieslab.emu.micromanager.mmproperties.MMDevice;
-import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
-import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import mmcorej.CMMCore;
-import mmcorej.Configuration;
 import mmcorej.StrVector;
 
 /**
@@ -26,18 +18,16 @@ public class MMConfigurationGroupsRegistry {
 	public final static String KEY_MMCONFDEVICE = "Configurations";
 	
 	private CMMCore core_;
-	private Application app_;
 	private HashMap<String, MMConfigurationGroup> groups_;
 	
 	/**
-	 * The constructor receives the current Micro-manager core instance and extract all the
+	 * The constructor receives the current Micro-manager core instance and extracts all the
 	 * configuration groups, building a HashMap<group name, ConfigurationGroup>.
 	 * 
 	 * @param core
 	 */
-	public MMConfigurationGroupsRegistry(Application app, CMMCore core){
+	public MMConfigurationGroupsRegistry(CMMCore core){
 		core_ = core;
-		app_ = app;
 		
 		groups_ = new HashMap<String, MMConfigurationGroup>();
 		
@@ -95,34 +85,5 @@ public class MMConfigurationGroupsRegistry {
 		}
 		return null;
 	}
-	
-	
-	@SuppressWarnings("rawtypes")
-	public void registerMMConfAsDevice(MMProperties mmproperties){
-		MMDevice dev = new MMDevice(KEY_MMCONFDEVICE);
-
-		Iterator<String> it = groups_.keySet().iterator();
-		while(it.hasNext()){
-			String group = it.next();
-			String[] values = groups_.get(group).getConfigurations().toArray();
-			
-			ArrayList<MMProperty> affectedmmprops = new ArrayList<MMProperty>();
-			Configuration conf;
-			try {
-				conf = core_.getConfigGroupState(group);
-				for(int i=0;i<conf.size();i++){
-					affectedmmprops.add(mmproperties.getProperties().get(conf.getSetting(i).getDeviceLabel()+"-"+conf.getSetting(i).getPropertyName()));
-				}
-				
-				dev.registerProperty(new ConfigGroupAsMMProperty(app_, core_, KEY_MMCONFDEVICE, group, values, affectedmmprops));
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		
-		mmproperties.addConfigGroupAsMMProperties(dev);
-	}
-	
 }
   

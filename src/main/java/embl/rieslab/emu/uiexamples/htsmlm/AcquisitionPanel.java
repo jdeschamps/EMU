@@ -29,7 +29,7 @@ import javax.swing.JToggleButton;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.TwoStateFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionController;
@@ -39,7 +39,7 @@ import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.utils.Experimen
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
 
-public class AcquisitionPanel extends PropertyPanel{
+public class AcquisitionPanel extends ConfigurablePanel{
 
 	/**
 	 * 

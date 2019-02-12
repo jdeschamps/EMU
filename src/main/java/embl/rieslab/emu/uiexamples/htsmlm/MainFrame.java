@@ -11,9 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
-import main.java.embl.rieslab.emu.ui.PropertyMainFrame;
+import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
 
-public class MainFrame extends PropertyMainFrame{
+public class MainFrame extends ConfigurableMainFrame{
 		/**
 	 * 
 	 */

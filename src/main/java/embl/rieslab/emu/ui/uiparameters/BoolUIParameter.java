@@ -1,12 +1,12 @@
 package main.java.embl.rieslab.emu.ui.uiparameters;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 
 public class BoolUIParameter extends UIParameter<Boolean>{
 
-	public BoolUIParameter(PropertyPanel owner, String name, String description, boolean value) {
+	public BoolUIParameter(ConfigurablePanel owner, String name, String description, boolean value) {
 		super(owner, name, description);
 		
 		setValue(value);

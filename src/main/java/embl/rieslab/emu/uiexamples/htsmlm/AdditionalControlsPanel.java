@@ -12,13 +12,13 @@ import javax.swing.BorderFactory;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.TwoStateFlag;
 
-public class AdditionalControlsPanel extends PropertyPanel{
+public class AdditionalControlsPanel extends ConfigurablePanel{
 
 	/**
 	 * 

@@ -7,13 +7,13 @@ import mmcorej.CMMCore;
 import mmcorej.StrVector;
 
 @SuppressWarnings("rawtypes")
-public class MMProperties {
+public class MMPropertiesRegistry {
 
 	CMMCore core_;
 	HashMap<String, MMDevice> devices_;
 	HashMap<String, MMProperty> properties_;
 	
-	public MMProperties(CMMCore core){
+	public MMPropertiesRegistry(CMMCore core){
 		core_ = core;
 		devices_ = new HashMap<String, MMDevice>();
 		properties_ = new HashMap<String,MMProperty>();
@@ -66,10 +66,10 @@ public class MMProperties {
 		return s;
 	}
 	
-	public void addConfigGroupAsMMProperties(MMDevice mmconfdevice){
-		if(mmconfdevice.getProperties().size() > 0){
-			devices_.put(mmconfdevice.getLabel(),mmconfdevice);
-			properties_.putAll(mmconfdevice.getProperties());
+	public void addMMDevice(MMDevice device){
+		if(device.getProperties().size() > 0){
+			devices_.put(device.getLabel(),device);
+			properties_.putAll(device.getProperties());
 		}
 	}
 	

@@ -3,7 +3,14 @@ package main.java.embl.rieslab.emu.configuration;
 import java.util.Map;
 import java.util.TreeMap;
 
-
+/**
+ * Class representing a plugin configuration. It holds the name of an EMU plugin
+ * and maps of the plugin properties and parameters names and values. The Class
+ * is written and read using jackson ObjectMapper by the ConfigurationIO class.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class PluginConfiguration implements Comparable<PluginConfiguration>{
 	
 	private String configurationName;

@@ -1,16 +1,16 @@
 package main.java.embl.rieslab.emu.ui.internalproperty;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 
 public abstract class InternalProperty<T> {
 	private String name_;
-	private PropertyPanel owner_;
+	private ConfigurablePanel owner_;
 	private boolean allocated_ = false;
 	private InternalPropertyValue<T> value_;
 	protected InternalPropertyType type_;
 	private T defaultvalue;
 	
-	public InternalProperty(PropertyPanel owner, String name, T defaultvalue){
+	public InternalProperty(ConfigurablePanel owner, String name, T defaultvalue){
 		this.owner_ = owner;
 		this.name_ = name;
 		this.defaultvalue = defaultvalue;
@@ -51,7 +51,7 @@ public abstract class InternalProperty<T> {
 		}  
 	}
 	
-	protected PropertyPanel getOwner(){
+	protected ConfigurablePanel getOwner(){
 		return owner_;
 	}
 	

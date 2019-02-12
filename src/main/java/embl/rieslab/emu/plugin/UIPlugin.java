@@ -1,7 +1,7 @@
 package main.java.embl.rieslab.emu.plugin;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
-import main.java.embl.rieslab.emu.ui.PropertyMainFrame;
+import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
 
 public interface UIPlugin {
 
@@ -19,6 +19,6 @@ public interface UIPlugin {
 	 * @param controller
 	 * @return
 	 */
-	public PropertyMainFrame getMainFrame(SystemController controller);
+	public ConfigurableMainFrame getMainFrame(SystemController controller);
 	
 }

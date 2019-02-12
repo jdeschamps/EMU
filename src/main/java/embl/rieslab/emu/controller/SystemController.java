@@ -12,14 +12,13 @@ import main.java.embl.rieslab.emu.configuration.ConfigurationController;
 import main.java.embl.rieslab.emu.configuration.GlobalConfiguration;
 import main.java.embl.rieslab.emu.controller.SystemDialogs;
 import main.java.embl.rieslab.emu.exceptions.IncompatiblePluginConfigurationException;
+import main.java.embl.rieslab.emu.micromanager.MMRegistry;
 import main.java.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
-import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
 import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import main.java.embl.rieslab.emu.plugin.UIPluginLoader;
 import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.EmptyPropertyMainFrame;
-import main.java.embl.rieslab.emu.ui.PropertyMainFrame;
-import main.java.embl.rieslab.emu.ui.PropertyMainFrameInterface;
+import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.PropertyPair;
@@ -27,27 +26,40 @@ import main.java.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
+/**
+ * EMU controller class, bridging Micro-manager and the EMU UIPlugins using a configuration controller. 
+ * Upon starting, it extracts the Micro-Manager device properties and configuration groups using an 
+ * instance of {@link main.java.embl.rieslab.emu.micromanager.MMRegistry}. It then checks the available 
+ * {@link main.java.embl.rieslab.emu.plugin.UIPlugin} through an {@link main.java.embl.rieslab.emu.plugin.UIPluginLoader}. It also makes use of a
+ * {@link main.java.embl.rieslab.emu.configuration.ConfigurationController} to read the plugin configurations.
+ * Finally, it extracts the UIProperties and UIParameters from the loaded plugin and pair them to the corresponding
+ * MMProperties or state values. During running time, it can update the properties and change the current plugin or 
+ * configuration.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class SystemController {
 
-	private static Studio studio_;
-	private CMMCore core_;
-	private MMProperties mmproperties_;
-	private MMConfigurationGroupsRegistry mmconfiggroups_;
-	private ConfigurationController config;
-	private PropertyMainFrame mainframe_;
-	private PropertyMainFrameInterface interface_;
-	private UIPluginLoader pluginloader_;
-	private ArrayList<PropertyPair> pairs_;
-	private ArrayList<String> unallocatedprop_; 
-	private ArrayList<String> forbiddenValuesProp_; 
-	
-	private String currentPlugin;
+	private static Studio studio_; // MM studio
+	private MMRegistry mmregistry_; // holds the properties and configuration groups from Micro-manager
+	private ConfigurationController config; // Configuration controller, with all known plugin configurations
+	private ConfigurableMainFrame mainframe_; // Main frame of the current plugin
+	private UIPluginLoader pluginloader_; // loader for EMU plugins
+	private ArrayList<PropertyPair> pairs_; // UIProperty - MMProperty pairs
+	private ArrayList<String> unallocatedprop_;  // list of unallocated properties
+	private ArrayList<String> forbiddenValuesProp_; // forbidden properties value
+	private String currentPlugin; // reference to the current loaded plugin
 		
+	/**
+	 * Constructor, solely instantiates the member variables.
+	 * 
+	 * @param studio Micro-manager studio instance.
+	 */
 	public SystemController(Studio studio){
 		studio_ = studio;
-		core_ = studio_.core();
+	
 		pairs_ = new ArrayList<PropertyPair>();
-
 		unallocatedprop_ = new ArrayList<String>();
 		forbiddenValuesProp_ = new ArrayList<String>();
 		
@@ -55,118 +67,109 @@ public class SystemController {
 	}
 	
 	/**
-	 * Collects Micro-manager device properties, creates the user interface and loads the configuration. 
+	 * Collects Micro-manager device properties and configuration groups, instantiates the default user interface
+	 * plugin and loads the configurations. 
 	 */
 	public void start() {		
-		// extracts MM properties
-		mmproperties_ = new MMProperties(core_);
-		mmconfiggroups_ = new MMConfigurationGroupsRegistry(studio_.app(), core_);
+		// extracts MM properties, configuration groups and register configurations groups as properties
+		mmregistry_ = new MMRegistry(studio_);
 		
-		// register mmconfigs as mmproperties
-		mmconfiggroups_.registerMMConfAsDevice(mmproperties_);
-
-		// load plugin list
+		// loads plugin list
 		pluginloader_ = new UIPluginLoader(this);
 		
 		// if no plugin is found
 		if(pluginloader_.getPluginNumber() == 0){
-			// show message: no plugin found, stop here
+			// shows message: no plugin found
 			SystemDialogs.showNoPluginFound();
 			
-			// load empty MainFrame
+			// loads empty MainFrame and stops here
 			mainframe_ = new EmptyPropertyMainFrame(this);
-		} else {
+		} else { // there are plugins
 			// reads out configuration
 			config = new ConfigurationController(this);
 						
 			if(config.readDefaultConfiguration()){ // if a configuration was read
 				
-				if(pluginloader_.isPluginAvailable(config.getConfiguration().getCurrentPluginName())){ // plugin available
+				if(pluginloader_.isPluginAvailable(config.getConfiguration().getCurrentPluginName())){ // if plugin available
 					
-					// initiates UI					
+					// retrieves the plugin name and initiates UI					
 					currentPlugin = config.getConfiguration().getCurrentPluginName();
-					mainframe_ = pluginloader_.loadPlugin(config.getConfiguration().getCurrentPluginName());
-					
-					// extracts UI properties and parameters
-					interface_ = mainframe_.getInterface();
-					
+					mainframe_ = pluginloader_.loadPlugin(currentPlugin);
+										
 					applyConfiguration();
 					
-				} else { // default UI not found or wrong format
+				} else { // default configuration corresponds to an unknown plugin
 			
-					// get list of available plugins
+					// gets list of available plugins
 					String[] plugins = pluginloader_.getPluginList();
 					if(plugins.length > 1){
-						// Let user choose which plugin to load
-						// show dialog
+						// Lets user choose which plugin to load
 						currentPlugin = SystemDialogs.showPluginsChoiceWindow(plugins);
-					} else { // just one plugin
+					} else if(plugins.length == 1) { // there is just one plugin, therefore loads it
 						currentPlugin = plugins[0];
-					}
+					} 
 					
-					// load plugin 
+					// loads plugin 
 					if(currentPlugin != null){
-						// load plugin 
+						// loads plugin 
 						mainframe_ = pluginloader_.loadPlugin(currentPlugin);
 						
-						// extracts UI properties and parameters
-						interface_ = mainframe_.getInterface();
-						
-						// get list of configurations corresponding to this plugin
+						// gets list of configurations corresponding to this plugin
 						String[] configs = config.getCompatibleConfigurations(currentPlugin);
 						
-						if(configs == null || configs.length == 0){
-							// launch new wizard
-							config.startWizard(currentPlugin, interface_, mmproperties_);
-						} else if(configs.length == 1){
-							config.setDefaultConfiguration(configs[0]); // set as default
+						if(configs.length == 0){ // if there is no compatible configuration
+							// launches new wizard
+							config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
+						} else if(configs.length == 1){ // there is one so applies it
+							config.setDefaultConfiguration(configs[0]); // sets as default
 							applyConfiguration();
 						} else {
-							// if more than one, then let the user decide
+							// if more than one, then lets the user decide
 							String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
-							config.setDefaultConfiguration(configuration); // set as default and then launch wizard
+							config.setDefaultConfiguration(configuration); // sets as default and then launch wizard
 							applyConfiguration();
 						}		
 					} else {
-						// load empty MainFrame
+						// loads empty MainFrame
 						mainframe_ = new EmptyPropertyMainFrame(this);
 					}
 				}
 				
-			} else { // no configuration
+			} else { // no configuration was loaded
 				
-				// show message
+				// shows message
 				if(config.getDefaultConfigurationFile().exists()){
 					SystemDialogs.showConfigurationCouldNotBeParsed();
 				}
 
-				// get list of available plugins
+				// gets list of available plugins
 				String[] plugins = pluginloader_.getPluginList();
 				
-				// Let user choose which plugin to load
+				// Lets user choose which plugin to load
 				currentPlugin = SystemDialogs.showPluginsChoiceWindow(plugins);
 				
 				if(currentPlugin != null){
-					// load plugin 
+					// loads plugin 
 					mainframe_ = pluginloader_.loadPlugin(currentPlugin);
 					
-					// extracts UI properties and parameters
-					interface_ = mainframe_.getInterface();
-					
-					// launch a new wizard			
-					config.startWizard(currentPlugin, interface_, mmproperties_);
+					// launches a new wizard			
+					config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
 				} else {
-
-					// load empty MainFrame
+					// loads empty MainFrame
 					mainframe_ = new EmptyPropertyMainFrame(this);
 				}
 			}
 		}
 	}
 
-	public void loadConfiguration(String configuration){
+	/**
+	 * Reloads the UI with the {@code newConfiguration}.
+	 * 
+	 * @param newConfiguration Configuration to reload the system with.
+	 */
+	public void loadConfiguration(String newConfiguration){
 		try {
-			reloadSystem(currentPlugin, configuration);
+			reloadSystem(currentPlugin, newConfiguration);
 			
 			// apply configuration
 			applyConfiguration();
@@ -185,7 +188,7 @@ public class SystemController {
 		// get list of configurations corresponding to this plugin
 		String[] configs = config.getCompatibleConfigurations(newPlugin);
 
-		if(configs == null || configs.length == 0){ // no configuration corresponding to the plugin
+		if(configs.length == 0){ // no configuration corresponding to the plugin
 			currentPlugin = newPlugin;
 			
 			// close mainframe
@@ -194,7 +197,7 @@ public class SystemController {
 			mainframe_ = pluginloader_.loadPlugin(newPlugin);
 			
 			// launch new wizard
-			config.startWizard(newPlugin, mainframe_.getInterface(), mmproperties_);
+			config.startWizard(newPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
 			
 		} else if(configs.length == 1){ // a single compatible configuration
 			
@@ -224,35 +227,36 @@ public class SystemController {
 	
 	private void reloadSystem(String pluginName, String configName) throws IncompatiblePluginConfigurationException {
 		
-		if(!pluginloader_.isPluginAvailable(pluginName) || !config.doesConfigurationExist(configName)){
+		// if the plugin is not available or the configuration unknown
+		if(!pluginloader_.isPluginAvailable(pluginName) || !config.doesConfigurationExist(configName)){ 
 			throw new IllegalArgumentException();
 		}
 		
+		// if the configuration is not compatible to the plugin
 		if(!config.getConfiguration().getPluginConfiguration(configName).getPluginName().equals(pluginName)){
 			throw new IncompatiblePluginConfigurationException(pluginName, configName);
 		}
 		
+		// if the current plugin is not the requested plugin, then changes the current plugin
 		if(!currentPlugin.equals(pluginName)){
 			currentPlugin = pluginName;
 		}
 		
+		// if the current configuration is not the requested configuration, then updates it
 		if(!config.getDefaultConfiguration().equals(configName)){
 			config.setDefaultConfiguration(configName);
 		}
 		
-		config.writeConfiguration(); // to remember the default configuration
+		config.writeConfiguration(); // to set the default configuration in the confgiuration file.
 					
-		// close mainframe
+		// closes mainframe
 		mainframe_.shutDownAllPropertyPanels();
 		
-		// empty mmproperties listeners
-		mmproperties_.clearAllListeners();
+		// empties mmproperties listeners
+		mmregistry_.getMMPropertiesRegistry().clearAllListeners();
 		
-		// load plugin 
+		// reloads plugin 
 		mainframe_ = pluginloader_.loadPlugin(pluginName);
-		
-		// extracts UI properties and parameters
-		interface_ = mainframe_.getInterface();
 	}
 
 	
@@ -267,7 +271,7 @@ public class SystemController {
 		forbiddenValuesProp_.clear();
 		pairs_.clear(); // and the list of pairs
 		
-		HashMap<String, UIProperty> uiproperties = interface_.getUIProperties();
+		HashMap<String, UIProperty> uiproperties = mainframe_.getUIProperties();
 		
 		Iterator<String> itstr = configprop.keySet().iterator(); // iteration through all the mapped UI properties
 		while (itstr.hasNext()) {
@@ -281,9 +285,9 @@ public class SystemController {
 					// register missing allocation
 					unallocatedprop_.add(uiprop);
 					
-				} else if (mmproperties_.isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
+				} else if (mmregistry_.getMMPropertiesRegistry().isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
 					// link the properties
-					addPair(uiproperties.get(uiprop),mmproperties_.getProperty(configprop.get(uiprop)));
+					addPair(uiproperties.get(uiprop),mmregistry_.getMMPropertiesRegistry().getProperty(configprop.get(uiprop)));
 					
 					// test if the property has finite number of states
 					if(uiproperties.get(uiprop).isTwoState()){ // if it is a two-state property
@@ -341,7 +345,7 @@ public class SystemController {
 	@SuppressWarnings("rawtypes")
 	public void readParameters(Map<String, String> configparam){
 		String uiparam;
-		HashMap<String, UIParameter> uiparameters = interface_.getUIParameters();
+		HashMap<String, UIParameter> uiparameters = mainframe_.getUIParameters();
 		Iterator<String> itstr = configparam.keySet().iterator();
 		ArrayList<String> wrg = new ArrayList<String>();
 		while (itstr.hasNext()) {
@@ -363,7 +367,7 @@ public class SystemController {
 
 	private void applyConfiguration() {
 		// sanity check
-		boolean sane = config.sanityCheck(interface_, mmproperties_);
+		boolean sane = config.sanityCheck(mainframe_);
 		
 		if(!sane){
 			// show dialog
@@ -389,7 +393,7 @@ public class SystemController {
 	 * @return False if a Wizard is already running.
 	 */
 	public boolean launchWizard() {
-		return config.startWizard(currentPlugin, interface_, mmproperties_);
+		return config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
 	}
 	
 	// Pairs a ui property and a Micro-manager property together.
@@ -411,9 +415,13 @@ public class SystemController {
 		}
 	}
 	
-
+	/**
+	 * Returns the Micro-manager configuration groups.
+	 * 
+	 * @return {@link main.java.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry}
+	 */
 	public MMConfigurationGroupsRegistry getMMConfigGroupRegistry(){
-		return mmconfiggroups_;
+		return mmregistry_.getMMConfigurationGroupsRegistry();
 	}	
 	
 
@@ -423,7 +431,7 @@ public class SystemController {
 	 * @param propvalues Map of the UIProperties (keys) and the values they should be set to.
 	 */
 	public void setUpSystem(HashMap<String, String> propvalues){
-		HashMap<String, UIProperty> uiproperties = interface_.getUIProperties();
+		HashMap<String, UIProperty> uiproperties = mainframe_.getUIProperties();
 		Iterator<String> it = propvalues.keySet().iterator();
 		String s;
 		while(it.hasNext()){
@@ -442,7 +450,7 @@ public class SystemController {
 	public double getExposure(){
 		double i = 0;
 		try {
-			i = core_.getExposure();
+			i = studio_.getCMMCore().getExposure();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -455,11 +463,11 @@ public class SystemController {
 	 * @return
 	 */
 	public CMMCore getCore(){
-		return core_;
+		return studio_.getCMMCore();
 	}
 
 	/**
-	 * Returns Micro-Manager ScriptInterface.
+	 * Returns Micro-Manager Studio.
 	 * 
 	 * @return
 	 */
@@ -474,7 +482,7 @@ public class SystemController {
 	 * @return
 	 */
 	public UIProperty getProperty(String name){ 
-		return interface_.getUIProperties().get(name);
+		return mainframe_.getUIProperties().get(name);
 	}
 	
 	/**
@@ -483,7 +491,7 @@ public class SystemController {
 	 * @return
 	 */
 	public HashMap<String, UIProperty> getPropertiesMap(){
-		return interface_.getUIProperties();
+		return mainframe_.getUIProperties();
 	}
 	
 	/**
@@ -494,61 +502,82 @@ public class SystemController {
 	 */
 	@SuppressWarnings("rawtypes")
 	public TaskHolder getTaskHolder(String taskname){
-		return interface_.getUITaskHolders().get(taskname);
+		return mainframe_.getUITaskHolders().get(taskname);
 	}
 	
-	public void refreshProperties(){
+	/**
+	 * Updates all properties and parameters by calling {@link main.java.embl.rieslab.emu.ui.ConfigurableMainFrame#updateAllPropertyPanels()}
+	 * 
+	 */
+	public void update(){
 		if(mainframe_ != null){
 			mainframe_.updateAllPropertyPanels();
 		}
 	}
 
+	/**
+	 * Returnsan array of known plugins.
+	 * 
+	 * @return Array of plugins name.
+	 */
 	public String[] getPluginsList() {
 		if(pluginloader_ == null){
-			return null;
-		}	
-		return pluginloader_.getPluginList();
+			return new String[0];
+		} else {	
+			return pluginloader_.getPluginList();
+		}
 	}
 	
+	/**
+	 * Returns an array of known plugins, excluding the currently loaded plugin.
+	 * 
+	 * @return Array of plugins name.
+	 */
 	public String[] getOtherPluginsList() {
 		if(pluginloader_ == null){
-			return null;
-		}	
-		
-		String[] list = pluginloader_.getPluginList();
-		String[] others = new String[list.length-1];
-		int curr = 0;
-		for(int i=0;i<list.length;i++){
-			if(!list[i].equals(currentPlugin)){
-				others[curr] = list[i];
-				curr++;
+			return new String[0];
+		} else {	
+			String[] list = pluginloader_.getPluginList();
+			String[] others = new String[list.length-1];
+			int curr = 0;
+			for(int i=0;i<list.length;i++){
+				if(!list[i].equals(currentPlugin)){
+					others[curr] = list[i];
+					curr++;
+				}
 			}
+			
+			return others;
 		}
-		
-		return others;
 	}
 	
-	public String[] getOtherCompatibleConfigurationList() {
+	/**
+	 * Returns an array of known compatible configurations for the current loaded Plugin, 
+	 * excluding the current configuration. 
+	 * 
+	 * @return Array of compatible configurations name.
+	 */
+	public String[] getOtherCompatibleConfigurationsList() {
 		if(config == null){
-			return null;
+			return new String[0];
 		}	
 		
 		String[] list = config.getCompatibleConfigurations(currentPlugin);
 		
-		if(list.length==1){
+		if(list.length==1){ // if length is 1 then the only configuration is the current one
 			return new String[0];
-		}
-		
-		String[] others = new String[list.length-1];
-		int curr = 0;
-		for(int i=0;i<list.length;i++){
-			if(!list[i].equals(config.getConfiguration().getCurrentConfigurationName())){
-				others[curr] = list[i];
-				curr++;
+		} else { // else remove the current one
+			String[] others = new String[list.length-1];
+			int curr = 0;
+			for(int i=0;i<list.length;i++){
+				if(!list[i].equals(config.getConfiguration().getCurrentConfigurationName())){
+					others[curr] = list[i];
+					curr++;
+				}
 			}
+			
+			return others;
 		}
-		
-		return others;
 	}
 
 }

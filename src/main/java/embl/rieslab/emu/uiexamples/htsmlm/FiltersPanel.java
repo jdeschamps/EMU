@@ -13,13 +13,13 @@ import javax.swing.ButtonGroup;
 import javax.swing.JToggleButton;
 import javax.swing.border.TitledBorder;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FilterWheelFlag;
 import main.java.embl.rieslab.emu.utils.ColorRepository;
 
-public class FiltersPanel extends PropertyPanel {
+public class FiltersPanel extends ConfigurablePanel {
 
 	/**
 	 * 

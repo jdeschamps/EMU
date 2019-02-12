@@ -1,6 +1,6 @@
 package main.java.embl.rieslab.emu.ui.uiparameters;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 
 public abstract class UIParameter<T> {
@@ -11,7 +11,7 @@ public abstract class UIParameter<T> {
 	private T value_;
 	private String ownername_;
 	
-	public UIParameter(PropertyPanel owner, String label, String description){
+	public UIParameter(ConfigurablePanel owner, String label, String description){
 		ownername_ = owner.getLabel();
 		label_ = label;
 		description_ = description;

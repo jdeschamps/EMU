@@ -20,7 +20,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
@@ -33,7 +33,7 @@ import main.java.embl.rieslab.emu.utils.ColorRepository;
 import main.java.embl.rieslab.emu.utils.utils;
 
 
-public class LaserTriggerPanel extends PropertyPanel {
+public class LaserTriggerPanel extends ConfigurablePanel {
 
 	private static final long serialVersionUID = -6553153910855055671L;
 	

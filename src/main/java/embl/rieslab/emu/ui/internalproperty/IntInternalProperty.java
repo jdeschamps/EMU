@@ -1,10 +1,10 @@
 package main.java.embl.rieslab.emu.ui.internalproperty;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 
 public class IntInternalProperty extends InternalProperty<Integer>{
 
-	public IntInternalProperty(PropertyPanel owner, String name, int defaultvalue) {
+	public IntInternalProperty(ConfigurablePanel owner, String name, int defaultvalue) {
 		super(owner, name, defaultvalue);
 	}
 

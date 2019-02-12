@@ -21,12 +21,12 @@ import main.java.embl.rieslab.emu.configuration.ui.GlobalSettingsTable;
 import main.java.embl.rieslab.emu.configuration.ui.HelpWindow;
 import main.java.embl.rieslab.emu.configuration.ui.ParametersTable;
 import main.java.embl.rieslab.emu.configuration.ui.PropertiesTable;
-import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperties;
-import main.java.embl.rieslab.emu.ui.PropertyMainFrameInterface;
+import main.java.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import main.java.embl.rieslab.emu.ui.ConfigurableFrame;
 
 /**
- * UI used to configure the system by allocating UI properties to existing device properties in Micro-manager, the values of their state
- * and the values of the UI parameters.
+ * UI used to configure the system by allocating UI properties to existing device properties in Micro-manager, the 
+ * values of their state if applicable and the values of the UI parameters.
  * 
  * @author Joran Deschamps
  *
@@ -63,8 +63,8 @@ public class ConfigurationWizard {
 		plugin_name_ = "";
 	}
 
-	private void newConfiguration(final String plugin_name, final PropertyMainFrameInterface maininterface, final MMProperties mmproperties) {
-
+	private void newConfiguration(final String plugin_name, final ConfigurableFrame maininterface, final MMPropertiesRegistry mmproperties) {
+		// makes sure it runs on EDT
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@SuppressWarnings("rawtypes")
 			public void run() {
@@ -97,11 +97,11 @@ public class ConfigurationWizard {
 	 * @param uipropertySet HashMap containing the UI properties.
 	 * @param uiparameterSet HashMap containing the UI parameters.
 	 * @param mmproperties Object holding the device properties from Micro-manager.
-	 * @param configprop HashMap linking mm properties to ui properties from the configuration.
-	 * @param configparam HashMap holding the values of the ui parameters from the configuration.
+	 * @param configprop HashMap linking MM properties to UI properties from the configuration.
+	 * @param configparam HashMap holding the values of the UI parameters from the configuration.
 	 */
-	private void existingConfiguration(final PropertyMainFrameInterface maininterface,
-			final MMProperties mmproperties, final GlobalConfiguration configuration) {
+	private void existingConfiguration(final ConfigurableFrame maininterface,
+			final MMPropertiesRegistry mmproperties, final GlobalConfiguration configuration) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			@SuppressWarnings("rawtypes")
@@ -163,7 +163,7 @@ public class ConfigurationWizard {
 		JPanel upperpane = new JPanel();
 		upperpane.setLayout(new GridLayout(0,4));
 		
-		JLabel conf_name_label = new JLabel("   Name:");
+		JLabel conf_name_label = new JLabel("   Configuration's name:");
 		config_name_ = new JTextField(conf_name);
 
 		JToggleButton helptoggle = new JToggleButton("HELP");
@@ -208,8 +208,9 @@ public class ConfigurationWizard {
 	}
 	
 	/**
+	 * Checks if the wizard is already running by returning an internal member variable.
 	 * 
-	 * @return true if running, false otherwise.
+	 * @return True if running, false otherwise.
 	 */
 	public boolean isRunning(){
 		return running_;
@@ -273,8 +274,17 @@ public class ConfigurationWizard {
 		running_ = false;
 	}
 
+	/**
+	 * Starts a new configuration wizard. If {@code configuration} is not compatible with {@code pluginName} then
+	 * the wizard starts a new configuration, otherwise the wizard will allow editing {@code configuration}.
+	 * 
+	 * @param pluginName Name of the plugin to be configured.
+	 * @param configuration Current configuration loaded in EMU.
+	 * @param maininterface ConfigurableFrame of the plugin. 
+	 * @param mmproperties Device properties from Micro-Manager.
+	 */
 	public void start(String pluginName, GlobalConfiguration configuration,
-			PropertyMainFrameInterface maininterface, MMProperties mmproperties) {
+			ConfigurableFrame maininterface, MMPropertiesRegistry mmproperties) {
 		
 		plugin_name_ = pluginName;
 		if(configuration.getCurrentPluginName() != null && configuration.getCurrentPluginName().equals(pluginName)){

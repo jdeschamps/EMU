@@ -1,13 +1,13 @@
 package main.java.embl.rieslab.emu.ui.uiparameters;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 import main.java.embl.rieslab.emu.utils.utils;
 
 public class FloatUIParameter extends UIParameter<Float>{
 
-	public FloatUIParameter(PropertyPanel owner, String name, String description, Float val) {
+	public FloatUIParameter(ConfigurablePanel owner, String name, String description, Float val) {
 		super(owner, name, description);
 		setValue(val);
 	}

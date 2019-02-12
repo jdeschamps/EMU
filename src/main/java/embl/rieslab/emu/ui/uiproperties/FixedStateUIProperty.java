@@ -3,7 +3,7 @@ package main.java.embl.rieslab.emu.ui.uiproperties;
 import java.util.LinkedHashMap;
 import java.util.Set;
 
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
@@ -13,13 +13,13 @@ public class FixedStateUIProperty extends UIProperty {
 	
 	private LinkedHashMap<String,String> states_;
 	
-	public FixedStateUIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag, LinkedHashMap<String,String> states) {
+	public FixedStateUIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag, LinkedHashMap<String,String> states) {
 		super(owner, name, description, flag);
 
 		states_ = states;
 	}	
 	
-	public FixedStateUIProperty(PropertyPanel owner, String name, String description, LinkedHashMap<String,String> states) {
+	public FixedStateUIProperty(ConfigurablePanel owner, String name, String description, LinkedHashMap<String,String> states) {
 		super(owner, name, description);
 
 		states_ = states;

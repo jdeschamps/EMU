@@ -23,7 +23,7 @@ import javax.swing.border.TitledBorder;
 
 import main.java.embl.rieslab.emu.tasks.Task;
 import main.java.embl.rieslab.emu.tasks.TaskHolder;
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.graph.TimeChart;
 import main.java.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
@@ -35,7 +35,7 @@ import main.java.embl.rieslab.emu.utils.utils;
  *
  * @author Joran Deschamps
  */
-public class PIFocusPanel extends PropertyPanel implements TaskHolder<Double> {
+public class PIFocusPanel extends ConfigurablePanel implements TaskHolder<Double> {
 
 	/**
 	 * 

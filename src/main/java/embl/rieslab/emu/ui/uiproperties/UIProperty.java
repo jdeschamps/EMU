@@ -1,8 +1,8 @@
 package main.java.embl.rieslab.emu.ui.uiproperties;
 
-import main.java.embl.rieslab.emu.exceptions.AlreadyAllocatedUIProperty;
+import main.java.embl.rieslab.emu.exceptions.AlreadyAllocatedUIPropertyException;
 import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
-import main.java.embl.rieslab.emu.ui.PropertyPanel;
+import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
@@ -12,19 +12,19 @@ public class UIProperty {
 	private String name_;
 	private String friendlyname_;
 	private String description_;
-	private PropertyPanel owner_;
+	private ConfigurablePanel owner_;
 	private MMProperty mmproperty_;
 	private PropertyFlag flag_;
 	private boolean allocated_ = false;
 	
-	public UIProperty(PropertyPanel owner, String name, String description, PropertyFlag flag){
+	public UIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag){
 		this.owner_ = owner;
 		this.name_ = name;
 		this.description_ = description;
 		this.flag_ = flag;
 	}	
 	
-	public UIProperty(PropertyPanel owner, String name, String description){
+	public UIProperty(ConfigurablePanel owner, String name, String description){
 		this.owner_ = owner;
 		this.name_ = name;
 		this.description_ = description;
@@ -39,14 +39,14 @@ public class UIProperty {
 		return description_;
 	}
 	
-	public void setProperty(MMProperty prop) throws AlreadyAllocatedUIProperty{
-		if(!allocated_ && prop != null){
+	public void setProperty(MMProperty prop) throws AlreadyAllocatedUIPropertyException{
+		if(prop == null) {
+			throw new NullPointerException();
+		} else if(!allocated_){
 			mmproperty_ = prop;
 			allocated_ = true;
-		} else if(prop == null){
-			throw new NullPointerException();
 		} else if(allocated_){
-			throw new AlreadyAllocatedUIProperty(name_);
+			throw new AlreadyAllocatedUIPropertyException(name_);
 		}
 	}
 	

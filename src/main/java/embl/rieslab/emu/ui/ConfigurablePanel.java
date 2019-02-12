@@ -16,7 +16,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 
 @SuppressWarnings("rawtypes")
-public abstract class PropertyPanel extends JPanel{
+public abstract class ConfigurablePanel extends JPanel{
 
 	/**
 	 * 
@@ -31,7 +31,7 @@ public abstract class PropertyPanel extends JPanel{
 	
 	private boolean propertychange_ = true;
 	
-	public PropertyPanel(String label){
+	public ConfigurablePanel(String label){
 		label_ = label;
 		
 		properties_ = new HashMap<String,UIProperty>();
