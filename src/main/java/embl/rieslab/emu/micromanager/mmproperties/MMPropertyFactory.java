@@ -2,6 +2,12 @@ package main.java.embl.rieslab.emu.micromanager.mmproperties;
 
 import mmcorej.CMMCore;
 
+/**
+ * 
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class MMPropertyFactory {
 	
 	CMMCore core_;

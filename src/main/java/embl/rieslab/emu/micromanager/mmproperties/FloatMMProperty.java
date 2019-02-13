@@ -95,6 +95,9 @@ public class FloatMMProperty extends MMProperty<Float> {
 		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean isAllowed(Float val) {
 		if(val == null){

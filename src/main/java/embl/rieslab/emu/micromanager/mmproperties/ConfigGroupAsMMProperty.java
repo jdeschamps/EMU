@@ -103,7 +103,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	@Override
-	public boolean isAllowed(String val) { // always have allowed values, so no checking here
+	public boolean isAllowed(String val) { // always has allowed values, so no "hasAllowedValues" to prevent null object
 		for(int i=0;i<getAllowedValues().length;i++){
 			if(areEqual(val, getAllowedValues()[i])){
 				return true;
