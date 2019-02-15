@@ -34,31 +34,49 @@ public class StringMMProperty extends MMProperty<String> {
 		super(core, deviceLabel, propertyLabel, allowedValues);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String convertToValue(String s) {
 		return s;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String convertToValue(int s) {
 		return String.valueOf(s);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String convertToValue(double s) {
 		return String.valueOf(s);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String[] arrayFromStrings(String[] s) {
 		return s;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String convertToString(String val) {
 		return val.toString();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean isInRange(String val) {
 		if(hasLimits()){
@@ -71,6 +89,9 @@ public class StringMMProperty extends MMProperty<String> {
 		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean isAllowed(String val) {
 		if(val == null){
@@ -90,6 +111,9 @@ public class StringMMProperty extends MMProperty<String> {
 		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean areEqual(String val1, String val2) {
 		return val1.equals(val2);

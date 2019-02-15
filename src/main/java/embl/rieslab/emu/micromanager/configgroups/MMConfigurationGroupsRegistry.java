@@ -15,8 +15,6 @@ import mmcorej.StrVector;
  */
 public class MMConfigurationGroupsRegistry {
 
-	public final static String KEY_MMCONFDEVICE = "Configurations";
-	
 	private CMMCore core_;
 	private HashMap<String, MMConfigurationGroup> groups_;
 	

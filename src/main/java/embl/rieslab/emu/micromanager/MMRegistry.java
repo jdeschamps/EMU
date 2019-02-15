@@ -12,12 +12,25 @@ import main.java.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry
 import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import mmcorej.Configuration;
 
+/**
+ * Class instantiating the {@link MMPropertiesRegistry} and {@link MMConfigurationGroupsRegistry}. In addition, it
+ * registers the configuration groups as MMProperties and add them to the MMPropertiesRegistry.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class MMRegistry {
 
 	private MMPropertiesRegistry mmproperties_; // holds the Micro-Manager device properties
 	private MMConfigurationGroupsRegistry mmconfiggroups_; // holds the configuration groups from Micro-manager
 	private Studio studio_;
 	
+	/**
+	 * Constructor. Instantiate the {@link MMPropertiesRegistry} and {@link MMConfigurationGroupsRegistry} and register
+	 * the configuration groups as MMProperties.
+	 * 
+	 * @param studio Micro-Manager studio
+	 */
 	public MMRegistry(Studio studio) {
 		
 		studio_ = studio;
@@ -30,17 +43,31 @@ public class MMRegistry {
 		registerMMConfAsDevice();
 	}
 	
+	/**
+	 * Returns the {@link MMPropertiesRegistry}.
+	 * 
+	 * @return Instance of {@link MMPropertiesRegistry}
+	 */
 	public MMPropertiesRegistry getMMPropertiesRegistry() {
 		return mmproperties_;
 	}
 	
+	/**
+	 * Returns the {@link MMConfigurationGroupsRegistry}.
+	 * 
+	 * @return Instance of {@link MMConfigurationGroupsRegistry}
+	 */
 	public MMConfigurationGroupsRegistry getMMConfigurationGroupsRegistry() {
 		return mmconfiggroups_;
 	}
 	
+	/**
+	 * Wraps the configuration groups as MMProperties and adds them to the MMPropertiesRegistry.
+	 * 
+	 */
 	@SuppressWarnings("rawtypes")
 	private void registerMMConfAsDevice(){
-		MMDevice dev = new MMDevice(MMConfigurationGroupsRegistry.KEY_MMCONFDEVICE);
+		MMDevice dev = new MMDevice(ConfigGroupAsMMProperty.KEY_MMCONFDEVICE);
 
 		Iterator<String> it = mmconfiggroups_.getMMConfigurationGroups().keySet().iterator();
 		while(it.hasNext()){
@@ -55,8 +82,7 @@ public class MMRegistry {
 					affectedmmprops.add(mmproperties_.getProperties().get(conf.getSetting(i).getDeviceLabel()+"-"+conf.getSetting(i).getPropertyName()));
 				}
 				
-				dev.registerProperty(new ConfigGroupAsMMProperty(studio_.app(), studio_.core(), 
-						MMConfigurationGroupsRegistry.KEY_MMCONFDEVICE, group, values, affectedmmprops));
+				dev.registerProperty(new ConfigGroupAsMMProperty(studio_.app(), studio_.core(), group, values, affectedmmprops));
 
 			} catch (Exception e) {
 				e.printStackTrace();

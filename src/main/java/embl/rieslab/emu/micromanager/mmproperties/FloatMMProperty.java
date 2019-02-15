@@ -48,6 +48,9 @@ public class FloatMMProperty extends MMProperty<Float> {
 		super(core, deviceLabel, propertyLabel, allowedValues);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Float convertToValue(String s) {
 		try{
@@ -59,16 +62,25 @@ public class FloatMMProperty extends MMProperty<Float> {
 		return null;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Float convertToValue(int s) {
 		return new Float(s);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Float convertToValue(double s) {
 		return new Float(s);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Float[] arrayFromStrings(String[] s) {
 		Float[] allowedVal = new Float[s.length];
@@ -78,11 +90,17 @@ public class FloatMMProperty extends MMProperty<Float> {
 		return allowedVal;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String convertToString(Float val) {
 		return val.toString();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean isInRange(Float val) {
 		if(hasLimits()){
@@ -117,6 +135,9 @@ public class FloatMMProperty extends MMProperty<Float> {
 		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean areEqual(Float val1, Float val2) {
 		return val1 == val2;

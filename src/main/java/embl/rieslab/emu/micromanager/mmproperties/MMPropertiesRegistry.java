@@ -50,7 +50,7 @@ public class MMPropertiesRegistry {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				devices_.put(dev.getLabel(),dev);
+				devices_.put(dev.getDeviceLabel(),dev);
 			}
 		}
 	}
@@ -111,7 +111,7 @@ public class MMPropertiesRegistry {
 	 */
 	public void addMMDevice(MMDevice device){
 		if(device.getProperties().size() > 0){
-			devices_.put(device.getLabel(),device);
+			devices_.put(device.getDeviceLabel(),device);
 			properties_.putAll(device.getProperties());
 		}
 	}

@@ -306,7 +306,7 @@ public class PropertiesTable extends JPanel {
 		cb.addItem(GlobalConfiguration.KEY_UNALLOCATED);
 
 		if (!device.equals(GlobalConfiguration.KEY_UNALLOCATED)) {
-			String[] props = mmproperties_.getDevice(device).getPropertiesFriendlyName(); // fill with the name of the property itself
+			String[] props = mmproperties_.getDevice(device).getPropertyLabels(); // fill with the name of the property itself
 			for (int i = 0; i < props.length; i++) {
 				cb.addItem(props[i]);
 			}
@@ -371,8 +371,8 @@ public class PropertiesTable extends JPanel {
 			// if device column is not empty (from state property, e.g. single state value or multistates) and is not unallocated
 			if (!UIPropertyUtils.isStateValue((String) model.getValueAt(i, 0)) && !((String) model.getValueAt(i, 1)).equals(GlobalConfiguration.KEY_UNALLOCATED)) { 
 				String propertyname = (String) model.getValueAt(i, 2);
-				if( mmproperties_.getDevice((String) model.getValueAt(i, 1)).hasFriendlyProperty(propertyname)){
-					String hash = mmproperties_.getDevice((String) model.getValueAt(i, 1)).getFriendlyPropertyHash(propertyname);
+				if( mmproperties_.getDevice((String) model.getValueAt(i, 1)).hasLabelProperty(propertyname)){
+					String hash = mmproperties_.getDevice((String) model.getValueAt(i, 1)).getHashFromLabel(propertyname);
 					settings.put((String) model.getValueAt(i, 0), hash); // put with the property hash
 				} else {
 					settings.put((String) model.getValueAt(i, 0), GlobalConfiguration.KEY_UNALLOCATED); // set to unallocated

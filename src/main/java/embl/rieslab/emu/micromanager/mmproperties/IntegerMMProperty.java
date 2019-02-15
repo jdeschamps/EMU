@@ -47,6 +47,9 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 		super(core, deviceLabel, propertyLabel, allowedValues);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Integer convertToValue(String s) {
 		try{
@@ -58,17 +61,26 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 		return null;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Integer convertToValue(int s) {
 		return s;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Integer convertToValue(double s) {
 		Double val = new Double(s);
 		return val.intValue();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public Integer[] arrayFromStrings(String[] s) {
 		Integer[] allowedVal = new Integer[s.length];
@@ -78,11 +90,17 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 		return allowedVal;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String convertToString(Integer val) {
 		return val.toString();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean isInRange(Integer val) {
 		if(hasLimits()){
@@ -94,6 +112,9 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean isAllowed(Integer val) {
 		if(val == null){
@@ -113,6 +134,9 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 		return true;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean areEqual(Integer val1, Integer val2) {
 		return val1 == val2;

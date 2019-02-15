@@ -8,6 +8,8 @@ import mmcorej.CMMCore;
 /**
  * Abstract wrapper for a Micro-manager device property. This class allows retrieving and modifying
  * the value of a device property, within its limits, or allowed values, as defined by Micro-manager. 
+ * Each MMProperty is identified by a hash "deviceLabel-propertyLabel" where deviceLabel is the label
+ * of the device holding the property and propertyLabel is the label of the property.
  * 
  * @author Joran Deschamps
  *
@@ -31,7 +33,8 @@ public abstract class MMProperty<T> {
 	private ArrayList<UIProperty> listeners_;
 	
 	/**
-	 * Builds a MMproperty without limits or allowed values. The property can be set to be read-only.
+	 * Builds a MMproperty without limits or allowed values. The property can be set to be read-only. 
+	 * 
 	 * 
 	 * @param core Micro-manager core.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
@@ -115,7 +118,7 @@ public abstract class MMProperty<T> {
 	}
 	
 	/** 
-	 * Returns the current value of the device property.
+	 * Returns the current value of the device property. This method calls Micro-Manager CMMCore.
 	 * 
 	 * @return Current value.
 	 */
@@ -132,7 +135,7 @@ public abstract class MMProperty<T> {
 	}
 
 	/**
-	 * Returns the current value of the device property as a String.
+	 * Returns the current value of the device property as a String. This method calls Micro-Manager CMMCore.
 	 * 
 	 * @return Current String value.
 	 */
@@ -150,7 +153,7 @@ public abstract class MMProperty<T> {
 
 	/**
 	 * Sets the value of the device property and updates all parent UIProperties. This method is called by a parent UIProperty, and the source
-	 * is excluded from the notification (using {@link #notifyListeners(UIProperty, String)}).
+	 * is excluded from the notification (using {@link #notifyListeners(UIProperty, String)}). The method calls Micro-Manager CMMCore.
 	 * 
 	 * @param stringval New value.
 	 * @param source UIProperty at the origin of the update.
@@ -360,7 +363,7 @@ public abstract class MMProperty<T> {
 	}
 	
 	/**
-	 * Returns the MMProperty hash, which is "{device label}-{property label}".
+	 * Returns the MMProperty hash, which is "{device label}-{property label}" (without brackets).
 	 * 
 	 * @return Property's hash
 	 */

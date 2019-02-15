@@ -3,24 +3,40 @@ package main.java.embl.rieslab.emu.micromanager.mmproperties;
 import mmcorej.CMMCore;
 
 /**
- * 
+ * {@link MMProperty} factory.
  * 
  * @author Joran Deschamps
  *
  */
 public class MMPropertyFactory {
 	
-	CMMCore core_;
+	private CMMCore core_;
 	
+	/**
+	 * Constructor.
+	 * 
+	 * @param core Micro-manager CMMCore.
+	 */
 	public MMPropertyFactory(CMMCore core){
 		core_ = core;
 	}
 
+	/**
+	 * Returns an instantiated MMProperty from a device and a device property labels. The method retrieves the type
+	 * of property (Float, Integer or String), the limits and allowed values if applicable. If the device property
+	 * does not exist, it returns a null object.
+	 * 
+	 * @param deviceLabel Label of the device.
+	 * @param propertyLabel Label of the property.
+	 * @return MMProperty corresponding to the device property, null if the device property does not exist.
+	 */
 	@SuppressWarnings("rawtypes")
 	public MMProperty getNewProperty(String deviceLabel, String propertyLabel) {
 		MMProperty p = null;
 		
 		try {		
+			
+			// retrieves type, read only, limits and allowed values
 			String type = (core_.getPropertyType(deviceLabel, propertyLabel)).toString();	
 				
 			boolean readOnly = core_.isPropertyReadOnly(deviceLabel, propertyLabel);
@@ -40,6 +56,7 @@ public class MMPropertyFactory {
 				}
 			} 
 			
+			// instantiate using the type and the constructors for read-only, limited or allowed values
 			if(type.equals("Float")){
 				if(hasLimits){
 					p = new FloatMMProperty(core_, deviceLabel, propertyLabel, upLimit, downLimit);
@@ -64,7 +81,6 @@ public class MMPropertyFactory {
 				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
