@@ -25,7 +25,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.internalproperty.IntInternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;

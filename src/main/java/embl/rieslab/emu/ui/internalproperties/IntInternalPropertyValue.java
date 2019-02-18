@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.ui.internalproperty;
+package main.java.embl.rieslab.emu.ui.internalproperties;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;

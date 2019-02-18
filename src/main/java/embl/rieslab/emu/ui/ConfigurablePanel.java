@@ -6,21 +6,42 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import main.java.embl.rieslab.emu.ui.internalproperty.InternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
-/////////////////////
-//
-// need to maybe modify the API to not expose the UIProperties to the property panel is order to prevent EDT from lengthy calls?
-
-
+/**
+ * Building block of EMU, this abstract class extends a JPanel. It holds a map of {@link main.java.embl.rieslab.emu.ui.uiproperties.UIProperty},
+ * {@link main.java.embl.rieslab.emu.ui.uiparameters.UIParameter} and {@link main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty}.
+ * 
+ * Subclasses of ConfigurablePanel must implements few methods called in the ConfigurablePanel constructor in order to instantiate the
+ * UIProperties, UIParameters and InternalProperties, as well as setting up the JComponents in the JPanel (itself). All JComponent instantiations
+ * should happen in {@link #setupPanel()}. Note that this method is the last one to be called in the ConfigurablePanel constructor, therefore
+ * the JPanel set up can also take place in the subclass constructor equivalently.
+ * 
+ * Modifications to the state of UIProperties, UIParameters and InternalProperties should not be done explicitly in the subclasses, but should be 
+ * done through the abstraction methods (e.g. see {@link #changeProperty(String, String)}). Modifications of the JComponents based on UIProperties, 
+ * UIParameters and InternalProperties changes take place in the subclasses implementation of {@link #propertyhasChanged(String, String)}, 
+ * {@link #parameterhasChanged(String)} and {@link #internalpropertyhasChanged(String)} respectively.  
+ * 
+ * Upon start up of the {@link main.java.embl.rieslab.emu.plugin.UIPlugin}, the {@link main.java.embl.rieslab.emu.controller.SystemController} will
+ * pair up the UIProperties with MMProperties and set the values of the 
+ * 
+ * In addition, to avoid triggering {@link #changeProperty(String, String)} upon starting of the plugin, {@link #turnOffComponentTriggering()} can be 
+ * called in {@link #propertyhasChanged(String, String)}
+ * 
+ * 
+ * @see main.java.embl.rieslab.emu.ui.uiproperties.UIProperty
+ * @see main.java.embl.rieslab.emu.ui.uiparameters.UIParameter
+ * @see main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty
+ * @see ConfigurableMainFrame
+ * 
+ * @author Joran Deschamps
+ *
+ */
 @SuppressWarnings("rawtypes")
 public abstract class ConfigurablePanel extends JPanel{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 7664471329228929184L;
 
 	private HashMap<String, UIProperty> properties_; 
@@ -29,8 +50,14 @@ public abstract class ConfigurablePanel extends JPanel{
 
 	private String label_;
 	
-	private boolean propertychange_ = true;
+	private boolean componentTriggering_ = true;
 	
+	/**
+	 * Constructor. Calls the abstract methods {@link #initializeProperties()}, {@link #initializeParameters()}, 
+	 * {@link #initializeInternalProperties()} and finally {@link #setupPanel()} (in that order).
+	 * 
+	 * @param label Label of the panel.
+	 */
 	public ConfigurablePanel(String label){
 		label_ = label;
 		
@@ -44,83 +71,167 @@ public abstract class ConfigurablePanel extends JPanel{
 		setupPanel();
 	}
 
-	public HashMap<String, UIProperty> getUIProperties(){
+	/**
+	 * Returns a hash map of the panel's UI properties indexed by their name.
+	 *
+	 * @see main.java.embl.rieslab.emu.ui.uiproperties.UIProperty
+	 * 
+	 * @return HashMap with the UIProperty indexed by their name. 
+	 */
+	protected HashMap<String, UIProperty> getUIProperties(){
 		return properties_;
 	}
 	
-	public HashMap<String, InternalProperty> getInternalProperties(){
+	/**
+	 * Returns a hash map of the panel's internal properties indexed by their hash ({panel's name}-{property's name}).
+	 *
+	 * @see main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty
+	 * 
+	 * @return HashMap with the InternalProperty indexed by their hash. 
+	 */
+	protected HashMap<String, InternalProperty> getInternalProperties(){
 		return internalprops_;
 	}
 	
-	public HashMap<String,UIParameter> getUIParameters(){
+	/**
+	 * Returns a hash map of the panel's UI parameters indexed by their hash (({panel's name}-{parameter's name})).
+	 *
+	 * @see main.java.embl.rieslab.emu.ui.uiparameters.UIParameter
+	 * 
+	 * @return HashMap with the UIParameter indexed by their hash. 
+	 */
+	protected HashMap<String,UIParameter> getUIParameters(){
 		return parameters_;
 	}	
 	
-	public InternalProperty getInternalProperty(String name){
-		if(internalprops_.containsKey(getLabel()+" "+name)){
-			return internalprops_.get(getLabel()+" "+name);
+	/**
+	 * Returns the {@link main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty} named {@code propertyName}.
+	 * Since the internal properties are stored in a HashMap with their hashes as keys, this method takes the name of 
+	 * the internal property and searches the HashMap for the hash {this panel's label}-{propertyName}. 
+	 * 
+	 * @param propertyName Name of the internal property.
+	 * @return Corresponding InternalProperty, null if it doesn't exist.
+	 */
+	protected InternalProperty getInternalProperty(String propertyName){
+		if(internalprops_.containsKey(getLabel()+" "+propertyName)){
+			return internalprops_.get(getLabel()+" "+propertyName);
 		}
 		return null;
 	}	
 	
-	public void setUIPropertyFriendlyName(String name, String friendlyname){
-		if(properties_.containsKey(name)){
-			properties_.get(name).setFriendlyName(friendlyname);
+	/**
+	 * Returns the {@link main.java.embl.rieslab.emu.ui.uiparameters.UIParameter} named {@code parameterName}.
+	 * Since the UI parameters are stored in a HashMap with their hashes as keys, this method takes the name of 
+	 * the parameter and searches the HashMap for the hash {this panel's label}-{parameterName}. 
+	 * 
+	 * @param parameterName Name of the UIParameter
+	 * @return Corresponding UIParameter, null if it doesn't exist.
+	 */
+	protected UIParameter getUIParameter(String parameterName){
+		if(parameters_.containsKey(getLabel()+" "+parameterName)){
+			return parameters_.get(getLabel()+" "+parameterName);
 		}
+		return null;
 	}
 	
+	/**
+	 * Returns the {@link main.java.embl.rieslab.emu.ui.uiproperties.UIProperty} named {@code propertyName}.
+	 * 
+	 * @param propertyName Name of the UIProperty
+	 * @return Corresponding UIProperty, null if it doesn't exist.
+	 */
 	// maybe this should not be exposed to avoid modifying the property value on the EDT
-	public UIProperty getUIProperty(String name){
-		if(properties_.containsKey(name)){
-			return properties_.get(name);
+	protected UIProperty getUIProperty(String propertyName){
+		if(properties_.containsKey(propertyName)){
+			return properties_.get(propertyName);
 		}
 		return null;
 	}
 	
-	public String getUIPropertyValue(String name){
-		if(properties_.containsKey(name)){
-			return properties_.get(name).getPropertyValue();
+	/**
+	 * Sets the UIProperty {@code propertyName} friendly name to {@code friendlyName}.
+	 * 
+	 * @param propertyName Property name
+	 * @param friendlyName New friendly name
+	 */
+	protected void setUIPropertyFriendlyName(String propertyName, String friendlyName){
+		if(properties_.containsKey(propertyName)){
+			properties_.get(propertyName).setFriendlyName(friendlyName);
+		}
+	}
+	
+	/**
+	 * Returns the current value of the UIProperty called {@code propertyName}.
+	 * 
+	 * @param propertyName Name of the property
+	 * @return String value of the property, null if the property doesn't exist.
+	 */
+	protected String getUIPropertyValue(String propertyName){
+		if(properties_.containsKey(propertyName)){
+			return properties_.get(propertyName).getPropertyValue();
 		}
 		return null;
 	}
 	
-	public void setUIPropertyValue(String name, String value){
+	/**
+	 * Sets the UIProperty {@code propertyName}'s value to {@code newValue}. This method calls the 
+	 * UIProperty's method to set the value, which will in turn call the corresponding MMProperty's
+	 * method. Since the change will be notified to all the UIProperties listening to the MMProperty 
+	 * (through {@link #triggerPropertyHasChanged(String, String)}), this method runs on an independent
+	 * thread (that is, not on the EDT).
+	 *  
+	 * @param propertyName UIProperty's name
+	 * @param newValue New value
+	 */
+	protected void setUIPropertyValue(String propertyName, String newValue){
 		// makes sure the call does NOT run on EDT
-		Thread t = new Thread("Property change: " + name) {
+		Thread t = new Thread("Property change: " + propertyName) {
 			public void run() {
-				if (properties_.containsKey(name)) {
-					properties_.get(name).setPropertyValue(value);
+				if (properties_.containsKey(propertyName)) {
+					properties_.get(propertyName).setPropertyValue(newValue);
 				}
 			}
 		};
 		t.start();
 	}
 	
-	public UIParameter getUIParameter(String name){
-		Iterator<String> it = parameters_.keySet().iterator();
-		UIParameter param;
-		while(it.hasNext()){
-			param = parameters_.get(it.next());
-			if(param.getLabel().equals(name)){
-				return param;
-			}
-		}
-		return null;
-	}
-	
-	protected void addUIProperty(UIProperty p){
-		properties_.put(p.getName(),p);
+
+	/**
+	 * Adds a {@link main.java.embl.rieslab.emu.ui.uiproperties.UIProperty} to the internal HashMap
+	 * using the UI property's name.
+	 * 
+	 * @param uiproperty UIProperty to add
+	 */
+	// Shouldn't UI property not be added by unique hash instead of collision prone name?
+	protected void addUIProperty(UIProperty uiproperty){
+		properties_.put(uiproperty.getName(),uiproperty);
 	}	
 
-	protected void addUIParameter(UIParameter p){
-		parameters_.put(p.getHash(),p);
+	/**
+	 * Adds a {@link main.java.embl.rieslab.emu.ui.uiparameters.UIParameter} to the internal HashMap
+	 * using the UIParameter's hash.
+	 * 
+	 * @param uiparameter UIParameter to add
+	 */
+	protected void addUIParameter(UIParameter uiparameter){
+		parameters_.put(uiparameter.getHash(),uiparameter);
 	}
 	
-	protected void addInternalProperty(InternalProperty p){
-		internalprops_.put(p.getHash(),p);
+	/**
+	 * Adds a {@link main.java.embl.rieslab.emu.ui.internalproperty.InternalProperty} to the internal HashMap
+	 * using the InternalProperty hash.
+	 * 
+	 * @param internalproperty InternalProperty to add
+	 */
+	protected void addInternalProperty(InternalProperty internalproperty){
+		internalprops_.put(internalproperty.getHash(),internalproperty);
 	}
 	
-	public void updateAllProperties(){
+	/**
+	 * Updates the ConfigurablePanel for all UI properties by calling {@link #triggerPropertyHasChanged(String, String)} 
+	 * for each UIProperty.
+	 */
+	protected void updateAllProperties(){
 		Iterator<String> it = properties_.keySet().iterator();
 		String prop;
 		while(it.hasNext()){
@@ -129,82 +240,177 @@ public abstract class ConfigurablePanel extends JPanel{
 		}
 	}	
 	
-	public void updateAllParameters(){
+	/**
+	 * Updates the ConfigurablePanel for all UI parameters by calling {@link #triggerParameterHasChanged(String, String)} 
+	 * for each UIParameter.
+	 */
+	protected void updateAllParameters(){
 		Iterator<String> it = parameters_.keySet().iterator();
 		while(it.hasNext()){
-			triggerParameterHasChanged(parameters_.get(it.next()).getLabel());
+			triggerParameterHasChanged(parameters_.get(it.next()).getName());
 		}
 	}
 	
+	/**
+	 * Returns this ConfigurablePanel's label.
+	 * 
+	 * @return This panel's label.
+	 */
 	public String getLabel(){
 		return label_;
 	}
 
-	public void substituteParameter(String param, UIParameter uiParameter) {
+	// TODO
+	protected void substituteParameter(String param, UIParameter uiParameter) {
+		System.out.println("Call to substitute Parameter: how often does this happen?");
+		// UIParamters have a "unique" hash, so they should not collide, so this method is useless. Is it the case with htSMLM?
 		parameters_.remove(param);
 		parameters_.put(param, uiParameter);
 	}
 	
-	public boolean isPropertyChangeAllowed(){
-		return propertychange_;
+	/**
+	 * Checks if the component triggering is enabled. The change in permission is done through {@link #turnOffComponentTriggering()}
+	 * and {@link #turnOnComponentTriggering()}. This is just indicative and only provides a mechanism to avoid triggering 
+	 * the components actionListeners upon calling {@link #propertyhasChanged(String, String)}. For this mechanism to work, 
+	 * {@link #changeProperty(String, String)} needs to be called in the actionListeners ONLY if this method returns true. For instance,
+	 * this can be useful upon loading the UI, as {@link #propertyhasChanged(String, String)} will be called for each UIProperty,
+	 * then in turn {@link #propertyhasChanged(String, String)} will be called and might change the state of a JComponent. Depending
+	 * on the type of actionListeners, this might trigger {@link #changeProperty(String, String)}.
+	 * 
+	 * @return true if the component triggering is on, false if it is off.
+	 */
+	protected boolean isComponentTriggeringOff(){
+		return componentTriggering_;
 	}
 
 	/**
-	 * Upon loading the UI, the properties are updated according to the value of the linked MM property.
-	 * Turning off the property change in the beginning of propertyhasChanged() allows changing the state
-	 * of the UI components without triggering their own actionListeners. Note that it requires the UI
-	 * components to call isPropertyChangeAllowed in their actionListeners. Before returning, propertyhasChanged
-	 * need to turn on the property change again. 
+	 * Turns off component triggering. See {@link #isComponentTriggeringOff()}.
 	 */
-	public void turnOffPropertyChange(){
-		propertychange_ = false;
+	protected void turnOffComponentTriggering(){
+		componentTriggering_ = false;
+	}
+	
+	/**
+	 * Turns on component triggering. See {@link #isComponentTriggeringOff()}.
+	 */
+	protected void turnOnComponentTriggering(){
+		componentTriggering_ = true;
 	}
 
-	public void turnOnPropertyChange(){
-		propertychange_ = true;
-	}
-
-	public void triggerPropertyHasChanged(final String name, final String newvalue){
+	/**
+	 * Calls {@link #propertyhasChanged(String, String)} on the EDT. This allows the extension classes of
+	 * ConfigurablePanel to change the state of a JComponent depending on the value {@code newValue} of 
+	 * the UIProperty {@code propertyName} (itself linked to a MMProperty). Since a UIProperty does not hold the value of the corresponding
+	 * MMProperty, it is passed as a parameter.
+	 * 
+	 * @param propertyName Name of the property
+	 * @param newValue New value of the property
+	 */
+	public void triggerPropertyHasChanged(final String propertyName, final String newValue){
 		// Makes sure that the updating runs on EDT
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				propertyhasChanged(name, newvalue);
+				propertyhasChanged(propertyName, newValue);
 			}
 		});
 	}
 	
-	public void triggerParameterHasChanged(final String name){
+	/**
+	 * Calls {@link #parameterhasChanged(String, String)} on the EDT. This allows the subclasses of
+	 * ConfigurablePanel to adjust its components based on the value of the UIParameter {@code parameterName}.
+	 * 
+	 * @param parameterName Name of the parameter
+	 */
+	public void triggerParameterHasChanged(final String parameterName){
 		// Makes sure that the updating runs on EDT
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				parameterhasChanged(name);
+				parameterhasChanged(parameterName);
 			}
 		});
 	}
+		
+	/**
+	 * Method called when an internal property's value has been changed. This allows the ConfigurablePanel
+	 * subclasses to react to the change of vale.
+	 * 
+	 * @param propertyName Name of the internal property
+	 */
+	public abstract void internalpropertyhasChanged(String propertyName);
 	
+	/**
+	 * Method called in the constructor of a ConfigurablePanel. In this method, the subclasses must create
+	 * their UIproperty and add them to the map of properties using {@link #addUIProperty(UIProperty)}.
+	 */
 	protected abstract void initializeProperties();
+	
+	/**
+	 * Method called in the constructor of a ConfigurablePanel. In this method, the subclasses must create
+	 * their InternalProperties and add them to the map of internal properties using {@link #addInternalProperty(InternalProperty)}.
+	 */
 	protected abstract void initializeInternalProperties();
+	
+	/**
+	 * Method called in the constructor of a ConfigurablePanel. In this method, the subclasses must create
+	 * their UIparameter and add them to the map of properties using {@link #addUIParameter(UIParameter)}.
+	 */
 	protected abstract void initializeParameters();
-	public abstract void setupPanel();
-	protected abstract void changeProperty(String name, String value);
-	protected abstract void changeInternalProperty(String name, String value);
 	
 	/**
-	 * Notifies the PropertyPanel that one of its UIProperty has changed. This function is called on the EDT.
-	 * 
-	 * @param name
-	 * @param newvalue
+	 * Method called in the constructor of a ConfigurablePanel after {@link #addUIProperty(UIProperty)}, {@link #addUIParameter(UIParameter)} 
+	 * and {@link #addInternalProperty(InternalProperty)}. In this method, the subclasses must instantiate their 
+	 * JComponents and build the JPanel (itself) as in any user interface. In particular, the default values of the
+	 * UIParameters can be used.
 	 */
-	protected abstract void propertyhasChanged(String name, String newvalue);
+	protected abstract void setupPanel();
 	
 	/**
-	 * runs on edt
+	 * Method called to change the value of a UIProperty after user interaction with the ConfigurablePanel. For instance, this
+	 * method should be called from the actionListeners of a JComponent.
 	 * 
-	 * @param label
+	 * @param propertyName UIProperty to change
+	 * @param value New value of the UIproperty
 	 */
-	protected abstract void parameterhasChanged(String label);
-	public abstract void internalpropertyhasChanged(String label);
+	protected abstract void changeProperty(String propertyName, String value);
+	
+	/**
+	 * Method called to change the value of an InternalProperty after user interaction with the ConfigurablePanel. For instance, this
+	 * method should be called from the actionListeners of a JComponent.
+	 * 
+	 * @param propertyName InternalProperty to change
+	 * @param value New value of the InternalProperty
+	 */
+	protected abstract void changeInternalProperty(String propertyName, String value);
+	
+	/**
+	 * Notifies the ConfigurablePanel subclass that the MMProperty linked to its UIProperty {@code propertyName}
+	 * has changed in value. This function is called on the EDT and allows the subclass to change the states of
+	 * its JComponents based on the new value of the UIProperty.
+	 * 
+	 * @param propertyName Name of the Property whose value has changed.
+	 * @param newvalue New value of the UIProperty
+	 */
+	protected abstract void propertyhasChanged(String propertyName, String newvalue);
+	
+	/**
+	 * Notifies the ConfigurablePanel subclass that the UIParameter {@code parameterName} value has changed.
+	 * This method is called upon loading of the UI and whenever the user changes the configuration.
+	 * 
+	 * @param parameterName Name of the UIParameter
+	 */
+	protected abstract void parameterhasChanged(String parameterName);
+	
+	/**
+	 * Allows the ConfigurablePanel subclass to shut down all processes, e.g. SwingWorkers. This method is called 
+	 * when EMU is closing.
+	 */
 	public abstract void shutDown();
+	
+	/**
+	 * Returns the description of the ConfigurablePanel. 
+	 * 
+	 * @return Description of the ConfigurablePanel.
+	 */
 	public abstract String getDescription();
 
 }

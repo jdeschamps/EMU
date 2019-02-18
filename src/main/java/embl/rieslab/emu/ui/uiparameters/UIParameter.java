@@ -5,15 +5,15 @@ import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 
 public abstract class UIParameter<T> {
 
-	private String label_;
+	private String name_;
 	private String description_;
 	protected UIParameterType type_;
 	private T value_;
 	private String ownername_;
 	
-	public UIParameter(ConfigurablePanel owner, String label, String description){
+	public UIParameter(ConfigurablePanel owner, String name, String description){
 		ownername_ = owner.getLabel();
-		label_ = label;
+		name_ = name;
 		description_ = description;
 		
 		setType();
@@ -24,11 +24,11 @@ public abstract class UIParameter<T> {
 	}
 
 	public String getHash(){
-		return ownername_+" - "+label_;
+		return ownername_+" - "+name_;
 	}
 	
-	public String getLabel(){
-		return label_;
+	public String getName(){
+		return name_;
 	}
 
 	public String getDescription(){

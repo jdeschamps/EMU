@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.ui.internalproperty;
+package main.java.embl.rieslab.emu.ui.internalproperties;
 
 public enum InternalPropertyType{
 	INTEGER("Integer"), DOUBLE("Double"), STRING("String"); 

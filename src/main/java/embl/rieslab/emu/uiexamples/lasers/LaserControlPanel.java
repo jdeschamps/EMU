@@ -80,7 +80,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 			public void focusGained(FocusEvent arg0) {}
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(isPropertyChangeAllowed()){
+				if(isComponentTriggeringOff()){
 	
 					String typed = getUserInput();
 	        	    if(typed == null) {
@@ -104,7 +104,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 		textfieldUser_.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(isPropertyChangeAllowed()){
+				if(isComponentTriggeringOff()){
 					String typed = getUserInput();
 	        	    if(typed == null) {
 	        	        return;
@@ -140,7 +140,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 		togglebuttonUser_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				if(isPropertyChangeAllowed()){
+				if(isComponentTriggeringOff()){
 					if(e.getStateChange()==ItemEvent.SELECTED){
 						String typed = getUserInput();
 		        	    if(typed == null) {
@@ -277,7 +277,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
-		turnOffPropertyChange();
+		turnOffComponentTriggering();
 		if(name.equals(getLabel()+" "+LASER_PERCENTAGE)){
 			if(utils.isNumeric(newvalue)){
 				int val = (int) Double.parseDouble(newvalue);
@@ -308,7 +308,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 				togglebuttonOnOff_.setSelected(false);
 			}
 		}		
-		turnOnPropertyChange();
+		turnOnComponentTriggering();
 	}
 
 	@Override

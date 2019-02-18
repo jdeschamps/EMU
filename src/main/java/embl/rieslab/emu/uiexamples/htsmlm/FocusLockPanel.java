@@ -74,7 +74,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 			public void focusGained(FocusEvent arg0) {}
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(isPropertyChangeAllowed()){
+				if(isComponentTriggeringOff()){
 					String typed = textfieldUserPower_.getText();
 					if(!utils.isNumeric(typed)){
 						return;
@@ -96,7 +96,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 		textfieldUserPower_.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent ev) {
-				if(isPropertyChangeAllowed()){
+				if(isComponentTriggeringOff()){
 					String typed = textfieldUserPower_.getText();
 					if(!utils.isNumeric(typed)){
 						return;
@@ -330,7 +330,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
-		turnOffPropertyChange();
+		turnOffComponentTriggering();
 		if(name.equals(getLabel()+" "+LASER_POWER)){
 			if(utils.isNumeric(newvalue)){
 				double val = Double.parseDouble(newvalue);
@@ -384,7 +384,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 				}
 			}
 		}
-		turnOnPropertyChange();
+		turnOnComponentTriggering();
 	}
 
 

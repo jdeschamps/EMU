@@ -17,10 +17,10 @@ import javax.swing.JOptionPane;
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.controller.SystemDialogs;
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.internalproperty.IntInternalProperty;
-import main.java.embl.rieslab.emu.ui.internalproperty.IntInternalPropertyValue;
-import main.java.embl.rieslab.emu.ui.internalproperty.InternalProperty;
-import main.java.embl.rieslab.emu.ui.internalproperty.InternalPropertyType;
+import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalPropertyValue;
+import main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.InternalPropertyType;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
@@ -67,7 +67,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         setUpMenu();
 		initComponents();
 		linkInternalProperties();
-		generateInterface();
+		retrieveUIPropertiesAndParameters();
 	}
 
 	private void setUpMenu() {
@@ -108,9 +108,9 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         this.setJMenuBar(mb); 
 	}
 
-	
+	// last time I simplified this part everything broke down. The UIProperties do not contain the 
 	@SuppressWarnings("rawtypes")
-	private void generateInterface() {
+	private void retrieveUIPropertiesAndParameters() {
 		properties_ = new HashMap<String,UIProperty>();
 		parameters_ = new HashMap<String,UIParameter>();
 		
@@ -121,8 +121,10 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			pan = it.next();
 			
 			// adds all the UIProperties, since their name contains their parent PropertyPanel name
-			// there is no collision
+			// there is no collision <------------ Not true (split personnality comments), this depends on the panel!
 			properties_.putAll(pan.getUIProperties()); 
+			 
+			// But here the UIParameters don't have the same hash!!!! So what is the point here:
 			
 			// adds all the UIParameters, in case of collision the first UIParameter has priority
 			// and substituted to the second UIParameter in its owner PropertyPanel: "same name" = "same parameter"
