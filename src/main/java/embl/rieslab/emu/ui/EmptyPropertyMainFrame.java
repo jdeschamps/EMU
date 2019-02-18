@@ -9,7 +9,6 @@ import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 
 public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 
@@ -40,13 +39,6 @@ public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 	@Override
 	public HashMap<String, UIParameter> getUIParameters() {
 		return new HashMap<String, UIParameter>();
-	}
-
-	@SuppressWarnings("rawtypes")
-	@Override
-	public HashMap<String, TaskHolder> getUITaskHolders() {
-		// TODO Auto-generated method stub
-		return  new HashMap<String, TaskHolder>();
 	}
 
 }

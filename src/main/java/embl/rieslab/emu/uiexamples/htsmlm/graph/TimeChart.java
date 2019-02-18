@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.ui.graph;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.graph;
 
 import java.awt.BasicStroke;
 import java.awt.Color;

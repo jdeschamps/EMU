@@ -25,11 +25,11 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.graph.TimeChart;
 import main.java.embl.rieslab.emu.ui.internalproperty.IntInternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.graph.TimeChart;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.ActivationTask;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.Task;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;

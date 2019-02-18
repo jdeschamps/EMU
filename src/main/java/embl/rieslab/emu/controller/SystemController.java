@@ -24,7 +24,6 @@ import main.java.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import main.java.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 
 /**
  * EMU controller class, bridging Micro-manager and the EMU UIPlugins using a configuration controller. 
@@ -492,17 +491,6 @@ public class SystemController {
 	 */
 	public HashMap<String, UIProperty> getPropertiesMap(){
 		return mainframe_.getUIProperties();
-	}
-	
-	/**
-	 * Returns the corresponding TaskHolder.
-	 * 
-	 * @param taskname name of the task.
-	 * @return
-	 */
-	@SuppressWarnings("rawtypes")
-	public TaskHolder getTaskHolder(String taskname){
-		return mainframe_.getUITaskHolders().get(taskname);
 	}
 	
 	/**

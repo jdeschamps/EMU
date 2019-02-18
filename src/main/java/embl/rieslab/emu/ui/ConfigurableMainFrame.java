@@ -23,7 +23,6 @@ import main.java.embl.rieslab.emu.ui.internalproperty.InternalProperty;
 import main.java.embl.rieslab.emu.ui.internalproperty.InternalPropertyType;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 import mmcorej.CMMCore;
 
 /**
@@ -45,8 +44,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	private HashMap<String, UIProperty> properties_;
 	@SuppressWarnings("rawtypes")
 	private HashMap<String, UIParameter> parameters_;
-	@SuppressWarnings("rawtypes")
-	private HashMap<String, TaskHolder> taskholders_;
 	
 	/**
 	 * 
@@ -116,7 +113,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	private void generateInterface() {
 		properties_ = new HashMap<String,UIProperty>();
 		parameters_ = new HashMap<String,UIParameter>();
-		taskholders_ = new HashMap<String,TaskHolder>();
 		
 		Iterator<ConfigurablePanel> it = this.getPropertyPanels().iterator();
 		ConfigurablePanel pan;
@@ -149,11 +145,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			// second PropertyPanel
 			for(int i=0;i<subst.size();i++){
 				pan.substituteParameter(subst.get(i), parameters_.get(subst.get(i)));
-			}
-
-			// gets tasks
-			if(pan instanceof TaskHolder){
-				taskholders_.put(((TaskHolder) pan).getTaskName(), (TaskHolder) pan);
 			}
 		}	
 	}
@@ -281,12 +272,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		return parameters_;
 	}
 
-	@SuppressWarnings("rawtypes")
-	@Override
-	public HashMap<String, TaskHolder> getUITaskHolders() {
-		return taskholders_;
-	}
-	
 	protected abstract void initComponents();
 
 }

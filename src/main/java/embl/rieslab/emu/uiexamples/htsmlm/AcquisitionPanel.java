@@ -74,7 +74,7 @@ public class AcquisitionPanel extends ConfigurablePanel{
 		super("Acquisitions");
 		controller_ = controller;
 		
-		acqcontroller_ = new AcquisitionController(controller, this, new AcquisitionInformationPanel(jTextPane_progress));
+		acqcontroller_ = new AcquisitionController(controller, this, new AcquisitionInformationPanel(jTextPane_progress), owner.getTaskHolders());
 		
 		// listen to window movement to place the summary panel at the right place
 		owner_ = owner;

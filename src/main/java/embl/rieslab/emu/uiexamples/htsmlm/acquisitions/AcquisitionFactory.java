@@ -74,7 +74,7 @@ public class AcquisitionFactory {
 	 
 	public Acquisition getAcquisition(String type){
 		if(type.equals(AcquisitionType.LOCALIZATION.getTypeValue())){
-			return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
+			return new LocalizationAcquisition(acqcontroller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
 		} else if(type.equals(AcquisitionType.TIME.getTypeValue())){
 			return new TimeAcquisition(controller_.getExposure());
 		} else if(type.equals(AcquisitionType.SNAP.getTypeValue())){
@@ -97,7 +97,7 @@ public class AcquisitionFactory {
 	}
 	
 	private Acquisition getDefaultAcquisition() {
-		return new LocalizationAcquisition(controller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
+		return new LocalizationAcquisition(acqcontroller_.getTaskHolder(ActivationPanel.TASK_NAME),controller_.getExposure());
 	}
 
 	public boolean writeAcquisitionList(Experiment exp, String name, String filepath){

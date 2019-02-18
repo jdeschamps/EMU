@@ -5,6 +5,7 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Point;
+import java.util.HashMap;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -12,6 +13,7 @@ import javax.swing.JTabbedPane;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 
 public class MainFrame extends ConfigurableMainFrame{
 		/**
@@ -32,6 +34,9 @@ public class MainFrame extends ConfigurableMainFrame{
 	private AcquisitionPanel acqPanel;
 	private JPanel lowerpanel;
 	private JTabbedPane tab;
+	@SuppressWarnings("rawtypes")
+	private HashMap<String,TaskHolder> taskholders_;
+
 	
 	public MainFrame(String title, SystemController controller) {
 		super(title, controller);
@@ -63,7 +68,8 @@ public class MainFrame extends ConfigurableMainFrame{
  	    this.setVisible(true);        
     }
 
-    private void setupPanels(){
+    @SuppressWarnings("rawtypes")
+	private void setupPanels(){
 		JPanel lasers = new JPanel(); 
 		controlPanels = new LaserControlPanel[4];
 		lasers.setLayout(new GridBagLayout());
@@ -205,6 +211,11 @@ public class MainFrame extends ConfigurableMainFrame{
         registerPropertyPanel(activationPanel);
         registerPropertyPanel(acqPanel);
         registerPropertyPanel(addFiltersPanel);
+        
+        // tasks, ignore the acquisition task as it is not supposed to be called by another panel
+        taskholders_ = new HashMap<String,TaskHolder>();
+        taskholders_.put(activationPanel.getTaskName(), activationPanel);
+
     }
     
     public Point getAcquisitionPanelLocation(){
@@ -213,5 +224,10 @@ public class MainFrame extends ConfigurableMainFrame{
     	loc.y += tab.getLocation().y+lowerpanel.getLocation().y+acqPanel.getLocation().y;
     	
     	return loc;
+    }
+    
+    @SuppressWarnings("rawtypes")
+	public HashMap<String,TaskHolder> getTaskHolders(){
+    	return taskholders_;
     }
 }

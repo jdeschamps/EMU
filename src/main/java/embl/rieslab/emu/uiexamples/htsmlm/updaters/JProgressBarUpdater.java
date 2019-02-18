@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.updaters;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.updaters;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

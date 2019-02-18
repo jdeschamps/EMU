@@ -12,11 +12,11 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.graph.Chart;
 import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.embl.rieslab.emu.updaters.ChartUpdater;
-import main.java.embl.rieslab.emu.updaters.JProgressBarUpdater;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.graph.Chart;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.updaters.ChartUpdater;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.updaters.JProgressBarUpdater;
 
 public class QPDPanel extends ConfigurablePanel {
 

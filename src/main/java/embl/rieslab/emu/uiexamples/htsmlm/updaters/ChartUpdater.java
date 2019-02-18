@@ -1,11 +1,11 @@
-package main.java.embl.rieslab.emu.updaters;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.updaters;
 
 import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import main.java.embl.rieslab.emu.ui.graph.Chart;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.graph.Chart;
 import main.java.embl.rieslab.emu.utils.utils;
 
 public class ChartUpdater {
