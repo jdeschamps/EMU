@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.tasks;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks;
 
 public interface Task<T> {
 

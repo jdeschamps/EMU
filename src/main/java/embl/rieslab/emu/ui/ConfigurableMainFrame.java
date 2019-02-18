@@ -16,7 +16,6 @@ import javax.swing.JOptionPane;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.controller.SystemDialogs;
-import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.internalproperty.IntInternalProperty;
 import main.java.embl.rieslab.emu.ui.internalproperty.IntInternalPropertyValue;
@@ -24,6 +23,7 @@ import main.java.embl.rieslab.emu.ui.internalproperty.InternalProperty;
 import main.java.embl.rieslab.emu.ui.internalproperty.InternalPropertyType;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 import mmcorej.CMMCore;
 
 /**

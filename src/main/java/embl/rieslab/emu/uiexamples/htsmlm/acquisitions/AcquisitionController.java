@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import javax.swing.SwingUtilities;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
-import main.java.embl.rieslab.emu.tasks.Task;
-import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.AcquisitionPanel;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
@@ -17,6 +15,8 @@ import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.utils.Acquisiti
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.AcquisitionTask;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.Task;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 
 public class AcquisitionController implements TaskHolder<Integer>{
 

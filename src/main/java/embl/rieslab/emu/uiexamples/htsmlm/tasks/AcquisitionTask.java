@@ -15,8 +15,6 @@ import org.micromanager.data.Datastore;
 import org.micromanager.data.Datastore.SaveMode;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
-import main.java.embl.rieslab.emu.tasks.Task;
-import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.Acquisition;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.wrappers.Experiment;
 import mmcorej.CMMCore;

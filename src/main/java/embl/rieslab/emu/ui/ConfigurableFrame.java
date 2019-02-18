@@ -3,9 +3,9 @@ package main.java.embl.rieslab.emu.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 
 public interface ConfigurableFrame {
 

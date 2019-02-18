@@ -15,11 +15,26 @@ import main.java.embl.rieslab.emu.plugin.UIPlugin;
 import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import main.java.embl.rieslab.emu.uiexamples.ExamplePlugins;
 
+/**
+ * Loader of EMU plugins. It uses the java.util.ServiceLoader to detect and load
+ * the plugins from the EMU folders in the Micro-manager installation folder. 
+ * 
+ * @see UIPlugin
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class UIPluginLoader {
 	
 	private SystemController controller_;
 	private HashMap<String, UIPlugin> plugins_;
 	
+	/**
+	 * Constructor. The UIPluginLoader loads the example plugins and all plugins found
+	 * in a .jar in the EMU home folder.
+	 * 
+	 * @param controller EMU system controller.
+	 */
 	public UIPluginLoader(SystemController controller){
 		controller_ = controller;
 		
@@ -36,7 +51,6 @@ public class UIPluginLoader {
             try {
 				urls[i] = flist[i].toURI().toURL();
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         }
@@ -49,18 +63,41 @@ public class UIPluginLoader {
 		
 	}
 	
+	/**
+	 * Returns the number of known plugins.
+	 * 
+	 * @return Number of plugins
+	 */
 	public int getPluginNumber(){
 		return plugins_.size();
 	}
 	
+	/**
+	 * Checks if {@code pluginName} corresponds to the name of a known plugin.
+	 * 
+	 * @param pluginName Name of the plugin
+	 * @return True if the plugin is known, false otherwise.
+	 */
 	public boolean isPluginAvailable(String pluginName){
 		return plugins_.containsKey(pluginName);
 	}
 
+	/**
+	 * Returns an instantiated ConfigurableMainFrame that corresponds to the main
+	 * frame of the plugin {@code pluginName}.
+	 * 
+	 * @param pluginName Name of the plugin to load.
+	 * @return Main frame of the plugin
+	 */
 	public ConfigurableMainFrame loadPlugin(String pluginName){
 		return plugins_.get(pluginName).getMainFrame(controller_);
 	}
 	
+	/**
+	 * Returns an array of known plugin names.
+	 * 
+	 * @return Array of plugin names.
+	 */
 	public String[] getPluginList(){
 		String[] s =  plugins_.keySet().toArray(new String[0]);
 		Arrays.sort(s);

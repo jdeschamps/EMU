@@ -10,8 +10,6 @@ import java.util.List;
 
 import javax.swing.SwingWorker;
 
-import main.java.embl.rieslab.emu.tasks.Task;
-import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.utils.NMS;
 import mmcorej.CMMCore;

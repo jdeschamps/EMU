@@ -16,7 +16,6 @@ import main.java.embl.rieslab.emu.micromanager.MMRegistry;
 import main.java.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
 import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import main.java.embl.rieslab.emu.plugin.UIPluginLoader;
-import main.java.embl.rieslab.emu.tasks.TaskHolder;
 import main.java.embl.rieslab.emu.ui.EmptyPropertyMainFrame;
 import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
@@ -25,6 +24,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import main.java.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 
 /**
  * EMU controller class, bridging Micro-manager and the EMU UIPlugins using a configuration controller. 
