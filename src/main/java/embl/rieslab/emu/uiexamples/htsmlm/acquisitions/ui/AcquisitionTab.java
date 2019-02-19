@@ -440,7 +440,7 @@ public class AcquisitionTab extends JPanel {
 	 * @param filteredProperties Properties to add to the table
 	 * @param twostatedefault_ Default value for TwoStateProperties
 	 * @param propertyValues Property values of the current acquisition
-	 * @return
+	 * @return JPanel with the filtered UIProperties JTable.
 	 */
 	private JPanel createPropertyTable(String[] filteredProperties, boolean twostatedefault_, HashMap<String, String> propertyValues) {
 		JPanel pane = new JPanel();

@@ -24,7 +24,7 @@ public class BinaryConverter {
 	 * Tests if a string is represents 16bits.
 	 * 
 	 * @param s
-	 * @return
+	 * @return True if the string represents 16 bits, false otherwise.
 	 */
 	public static boolean is16bits(String s){
 		if(s.length() != 16){

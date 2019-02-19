@@ -16,7 +16,6 @@ public class StringMMProperty extends MMProperty<String> {
 	 * @param core Micro-manager core.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
-	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
 	public StringMMProperty(CMMCore core, String deviceLabel, String propertyLabel) {
 		super(core, deviceLabel, propertyLabel, true);

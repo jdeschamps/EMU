@@ -51,10 +51,10 @@ public class FixedStateUIProperty extends UIProperty {
 	}
 	
 	/**
-	 * Returns the value corresponding to state name. If the name is not amongst 
+	 * Returns the value corresponding to state name. If {@code statename} is not amongst 
 	 * the states, returns 0.
 	 * 
-	 * @param name The state name.
+	 * @param statename The state name.
 	 * @return The value of the state, or 0 if not found.
 	 */
 	public String getStateValue(String statename){

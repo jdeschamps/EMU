@@ -15,35 +15,35 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * {@link main.java.embl.rieslab.emu.ui.uiparameters.UIParameter} and {@link main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty}.
  * ConfigurablePanel subclasses should be instantiated within a {@link ConfigurableMainFrame}. The latter will collect their UIProperties, 
  * UIParameters and InternalProperties, and pass them on to the SystemController. 
- * 
+ * <p> 
  * Subclasses of ConfigurablePanel must implements few methods called in the ConfigurablePanel constructor in order to instantiate the
  * UIProperties ({@link #initializeProperties()}), UIParameters ({@link #initializeParameters()}) and InternalProperties ({@link #initializeInternalProperties()}), 
  * as well as setting up the JComponents in the JPanel (itself). All JComponent instantiations should happen in {@link #setupPanel()}. Note 
  * that this method is the last one to be called in the ConfigurablePanel constructor, therefore the JPanel set up can also take place in 
  * the subclass constructor equivalently.
- * 
+ * <p> 
  * UIProperties are aimed at linking the state of a MMProperty with the state of one or multiple JComponenents. InternalProperties are made to allow
  * shared values between ConfigurablePanels, such that a modification to one panel can trigger a change in the other panel. Finally, UIProperties
  * should only be used for user settings, such as changing the colors of JLabels or JButtons (to describe a filter or a laser) or the text of a header. 
  * All UIProperties and UIParameters appear in the {@link main.java.embl.rieslab.emu.configuration.ConfigurationWizard}. The user can then map the 
  * UIProperties with a MMProperty and change the value of a UIParameter. 
- * 
+ * <p> 
  * Modifications to the state of UIProperties and InternalProperties should not be done explicitly in the subclasses, but should be done through the 
  * abstraction methods: {@link #changeProperty(String, String)} and {@link #changeInternalProperty(String, String)}. UIParameters should not be modified
  * within the subclasses. Modifications of the JComponents based on UIProperties, UIParameters and InternalProperties changes take place in the subclasses 
  * implementation of {@link #propertyhasChanged(String, String)}, {@link #parameterhasChanged(String)} and {@link #internalpropertyhasChanged(String)} respectively.  
- *  
+ *  <p> 
  * For instance, a JToggleButton can be designed to turn on and off a laser. After declaration of the JToggleButton and addition to the panel in {@link #setupPanel()}, 
  * an eventListener can be added to the JToggleButton. The eventListener should then call {@link #changeProperty(String, String)} to modify the corresponding
  * UIProperty with a new value being on when the JToggleButton is selected, and an off value when the JToggleButton is unselected. More details can be found in
  * tutorials and the javadocs of the different UIProperties implementations.
- * 
+ * <p> 
  * Upon start up of the {@link main.java.embl.rieslab.emu.plugin.UIPlugin}, the {@link main.java.embl.rieslab.emu.controller.SystemController} will
- * pair up the UIProperties with {@link main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperties} and the latter's values will be propagated 
+ * pair up the UIProperties with {@link main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperty} and the latter's values will be propagated 
  * to the ConfigurablePanel via {@link #propertyhasChanged(String, String)}. Later on, changes to a MMProperty (for instance by another ConfigurablePanel)
  * will trigger the same method. The same mechanism is at play for the InternalProperties and the UIParameters. Note that the UIParameters are only changed
  * upon start up and when the user modifies the configuration through the {@link main.java.embl.rieslab.emu.configuration.ConfigurationWizard}. 
- * 
+ * <p> 
  * In addition, to avoid triggering {@link #changeProperty(String, String)} through the eventListener when modifying the state of a JComponent (as it might happen
  * depending on the eventListener type), {@link #turnOffComponentTriggering()} can be called in the beginning of the subclasses implementation of 
  * {@link #propertyhasChanged(String, String)} and {@link #turnOnComponentTriggering()} at the end. These methods change the state of an internal member
@@ -72,7 +72,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	private boolean componentTriggering_ = true;
 	
 	/**
-	 * Constructor. Calls the abstract methods {@link #initializeProperties()}, {@link #initializeParameters()}, 
+	 * Constructor, calls the abstract methods {@link #initializeProperties()}, {@link #initializeParameters()}, 
 	 * {@link #initializeInternalProperties()} and finally {@link #setupPanel()} (in that order).
 	 * 
 	 * @param label Label of the panel.
@@ -237,7 +237,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	}
 	
 	/**
-	 * Adds a {@link main.java.embl.rieslab.emu.ui.internalproperty.InternalProperty} to the internal HashMap
+	 * Adds a {@link main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty} to the internal HashMap
 	 * using the InternalProperty hash.
 	 * 
 	 * @param internalproperty InternalProperty to add
@@ -260,7 +260,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	}	
 	
 	/**
-	 * Updates the ConfigurablePanel for all UI parameters by calling {@link #triggerParameterHasChanged(String, String)} 
+	 * Updates the ConfigurablePanel for all UI parameters by calling {@link #triggerParameterHasChanged(String)} 
 	 * for each UIParameter.
 	 */
 	protected void updateAllParameters(){
@@ -335,7 +335,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	}
 	
 	/**
-	 * Calls {@link #parameterhasChanged(String, String)} on the EDT. This allows the subclasses of
+	 * Calls {@link #parameterhasChanged(String)} on the EDT. This allows the subclasses of
 	 * ConfigurablePanel to adjust its components based on the value of the UIParameter {@code parameterName}.
 	 * 
 	 * @param parameterName Name of the parameter

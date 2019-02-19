@@ -432,8 +432,8 @@ public abstract class MMProperty<T> {
 	protected abstract T convertToValue(String s);
 	
 	/**
-	 * Convert the int i to the MMProperty type.
-	 * @param s Integer to be converted
+	 * Convert the integer {@code i} to the MMProperty type.
+	 * @param i Integer to be converted
 	 * @return Converted value
 	 */
 	protected abstract T convertToValue(int i);

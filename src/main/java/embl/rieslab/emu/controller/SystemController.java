@@ -459,7 +459,7 @@ public class SystemController {
 	/** 
 	 * Returns Micro-manager CMMCore.
 	 * 
-	 * @return
+	 * @return Micro-manager CMMCore
 	 */
 	public CMMCore getCore(){
 		return studio_.getCMMCore();
@@ -468,7 +468,7 @@ public class SystemController {
 	/**
 	 * Returns Micro-Manager Studio.
 	 * 
-	 * @return
+	 * @return Micro-manager Studio
 	 */
 	public Studio getStudio(){
 		return studio_;
@@ -478,7 +478,7 @@ public class SystemController {
 	 * Returns the corresponding UIProperty.
 	 * 
 	 * @param name name of the UIProperty
-	 * @return
+	 * @return Corresponding UIProperty 
 	 */
 	public UIProperty getProperty(String name){ 
 		return mainframe_.getUIProperties().get(name);
@@ -487,7 +487,7 @@ public class SystemController {
 	/**
 	 * Returns a HashMap containing the name of the UIProperties (keys) and the corresponding UIProperties.
 	 * 
-	 * @return
+	 * @return HashMap of the UIProperties
 	 */
 	public HashMap<String, UIProperty> getPropertiesMap(){
 		return mainframe_.getUIProperties();

@@ -14,7 +14,7 @@ import main.java.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry
 import main.java.embl.rieslab.emu.ui.ConfigurableFrame;
 
 /**
- * Controller class for the configuration of the current UI. This class bridges the {@ main.java.embl.rieslab.emu.controller.SystemController}
+ * Controller class for the configuration of the current UI. This class bridges the {@link main.java.embl.rieslab.emu.controller.SystemController}
  * with the {@link ConfigurationWizard}, the {@link GlobalConfiguration}. The ConfigurationController starts the configuration wizard to allow
  * the user to modify the current configuration. It also contains inform the SystemController on the different configurations. Finally, it
  * calls the {@link ConfigurationIO} to read and write the configurations from/to files.
@@ -247,7 +247,7 @@ public class ConfigurationController {
 	/**
 	 * Sets the default configuration to {@code newDefault}.
 	 * 
-	 * @param configuration New default configuration.
+	 * @param newDefault New default configuration.
 	 * @return True if the configuration was changed, false otherwise.
 	 */
 	public boolean setDefaultConfiguration(String newDefault){
@@ -261,7 +261,7 @@ public class ConfigurationController {
 	/**
 	 * Returns the default configuration's name. Null if there is no configuration yet.
 	 * 
-	 * @return
+	 * @return Default configuration's name.
 	 */
 	public String getDefaultConfiguration(){
 		if(configuration_ == null){

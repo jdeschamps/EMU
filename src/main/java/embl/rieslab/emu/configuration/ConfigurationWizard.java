@@ -220,7 +220,7 @@ public class ConfigurationWizard {
 	 * Returns the entries of the property table as a HashMap with the keys being the UIProperty names or state names, and the 
 	 * values being the allocated MMProperty names or state values.
 	 * 
-	 * @return
+	 * @return HashMap of the UIProperty names or state names as keys and the mapped MMProperty names or state values.
 	 */
 	public HashMap<String, String> getWizardProperties() {
 		return prop_;
@@ -230,7 +230,7 @@ public class ConfigurationWizard {
 	 * Returns the entries of the parameter table as a HashMap with the keys being the UIParameter names and the values
 	 * being the parameter values.
 	 * 
-	 * @return
+	 * @return HashMap of the UIParameter names as keys and corresponding values.
 	 */
 	public HashMap<String, String> getWizardParameters() {
 		return param_;

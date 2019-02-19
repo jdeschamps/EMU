@@ -268,7 +268,7 @@ public class ParametersTable extends JPanel{
 	/**
 	 * Returns the map of the UIParameter names (keys) and their values (values).
 	 * 
-	 * @return
+	 * @return HashMap of the UIParameters
 	 */
 	public HashMap<String,String> getSettings(){
 		HashMap<String,String> settings = new HashMap<String,String>();

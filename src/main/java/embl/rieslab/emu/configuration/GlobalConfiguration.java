@@ -93,7 +93,7 @@ public class GlobalConfiguration {
 	 * 
 	 * @see GlobalConfigurationWrapper
 	 * 
-	 * @return
+	 * @return Wrapper.
 	 */
 	public GlobalConfigurationWrapper getGlobalConfigurationWrapper(){
 		GlobalConfigurationWrapper conf =  new GlobalConfigurationWrapper();
@@ -249,13 +249,13 @@ public class GlobalConfiguration {
 	}
 
 	/**
-	 * Set the values of the {@link GlobalSetting}s.
+	 * Set the values of the {@link main.java.embl.rieslab.emu.configuration.globalsettings.GlobalSetting}s.
 	 * 
-	 * @param globset_ A HashMap containing the String values of the settings indexed by their name. 
+	 * @param globalSettings A HashMap containing the String values of the settings indexed by their name. 
 	 */
-	public void setGlobalSettings(HashMap<String, String> globset_) {
+	public void setGlobalSettings(HashMap<String, String> globalSettings) {
 		// enable unallocated warnings
-		enableUnallocatedWarnings = Boolean.parseBoolean(globset_.get(KEY_ENABLEUNALLOCATEDWARNINGS));
+		enableUnallocatedWarnings = Boolean.parseBoolean(globalSettings.get(KEY_ENABLEUNALLOCATEDWARNINGS));
 	}
 
 	
