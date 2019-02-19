@@ -68,7 +68,7 @@ public class LasersMainFrame extends ConfigurableMainFrame{
 		this.add(lasers);
 	
         for(int i=0;i<controlPanels.length;i++){
-        	registerPropertyPanel(controlPanels[i]);
+        	registerConfigurablePanel(controlPanels[i]);
         }
     }
    

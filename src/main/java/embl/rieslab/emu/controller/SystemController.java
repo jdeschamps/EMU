@@ -191,7 +191,7 @@ public class SystemController {
 			currentPlugin = newPlugin;
 			
 			// close mainframe
-			mainframe_.shutDownAllPropertyPanels();
+			mainframe_.shutDownAllConfigurablePanels();
 			
 			mainframe_ = pluginloader_.loadPlugin(newPlugin);
 			
@@ -249,7 +249,7 @@ public class SystemController {
 		config.writeConfiguration(); // to set the default configuration in the confgiuration file.
 					
 		// closes mainframe
-		mainframe_.shutDownAllPropertyPanels();
+		mainframe_.shutDownAllConfigurablePanels();
 		
 		// empties mmproperties listeners
 		mmregistry_.getMMPropertiesRegistry().clearAllListeners();
@@ -378,7 +378,7 @@ public class SystemController {
 		readParameters(config.getParametersConfiguration());
 
 		// update all properties and parameters
-		mainframe_.updateAllPropertyPanels();
+		mainframe_.updateAllConfigurablePanels();
 		
 		// update menu
 		mainframe_.updateMenu();
@@ -410,7 +410,7 @@ public class SystemController {
 			config.shutDown();
 		}
 		if(mainframe_ != null){
-			mainframe_.shutDownAllPropertyPanels();
+			mainframe_.shutDownAllConfigurablePanels();
 		}
 	}
 	
@@ -494,12 +494,12 @@ public class SystemController {
 	}
 	
 	/**
-	 * Updates all properties and parameters by calling {@link main.java.embl.rieslab.emu.ui.ConfigurableMainFrame#updateAllPropertyPanels()}
+	 * Updates all properties and parameters by calling {@link main.java.embl.rieslab.emu.ui.ConfigurableMainFrame#updateAllConfigurablePanels()}
 	 * 
 	 */
 	public void update(){
 		if(mainframe_ != null){
-			mainframe_.updateAllPropertyPanels();
+			mainframe_.updateAllConfigurablePanels();
 		}
 	}
 

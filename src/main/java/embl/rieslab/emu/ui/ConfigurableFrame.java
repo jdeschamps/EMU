@@ -8,7 +8,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 public interface ConfigurableFrame {
 
-	public ArrayList<ConfigurablePanel> getPropertyPanels();
+	public ArrayList<ConfigurablePanel> getConfigurablePanels();
 	
 	public HashMap<String, UIProperty> getUIProperties();
 	

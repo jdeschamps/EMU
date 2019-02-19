@@ -46,9 +46,13 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	private HashMap<String, UIParameter> parameters_;
 	
 	/**
+	 * Constructor. It sets up the JMenu bar containing the menu items for launching the ConfigurationWizard and switching
+	 * plugin or configuration. It then calls the abstract method {@link #initComponents()}. Finally, it links the internal
+	 * properties together based on their name and retrieves all UIProperties and UIParameters from the ConfigurablePanels
+	 * instantiated and registered using {@link #registerConfigurablePanel(ConfigurablePanel)} in {@link #initComponents()}.
 	 * 
-	 * @param title
-	 * @param controller
+	 * @param title Title of the frame
+	 * @param controller EMU system controller
 	 */
 	public ConfigurableMainFrame(String title, SystemController controller){
 		controller_ = controller;
@@ -60,7 +64,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
     	this.addWindowListener(new WindowAdapter() {
     	    @Override
     	    public void windowClosing(WindowEvent e) {
-    	    	shutDownAllPropertyPanels();
+    	    	shutDownAllConfigurablePanels();
     	    }
     	});
 
@@ -71,7 +75,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	}
 
 	private void setUpMenu() {
-
 		JMenuBar mb=new JMenuBar(); 
         
 		JMenu menu = new JMenu("Menu");
@@ -108,20 +111,20 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         this.setJMenuBar(mb); 
 	}
 
-	// last time I simplified this part everything broke down. The UIProperties do not contain the 
+	// last time I simplified this part everything broke down. The UIProperties do not contain the name of the panel in their names so collision can happen
 	@SuppressWarnings("rawtypes")
 	private void retrieveUIPropertiesAndParameters() {
 		properties_ = new HashMap<String,UIProperty>();
 		parameters_ = new HashMap<String,UIParameter>();
 		
-		Iterator<ConfigurablePanel> it = this.getPropertyPanels().iterator();
+		Iterator<ConfigurablePanel> it = this.getConfigurablePanels().iterator();
 		ConfigurablePanel pan;
 		
 		while (it.hasNext()) { // loops over the PropertyPanel contained in the MainFrame
 			pan = it.next();
 			
 			// adds all the UIProperties, since their name contains their parent PropertyPanel name
-			// there is no collision <------------ Not true (split personnality comments), this depends on the panel!
+			// there is no collision <------------ Not true (split personnality comments), this depends on the panel?!
 			properties_.putAll(pan.getUIProperties()); 
 			 
 			// But here the UIParameters don't have the same hash!!!! So what is the point here:
@@ -151,19 +154,28 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		}	
 	}
 	
-	protected void registerPropertyPanel(ArrayList<ConfigurablePanel> panels){
-		panels_.addAll(panels);
+	/**
+	 * Adds {@code configurablePanel} to the internal List of {@link ConfigurablePanel}s.
+	 * 
+	 * @param configurablePanel ConfigurablePanel to add
+	 */
+	protected void registerConfigurablePanel(ConfigurablePanel configurablePanel){
+		panels_.add(configurablePanel);
 	}
 	
-	protected void registerPropertyPanel(ConfigurablePanel pan){
-		panels_.add(pan);
-	}
-	
-	public ArrayList<ConfigurablePanel> getPropertyPanels(){
+	/**
+	 * Returns the List of {@link ConfigurablePanel}s.
+	 */
+	public ArrayList<ConfigurablePanel> getConfigurablePanels(){
 		return panels_;
 	}
 	
-	public void updateAllPropertyPanels(){
+	/**
+	 * Updates all properties and parameters from each known ConfigurablePanel by calling 
+	 * {@link ConfigurablePanel#updateAllProperties()} and {@link ConfigurablePanel#updateAllParameters()}
+	 * on each panel.
+	 */
+	public void updateAllConfigurablePanels(){
 		Iterator<ConfigurablePanel> it = panels_.iterator();
 		ConfigurablePanel pan;
 		while(it.hasNext()){
@@ -174,7 +186,12 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		}
 	}
 	
-	public void shutDownAllPropertyPanels(){
+	/**
+	 * Shuts down all ConfigurablePanels by calling {@link ConfigurablePanel#shutDown()} on
+	 * each panel.
+	 * 
+	 */
+	public void shutDownAllConfigurablePanels(){
 		Iterator<ConfigurablePanel> it = panels_.iterator();
 		ConfigurablePanel pan;
 		while(it.hasNext()){
@@ -184,14 +201,25 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		this.dispose();
 	}
 
+	/**
+	 * Provides access the Micro-Manager CMMCore to subclasses.
+	 * 
+	 * @return Micro-Manager CMMCore.
+	 */
 	protected CMMCore getCore(){
 		return controller_.getCore();
 	}
 	
+	/**
+	 * Returns the EMU system controller.
+	 * 
+	 * @return EMU SystemController.
+	 */
 	protected SystemController getController(){
 		return controller_;
 	}
 	
+	// this has to be reviewed
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void linkInternalProperties(){
 		Iterator<ConfigurablePanel> panelsIt = panels_.iterator();
@@ -206,13 +234,14 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		String firstproperty, secondproperty;
 		while(propIt1.hasNext()){
 			firstproperty = propIt1.next();
-			if(!internalproperties.get(firstproperty).isAllocated()){
-				internalpropertiesCopy = (HashMap<String, InternalProperty>) internalproperties.clone();
+			if(!internalproperties.get(firstproperty).isAllocated()){ // should allow more than one to be mapped with it?
+				internalpropertiesCopy = (HashMap<String, InternalProperty>) internalproperties.clone(); // seems a bit stupid to always clone a hashmap. 
+				// I guess it is to remove the first one and check all the others
 				internalpropertiesCopy.remove(firstproperty);
 				propIt2 = internalpropertiesCopy.keySet().iterator();
 				while(propIt2.hasNext()){
 					secondproperty = propIt2.next();
-					if(internalproperties.get(secondproperty).getName().equals(internalproperties.get(firstproperty).getName())){
+					if(internalproperties.get(secondproperty).getName().equals(internalproperties.get(firstproperty).getName())){ // they are linked if they have the same name. How are they indexed?
 						String firstType = internalproperties.get(firstproperty).getType();
 						String secondType = internalproperties.get(secondproperty).getType();
 						if(firstType.equals(secondType)){
@@ -233,6 +262,10 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		
 	}
 	
+	/**
+	 * Updates the JMenu. In particular, the menu gives access to the other known plugins and configurations 
+	 * than the ones currently loaded. This method is called by the {@link main.java.embl.rieslab.emu.controller.SystemController}.
+	 */
 	public void updateMenu() {
 		switch_plugin.removeAll();
 		final String[] plugins = controller_.getOtherPluginsList();
@@ -263,17 +296,28 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		}
 	}
 
+	/**
+	 * Returns the Map of UIProperties indexed by their name.
+	 */
 	@Override
 	public HashMap<String, UIProperty> getUIProperties() {
 		return properties_;
 	}
-
+	
+	/**
+	 * Returns the Map of UIParameters indexed by their hash.
+	 */
 	@SuppressWarnings("rawtypes")
 	@Override
 	public HashMap<String, UIParameter> getUIParameters() {
 		return parameters_;
 	}
 
+	/**
+	 * Sets-up the ConfigurableMainFrame subclass. This method is called in the ConfigurableMainFrame constructor.
+	 * In this method, the subclasses should instantiate their ConfigurablePanels and register them using 
+	 * {@link #registerConfigurablePanel(ConfigurablePanel)}.
+	 */
 	protected abstract void initComponents();
 
 }

@@ -53,8 +53,8 @@ public class FocusLockMainFrame extends ConfigurableMainFrame{
 		this.add(focusPanel);
 		this.add(qpdPanel);
 
-       	registerPropertyPanel(focusPanel);
-       	registerPropertyPanel(qpdPanel);
+       	registerConfigurablePanel(focusPanel);
+       	registerConfigurablePanel(qpdPanel);
     }
    
 }
