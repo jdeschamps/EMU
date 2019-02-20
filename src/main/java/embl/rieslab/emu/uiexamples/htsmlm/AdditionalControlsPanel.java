@@ -180,35 +180,35 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_NAME1)){
-			String s = ((StringUIParameter) getUIParameter(PARAM_NAME1)).getValue();
+			String s = getStringUIParameterValue(PARAM_NAME1);
 			togglebuttons_[0].setText(s);
 			getUIProperty(DEVICE_1).setFriendlyName(s);
 		} else if(label.equals(PARAM_NAME2)){
-			String s = ((StringUIParameter) getUIParameter(PARAM_NAME2)).getValue();
+			String s = getStringUIParameterValue(PARAM_NAME2);
 			togglebuttons_[1].setText(s);
 			getUIProperty(DEVICE_2).setFriendlyName(s);
 		} else if(label.equals(PARAM_NAME3)){
-			String s = ((StringUIParameter) getUIParameter(PARAM_NAME3)).getValue();
+			String s = getStringUIParameterValue(PARAM_NAME3);
 			togglebuttons_[2].setText(s);
 			getUIProperty(DEVICE_3).setFriendlyName(s);
 		} else if(label.equals(PARAM_NAME4)){
-			String s = ((StringUIParameter) getUIParameter(PARAM_NAME4)).getValue();
+			String s = getStringUIParameterValue(PARAM_NAME4);
 			togglebuttons_[3].setText(s);
 			getUIProperty(DEVICE_4).setFriendlyName(s);
 		} else if(label.equals(PARAM_ENABLE1)){
-			boolean b = ((BoolUIParameter) getUIParameter(PARAM_ENABLE1)).getValue();
+			boolean b = getBoolUIParameterValue(PARAM_ENABLE1);
 			togglebuttons_[0].setEnabled(b);
 		} else if(label.equals(PARAM_ENABLE2)){
-			boolean b = ((BoolUIParameter) getUIParameter(PARAM_ENABLE2)).getValue();
+			boolean b = getBoolUIParameterValue(PARAM_ENABLE2);
 			togglebuttons_[1].setEnabled(b);
 		} else if(label.equals(PARAM_ENABLE3)){
-			boolean b = ((BoolUIParameter) getUIParameter(PARAM_ENABLE3)).getValue();
+			boolean b = getBoolUIParameterValue(PARAM_ENABLE3);
 			togglebuttons_[2].setEnabled(b);
 		} else if(label.equals(PARAM_ENABLE4)){
-			boolean b = ((BoolUIParameter) getUIParameter(PARAM_ENABLE4)).getValue();
+			boolean b = getBoolUIParameterValue(PARAM_ENABLE4);
 			togglebuttons_[3].setEnabled(b);
 		} else if(label.equals(PARAM_TITLE)){
-			border_.setTitle(getUIParameter(PARAM_TITLE).getStringValue());
+			border_.setTitle(getStringUIParameterValue(PARAM_TITLE));
 			this.repaint();
 		}
 	}

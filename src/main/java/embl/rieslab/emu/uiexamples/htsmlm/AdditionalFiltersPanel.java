@@ -265,23 +265,23 @@ public class AdditionalFiltersPanel extends ConfigurablePanel {
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM1_NAMES)){
-			names1_ = ((StringUIParameter) getUIParameter(PARAM1_NAMES)).getValue();
+			names1_ = getStringUIParameterValue(PARAM1_NAMES);
 			setNames(0);
 		} else if(label.equals(PARAM1_COLORS)){
-			colors1_ = ((StringUIParameter) getUIParameter(PARAM1_COLORS)).getValue();
+			colors1_ = getStringUIParameterValue(PARAM1_COLORS);
 			setColors(0);
 		} else if(label.equals(PARAM2_NAMES)){
-			names2_ = ((StringUIParameter) getUIParameter(PARAM2_NAMES)).getValue();
+			names2_ = getStringUIParameterValue(PARAM2_NAMES);
 			setNames(1);
 		} else if(label.equals(PARAM2_COLORS)){
-			colors2_ = ((StringUIParameter) getUIParameter(PARAM2_COLORS)).getValue();
+			colors2_ = getStringUIParameterValue(PARAM2_COLORS);
 			setColors(1);
 		} else if(label.equals(PARAM1_TITLE)){
-			title1_ = ((StringUIParameter) getUIParameter(PARAM1_TITLE)).getValue();
+			title1_ = getStringUIParameterValue(PARAM1_TITLE);
 			border1_.setTitle(title1_);
 			this.repaint();
 		} else if(label.equals(PARAM2_TITLE)){
-			title2_ = ((StringUIParameter) getUIParameter(PARAM2_TITLE)).getValue();
+			title2_ = getStringUIParameterValue(PARAM2_TITLE);
 			border2_.setTitle(title2_);
 			this.repaint();
 		}

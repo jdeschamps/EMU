@@ -12,7 +12,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.graph.Chart;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.updaters.ChartUpdater;
@@ -133,9 +133,9 @@ public class QPDPanel extends ConfigurablePanel {
 		zmax_ = 700;
 		idle_ = 100;
 		
-		addUIParameter(new IntUIParameter(this, PARAM_XYMAX,"Maximum X and Y signals value from the QPD to display.",xymax_));
-		addUIParameter(new IntUIParameter(this, PARAM_ZMAX,"Maximum Z signal value from the QPD to display.",zmax_));
-		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time (ms) of the QPD signals monitoring.",idle_)); // thread idle time
+		addUIParameter(new IntegerUIParameter(this, PARAM_XYMAX,"Maximum X and Y signals value from the QPD to display.",xymax_));
+		addUIParameter(new IntegerUIParameter(this, PARAM_ZMAX,"Maximum Z signal value from the QPD to display.",zmax_));
+		addUIParameter(new IntegerUIParameter(this, PARAM_IDLE,"Idle time (ms) of the QPD signals monitoring.",idle_)); // thread idle time
 	}
 
 	@Override
@@ -146,8 +146,9 @@ public class QPDPanel extends ConfigurablePanel {
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_XYMAX)){
-			if(((IntUIParameter) getUIParameter(PARAM_XYMAX)).getValue() != xymax_){
-				xymax_ = ((IntUIParameter) getUIParameter(PARAM_XYMAX)).getValue();
+			int val = getIntegerUIParameterValue(PARAM_XYMAX);
+			if(val != xymax_){
+				xymax_ = val;
 				graphpanel_.remove(graph_.getChart());
 				newGraph();
 				graphpanel_.add(graph_.getChart());
@@ -155,13 +156,15 @@ public class QPDPanel extends ConfigurablePanel {
 				chartupdater_.changeChart(graph_);
 			}
 		} else if(label.equals(PARAM_ZMAX)){
-			if(((IntUIParameter) getUIParameter(PARAM_ZMAX)).getValue() != zmax_){
-				zmax_ = ((IntUIParameter) getUIParameter(PARAM_ZMAX)).getValue();
+			int val = getIntegerUIParameterValue(PARAM_ZMAX);
+			if(val != zmax_){
+				zmax_ = val;
 				progressBar_.setMaximum(zmax_);
 			}
 		}else if(label.equals(PARAM_IDLE)){
-			if(((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue() != idle_){
-				idle_ = ((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue();
+			int val = getIntegerUIParameterValue(PARAM_IDLE);
+			if(val != idle_){
+				idle_ = val;
 				chartupdater_.changeIdleTime(idle_);
 				progressbarupdater_.changeIdleTime(idle_);
 			}

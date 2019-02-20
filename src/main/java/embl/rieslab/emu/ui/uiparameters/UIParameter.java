@@ -6,7 +6,6 @@ public abstract class UIParameter<T> {
 
 	private String name_;
 	private String description_;
-	protected UIParameterType type_;
 	private T value_;
 	private String ownername_;
 	
@@ -14,14 +13,8 @@ public abstract class UIParameter<T> {
 		ownername_ = owner.getLabel();
 		name_ = name;
 		description_ = description;
-		
-		setType();
 	}
 	
-	public String getType(){
-		return type_.getTypeValue();
-	}
-
 	public String getHash(){
 		return ownername_+" - "+name_;
 	}
@@ -52,17 +45,13 @@ public abstract class UIParameter<T> {
 		return false;
 	}
 	
-	public int getDepth(){
-		return 1;
-	}
-	
-	public abstract void setType();
+	public abstract UIParameterType getType();
 	public abstract boolean isSuitable(String val);
 	protected abstract T convertValue(String val);
 	public abstract String getStringValue();
 	
 	public enum UIParameterType { 
-		INTEGER("Integer"), DOUBLE("Double"), FLOAT("Float"), STRING("String"), COLOUR("Color"), BOOL("Boolean"), COMBO("COMBO"), UIPROPERTY("UIProperty"); 
+		INTEGER("Integer"), DOUBLE("Double"), FLOAT("Float"), STRING("String"), COLOR("Color"), BOOL("Boolean"), COMBO("COMBO"), UIPROPERTY("UIProperty"); 
 		
 		private String value; 
 		

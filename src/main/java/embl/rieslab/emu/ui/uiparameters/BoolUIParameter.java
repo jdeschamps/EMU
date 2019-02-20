@@ -12,8 +12,8 @@ public class BoolUIParameter extends UIParameter<Boolean>{
 	}
 
 	@Override
-	public void setType() {
-		type_ = UIParameterType.BOOL;
+	public UIParameterType getType() {
+		return UIParameterType.BOOL;
 	}
 
 	@Override

@@ -259,22 +259,23 @@ public class LaserTriggerPanel extends ConfigurablePanel {
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_TITLE)){
-			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
+			title_ = getStringUIParameterValue(PARAM_TITLE);
 			border_.setTitle(title_);
 			this.repaint();
 			getUIProperty(getLabel()+" "+TRIGGER_BEHAVIOUR).setFriendlyName(title_+" "+TRIGGER_BEHAVIOUR);
 			getUIProperty(getLabel()+" "+TRIGGER_SEQUENCE).setFriendlyName(title_+" "+TRIGGER_SEQUENCE);
 			getUIProperty(getLabel()+" "+PULSE_LENGTH).setFriendlyName(title_+" "+PULSE_LENGTH);
 		} else if(label.equals(PARAM_COLOR)){
-			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
+			color_ = getColorUIParameterValue(PARAM_COLOR);
 			border_.setTitleColor(color_);
 			this.repaint();
 		} else if(label.equals(PARAM_DEF_BEHAVIOUR)){
-			behaviour_ = ((ComboUIParameter) getUIParameter(PARAM_DEF_BEHAVIOUR)).getValue();
+			behaviour_ = getComboUIParameterValue(PARAM_DEF_BEHAVIOUR);
 			combobehaviour_.setSelectedItem(behaviour_); // triggers the action listener
 		} else if(label.equals(PARAM_DEF_SEQUENCE)){
-			if(BinaryConverter.is16bits(((StringUIParameter) getUIParameter(PARAM_DEF_SEQUENCE)).getValue())){
-				sequence_ = ((StringUIParameter) getUIParameter(PARAM_DEF_SEQUENCE)).getValue();
+			String newval = getStringUIParameterValue(PARAM_DEF_SEQUENCE);
+			if(BinaryConverter.is16bits(newval)){
+				sequence_ = newval;
 				textfieldsequence_.setText(sequence_);
 				setUIPropertyValue(TRIGGER_SEQUENCE,String.valueOf(BinaryConverter.getDecimal16bits(sequence_))); // setting text on JTextField does not trigger the action listeners in this case
 			}

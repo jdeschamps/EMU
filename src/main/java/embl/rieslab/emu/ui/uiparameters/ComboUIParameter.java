@@ -13,14 +13,14 @@ public class ComboUIParameter extends UIParameter<String> {
 		combovalues_ = combovalues;
 		if(ind<combovalues_.length){
 			setValue(combovalues_[ind]);
-		}else {
+		} else {
 			setValue(combovalues_[0]);
 		}
 	}
 
 	@Override
-	public void setType() {
-		type_ = UIParameterType.COMBO;
+	public UIParameterType getType() {
+		return UIParameterType.COMBO;
 	}
 
 	@Override

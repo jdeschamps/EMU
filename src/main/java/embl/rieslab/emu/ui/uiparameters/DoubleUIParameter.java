@@ -12,9 +12,10 @@ public class DoubleUIParameter extends UIParameter<Double> {
 		setValue(val);
 	}
 
+
 	@Override
-	public void setType() {
-		type_ = UIParameterType.DOUBLE;
+	public UIParameterType getType() {
+		return UIParameterType.DOUBLE;
 	}
 
 	@Override

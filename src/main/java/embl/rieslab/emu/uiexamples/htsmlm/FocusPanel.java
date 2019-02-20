@@ -23,7 +23,7 @@ import javax.swing.border.TitledBorder;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
-import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
@@ -398,8 +398,8 @@ public class FocusPanel extends ConfigurablePanel {
 		
 		addUIParameter(new DoubleUIParameter(this, PARAM_LARGESTEP,"Default value for large z stage step.",largestep_));
 		addUIParameter(new DoubleUIParameter(this, PARAM_SMALLSTEP,"Default value for small z stage step.",smallstep_));
-		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time in ms of the stage position monitoring.",idle_)); // thread idle time
-		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
+		addUIParameter(new IntegerUIParameter(this, PARAM_IDLE,"Idle time in ms of the stage position monitoring.",idle_)); // thread idle time
+		addUIParameter(new IntegerUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
 	}
 
 	@Override
@@ -425,19 +425,21 @@ public class FocusPanel extends ConfigurablePanel {
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_LARGESTEP)){
-			largestep_ = ((DoubleUIParameter) getUIParameter(PARAM_LARGESTEP)).getValue();
+			largestep_ = getDoubleUIParameterValue(PARAM_LARGESTEP);
 			textfieldLargeStep_.setText(String.valueOf(largestep_));
 		} else if(label.equals(PARAM_SMALLSTEP)){
-			smallstep_ = ((DoubleUIParameter) getUIParameter(PARAM_SMALLSTEP)).getValue();
+			smallstep_ = getDoubleUIParameterValue(PARAM_SMALLSTEP);
 			textfieldSmallStep_.setText(String.valueOf(smallstep_));
 		}else if(label.equals(PARAM_IDLE)){
-			if(((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue() != idle_){
-				idle_ = ((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue();
+			int val = getIntegerUIParameterValue(PARAM_IDLE);
+			if(val != idle_){
+				idle_ = val;
 				updater_.changeIdleTime(idle_);
 			}
 		}else if(label.equals(PARAM_NPOS)){
-			if(((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue() != npos_){
-				npos_ = ((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue();
+			int val = getIntegerUIParameterValue(PARAM_NPOS);
+			if(val != npos_){
+				npos_ = val;
 				panelGraph_.remove(graph_.getChart());
 				newGraph();
 				panelGraph_.add(graph_.getChart());

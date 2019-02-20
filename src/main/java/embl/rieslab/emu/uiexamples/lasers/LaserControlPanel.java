@@ -21,7 +21,7 @@ import javax.swing.border.TitledBorder;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
-import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
@@ -265,7 +265,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
 		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Laser color.",color_));
-		addUIParameter(new IntUIParameter(this, PARAM_SCALING,"Maximum value of the laser percentage after scaling.",scaling_));
+		addUIParameter(new IntegerUIParameter(this, PARAM_SCALING,"Maximum value of the laser percentage after scaling.",scaling_));
 	}
 
 	@Override
@@ -307,17 +307,17 @@ public class LaserControlPanel extends ConfigurablePanel {
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_TITLE)){
-			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
+			title_ = getStringUIParameterValue(PARAM_TITLE);
 			border_.setTitle(title_);
 			this.repaint();
 			getUIProperty(getLabel()+" "+LASER_PERCENTAGE).setFriendlyName(title_+" "+LASER_PERCENTAGE);
 			getUIProperty(getLabel()+" "+LASER_OPERATION).setFriendlyName(title_+" "+LASER_OPERATION);
 		} else if(label.equals(PARAM_COLOR)){
-			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
+			color_ = getColorUIParameterValue(PARAM_COLOR);
 			border_.setTitleColor(color_);
 			this.repaint();
 		}else if(label.equals(PARAM_SCALING)){
-			scaling_ = ((IntUIParameter) getUIParameter(PARAM_SCALING)).getValue();
+			scaling_ = getIntegerUIParameterValue(PARAM_SCALING);
 		}
 	}
 

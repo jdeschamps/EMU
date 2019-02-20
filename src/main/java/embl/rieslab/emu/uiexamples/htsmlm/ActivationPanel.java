@@ -27,7 +27,7 @@ import javax.swing.SwingUtilities;
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
-import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.graph.TimeChart;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.ActivationTask;
@@ -541,8 +541,8 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 		
 		addUIParameter(new DoubleUIParameter(this, PARAM_DEF_SD,"Default value of the cutoff coefficient.",sdcoeff_));
 		addUIParameter(new DoubleUIParameter(this, PARAM_DEF_FB,"Default value of the activation feedback coefficient.",feedback_));
-		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time (ms) of the stage position monitoring.",idletime_)); // thread idle time
-		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
+		addUIParameter(new IntegerUIParameter(this, PARAM_IDLE,"Idle time (ms) of the stage position monitoring.",idletime_)); // thread idle time
+		addUIParameter(new IntegerUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
 	}
 
 	@Override
@@ -553,19 +553,21 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_DEF_SD)){
-			sdcoeff_ = ((DoubleUIParameter) getUIParameter(PARAM_DEF_SD)).getValue();
+			sdcoeff_ = getDoubleUIParameterValue(PARAM_DEF_SD);
 			textfieldsdcoeff_.setText(String.valueOf(sdcoeff_));
 		} else if(label.equals(PARAM_DEF_FB)){
-			feedback_ = ((DoubleUIParameter) getUIParameter(PARAM_DEF_FB)).getValue();
+			feedback_ = getDoubleUIParameterValue(PARAM_DEF_FB);
 			textfieldfeedback_.setText(String.valueOf(feedback_));
 		}else if(label.equals(PARAM_IDLE)){
-			if(((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue() != idletime_){
-				idletime_ = ((IntUIParameter) getUIParameter(PARAM_IDLE)).getValue();
+			int val = getIntegerUIParameterValue(PARAM_IDLE);
+			if(val != idletime_){
+				idletime_ = val;
 				task_.setIdleTime(idletime_);
 			}
 		}else if(label.equals(PARAM_NPOS)){
-			if(((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue() != npos_){
-				npos_ = ((IntUIParameter) getUIParameter(PARAM_NPOS)).getValue();
+			int val = getIntegerUIParameterValue(PARAM_NPOS);
+			if(val != npos_){
+				npos_ = val;
 				graphpane_.remove(graph_.getChart());
 				newGraph();
 				graphpane_.add(graph_.getChart());

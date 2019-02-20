@@ -409,11 +409,11 @@ public class AcquisitionPanel extends ConfigurablePanel{
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_BFP)){
-			paramBFP_ = ((UIPropertyParameter) getUIParameter(PARAM_BFP)).getValue();
+			paramBFP_ = getUIPropertyParameterValue(PARAM_BFP);
 		} else if(label.equals(PARAM_LOCKING)){
-			paramLocking_ = ((UIPropertyParameter) getUIParameter(PARAM_LOCKING)).getValue();
+			paramLocking_ = getUIPropertyParameterValue(PARAM_LOCKING);
 		} else if(label.equals(PARAM_BRIGHTFIELD)){
-			paramBrightField_ = ((UIPropertyParameter) getUIParameter(PARAM_BRIGHTFIELD)).getValue();
+			paramBrightField_ = getUIPropertyParameterValue(PARAM_BRIGHTFIELD);
 		}
 	}
 	

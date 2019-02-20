@@ -21,7 +21,7 @@ import javax.swing.border.TitledBorder;
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
-import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.CameraExpFlag;
@@ -30,9 +30,6 @@ import main.java.embl.rieslab.emu.utils.utils;
 
 public class LaserPulsingPanel extends ConfigurablePanel {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1379090644780233443L;
 
 	//////// Components
@@ -231,7 +228,7 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 		
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
 		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Default value for large z stage step.",color_));
-		addUIParameter(new IntUIParameter(this, PARAM_DEFAULT_MAX,"Default maximum value for the activation laser pulse length.",maxpulse_));
+		addUIParameter(new IntegerUIParameter(this, PARAM_DEFAULT_MAX,"Default maximum value for the activation laser pulse length.",maxpulse_));
 	}
 
 	@Override
@@ -268,15 +265,15 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_TITLE)){
-			title_ = ((StringUIParameter) getUIParameter(PARAM_TITLE)).getValue();
+			title_ = getStringUIParameterValue(PARAM_TITLE);
 			border_.setTitle(title_);
 			this.repaint();
 		} else if(label.equals(PARAM_COLOR)){
-			color_ = ((ColorUIParameter) getUIParameter(PARAM_COLOR)).getValue();
+			color_ = getColorUIParameterValue(PARAM_COLOR);
 			border_.setTitleColor(color_);
 			this.repaint();
 		} else if(label.equals(PARAM_DEFAULT_MAX)){
-			maxpulse_ = ((IntUIParameter) getUIParameter(PARAM_DEFAULT_MAX)).getValue();
+			maxpulse_ = getIntegerUIParameterValue(PARAM_DEFAULT_MAX);
 			logslider_.setMaxWithin(maxpulse_);
 			if (logslider_.getValue() > logslider_.getMaxWithin()) {
 				logslider_.setValueWithin(logslider_.getMaxWithin());

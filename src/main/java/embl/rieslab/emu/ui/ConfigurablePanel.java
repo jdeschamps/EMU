@@ -1,5 +1,6 @@
 package main.java.embl.rieslab.emu.ui;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -11,7 +12,15 @@ import main.java.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
 import main.java.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty;
 import main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty.InternalPropertyType;
+import main.java.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter.UIParameterType;
+import main.java.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 /**
@@ -129,21 +138,6 @@ public abstract class ConfigurablePanel extends JPanel{
 	}	
 		
 	/**
-	 * Returns the {@link main.java.embl.rieslab.emu.ui.uiparameters.UIParameter} named {@code parameterName}.
-	 * Since the UI parameters are stored in a HashMap with their hashes as keys, this method takes the name of 
-	 * the parameter and searches the HashMap for the hash {this panel's label}-{parameterName}. 
-	 * 
-	 * @param parameterName Name of the UIParameter
-	 * @return Corresponding UIParameter, null if it doesn't exist.
-	 */
-	protected UIParameter getUIParameter(String parameterName){
-		if(parameters_.containsKey(getLabel()+" "+parameterName)){
-			return parameters_.get(getLabel()+" "+parameterName);
-		}
-		return null;
-	}
-	
-	/**
 	 * Returns the {@link main.java.embl.rieslab.emu.ui.uiproperties.UIProperty} named {@code propertyName}.
 	 * 
 	 * @param propertyName Name of the UIProperty
@@ -214,7 +208,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected void setInternalPropertyValue(String propertyName, int newValue){
 		// runs on EDT, is this a problem?
 		if (internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.INTEGER) == 0) {
+				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.INTEGER)) {
 			((IntegerInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
 		}
 	}
@@ -229,7 +223,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected void setInternalPropertyValue(String propertyName, boolean newValue){
 		// runs on EDT, is this a problem?
 		if (internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.BOOLEAN) == 0) {
+				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.BOOLEAN)) {
 			((BoolInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
 		}
 	}
@@ -244,21 +238,21 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected void setInternalPropertyValue(String propertyName, double newValue){
 		// runs on EDT, is this a problem?
 		if (internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.DOUBLE) == 0) {
+				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.DOUBLE)) {
 			((DoubleInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
 		}
 	}
 
 	/**
 	 * Returns the value of the IntegerInternalProperty called {@code propertyName}.
-	 * If {@code propertyName} doesn't exist or is not an IntegerInternalProperty, nothing happens.
+	 * If {@code propertyName} doesn't exist or is not an IntegerInternalProperty, returns 0.
 	 * 
-	 * @param propertyName name of the property
-	 * @return Value of the InternalProperty
+	 * @param propertyName Name of the property
+	 * @return Value of the InternalProperty, or 0 if it doesn't exists.
 	 */
 	protected int getIntegerInternalPropertyValue(String propertyName) {
 		if(internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.INTEGER) == 0) {
+				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.INTEGER)) {
 			return ((IntegerInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
 		}
 		return 0;
@@ -266,14 +260,14 @@ public abstract class ConfigurablePanel extends JPanel{
 	
 	/**
 	 * Returns the value of the BoolInternalProperty called {@code propertyName}.
-	 * If {@code propertyName} doesn't exist or is not an BoolInternalProperty, nothing happens.
+	 * If {@code propertyName} doesn't exist or is not an BoolInternalProperty, returns false.
 	 * 
-	 * @param propertyName name of the property
-	 * @return Value of the InternalProperty
+	 * @param propertyName Name of the property
+	 * @return Value of the InternalProperty, or false if it doesn't exists.
 	 */
 	protected boolean getBoolInternalPropertyValue(String propertyName) {
 		if(internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.BOOLEAN) == 0) {
+				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.BOOLEAN)) {
 			return ((BoolInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
 		}
 		return false;
@@ -281,18 +275,125 @@ public abstract class ConfigurablePanel extends JPanel{
 	
 	/**
 	 * Returns the value of the DoubleInternalProperty called {@code propertyName}.
-	 * If {@code propertyName} doesn't exist or is not an DoubleInternalProperty, nothing happens.
+	 * If {@code propertyName} doesn't exist or is not an DoubleInternalProperty, returns 0.
 	 * 
-	 * @param propertyName name of the property
-	 * @return Value of the InternalProperty
+	 * @param propertyName Name of the property
+	 * @return Value of the InternalProperty, or 0 if it doesn't exists.
 	 */
 	protected double getDoubleInternalPropertyValue(String propertyName) {
 		if(internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.DOUBLE) == 0) {
+				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.DOUBLE)) {
 			return ((DoubleInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
 		}
 		return 0.;
 	}
+	
+	/**
+	 * Returns the value of the DoubleUIParameter called {@code parameterName}. If no such UIParameter exists
+	 * then returns 0.
+	 * 
+	 * @param parameterName Name of the parameter
+	 * @return Value of the UIParameter, or 0 if it doesn't exist.
+	 */
+	protected double getDoubleUIParameterValue(String parameterName) {
+		if(parameters_.containsKey(parameterName)
+				&& parameters_.get(parameterName).getType().equals(UIParameterType.DOUBLE)) {
+			return ((DoubleUIParameter) parameters_.get(parameterName)).getValue();
+		}
+		return 0.;
+	}
+
+	
+	/**
+	 * Returns the value of the BoolUIParameter called {@code parameterName}. If no such UIParameter exists
+	 * then returns false.
+	 * 
+	 * @param parameterName Name of the parameter
+	 * @return Value of the UIParameter, or false if it doesn't exist.
+	 */
+	protected boolean getBoolUIParameterValue(String parameterName) {
+		if(parameters_.containsKey(parameterName)
+				&& parameters_.get(parameterName).getType().equals(UIParameterType.BOOL)) {
+			return ((BoolUIParameter) parameters_.get(parameterName)).getValue();
+		}
+		return false;
+	}
+
+	/**
+	 * Returns the value of the ColorUIParameter called {@code parameterName}. If no such UIParameter exists
+	 * then returns black.
+	 * 
+	 * @param parameterName Name of the parameter
+	 * @return Value of the UIParameter, or black if it doesn't exist.
+	 */
+	protected Color getColorUIParameterValue(String parameterName) {
+		if(parameters_.containsKey(parameterName)
+				&& parameters_.get(parameterName).getType().equals(UIParameterType.COLOR)) {
+			return ((ColorUIParameter) parameters_.get(parameterName)).getValue();
+		}
+		return Color.black;
+	}
+
+	/**
+	 * Returns the value of the ComboUIParameter called {@code parameterName}. If no such UIParameter exists
+	 * then returns an empty String.
+	 * 
+	 * @param parameterName Name of the parameter
+	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
+	 */
+	protected String getComboUIParameterValue(String parameterName) {
+		if(parameters_.containsKey(parameterName)
+				&& parameters_.get(parameterName).getType().equals(UIParameterType.COMBO)) {
+			return ((ComboUIParameter) parameters_.get(parameterName)).getValue();
+		}
+		return "";
+	}
+
+	/**
+	 * Returns the value of the IntegerUIParameter called {@code parameterName}. If no such UIParameter exists
+	 * then returns 0.
+	 * 
+	 * @param parameterName Name of the parameter
+	 * @return Value of the UIParameter, or 0 if it doesn't exist.
+	 */
+	protected int getIntegerUIParameterValue(String parameterName) {
+		if(parameters_.containsKey(parameterName)
+				&& parameters_.get(parameterName).getType().equals(UIParameterType.INTEGER)) {
+			return ((IntegerUIParameter) parameters_.get(parameterName)).getValue();
+		}
+		return 0;
+	}
+
+	/**
+	 * Returns the value of the StringUIParameter called {@code parameterName}. If no such UIParameter exists
+	 * then returns an empty String.
+	 * 
+	 * @param parameterName Name of the parameter
+	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
+	 */
+	protected String getStringUIParameterValue(String parameterName) {
+		if(parameters_.containsKey(parameterName)
+				&& parameters_.get(parameterName).getType().equals(UIParameterType.STRING)) {
+			return ((StringUIParameter) parameters_.get(parameterName)).getValue();
+		}
+		return "";
+	}
+
+	/**
+	 * Returns the value of the UIPropertyParameter called {@code parameterName}. If no such UIParameter exists
+	 * then returns 0.
+	 * 
+	 * @param parameterName Name of the parameter
+	 * @return Value of the UIParameter, or 0 if it doesn't exist.
+	 */
+	protected String getUIPropertyParameterValue(String parameterName) {
+		if(parameters_.containsKey(parameterName)
+				&& parameters_.get(parameterName).getType().equals(UIParameterType.UIPROPERTY)) {
+			return ((UIPropertyParameter) parameters_.get(parameterName)).getValue();
+		}
+		return UIPropertyParameter.NO_PROPERTY;
+	}
+	
 
 	/**
 	 * Adds a {@link main.java.embl.rieslab.emu.ui.uiproperties.UIProperty} to the internal HashMap

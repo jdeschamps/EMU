@@ -154,10 +154,10 @@ public class FiltersPanel extends ConfigurablePanel {
 	@Override
 	public void parameterhasChanged(String label) {
 		if(label.equals(PARAM_NAMES)){
-			names_ = ((StringUIParameter) getUIParameter(PARAM_NAMES)).getValue();
+			names_ = getStringUIParameterValue(PARAM_NAMES);
 			setNames();
 		} else if(label.equals(PARAM_COLORS)){
-			colors_ = ((StringUIParameter) getUIParameter(PARAM_COLORS)).getValue();
+			colors_ = getStringUIParameterValue(PARAM_COLORS);
 			setColors();
 		}
 	}

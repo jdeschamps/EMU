@@ -14,9 +14,10 @@ public class ColorUIParameter extends UIParameter<Color>{
 		setValue(value);
 	}
 	
+
 	@Override
-	public void setType() {
-		type_ = UIParameterType.COLOUR;
+	public UIParameterType getType() {
+		return UIParameterType.COLOR;
 	}
 
 	@Override

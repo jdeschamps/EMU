@@ -11,8 +11,8 @@ public class StringUIParameter extends UIParameter<String>{
 	}
 
 	@Override
-	public void setType() {
-		type_ = UIParameterType.STRING;
+	public UIParameterType getType() {
+		return UIParameterType.STRING;
 	}
 
 	@Override

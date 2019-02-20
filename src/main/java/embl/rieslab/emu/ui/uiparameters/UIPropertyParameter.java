@@ -18,8 +18,8 @@ public class UIPropertyParameter extends UIParameter<String>{
 	}
 	
 	@Override
-	public void setType() {
-		type_ = UIParameterType.UIPROPERTY;
+	public UIParameterType getType() {
+		return UIParameterType.UIPROPERTY;
 	}
 
 	@Override
