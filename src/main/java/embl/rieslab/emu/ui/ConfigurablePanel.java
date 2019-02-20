@@ -279,12 +279,16 @@ public abstract class ConfigurablePanel extends JPanel{
 		return label_;
 	}
 
-	// TODO
-	protected void substituteParameter(String param, UIParameter uiParameter) {
-		System.out.println("Call to substitute Parameter: how often does this happen?");
-		// UIParamters have a "unique" hash, so they should not collide, so this method is useless. Is it the case with htSMLM?
-		parameters_.remove(param);
-		parameters_.put(param, uiParameter);
+	/**
+	 * Substitute the parameter indexed by {@code paramHash} with {@code uiParameter}. This is used to resolve collisions
+	 * between two parameters with same hash: their respective ConfigurablePanel owners then share the same UIParameter.
+	 * 
+	 * @param paramHash
+	 * @param uiParameter
+	 */
+	protected void substituteParameter(String paramHash, UIParameter uiParameter) {
+		parameters_.remove(paramHash);
+		parameters_.put(paramHash, uiParameter);
 	}
 	
 	/**

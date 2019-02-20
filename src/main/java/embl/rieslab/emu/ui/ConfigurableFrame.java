@@ -6,6 +6,12 @@ import java.util.HashMap;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
+/**
+ * Interface giving access to a list of {@link ConfigurablePanel}s and maps of UIProperties and UIparameters.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public interface ConfigurableFrame {
 
 	public ArrayList<ConfigurablePanel> getConfigurablePanels();

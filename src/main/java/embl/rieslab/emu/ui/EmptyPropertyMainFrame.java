@@ -10,6 +10,12 @@ import main.java.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
+/**
+ * Empty ConfigurableMainFrame. Used when no plugin is found.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 
 	private static final long serialVersionUID = -1840416249969324418L;

@@ -20,22 +20,20 @@ import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalProperty;
 import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalPropertyValue;
 import main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty;
-import main.java.embl.rieslab.emu.ui.internalproperties.InternalPropertyType;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
 /**
- * 
+ * Class representing the main JFrame of a {@link main.java.embl.rieslab.emu.plugin.UIPlugin}. Subclasses must
+ * implement the {@link #initComponents()} method, in which the {@link ConfigurablePanel}s must be instantiated
+ * and registered using {@link #registerConfigurablePanel(ConfigurablePanel)}.
  * 
  * @author Joran Deschamps
  *
  */
 public abstract class ConfigurableMainFrame extends JFrame implements ConfigurableFrame{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6852560487523093601L;
 
 	private ArrayList<ConfigurablePanel> panels_;
@@ -46,10 +44,8 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	private HashMap<String, UIParameter> parameters_;
 	
 	/**
-	 * Constructor. It sets up the JMenu bar containing the menu items for launching the ConfigurationWizard and switching
-	 * plugin or configuration. It then calls the abstract method {@link #initComponents()}. Finally, it links the internal
-	 * properties together based on their name and retrieves all UIProperties and UIParameters from the ConfigurablePanels
-	 * instantiated and registered using {@link #registerConfigurablePanel(ConfigurablePanel)} in {@link #initComponents()}.
+	 * Constructor, it sets up the JMenu, calls {@link #initComponents()} from the subclass, then links InternaProperties and
+	 * gather UIPropertiers and UIParameters.
 	 * 
 	 * @param title Title of the frame
 	 * @param controller EMU system controller
@@ -111,7 +107,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         this.setJMenuBar(mb); 
 	}
 
-	// last time I simplified this part everything broke down. The UIProperties do not contain the name of the panel in their names so collision can happen
+
 	@SuppressWarnings("rawtypes")
 	private void retrieveUIPropertiesAndParameters() {
 		properties_ = new HashMap<String,UIProperty>();
@@ -123,14 +119,15 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		while (it.hasNext()) { // loops over the PropertyPanel contained in the MainFrame
 			pan = it.next();
 			
-			// adds all the UIProperties, since their name contains their parent PropertyPanel name
-			// there is no collision <------------ Not true (split personnality comments), this depends on the panel?!
+			// adds all the UIProperties, if there is collision the last one is kept. Thus, when writing
+			// a plugin, one needs to be aware of this.
 			properties_.putAll(pan.getUIProperties()); 
 			 
-			// But here the UIParameters don't have the same hash!!!! So what is the point here:
 			
 			// adds all the UIParameters, in case of collision the first UIParameter has priority
 			// and substituted to the second UIParameter in its owner PropertyPanel: "same name" = "same parameter"
+			// Because UIParameters do not update their ConfigurablePanel owner by themselves, then by doing so
+			// we obtain a shared Parameter.
 			HashMap<String,UIParameter> panparam = pan.getUIParameters();
 			Iterator<String> paramit = panparam.keySet().iterator();
 			ArrayList<String> subst = new ArrayList<String>();
@@ -245,13 +242,13 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 						String firstType = internalproperties.get(firstproperty).getType();
 						String secondType = internalproperties.get(secondproperty).getType();
 						if(firstType.equals(secondType)){
-							if(firstType.equals(InternalPropertyType.INTEGER.getTypeValue())){
+							if(firstType.equals(InternalProperty.InternalPropertyType.INTEGER.getTypeValue())){
 								IntInternalPropertyValue val = new IntInternalPropertyValue(((IntInternalProperty) internalproperties.get(firstproperty)).getDefaultValue());
 								((IntInternalProperty) internalproperties.get(firstproperty)).linkValue(val);
 								((IntInternalProperty) internalproperties.get(secondproperty)).linkValue(val);
-							} else if(firstType.equals(InternalPropertyType.DOUBLE.getTypeValue())){
+							} else if(firstType.equals(InternalProperty.InternalPropertyType.DOUBLE.getTypeValue())){
 								// TODO
-							} else if(firstType.equals(InternalPropertyType.STRING.getTypeValue())){
+							} else if(firstType.equals(InternalProperty.InternalPropertyType.STRING.getTypeValue())){
 								// TODO
 							}
 						}
@@ -263,8 +260,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	}
 	
 	/**
-	 * Updates the JMenu. In particular, the menu gives access to the other known plugins and configurations 
-	 * than the ones currently loaded. This method is called by the {@link main.java.embl.rieslab.emu.controller.SystemController}.
+	 * Updates the JMenu, called when loading a new Plugin or a new Configuration. 
 	 */
 	public void updateMenu() {
 		switch_plugin.removeAll();
@@ -314,8 +310,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	}
 
 	/**
-	 * Sets-up the ConfigurableMainFrame subclass. This method is called in the ConfigurableMainFrame constructor.
-	 * In this method, the subclasses should instantiate their ConfigurablePanels and register them using 
+	 * Sets-up the frame, in this method the subclasses should instantiate the ConfigurablePanels and register them using 
 	 * {@link #registerConfigurablePanel(ConfigurablePanel)}.
 	 */
 	protected abstract void initComponents();
