@@ -2,14 +2,15 @@ package main.java.embl.rieslab.emu.ui.uiparameters;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
 public class UIPropertyParameter extends UIParameter<String>{
 	
 	public static String NO_PROPERTY = "None";
 	
-	private String propertyflag_;
+	private PropertyFlag propertyflag_;
 
-	public UIPropertyParameter(ConfigurablePanel owner, String name, String description, String propertyflag) {
+	public UIPropertyParameter(ConfigurablePanel owner, String name, String description, PropertyFlag propertyflag) {
 		super(owner, name, description);
 		
 		propertyflag_ = propertyflag;
@@ -37,7 +38,7 @@ public class UIPropertyParameter extends UIParameter<String>{
 		return getValue();
 	}
 	
-	public String getPropertyFlag(){
+	public PropertyFlag getFlag(){
 		return propertyflag_;
 	}
 }

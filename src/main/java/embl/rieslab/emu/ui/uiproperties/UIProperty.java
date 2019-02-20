@@ -143,8 +143,8 @@ public class UIProperty {
 		return null;
 	}
 	
-	public String getFlag(){
-		return flag_.getPropertyFlag();
+	public PropertyFlag getFlag(){
+		return flag_;
 	}
 	
 	public boolean isValueAllowed(String val){

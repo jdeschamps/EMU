@@ -391,9 +391,9 @@ public class AcquisitionPanel extends ConfigurablePanel{
 		paramLocking_ = UIPropertyParameter.NO_PROPERTY;
 		paramBrightField_ = UIPropertyParameter.NO_PROPERTY;	
 		
-		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens.", TwoStateFlag.TWOSTATE_FLAG));
-		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.", FocusStabFlag.FOCUSSTAB_FLAG)); 
-		addUIParameter(new UIPropertyParameter(this, PARAM_BRIGHTFIELD,"UIProperty corresponding to the triggering of the white light illumination.", TwoStateFlag.TWOSTATE_FLAG)); 
+		addUIParameter(new UIPropertyParameter(this, PARAM_BFP,"UIProperty corresponding to the insertion of the BFP lens.", new TwoStateFlag()));
+		addUIParameter(new UIPropertyParameter(this, PARAM_LOCKING,"UIProperty corresponding to the locking of the focus stabilization.", new FocusStabFlag())); 
+		addUIParameter(new UIPropertyParameter(this, PARAM_BRIGHTFIELD,"UIProperty corresponding to the triggering of the white light illumination.", new TwoStateFlag())); 
 	}
 
 	@Override
