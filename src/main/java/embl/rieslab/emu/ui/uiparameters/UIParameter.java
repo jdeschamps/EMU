@@ -1,7 +1,6 @@
 package main.java.embl.rieslab.emu.ui.uiparameters;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 
 public abstract class UIParameter<T> {
 
@@ -61,4 +60,19 @@ public abstract class UIParameter<T> {
 	public abstract boolean isSuitable(String val);
 	protected abstract T convertValue(String val);
 	public abstract String getStringValue();
+	
+	public enum UIParameterType { 
+		INTEGER("Integer"), DOUBLE("Double"), FLOAT("Float"), STRING("String"), COLOUR("Color"), BOOL("Boolean"), COMBO("COMBO"), UIPROPERTY("UIProperty"); 
+		
+		private String value; 
+		
+		private UIParameterType(String value) { 
+			this.value = value; 
+		}
+
+		public String getTypeValue() {
+			return value;
+		} 
+	}; 
+
 }

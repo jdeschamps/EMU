@@ -78,7 +78,7 @@ public class FiltersPanel extends ConfigurablePanel {
 					if(e.getStateChange()==ItemEvent.SELECTED){
 						int pos = getSelectedButtonNumber();
 						if(pos>=0 && pos<togglebuttons_.length){
-							changeProperty(FW_POSITION,getValueFromPosition(pos));
+							setUIPropertyValue(FW_POSITION,getValueFromPosition(pos));
 						}				
 					} 
 				}
@@ -140,13 +140,6 @@ public class FiltersPanel extends ConfigurablePanel {
 		addUIParameter(new StringUIParameter(this, PARAM_COLORS,"Filter colors displayed by the UI. The entry should be written as \"color1,color2,color3,grey,grey,grey\". The names should be separated by a comma. "
 				+ "The maximum number of filters color is "+NUM_POS+", beyond that the colors will be ignored. If the comma are not present, then no color will be allocated. The available colors are:\n"+ColorRepository.getColorsInOneColumn(),colors_));
 	}
-	
-	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(FW_POSITION)){
-			setUIPropertyValue(name,value);
-		}		
-	}
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
@@ -181,11 +174,6 @@ public class FiltersPanel extends ConfigurablePanel {
 
 	@Override
 	protected void initializeInternalProperties() {
-		// Do nothing
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
 		// Do nothing
 	}
 

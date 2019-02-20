@@ -84,31 +84,31 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 					if(e.getStateChange()==ItemEvent.SELECTED){
 						switch(pos){
 						case 0:
-							changeProperty(DEVICE_1, TwoStateUIProperty.getOnStateName());
+							setUIPropertyValue(DEVICE_1, TwoStateUIProperty.getOnStateName());
 							break;
 						case 1:
-							changeProperty(DEVICE_2, TwoStateUIProperty.getOnStateName());
+							setUIPropertyValue(DEVICE_2, TwoStateUIProperty.getOnStateName());
 							break;
 						case 2:
-							changeProperty(DEVICE_3, TwoStateUIProperty.getOnStateName());
+							setUIPropertyValue(DEVICE_3, TwoStateUIProperty.getOnStateName());
 							break;
 						case 3:
-							changeProperty(DEVICE_4, TwoStateUIProperty.getOnStateName());
+							setUIPropertyValue(DEVICE_4, TwoStateUIProperty.getOnStateName());
 							break;
 						}
 					} else if (e.getStateChange()==ItemEvent.DESELECTED){
 						switch(pos){
 						case 0:
-							changeProperty(DEVICE_1, TwoStateUIProperty.getOffStateName());
+							setUIPropertyValue(DEVICE_1, TwoStateUIProperty.getOffStateName());
 							break;
 						case 1:
-							changeProperty(DEVICE_2, TwoStateUIProperty.getOffStateName());
+							setUIPropertyValue(DEVICE_2, TwoStateUIProperty.getOffStateName());
 							break;
 						case 2:
-							changeProperty(DEVICE_3, TwoStateUIProperty.getOffStateName());
+							setUIPropertyValue(DEVICE_3, TwoStateUIProperty.getOffStateName());
 							break;
 						case 3:
-							changeProperty(DEVICE_4, TwoStateUIProperty.getOffStateName());
+							setUIPropertyValue(DEVICE_4, TwoStateUIProperty.getOffStateName());
 							break;
 						}
 					} 
@@ -146,13 +146,6 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 		addUIParameter(new BoolUIParameter(this, PARAM_ENABLE2,"Enable the button corresponding to the second two-state device.",true));
 		addUIParameter(new BoolUIParameter(this, PARAM_ENABLE3,"Enable the button corresponding to the third two-state device.",false));
 		addUIParameter(new BoolUIParameter(this, PARAM_ENABLE4,"Enable the button corresponding to the fourth two-state device.",false));
-	}
-
-	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(DEVICE_1) || name.equals(DEVICE_2) || name.equals(DEVICE_3) || name.equals(DEVICE_4)){
-			setUIPropertyValue(name,value);
-		}
 	}
 
 	@Override
@@ -232,11 +225,6 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 
 	@Override
 	protected void initializeInternalProperties() {
-		// Do nothing
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
 		// Do nothing
 	}
 

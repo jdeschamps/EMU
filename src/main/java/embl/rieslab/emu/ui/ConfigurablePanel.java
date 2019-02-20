@@ -6,7 +6,11 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import main.java.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty.InternalPropertyType;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
@@ -29,9 +33,10 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * UIProperties with a MMProperty and change the value of a UIParameter. 
  * <p> 
  * Modifications to the state of UIProperties and InternalProperties should not be done explicitly in the subclasses, but should be done through the 
- * abstraction methods: {@link #changeProperty(String, String)} and {@link #changeInternalProperty(String, String)}. UIParameters should not be modified
- * within the subclasses. Modifications of the JComponents based on UIProperties, UIParameters and InternalProperties changes take place in the subclasses 
- * implementation of {@link #propertyhasChanged(String, String)}, {@link #parameterhasChanged(String)} and {@link #internalpropertyhasChanged(String)} respectively.  
+ * abstraction methods: {@link #setUIPropertyValue(String, String)} and setInternalPropertyValue(String, ?). UIParameters should not be modified within the subclasses. 
+ * Modifications of the JComponents based on UIProperties, UIParameters and InternalProperties changes take place in the subclasses 
+ * implementation of {@link #propertyhasChanged(String, String)}, {@link #parameterhasChanged(String)} and {@link #internalpropertyhasChanged(String)} respectively.
+ * To query the value   
  *  <p> 
  * For instance, a JToggleButton can be designed to turn on and off a laser. After declaration of the JToggleButton and addition to the panel in {@link #setupPanel()}, 
  * an eventListener can be added to the JToggleButton. The eventListener should then call {@link #changeProperty(String, String)} to modify the corresponding
@@ -102,11 +107,11 @@ public abstract class ConfigurablePanel extends JPanel{
 	}
 	
 	/**
-	 * Returns a hash map of the panel's internal properties indexed by their hash ({panel's name}-{property's name}).
+	 * Returns a hash map of the panel's internal properties indexed by their names.
 	 *
 	 * @see main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty
 	 * 
-	 * @return HashMap with the InternalProperty indexed by their hash. 
+	 * @return HashMap with the InternalProperty indexed by their names. 
 	 */
 	protected HashMap<String, InternalProperty> getInternalProperties(){
 		return internalprops_;
@@ -122,22 +127,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected HashMap<String,UIParameter> getUIParameters(){
 		return parameters_;
 	}	
-	
-	/**
-	 * Returns the {@link main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty} named {@code propertyName}.
-	 * Since the internal properties are stored in a HashMap with their hashes as keys, this method takes the name of 
-	 * the internal property and searches the HashMap for the hash {this panel's label}-{propertyName}. 
-	 * 
-	 * @param propertyName Name of the internal property.
-	 * @return Corresponding InternalProperty, null if it doesn't exist.
-	 */
-	protected InternalProperty getInternalProperty(String propertyName){
-		if(internalprops_.containsKey(getLabel()+" "+propertyName)){
-			return internalprops_.get(getLabel()+" "+propertyName);
-		}
-		return null;
-	}	
-	
+		
 	/**
 	 * Returns the {@link main.java.embl.rieslab.emu.ui.uiparameters.UIParameter} named {@code parameterName}.
 	 * Since the UI parameters are stored in a HashMap with their hashes as keys, this method takes the name of 
@@ -214,6 +204,95 @@ public abstract class ConfigurablePanel extends JPanel{
 		t.start();
 	}
 	
+	/**
+	 * Sets the value of the IntegerInternalProperty called {@code propertyName} to {@code newValue}.
+	 * If {@code propertyName} doesn't exist or is not an IntegerInternalProperty, nothing happens.
+	 *  
+	 * @param propertyName Name of the InternalProperty
+	 * @param newValue New value
+	 */
+	protected void setInternalPropertyValue(String propertyName, int newValue){
+		// runs on EDT, is this a problem?
+		if (internalprops_.containsKey(propertyName)
+				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.INTEGER) == 0) {
+			((IntegerInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+		}
+	}
+	
+	/**
+	 * Sets the value of the BoolInternalProperty called {@code propertyName} to {@code newValue}.
+	 * If {@code propertyName} doesn't exist or is not an BoolInternalProperty, nothing happens.
+	 *  
+	 * @param propertyName Name of the InternalProperty
+	 * @param newValue New value
+	 */
+	protected void setInternalPropertyValue(String propertyName, boolean newValue){
+		// runs on EDT, is this a problem?
+		if (internalprops_.containsKey(propertyName)
+				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.BOOLEAN) == 0) {
+			((BoolInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+		}
+	}
+	
+	/**
+	 * Sets the value of the DoubleInternalProperty called {@code propertyName} to {@code newValue}.
+	 * If {@code propertyName} doesn't exist or is not an DoubleInternalProperty, nothing happens.
+	 *  
+	 * @param propertyName name of the InternalProperty
+	 * @param newValue New value
+	 */
+	protected void setInternalPropertyValue(String propertyName, double newValue){
+		// runs on EDT, is this a problem?
+		if (internalprops_.containsKey(propertyName)
+				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.DOUBLE) == 0) {
+			((DoubleInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+		}
+	}
+
+	/**
+	 * Returns the value of the IntegerInternalProperty called {@code propertyName}.
+	 * If {@code propertyName} doesn't exist or is not an IntegerInternalProperty, nothing happens.
+	 * 
+	 * @param propertyName name of the property
+	 * @return Value of the InternalProperty
+	 */
+	protected int getIntegerInternalPropertyValue(String propertyName) {
+		if(internalprops_.containsKey(propertyName)
+				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.INTEGER) == 0) {
+			return ((IntegerInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+		}
+		return 0;
+	}
+	
+	/**
+	 * Returns the value of the BoolInternalProperty called {@code propertyName}.
+	 * If {@code propertyName} doesn't exist or is not an BoolInternalProperty, nothing happens.
+	 * 
+	 * @param propertyName name of the property
+	 * @return Value of the InternalProperty
+	 */
+	protected boolean getBoolInternalPropertyValue(String propertyName) {
+		if(internalprops_.containsKey(propertyName)
+				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.BOOLEAN) == 0) {
+			return ((BoolInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns the value of the DoubleInternalProperty called {@code propertyName}.
+	 * If {@code propertyName} doesn't exist or is not an DoubleInternalProperty, nothing happens.
+	 * 
+	 * @param propertyName name of the property
+	 * @return Value of the InternalProperty
+	 */
+	protected double getDoubleInternalPropertyValue(String propertyName) {
+		if(internalprops_.containsKey(propertyName)
+				&& internalprops_.get(propertyName).getType().compareTo(InternalPropertyType.DOUBLE) == 0) {
+			return ((DoubleInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+		}
+		return 0.;
+	}
 
 	/**
 	 * Adds a {@link main.java.embl.rieslab.emu.ui.uiproperties.UIProperty} to the internal HashMap
@@ -238,12 +317,12 @@ public abstract class ConfigurablePanel extends JPanel{
 	
 	/**
 	 * Adds a {@link main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty} to the internal HashMap
-	 * using the InternalProperty hash.
+	 * using the InternalProperty name.
 	 * 
 	 * @param internalproperty InternalProperty to add
 	 */
 	protected void addInternalProperty(InternalProperty internalproperty){
-		internalprops_.put(internalproperty.getHash(),internalproperty);
+		internalprops_.put(internalproperty.getName(),internalproperty);
 	}
 	
 	/**
@@ -286,9 +365,36 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param paramHash
 	 * @param uiParameter
 	 */
-	protected void substituteParameter(String paramHash, UIParameter uiParameter) {
-		parameters_.remove(paramHash);
+	public void substituteParameter(String paramHash, UIParameter uiParameter) {
 		parameters_.put(paramHash, uiParameter);
+	}
+	
+	/**
+	 * Substitutes the InternalProperty with same name and type than {@code internalProperty} with it. If no such 
+	 * InternalProperty exists, then this method does nothing.  
+	 * 
+	 * @param internalProperty InternalProperty to substitute with an existing one.
+	 */
+	public void substituteInternalProperty(InternalProperty internalProperty) {
+		if(internalprops_.containsKey(internalProperty.getName())) {
+			if(getInternalPropertyType(internalProperty.getName()).compareTo(internalProperty.getType()) == 0) {
+				internalprops_.put(internalProperty.getName(), internalProperty);
+			}
+		}
+	}
+	
+	/**
+	 * Returns the InternalPropertyType of the InternalProperty called {@code propertyName}. If there is no such
+	 * InternalProperty, returns InternalPropertyType.NONE.
+	 * 
+	 * @param propertyName Name of the InternalProperty
+	 * @return The corresponding InternalPropertyType, InternalPropertyType.NONE if there is no such InternalProperty.
+	 */
+	public InternalPropertyType getInternalPropertyType(String propertyName) {
+		if(internalprops_.containsKey(propertyName)) {
+			return internalprops_.get(propertyName).getType();
+		}
+		return InternalPropertyType.NONE;
 	}
 	
 	/**
@@ -352,15 +458,7 @@ public abstract class ConfigurablePanel extends JPanel{
 			}
 		});
 	}
-		
-	/**
-	 * Method called when an internal property's value has been changed. This allows the ConfigurablePanel
-	 * subclasses to react to the change of vale.
-	 * 
-	 * @param propertyName Name of the internal property
-	 */
-	public abstract void internalpropertyhasChanged(String propertyName);
-	
+
 	/**
 	 * Method called in the constructor of a ConfigurablePanel. In this method, the subclasses must create
 	 * their UIproperty and add them to the map of properties using {@link #addUIProperty(UIProperty)}.
@@ -388,22 +486,12 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected abstract void setupPanel();
 	
 	/**
-	 * Method called to change the value of a UIProperty after user interaction with the ConfigurablePanel. For instance, this
-	 * method should be called from the eventListeners of a JComponent.
+	 * Method called when an internal property's value has been changed. This allows the ConfigurablePanel
+	 * subclasses to react to the change of vale.
 	 * 
-	 * @param propertyName UIProperty to change
-	 * @param value New value of the UIproperty
+	 * @param propertyName Name of the internal property
 	 */
-	protected abstract void changeProperty(String propertyName, String value);
-	
-	/**
-	 * Method called to change the value of an InternalProperty after user interaction with the ConfigurablePanel. For instance, this
-	 * method should be called from the eventListeners of a JComponent.
-	 * 
-	 * @param propertyName InternalProperty to change
-	 * @param value New value of the InternalProperty
-	 */
-	protected abstract void changeInternalProperty(String propertyName, String value);
+	public abstract void internalpropertyhasChanged(String propertyName);
 	
 	/**
 	 * Notifies the ConfigurablePanel subclass that the MMProperty linked to its UIProperty {@code propertyName}

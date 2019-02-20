@@ -124,7 +124,7 @@ public class FocusPanel extends ConfigurablePanel {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
 						if (!togglebuttonLock_.isSelected()) {
-							changeProperty(FOCUS_POSITION, typed);
+							setUIPropertyValue(FOCUS_POSITION, typed);
 						}
 					}
 				} catch (Exception e) {
@@ -143,7 +143,7 @@ public class FocusPanel extends ConfigurablePanel {
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
 						if (!togglebuttonLock_.isSelected()) {
-							changeProperty(FOCUS_POSITION, typed);
+							setUIPropertyValue(FOCUS_POSITION, typed);
 						}
 					}
 				} catch (Exception exc) {
@@ -347,15 +347,15 @@ public class FocusPanel extends ConfigurablePanel {
     	
     	if (utils.isNumeric(s)) {
     		double val = Double.parseDouble(s)+step;
-    		changeProperty(FOCUS_POSITION,String.valueOf(val));
+    		setUIPropertyValue(FOCUS_POSITION,String.valueOf(val));
     	}		
 	}
 
 	protected void lockPosition(boolean b) {
 		if(b){
-			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOnStateName());
+			setUIPropertyValue(FOCUS_STABILIZATION,TwoStateUIProperty.getOnStateName());
 		} else {
-			changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOffStateName());
+			setUIPropertyValue(FOCUS_STABILIZATION,TwoStateUIProperty.getOffStateName());
 		}
 	}
 
@@ -400,13 +400,6 @@ public class FocusPanel extends ConfigurablePanel {
 		addUIParameter(new DoubleUIParameter(this, PARAM_SMALLSTEP,"Default value for small z stage step.",smallstep_));
 		addUIParameter(new IntUIParameter(this, PARAM_IDLE,"Idle time in ms of the stage position monitoring.",idle_)); // thread idle time
 		addUIParameter(new IntUIParameter(this, PARAM_NPOS,"Number of stage positions displayed in the chart.",npos_)); // number of point in the graph
-	}
-	
-	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(FOCUS_POSITION) || name.equals(FOCUS_STABILIZATION)){
-			setUIPropertyValue(name,value);
-		}
 	}
 
 	@Override
@@ -457,7 +450,7 @@ public class FocusPanel extends ConfigurablePanel {
 	@Override
 	public void shutDown() {
 		updater_.stopUpdater();
-		changeProperty(FOCUS_STABILIZATION,TwoStateUIProperty.getOffStateName());
+		setUIPropertyValue(FOCUS_STABILIZATION,TwoStateUIProperty.getOffStateName());
 	}
 
 	@Override
@@ -470,12 +463,7 @@ public class FocusPanel extends ConfigurablePanel {
 	protected void initializeInternalProperties() {
 		// Do nothing
 	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
-		// Do nothing
-	}
-
+	
 	@Override
 	public void internalpropertyhasChanged(String label) {
 		// Do nothing

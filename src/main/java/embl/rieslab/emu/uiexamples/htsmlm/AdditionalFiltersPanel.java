@@ -100,7 +100,7 @@ public class AdditionalFiltersPanel extends ConfigurablePanel {
 					if(e.getStateChange()==ItemEvent.SELECTED){
 						int pos = getSelectedButtonNumber(togglebuttons1_);
 						if(pos>=0 && pos<togglebuttons1_.length){
-							changeProperty(SLIDER1_POSITION,getSlider1ValueFromPosition(pos));
+							setUIPropertyValue(SLIDER1_POSITION,getSlider1ValueFromPosition(pos));
 						}				
 					} 
 				}
@@ -123,7 +123,7 @@ public class AdditionalFiltersPanel extends ConfigurablePanel {
 					if(e.getStateChange()==ItemEvent.SELECTED){
 						int pos = getSelectedButtonNumber(togglebuttons2_);
 						if(pos>=0 && pos<togglebuttons2_.length){
-							changeProperty(SLIDER2_POSITION,getSlider2ValueFromPosition(pos));
+							setUIPropertyValue(SLIDER2_POSITION,getSlider2ValueFromPosition(pos));
 						}				
 					} 
 				}
@@ -246,15 +246,6 @@ public class AdditionalFiltersPanel extends ConfigurablePanel {
 		addUIParameter(new StringUIParameter(this, PARAM2_COLORS,"Filter colors displayed by the UI. The entry should be written as \"color1,color2,color3,grey,grey,grey\". The names should be separated by a comma. "
 				+ "The maximum number of filters color is "+NUM_POS+", beyond that the colors will be ignored. If the comma are not present, then no color will be allocated. The available colors are:\n"+ColorRepository.getColorsInOneColumn(),colors2_));
 	}
-	
-	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(SLIDER1_POSITION)){
-			setUIPropertyValue(name,value);
-		} else if(name.equals(SLIDER2_POSITION)){
-			setUIPropertyValue(name,value);
-		} 	
-	}
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
@@ -308,11 +299,6 @@ public class AdditionalFiltersPanel extends ConfigurablePanel {
 
 	@Override
 	protected void initializeInternalProperties() {
-		// Do nothing
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
 		// Do nothing
 	}
 

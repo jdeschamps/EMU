@@ -19,7 +19,7 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
@@ -106,10 +106,8 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 					logslider_.setMaxWithin(max);
 					if (logslider_.getValue() > logslider_.getMaxWithin()) {
 						logslider_.setValueWithin(logslider_.getMaxWithin());
-						textfieldvalue_.setText(String.valueOf(logslider_
-								.getValue()));
-						changeProperty(LASER_PULSE,
-								String.valueOf(logslider_.getValue()));
+						textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
+						setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getValue()));
 					}
 
 					changeMaxPulseProperty(max);
@@ -140,10 +138,8 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 					logslider_.setMaxWithin(max);
 					if (logslider_.getValue() > logslider_.getMaxWithin()) {
 						logslider_.setValueWithin(logslider_.getMaxWithin());
-						textfieldvalue_.setText(String.valueOf(logslider_
-								.getValue()));
-						changeProperty(LASER_PULSE,
-								String.valueOf(logslider_.getValue()));
+						textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
+						setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getValue()));
 					}
 
 					changeMaxPulseProperty(max);
@@ -170,10 +166,10 @@ public class LaserPulsingPanel extends ConfigurablePanel {
         	    int val = Integer.parseInt(typed);
         	    if(val<=logslider_.getMaxWithin()){
         	    	logslider_.setValueWithin(val);
-        	    	changeProperty(LASER_PULSE,typed);
+        	    	setUIPropertyValue(LASER_PULSE,typed);
         	    } else {
         	    	logslider_.setValueWithin(logslider_.getMaxWithin());
-        	    	changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
+        	    	setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
         	    }
         	}
          });
@@ -187,10 +183,10 @@ public class LaserPulsingPanel extends ConfigurablePanel {
         	    int val = Integer.parseInt(typed);
         	    if(val<=logslider_.getMaxWithin()){
         	    	logslider_.setValueWithin(val);
-        	    	changeProperty(LASER_PULSE,typed);
+        	    	setUIPropertyValue(LASER_PULSE,typed);
         	    } else {
         	    	logslider_.setValueWithin(logslider_.getMaxWithin());
-        	    	changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
+        	    	setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
         	    }
         	}
         });
@@ -209,7 +205,7 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 				  logslider_.setValueWithin(val);
 				  try{
 					  textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
-					  changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
+					  setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getValue()));
 				  } catch(Exception ex){
 					  ex.printStackTrace();
 				  }  
@@ -238,14 +234,6 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 		addUIParameter(new IntUIParameter(this, PARAM_DEFAULT_MAX,"Default maximum value for the activation laser pulse length.",maxpulse_));
 	}
 
-
-	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(LASER_PULSE)){
-			setUIPropertyValue(name,value);
-		}
-	}
-
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		if(name.equals(LASER_PULSE)){
@@ -255,7 +243,7 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 				if(val>logslider_.getMaxWithin()){
 					logslider_.setValueWithin(logslider_.getMaxWithin());
 					textfieldvalue_.setText(String.valueOf(logslider_.getMaxWithin()));
-					changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
+					setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
 				} else {
 					logslider_.setValueWithin(val);
 					textfieldvalue_.setText(newvalue);
@@ -266,7 +254,7 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 				if(val>logslider_.getMaxWithin()){
 					logslider_.setValueWithin(logslider_.getMaxWithin());
 					textfieldvalue_.setText(String.valueOf(logslider_.getMaxWithin()));
-					changeProperty(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
+					setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getMaxWithin()));
 				} else {
 					logslider_.setValueWithin(val);
 					textfieldvalue_.setText(newvalue);
@@ -293,7 +281,7 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 			if (logslider_.getValue() > logslider_.getMaxWithin()) {
 				logslider_.setValueWithin(logslider_.getMaxWithin());
 				textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
-				changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
+				setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getValue()));
 			}
 			textfieldmax_.setText(String.valueOf(maxpulse_));
 			changeMaxPulseProperty(maxpulse_);
@@ -315,32 +303,24 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 	protected void initializeInternalProperties() {
 		maxpulse_  = 10000;
 		
-		addInternalProperty(new IntInternalProperty(this, INTERNAL_MAXPULSE, maxpulse_));
+		addInternalProperty(new IntegerInternalProperty(this, INTERNAL_MAXPULSE, maxpulse_));
 	}
 
 	@Override
 	public void internalpropertyhasChanged(String label) {
 		if(label.equals(INTERNAL_MAXPULSE)){
-			maxpulse_ = ((IntInternalProperty) getInternalProperty(label)).getPropertyValue();
+			maxpulse_ = getIntegerInternalPropertyValue(label);
 			logslider_.setMaxWithin(maxpulse_);
 			if (logslider_.getValue() > logslider_.getMaxWithin()) {
 				logslider_.setValueWithin(logslider_.getMaxWithin());
 				textfieldvalue_.setText(String.valueOf(logslider_.getValue()));
-				changeProperty(LASER_PULSE,String.valueOf(logslider_.getValue()));
+				setUIPropertyValue(LASER_PULSE,String.valueOf(logslider_.getValue()));
 			}
 			textfieldmax_.setText(String.valueOf(maxpulse_));
 		}
 	}
 
 	private void changeMaxPulseProperty(int val){
-		((IntInternalProperty) getInternalProperty(INTERNAL_MAXPULSE)).setPropertyValue(val);
-	}
-	
-	// chose not to use this in order to avoid parsing...
-	@Override
-	protected void changeInternalProperty(String name, String value) {
-		if(name.equals(INTERNAL_MAXPULSE) && utils.isNumeric(value)){
-			((IntInternalProperty) getInternalProperty(name)).setPropertyValue(Integer.parseInt(value));
-		}
+		setInternalPropertyValue(INTERNAL_MAXPULSE,val);
 	}
 }

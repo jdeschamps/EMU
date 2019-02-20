@@ -83,7 +83,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 					try {
 						double val = Double.parseDouble(typed);
 						if (val <= max_power && val >= 0) {
-							changeProperty(LASER_POWER,typed);
+							setUIPropertyValue(LASER_POWER,typed);
 							sliderPower_.setValue((int) val);
 						}
 					} catch (Exception e) {
@@ -105,7 +105,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 					try {
 						double val = Double.parseDouble(typed);
 						if (val <= max_power && val >= 0) {
-							changeProperty(LASER_POWER,typed);
+							setUIPropertyValue(LASER_POWER,typed);
 							sliderPower_.setValue((int) val);
 						}
 					} catch (Exception e) {
@@ -120,7 +120,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 		sliderPower_.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {				
 				textfieldUserPower_.setText(String.valueOf(sliderPower_.getValue()));
-				changeProperty(LASER_POWER,String.valueOf(sliderPower_.getValue()));
+				setUIPropertyValue(LASER_POWER,String.valueOf(sliderPower_.getValue()));
 			}});
 		
 		
@@ -134,7 +134,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 				} else {
 					fineaperc_.setText(String.valueOf(sliderFinea_.getValue())+" %");		
 				}
-				changeProperty(LASER_PERCFINEA,String.valueOf(sliderFinea_.getValue()));
+				setUIPropertyValue(LASER_PERCFINEA,String.valueOf(sliderFinea_.getValue()));
 			}});
 
 		// slider fina b
@@ -146,7 +146,7 @@ public class FocusLockPanel extends ConfigurablePanel {
 				} else {
 					finebperc_.setText(String.valueOf(sliderFineb_.getValue())+" %");		
 				}				
-				changeProperty(LASER_PERCFINEB,String.valueOf(sliderFineb_.getValue()));
+				setUIPropertyValue(LASER_PERCFINEB,String.valueOf(sliderFineb_.getValue()));
 			}});
 		
 		
@@ -156,9 +156,9 @@ public class FocusLockPanel extends ConfigurablePanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
+					setUIPropertyValue(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
+					setUIPropertyValue(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
 				}
 			}
         });
@@ -175,9 +175,9 @@ public class FocusLockPanel extends ConfigurablePanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
+					setUIPropertyValue(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
+					setUIPropertyValue(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
 				}
 			}
         });
@@ -188,9 +188,9 @@ public class FocusLockPanel extends ConfigurablePanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_ENABLEFINE,TwoStateUIProperty.getOnStateName());
+					setUIPropertyValue(LASER_ENABLEFINE,TwoStateUIProperty.getOnStateName());
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					changeProperty(LASER_ENABLEFINE,TwoStateUIProperty.getOffStateName());
+					setUIPropertyValue(LASER_ENABLEFINE,TwoStateUIProperty.getOffStateName());
 				}
 			}
         });
@@ -319,15 +319,6 @@ public class FocusLockPanel extends ConfigurablePanel {
 		addUIProperty(new TwoStateUIProperty(this,getLabel()+" "+LASER_ENABLEFINE,"iBeamSmart Enable property of fine.", new FocusLockFlag()));
 	}
 
-
-	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(LASER_OPERATION) || name.equals(LASER_ENABLEFINE) || name.equals(LASER_POWER) || name.equals(LASER_PERCFINEA)
-				 || name.equals(LASER_PERCFINEB)){
-			setUIPropertyValue(name,value);
-		}	
-	}
-
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		turnOffComponentTriggering();
@@ -401,11 +392,6 @@ public class FocusLockPanel extends ConfigurablePanel {
 	
 	@Override
 	protected void initializeInternalProperties() {
-		// Do nothing
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
 		// Do nothing
 	}
 

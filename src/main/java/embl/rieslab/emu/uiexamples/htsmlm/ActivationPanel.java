@@ -25,7 +25,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalProperty;
+import main.java.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.IntUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
@@ -546,13 +546,6 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 	}
 
 	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(LASER_PULSE)){
-			setUIPropertyValue(name,value);
-		}
-	}
-
-	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		// do nothing
 	}
@@ -596,21 +589,15 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 	protected void initializeInternalProperties() {
 		maxpulse_ = 10000;
 		
-		addInternalProperty(new IntInternalProperty(this, INTERNAL_MAXPULSE, maxpulse_));
+		addInternalProperty(new IntegerInternalProperty(this, INTERNAL_MAXPULSE, maxpulse_));
 	}
 
 	@Override
 	public void internalpropertyhasChanged(String label) {
 		if(label.equals(INTERNAL_MAXPULSE)){
-			maxpulse_ = ((IntInternalProperty) getInternalProperty(label)).getPropertyValue();
+			maxpulse_ = getIntegerInternalPropertyValue(label);
 		}
 	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
-		// Do nothing
-	}
-
 
 	/////////////////////////////////////////////////////////////////////////////
 	//////
@@ -639,7 +626,7 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 		
 		if(activate_){
 			
-			changeProperty(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
+			setUIPropertyValue(LASER_PULSE,String.valueOf(output[ActivationTask.OUTPUT_NEWPULSE]));
 		}
 		
 		counternms_ ++;
@@ -766,7 +753,7 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 
 	@Override
 	public void initializeTask() {
-		changeProperty(LASER_PULSE,"0");
+		setUIPropertyValue(LASER_PULSE,"0");
 	}
 
 	@SuppressWarnings("rawtypes")

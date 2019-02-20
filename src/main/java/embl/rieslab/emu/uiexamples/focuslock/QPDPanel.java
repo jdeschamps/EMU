@@ -139,11 +139,6 @@ public class QPDPanel extends ConfigurablePanel {
 	}
 
 	@Override
-	protected void changeProperty(String name, String value) {
-		// do nothing
-	}
-
-	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		// do nothing
 	}
@@ -186,11 +181,6 @@ public class QPDPanel extends ConfigurablePanel {
 
 	@Override
 	protected void initializeInternalProperties() {
-		// Do nothing
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
 		// Do nothing
 	}
 

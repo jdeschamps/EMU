@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 import main.java.embl.rieslab.emu.utils.ColorRepository;
 
 public class ColorUIParameter extends UIParameter<Color>{

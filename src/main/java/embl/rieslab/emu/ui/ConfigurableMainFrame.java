@@ -17,8 +17,6 @@ import javax.swing.JOptionPane;
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.controller.SystemDialogs;
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalProperty;
-import main.java.embl.rieslab.emu.ui.internalproperties.IntInternalPropertyValue;
 import main.java.embl.rieslab.emu.ui.internalproperties.InternalProperty;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
@@ -28,6 +26,19 @@ import mmcorej.CMMCore;
  * Class representing the main JFrame of a {@link main.java.embl.rieslab.emu.plugin.UIPlugin}. Subclasses must
  * implement the {@link #initComponents()} method, in which the {@link ConfigurablePanel}s must be instantiated
  * and registered using {@link #registerConfigurablePanel(ConfigurablePanel)}.
+ * <pre>
+ * The ConfigurableMainFrame aggregates the UIParameters and the UIProperties, as well as linking together the
+ * InternalProperties. If two UIProperties have the same name, then the last added UIproperty will replace the 
+ * first ones. The order is the same as the order of {@link #registerConfigurablePanel(ConfigurablePanel)}. 
+ * <pre>
+ * For UIParameters, on the other hand, two UIParameters are allowed to have the same hash ({ConfigurablePanel name}-{UIParameter name})
+ * only if they have the same type. Should such case arise, all UIParameters but the first one to appear (in order
+ * of registration of the ConfigurablePanel that owns it) are replaced in their owner ConfigurablePanel by the 
+ * first UIParameter. There, UIParameters with same hash and type are made replaced by a single reference and are
+ * shared by all the corresponding ConfigurationPanel. Note that if two UIParameters have same name but different
+ * types, the second one to appear is ignored altogether.
+ * <pre>
+ * The same idea applies to InternalProperties.
  * 
  * @author Joran Deschamps
  *
@@ -151,6 +162,43 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		}	
 	}
 	
+	
+	@SuppressWarnings("rawtypes")
+	private void linkInternalProperties(){
+		HashMap<String, InternalProperty> allinternalprops, panelinternalprops, tempinternalprops;
+		allinternalprops = new HashMap<String, InternalProperty>();
+		tempinternalprops = new HashMap<String, InternalProperty>();
+		Iterator<ConfigurablePanel> panelsIt = panels_.iterator();
+		
+		while(panelsIt.hasNext()) { // iterate over panels
+			tempinternalprops.clear();
+			ConfigurablePanel pane = panelsIt.next();
+			panelinternalprops = pane.getInternalProperties();
+			
+			Iterator<String> propsit = panelinternalprops.keySet().iterator();
+			while(propsit.hasNext()) { // iterate over one panel's internal props
+				String internalprop = propsit.next();
+				if(allinternalprops.containsKey(internalprop)) { // if the internal property already exist
+					// add to a temporary HashMap, and will take care of them later to avoid a concurrent modifications of panelinternalprops
+					tempinternalprops.put(internalprop, panelinternalprops.get(internalprop));
+				} else {
+					allinternalprops.put(internalprop, panelinternalprops.get(internalprop));
+				}
+			}
+			
+			// Now substitute all the internal properties from the temporary HashMap with the internal
+			// property already in allinternalprops. So far they have the same name, but could have
+			// different type. In the following calls, if the properties have different type, then nothing
+			// will happen. In this case, we just ignore it. Doing it here at the end avoids concurrent 
+			// modification of the ConfigurablePanel hashmap.
+			propsit = tempinternalprops.keySet().iterator();
+			while(propsit.hasNext()) {
+				allinternalprops.get(propsit.next()).registerListener(pane);
+			}
+		}
+
+		
+	}
 	/**
 	 * Adds {@code configurablePanel} to the internal List of {@link ConfigurablePanel}s.
 	 * 
@@ -214,49 +262,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	 */
 	protected SystemController getController(){
 		return controller_;
-	}
-	
-	// this has to be reviewed
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	private void linkInternalProperties(){
-		Iterator<ConfigurablePanel> panelsIt = panels_.iterator();
-		HashMap<String, InternalProperty> internalproperties = new HashMap<String, InternalProperty>();
-		HashMap<String, InternalProperty> internalpropertiesCopy;
-		while(panelsIt.hasNext()){
-			internalproperties.putAll(panelsIt.next().getInternalProperties());
-		}
-		
-		Iterator<String> propIt1 = internalproperties.keySet().iterator();
-		Iterator<String> propIt2;
-		String firstproperty, secondproperty;
-		while(propIt1.hasNext()){
-			firstproperty = propIt1.next();
-			if(!internalproperties.get(firstproperty).isAllocated()){ // should allow more than one to be mapped with it?
-				internalpropertiesCopy = (HashMap<String, InternalProperty>) internalproperties.clone(); // seems a bit stupid to always clone a hashmap. 
-				// I guess it is to remove the first one and check all the others
-				internalpropertiesCopy.remove(firstproperty);
-				propIt2 = internalpropertiesCopy.keySet().iterator();
-				while(propIt2.hasNext()){
-					secondproperty = propIt2.next();
-					if(internalproperties.get(secondproperty).getName().equals(internalproperties.get(firstproperty).getName())){ // they are linked if they have the same name. How are they indexed?
-						String firstType = internalproperties.get(firstproperty).getType();
-						String secondType = internalproperties.get(secondproperty).getType();
-						if(firstType.equals(secondType)){
-							if(firstType.equals(InternalProperty.InternalPropertyType.INTEGER.getTypeValue())){
-								IntInternalPropertyValue val = new IntInternalPropertyValue(((IntInternalProperty) internalproperties.get(firstproperty)).getDefaultValue());
-								((IntInternalProperty) internalproperties.get(firstproperty)).linkValue(val);
-								((IntInternalProperty) internalproperties.get(secondproperty)).linkValue(val);
-							} else if(firstType.equals(InternalProperty.InternalPropertyType.DOUBLE.getTypeValue())){
-								// TODO
-							} else if(firstType.equals(InternalProperty.InternalPropertyType.STRING.getTypeValue())){
-								// TODO
-							}
-						}
-					}
-				}
-			}
-		}
-		
 	}
 	
 	/**

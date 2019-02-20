@@ -2,7 +2,6 @@ package main.java.embl.rieslab.emu.ui.uiparameters;
 
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 
 public class StringUIParameter extends UIParameter<String>{
 

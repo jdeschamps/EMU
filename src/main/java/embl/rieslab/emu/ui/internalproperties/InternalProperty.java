@@ -1,76 +1,60 @@
 package main.java.embl.rieslab.emu.ui.internalproperties;
 
+import java.util.ArrayList;
+
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 
-public abstract class InternalProperty<T> {
+public abstract class InternalProperty<T, V> {
 	private String name_;
-	private ConfigurablePanel owner_;
-	private boolean allocated_ = false;
-	private InternalPropertyValue<T> value_;
-	protected InternalPropertyType type_;
-	private T defaultvalue;
+	private T value_;
+	private ArrayList<ConfigurablePanel> listeners_;
 	
-	public InternalProperty(ConfigurablePanel owner, String name, T defaultvalue){
-		this.owner_ = owner;
+	public InternalProperty(ConfigurablePanel owner, String name, V defaultvalue){
 		this.name_ = name;
-		this.defaultvalue = defaultvalue;
-		
-		setType();
+
+		value_ = initializeDefault(defaultvalue);
+		listeners_ = new ArrayList<ConfigurablePanel>();
+		listeners_.add(owner);
 	}
 	
 	public String getName(){
 		return name_;
 	}
 	
-	public String getHash(){
-		return owner_.getLabel()+" "+name_;
+	public boolean hasListeners(){
+		return listeners_.size() > 0;
 	}
 	
-	public void linkValue(InternalPropertyValue<T> prop){
-		if(!allocated_ && prop != null){
-			value_ = prop;
-			value_.registerListener(this);
-			allocated_ = true;
+	public V getInternalPropertyValue(){
+		return convertValue(value_);
+	}
+	
+	protected T getAtomicValue(){
+		return value_;
+	}
+	
+	public void setInternalPropertyValue(V val, ConfigurablePanel source) {
+		setAtomicValue(val);
+		notifyListeners(source);
+	}
+
+	public void registerListener(ConfigurablePanel listener) {
+		if(listener.getInternalPropertyType(name_).compareTo(this.getType()) == 0) {
+			listeners_.add(listener);
+			listener.substituteInternalProperty(this);
 		}
 	}
-	
-	public boolean isAllocated(){
-		return allocated_;
-	}
-	
-	public T getPropertyValue(){
-		if(allocated_){
-			return value_.getValue();
+
+	public void notifyListeners(ConfigurablePanel source) {
+		for(int i=0;i<listeners_.size();i++){
+			if(listeners_.get(i) != source){
+				listeners_.get(i).internalpropertyhasChanged(name_);
+			}
 		}
-		return null;
 	}
-	
-	public void setPropertyValue(T val){		
-		if(allocated_){
-			value_.setValue(val, this);
-		}  
-	}
-	
-	protected ConfigurablePanel getOwner(){
-		return owner_;
-	}
-	
-	public void notifyOwner(){
-		owner_.internalpropertyhasChanged(name_);
-	}
-	
-	public String getType(){
-		return type_.getTypeValue();
-	}
-	
-	public T getDefaultValue(){
-		return defaultvalue;
-	}
-	
-	public abstract void setType();
 	
 	public enum InternalPropertyType{
-		INTEGER("Integer"), DOUBLE("Double"), STRING("String"); 
+		INTEGER("Integer"), DOUBLE("Double"), BOOLEAN("Boolean"), NONE("None"); 
 
 		private String value; 
 		
@@ -81,5 +65,10 @@ public abstract class InternalProperty<T> {
 		public String getTypeValue() {
 			return value;
 		} 
-	}; 
+	}; 	
+	
+	public abstract InternalPropertyType getType();
+	protected abstract T initializeDefault(V defaultval);
+	protected abstract V convertValue(T val);
+	protected abstract void setAtomicValue(V val);
 }

@@ -402,16 +402,6 @@ public class AcquisitionPanel extends ConfigurablePanel{
 	}
 
 	@Override
-	protected void changeProperty(String name, String value) {
-		// Do nothing
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
-		// Do nothing
-	}
-
-	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		// Do nothing
 	}

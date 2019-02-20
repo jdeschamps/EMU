@@ -92,7 +92,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 							togglebuttonUser_.setText(typed + "%");
 							if (togglebuttonUser_.isSelected()) {
 				        	    int value = (int) (val*scaling_/100);
-								changeProperty(LASER_PERCENTAGE,String.valueOf(value));
+				        	    setUIPropertyValue(LASER_PERCENTAGE,String.valueOf(value));
 							}
 						}
 					} catch (Exception e) {
@@ -115,7 +115,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 							togglebuttonUser_.setText(typed + "%");
 							if (togglebuttonUser_.isSelected()) {
 				        	    int value = (int) (val*scaling_/100);
-								changeProperty(LASER_PERCENTAGE,String.valueOf(value));
+				        	    setUIPropertyValue(LASER_PERCENTAGE,String.valueOf(value));
 							}
 						}
 					} catch (Exception exc) {
@@ -131,7 +131,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_PERCENTAGE,String.valueOf(scaling_));
+					setUIPropertyValue(LASER_PERCENTAGE,String.valueOf(scaling_));
 				}
 			}
         });		
@@ -147,7 +147,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 		        	        return;
 		        	    }
 		        	    int val = (int) (Double.valueOf(typed)*scaling_/100);
-						changeProperty(LASER_PERCENTAGE,String.valueOf(val));
+		        	    setUIPropertyValue(LASER_PERCENTAGE,String.valueOf(val));
 					}
 				}
 			}
@@ -159,7 +159,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
 					int val = (int) (scaling_*0.2);
-					changeProperty(LASER_PERCENTAGE,String.valueOf(val));
+					setUIPropertyValue(LASER_PERCENTAGE,String.valueOf(val));
 				}
 			}
         });
@@ -170,7 +170,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
 					int val = (int) (scaling_*0.01);
-					changeProperty(LASER_PERCENTAGE,String.valueOf(val));
+					setUIPropertyValue(LASER_PERCENTAGE,String.valueOf(val));
 				}
 			}
         });
@@ -200,9 +200,9 @@ public class LaserControlPanel extends ConfigurablePanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				if(e.getStateChange()==ItemEvent.SELECTED){
-					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
+					setUIPropertyValue(LASER_OPERATION,TwoStateUIProperty.getOnStateName());
 				} else if(e.getStateChange()==ItemEvent.DESELECTED){
-					changeProperty(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
+					setUIPropertyValue(LASER_OPERATION,TwoStateUIProperty.getOffStateName());
 				}
 			}
         });
@@ -266,13 +266,6 @@ public class LaserControlPanel extends ConfigurablePanel {
 		addUIParameter(new StringUIParameter(this, PARAM_TITLE,"Panel title.",title_));
 		addUIParameter(new ColorUIParameter(this, PARAM_COLOR,"Laser color.",color_));
 		addUIParameter(new IntUIParameter(this, PARAM_SCALING,"Maximum value of the laser percentage after scaling.",scaling_));
-	}
-
-	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(LASER_PERCENTAGE) || name.equals(LASER_OPERATION)){
-			setUIPropertyValue(getLabel()+" "+name,value);
-		}		
 	}
 
 	@Override
@@ -340,11 +333,6 @@ public class LaserControlPanel extends ConfigurablePanel {
 
 	@Override
 	protected void initializeInternalProperties() {
-		// Do nothing
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
 		// Do nothing
 	}
 

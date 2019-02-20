@@ -132,7 +132,7 @@ public class PIFocusPanel extends ConfigurablePanel implements TaskHolder<Double
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
 						if (!togglebuttonLock_.isSelected()) {
-							changeProperty(FOCUS_POSITION, typed);
+							setUIPropertyValue(FOCUS_POSITION, typed);
 						}
 					}
 				} catch (Exception e) {
@@ -151,7 +151,7 @@ public class PIFocusPanel extends ConfigurablePanel implements TaskHolder<Double
 					double val = Double.parseDouble(typed);
 					if (val >= 0) {
 						if (!togglebuttonLock_.isSelected()) {
-							changeProperty(FOCUS_POSITION, typed);
+							setUIPropertyValue(FOCUS_POSITION, typed);
 						}
 					}
 				} catch (Exception exc) {
@@ -355,7 +355,7 @@ public class PIFocusPanel extends ConfigurablePanel implements TaskHolder<Double
     	
     	if (utils.isNumeric(s)) {
     		double val = Double.parseDouble(s)+step;
-    		changeProperty(FOCUS_POSITION,String.valueOf(val));
+    		setUIPropertyValue(FOCUS_POSITION,String.valueOf(val));
     	}		
 	}
 
@@ -423,13 +423,6 @@ public class PIFocusPanel extends ConfigurablePanel implements TaskHolder<Double
 		addUIParameter(new DoubleUIParameter(this, PARAM_PI_SETPOINT,"",setpointPI_));
 		addUIParameter(new DoubleUIParameter(this, PARAM_PI_SCALING,"",scalingPI_));
 	}
-	
-	@Override
-	protected void changeProperty(String name, String value) {
-		if(name.equals(FOCUS_POSITION)){
-			setUIPropertyValue(name,value);
-		}
-	}
 
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
@@ -493,11 +486,6 @@ public class PIFocusPanel extends ConfigurablePanel implements TaskHolder<Double
 
 	@Override
 	protected void initializeInternalProperties() {
-		// Do nothing
-	}
-
-	@Override
-	protected void changeInternalProperty(String name, String value) {
 		// Do nothing
 	}
 

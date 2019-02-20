@@ -26,7 +26,6 @@ import main.java.embl.rieslab.emu.configuration.ui.utils.IconTableCellRenderer;
 import main.java.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.embl.rieslab.emu.ui.uiparameters.UIParameterType;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.utils.ColorRepository;
@@ -167,9 +166,9 @@ public class ParametersTable extends JPanel{
 					return new BoldTableCellRenderer();
 				case 1:
 					String s = (String) table.getValueAt(row, 0);
-					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){ // if Color parameter
+					if(uiparameterSet_.get(s).getType().equals(UIParameter.UIParameterType.COLOUR.getTypeValue())){ // if Color parameter
 						return new IconTableCellRenderer();
-					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) { // if checkbox
+					} else if (uiparameterSet_.get(s).getType().equals(UIParameter.UIParameterType.BOOL.getTypeValue())) { // if checkbox
 						return super.getDefaultRenderer(Boolean.class);
 					} else {
 						return new DefaultTableCellRenderer(); 
@@ -186,13 +185,13 @@ public class ParametersTable extends JPanel{
 					return super.getCellEditor(row, column);
 				case 1:
 					String s = (String) table.getValueAt(row, 0);
-					if(uiparameterSet_.get(s).getType().equals(UIParameterType.COLOUR.getTypeValue())){
+					if(uiparameterSet_.get(s).getType().equals(UIParameter.UIParameterType.COLOUR.getTypeValue())){
 						return new DefaultCellEditor(color);
 					} else if (uiparameterSet_.get(s) instanceof ComboUIParameter) {
 						return new DefaultCellEditor(new JComboBox<String>(((ComboUIParameter) uiparameterSet_.get(s)).getComboValues()));
-					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.BOOL.getTypeValue())) {
+					} else if (uiparameterSet_.get(s).getType().equals(UIParameter.UIParameterType.BOOL.getTypeValue())) {
 						return super.getDefaultEditor(Boolean.class);
-					} else if (uiparameterSet_.get(s).getType().equals(UIParameterType.UIPROPERTY.getTypeValue())) {
+					} else if (uiparameterSet_.get(s).getType().equals(UIParameter.UIParameterType.UIPROPERTY.getTypeValue())) {
 						return new DefaultCellEditor(new JComboBox<String>(getAvailableProperties((UIPropertyParameter) uiparameterSet_.get(s))));
 					} else {
 						return new DefaultCellEditor(new JTextField()); 
