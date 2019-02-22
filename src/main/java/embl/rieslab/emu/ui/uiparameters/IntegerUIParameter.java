@@ -4,6 +4,12 @@ import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.embl.rieslab.emu.utils.utils;
 
+/**
+ * UIParameter with integer value.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class IntegerUIParameter extends UIParameter<Integer>{
 
 	public IntegerUIParameter(ConfigurablePanel owner, String name, String description, int value) {
@@ -11,12 +17,18 @@ public class IntegerUIParameter extends UIParameter<Integer>{
 		
 		setValue(value);
 	}
-
+	
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public UIParameterType getType() {
 		return UIParameterType.INTEGER;
 	}
-
+	
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public boolean isSuitable(String val) {
 		if(utils.isInteger(val)){
@@ -24,12 +36,18 @@ public class IntegerUIParameter extends UIParameter<Integer>{
 		}
 		return false;
 	}
-
+	
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	protected Integer convertValue(String val) {
 		return Integer.parseInt(val);
 	}
-
+	
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public String getStringValue() {
 		return String.valueOf(getValue());

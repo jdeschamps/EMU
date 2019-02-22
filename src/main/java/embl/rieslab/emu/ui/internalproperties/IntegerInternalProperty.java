@@ -10,21 +10,33 @@ public class IntegerInternalProperty extends InternalProperty<AtomicInteger, Int
 		super(owner, name, defaultvalue);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	public InternalPropertyType getType() {
 		return InternalPropertyType.INTEGER;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	protected Integer convertValue(AtomicInteger val) {
 		return val.get();
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	protected void setAtomicValue(Integer val) {
 		getAtomicValue().set(val);
 	}
 
+	/**
+	 * @inheritDoc
+	 */
 	@Override
 	protected AtomicInteger initializeDefault(Integer defaultval) {
 		return new AtomicInteger(defaultval);
