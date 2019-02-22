@@ -16,7 +16,7 @@ import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.embl.rieslab.emu.ui.uiproperties.flag.TwoStateFlag;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.TwoStateFlag;
 
 public class AdditionalControlsPanel extends ConfigurablePanel{
 

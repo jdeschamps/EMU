@@ -4,6 +4,13 @@ import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
+/**
+ * A UIProperty with multiple allowed states, whose values are unknown at compilation time. Upon instantiation
+ * the number of states is set, while the user can change the values of each state in the configuration wizard.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class MultiStateUIProperty extends UIProperty{
 
 	public final static String STATE = " state ";
@@ -11,6 +18,15 @@ public class MultiStateUIProperty extends UIProperty{
 	private String[] states_;
 	private String[] statesname_;
 	
+	/**
+	 * Constructor with a PropertyFlag.
+	 * 
+	 * @param owner ConfigurablePanel that instantiated the UIProperty
+	 * @param name Name of the UIProperty
+	 * @param description Description of the UIProperty
+	 * @param flag Flag of the UIProperty
+	 * @param size Number of allowed states
+	 */
 	public MultiStateUIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag, int size) {
 		super(owner, name, description, flag);
 
@@ -21,7 +37,14 @@ public class MultiStateUIProperty extends UIProperty{
 			statesname_[i] = "State"+i;
 		}
 	}	
-	
+	/**
+	 * Constructor without a PropertyFlag.
+	 * 
+	 * @param owner ConfigurablePanel that instantiated the UIProperty
+	 * @param name Name of the UIProperty
+	 * @param description Description of the UIProperty
+	 * @param size Number of allowed states
+	 */
 	public MultiStateUIProperty(ConfigurablePanel owner, String name, String description, int size) {
 		super(owner, name, description);
 
@@ -65,16 +88,21 @@ public class MultiStateUIProperty extends UIProperty{
 		return true;
 	}
 	
-	public void setStatesName(String[] vals){
-		if(vals.length == statesname_.length){
-			statesname_ = vals;
-		} else if (vals.length > statesname_.length){
+	/**
+	 * Gives names to the states.
+	 * 
+	 * @param stateNames State names
+	 */
+	public void setStatesName(String[] stateNames){
+		if(stateNames.length == statesname_.length){
+			statesname_ = stateNames;
+		} else if (stateNames.length > statesname_.length){
 			for(int i=0; i<statesname_.length;i++){
-				statesname_[i] = vals[i];
+				statesname_[i] = stateNames[i];
 			}
 		} else {
-			for(int i=0; i<vals.length;i++){
-				statesname_[i] = vals[i];
+			for(int i=0; i<stateNames.length;i++){
+				statesname_[i] = stateNames[i];
 			}
 		}
 	}
@@ -117,41 +145,53 @@ public class MultiStateUIProperty extends UIProperty{
 		return "";
 	}
 	
+	/**
+	 * Sets the value of the MMProperty to {@code val} if {@code val}
+	 * equals either one of the state values or one of the state names.
+	 * 
+	 */
 	@Override
 	public void setPropertyValue(String val) {
-		if(isAllocated()) {
+		if(isAssigned()) {
 			for(int i=0;i<states_.length;i++){
 				if(states_[i].equals(val)){
-					getMMPoperty().setStringValue(val, this);
+					getMMProperty().setStringValue(val, this);
 					return;
 				}
 			}
 			for(int i=0;i<statesname_.length;i++){
 				if(statesname_[i].equals(val)){
-					getMMPoperty().setStringValue(states_[i], this);
+					getMMProperty().setStringValue(states_[i], this);
 					return;
 				}
 			}
 		}
 	}
 	
-	@Override
-	public boolean isMultiState(){
-		return true;
-	}
-	
+	/**
+	 * Returns the generic name for state i.
+	 * 
+	 * @param i State number
+	 * @return Generic name
+	 */
 	public static String getStateName(int i){
 		return STATE+i;
 	}
 	
+	/**
+	 * Returns the generic state name for String search and comparison: ".*"+STATE+"\\d+".
+	 * 
+	 * @return
+	 */
 	public static String getGenericStateName(){
 		return ".*"+STATE+"\\d+";
 	}
-	
-	public String[] getStates(){
-		return states_;
-	}	
-	
+		
+	/**
+	 * Returns the names of the states.
+	 * 
+	 * @return State names
+	 */
 	public String[] getStatesName(){
 		return statesname_;
 	}

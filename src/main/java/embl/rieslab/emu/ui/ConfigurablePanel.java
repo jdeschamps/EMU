@@ -40,7 +40,10 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * should only be used for user settings, such as changing the colors of JLabels or JButtons (to describe a filter or a laser) or the text of a header. 
  * All UIProperties and UIParameters appear in the {@link main.java.embl.rieslab.emu.configuration.ConfigurationWizard}. The user can then map the 
  * UIProperties with a MMProperty and change the value of a UIParameter. 
- * <p> 
+ * <p>
+ * In order to be added to the internal HashMap representation, UIproperties, UIParameters and InternalProperties need to be added using the following methods
+ * respectively: {@link #addUIProperty(UIProperty)}, {@link #addUIParameter(UIParameter)} and {@link #addInternalProperty(InternalProperty)}. 
+ * <p>
  * Modifications to the state of UIProperties and InternalProperties should not be done explicitly in the subclasses, but should be done through the 
  * abstraction methods: {@link #setUIPropertyValue(String, String)} and setInternalPropertyValue(String, ?). UIParameters should not be modified within the subclasses. 
  * Modifications of the JComponents based on UIProperties, UIParameters and InternalProperties changes take place in the subclasses 
@@ -402,7 +405,6 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @param uiproperty UIProperty to add
 	 */
-	// Shouldn't UI property not be added by unique hash instead of collision prone name?
 	protected void addUIProperty(UIProperty uiproperty){
 		properties_.put(uiproperty.getName(),uiproperty);
 	}	

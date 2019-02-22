@@ -87,16 +87,16 @@ public class PropertiesTable extends JPanel {
 			// adds a row corresponding to the allocation of the UI property to a MM device property
 			model.addRow(new Object[] { uipropkeys_[i], GlobalConfiguration.KEY_UNALLOCATED, GlobalConfiguration.KEY_UNALLOCATED });
 			
-			if (uipropertySet.get(uipropkeys_[i]).isTwoState()) {
+			if (uipropertySet.get(uipropkeys_[i]) instanceof TwoStateUIProperty) {
 				// if property is a toggle property, adds a line for the on and off values respectively.
 				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationWizard.KEY_ENTERVALUE });
 				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOffStateName(),"", ConfigurationWizard.KEY_ENTERVALUE });
 				
-			} else if (uipropertySet.get(uipropkeys_[i]).isSingleState()) {
+			} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) {
 				// if property is a single value property, adds a line for the value the property must take
 				model.addRow(new Object[] {uipropkeys_[i] + SingleStateUIProperty.getValueName(),"", ConfigurationWizard.KEY_ENTERVALUE });
 				
-			} else if (uipropertySet.get(uipropkeys_[i]).isMultiState()) {
+			} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) {
 				// if multiple values property, adds a line for each of the value to be allocated
 				int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 				for(int j=0;j<numpos;j++){
@@ -160,7 +160,7 @@ public class PropertiesTable extends JPanel {
 				model.addRow(new Object[] { uipropkeys_[i], mmproperties.getProperty(mmprop).getDeviceLabel(), mmproperties.getProperty(mmprop).getMMPropertyLabel() });
 				
 				// if the property is an instance of SingleState, TwoState or MultiState property, then looks for the assigned values
-				if (uipropertySet.get(uipropkeys_[i]).isTwoState()) { // if two state
+				if (uipropertySet.get(uipropkeys_[i]) instanceof TwoStateUIProperty) { // if two state
 					// gets values corresponding to the on and off states
 					uion = propertymapping.get(uipropkeys_[i]+ TwoStateUIProperty.getOnStateName());
 					uioff = propertymapping.get(uipropkeys_[i]+ TwoStateUIProperty.getOffStateName());
@@ -176,14 +176,14 @@ public class PropertiesTable extends JPanel {
 					// adds a row for each with the preset state value
 					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", uion });
 					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "", uioff });
-				} else if (uipropertySet.get(uipropkeys_[i]).isSingleState()) { // if single value property
+				} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) { // if single value property
 					// gets the value of the state and adds the corresponding row
 					uisingle = propertymapping.get(uipropkeys_[i]+ SingleStateUIProperty.getValueName());
 					if(uisingle == null){
 						uion = ConfigurationWizard.KEY_ENTERVALUE;
 					}
 					model.addRow(new Object[] {	uipropkeys_[i] + SingleStateUIProperty.getValueName(), "", uisingle });
-				} else if (uipropertySet.get(uipropkeys_[i]).isMultiState()) { // if multiple values property
+				} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) { // if multiple values property
 					// gets the number of positions and extracts all position values. If null then sets to default. Finally creates the corresponding row.
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
@@ -201,12 +201,12 @@ public class PropertiesTable extends JPanel {
 				model.addRow(new Object[] {uipropkeys_[i],GlobalConfiguration.KEY_UNALLOCATED,GlobalConfiguration.KEY_UNALLOCATED });
 				
 				// if the property is an instance of SingleState, TwoState or MultiState property, creates rows for the states value
-				if (uipropertySet.get(uipropkeys_[i]).isTwoState()) {
+				if (uipropertySet.get(uipropkeys_[i]) instanceof TwoStateUIProperty) {
 					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationWizard.KEY_ENTERVALUE });
 					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "",ConfigurationWizard.KEY_ENTERVALUE });
-				} else if (uipropertySet.get(uipropkeys_[i]).isSingleState()) {
+				} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) {
 					model.addRow(new Object[] {uipropkeys_[i]+ SingleStateUIProperty.getValueName(), "",ConfigurationWizard.KEY_ENTERVALUE });
-				} else if (uipropertySet.get(uipropkeys_[i]).isMultiState()) { // if multiple values property
+				} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) { // if multiple values property
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
 						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getStateName(j), "",ConfigurationWizard.KEY_ENTERVALUE });

@@ -1,5 +1,6 @@
-package main.java.embl.rieslab.emu.ui.uiproperties.filters;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.filters;
 
+import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 public class TwoStatePropertyFilter extends PropertyFilter {
@@ -13,7 +14,7 @@ public class TwoStatePropertyFilter extends PropertyFilter {
 	
 	@Override
 	public boolean filterOut(UIProperty property) {
-		if(property.isTwoState()){
+		if(property instanceof TwoStateUIProperty){
 			return false;
 		}
 		return true;

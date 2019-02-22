@@ -7,19 +7,41 @@ import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
-public class FixedStateUIProperty extends UIProperty {
+/**
+ * UIProperty with a fixed number of ordered states whose values are known at compilation time.
+ * 
+ * @author Joran Deschamps
+ *
+ */
+public class ImmutableMultiStateUIProperty extends UIProperty {
 
 	public final static String UNKNOWN = "Unknown";
 	
 	private LinkedHashMap<String,String> states_;
 	
-	public FixedStateUIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag, LinkedHashMap<String,String> states) {
+	/**
+	 * Constructor with PropertyFlag/
+	 * 
+	 * @param owner ConfigurablePanel that instantiated the UIProperty
+	 * @param name Name of the UIProperty
+	 * @param description Description of the UIProperty
+	 * @param flag Flag of the UIProperty
+	 * @param states Allowed states
+	 */
+	public ImmutableMultiStateUIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag, LinkedHashMap<String,String> states) {
 		super(owner, name, description, flag);
 
 		states_ = states;
 	}	
-	
-	public FixedStateUIProperty(ConfigurablePanel owner, String name, String description, LinkedHashMap<String,String> states) {
+	/**
+	 * Constructor without PropertyFlag/
+	 * 
+	 * @param owner ConfigurablePanel that instantiated the UIProperty
+	 * @param name Name of the UIProperty
+	 * @param description Description of the UIProperty
+	 * @param states Allowed states
+	 */
+	public ImmutableMultiStateUIProperty(ConfigurablePanel owner, String name, String description, LinkedHashMap<String,String> states) {
 		super(owner, name, description);
 
 		states_ = states;
@@ -64,41 +86,56 @@ public class FixedStateUIProperty extends UIProperty {
 		return UNKNOWN;
 	}
 
-	public boolean isStateName(String name){
-		if(states_.containsKey(name)){
+	/**
+	 * Checks if {@code stateName} is a known state name.
+	 *  
+	 * @param stateName State name to check
+	 * @return True if it is, false otherwise
+	 */
+	public boolean isStateName(String stateName){
+		if(states_.containsKey(stateName)){
 			return true;
 		}
 		return false;
 	}	
 	
-	public boolean isStateValue(String value){
+	/**
+	 * Checks if {@code stateValue} is a known state value.
+	 *  
+	 * @param stateValue State value to check
+	 * @return True if it is, false otherwise
+	 */
+	public boolean isStateValue(String stateValue){
 		Set<String> keys = states_.keySet();
         for(String k:keys){
-            if(states_.get(k).equals(value)){
+            if(states_.get(k).equals(stateValue)){
             	return true;
             }
         }
 		return false;
 	}
 	
+	/**
+	 * Sets the value of the MMProperty to {@code value}, only if {@code value} is equal to
+	 * either a valid state name or a valid state value.
+	 * 
+	 */
 	@Override
 	public void setPropertyValue(String value) {
-		if (isAllocated()) {
+		if (isAssigned()) {
 			if(states_.containsKey(value)){ // if value is the name of one of the state
-				System.out.println("Change property: "+getMMPoperty().getMMPropertyLabel()+" to "+states_.get(value));
-				getMMPoperty().setStringValue(states_.get(value), this);
+				getMMProperty().setStringValue(states_.get(value), this);
 			} else if(isStateValue(value)){ // if value corresponds to a state
-				System.out.println("Change property: "+getMMPoperty().getMMPropertyLabel()+" to "+value);
-				getMMPoperty().setStringValue(value, this);
+				getMMProperty().setStringValue(value, this);
 			}
 		}
 	}
-	
-	@Override
-	public boolean isFixedState(){
-		return true;
-	}
-	
+
+	/**
+	 * Returns the state names.
+	 * 
+	 * @return State names
+	 */
 	public String[] getStatesName(){
 		return states_.keySet().toArray(new String[states_.size()]);
 	}	

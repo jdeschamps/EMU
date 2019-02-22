@@ -1,9 +1,15 @@
 package main.java.embl.rieslab.emu.ui.uiproperties;
 
-import main.java.embl.rieslab.emu.exceptions.AlreadyAllocatedUIPropertyException;
+import main.java.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import main.java.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
+/**
+ * Class used to pair a UIproperty with a MMProperty.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 @SuppressWarnings("rawtypes")
 public class PropertyPair {
 
@@ -19,18 +25,10 @@ public class PropertyPair {
 	
 	public void pair(){
 		try {
-			uiprop_.setProperty(mmprop_);
+			uiprop_.assignProperty(mmprop_);
 			mmprop_.addListener(uiprop_);
-		} catch (AlreadyAllocatedUIPropertyException e) {
+		} catch (AlreadyAssignedUIPropertyException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public String getUIPropertyName(){
-		return uiprop_.getName();
-	}
-	
-	public String getMMPropertyName(){
-		return mmprop_.getHash();
 	}
 }

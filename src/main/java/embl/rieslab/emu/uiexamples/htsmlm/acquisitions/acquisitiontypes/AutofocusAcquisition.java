@@ -15,14 +15,14 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoPropertyFilter;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.SinglePropertyFilter;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.utils.Image2DoubleArray;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.autopilot.finder.FocusFinderInterface;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.autopilot.measures.FocusMeasures;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.autopilot.measures.FocusMeasures.FocusMeasure;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.NoPropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.PropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.SinglePropertyFilter;
 import main.java.embl.rieslab.emu.utils.utils;
 
 import org.micromanager.Studio;
@@ -63,7 +63,7 @@ public class AutofocusAcquisition implements Acquisition {
 	
 	public AutofocusAcquisition(double exposure, String[] zdevices, String defaultzdevice, TwoStateUIProperty twoStateUIProperty) {
 
-		if(twoStateUIProperty.isAllocated()){
+		if(twoStateUIProperty.isAssigned()){
 			stabprop_ = twoStateUIProperty;
 		}
 		

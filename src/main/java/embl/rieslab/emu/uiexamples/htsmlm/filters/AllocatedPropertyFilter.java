@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.ui.uiproperties.filters;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.filters;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
@@ -11,7 +11,7 @@ public class AllocatedPropertyFilter extends PropertyFilter {
 	
 	@Override
 	public boolean filterOut(UIProperty property) {
-		if(property.isAllocated()){
+		if(property.isAssigned()){
 			return false;
 		}
 		return true;

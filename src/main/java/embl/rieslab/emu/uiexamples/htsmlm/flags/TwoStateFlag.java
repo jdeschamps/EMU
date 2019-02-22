@@ -1,4 +1,6 @@
-package main.java.embl.rieslab.emu.ui.uiproperties.flag;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.flags;
+
+import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
 public class TwoStateFlag extends PropertyFlag{
 	

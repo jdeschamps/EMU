@@ -31,13 +31,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import main.java.embl.rieslab.emu.controller.SystemController;
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
-import main.java.embl.rieslab.emu.ui.uiproperties.flag.TwoStateFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionController;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.utils.AcquisitionDialogs;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.utils.AcquisitionInformationPanel;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.utils.ExperimentTreeSummary;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.TwoStateFlag;
 
 public class AcquisitionPanel extends ConfigurablePanel{
 

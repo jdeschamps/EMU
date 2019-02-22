@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.ui.uiproperties.filters;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.filters;
 
 import java.util.Arrays;
 import java.util.HashMap;

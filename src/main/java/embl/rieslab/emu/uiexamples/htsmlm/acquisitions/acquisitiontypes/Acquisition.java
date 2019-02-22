@@ -5,8 +5,8 @@ import javax.swing.JPanel;
 import org.micromanager.Studio;
 import org.micromanager.data.Datastore;
 
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory.AcquisitionType;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.PropertyFilter;
 
 public interface Acquisition {
 	

@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.ui.uiproperties.filters;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.filters;
 
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 

@@ -28,20 +28,20 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import main.java.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
-import main.java.embl.rieslab.emu.ui.uiproperties.FixedStateUIProperty;
+import main.java.embl.rieslab.emu.ui.uiproperties.ImmutableMultiStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.AllocatedPropertyFilter;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.AntiFlagPropertyFilter;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.FlagPropertyFilter;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.NoneConfigGroupPropertyFilter;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.PropertyFilter;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.ReadOnlyPropertyFilter;
-import main.java.embl.rieslab.emu.ui.uiproperties.filters.TwoStatePropertyFilter;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.AcquisitionFactory;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.acquisitiontypes.Acquisition;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.AllocatedPropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.AntiFlagPropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.FlagPropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.NonConfigGroupPropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.PropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.ReadOnlyPropertyFilter;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.filters.TwoStatePropertyFilter;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FilterWheelFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusLockFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
@@ -86,7 +86,7 @@ public class AcquisitionTab extends JPanel {
 		this.setName(acqtypes_[currind]);
 		
 		// Filter out read-only properties from the system properties
-		props_ = (new NoneConfigGroupPropertyFilter(new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()))).filterProperties(wizard_.getPropertiesMap());
+		props_ = (new NonConfigGroupPropertyFilter(new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()))).filterProperties(wizard_.getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
 		Iterator<String> it = props_.keySet().iterator();
 		String s;
@@ -141,7 +141,7 @@ public class AcquisitionTab extends JPanel {
 		acqtype_.setSelectedIndex(currind);
 		
 		// Filter out read-only properties from the system properties
-		props_ = (new NoneConfigGroupPropertyFilter(new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()))).filterProperties(wizard_.getPropertiesMap());
+		props_ = (new NonConfigGroupPropertyFilter(new AllocatedPropertyFilter(new ReadOnlyPropertyFilter()))).filterProperties(wizard_.getPropertiesMap());
 		propsfriendlyname_ = new HashMap<String, String>();
 		Iterator<String> it = props_.keySet().iterator();
 		String s;
@@ -452,30 +452,24 @@ public class AcquisitionTab extends JPanel {
 		for (int i = 0; i < filteredProperties.length; i++) {	
 			UIProperty prop = props_.get(filteredProperties[i]);
 			if(propertyValues.containsKey(filteredProperties[i])){ // if the property is found in the acquisition properties
-				if (prop.isTwoState()) {
+				if (prop instanceof TwoStateUIProperty) {
 					if(propertyValues.get(filteredProperties[i]).equals(TwoStateUIProperty.getOnStateName())){
 						model.addRow(new Object[] {prop.getFriendlyName(), true });
 					} else {
 						model.addRow(new Object[] {prop.getFriendlyName(), false });
 					}
-				} else if (prop.isSingleState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(), propertyValues.get(filteredProperties[i])});
-				} else if (prop.isMultiState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(filteredProperties[i])});
-				} else if (prop.isFixedState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(filteredProperties[i])});
 				} else {
 					model.addRow(new Object[] {prop.getFriendlyName(),propertyValues.get(filteredProperties[i])});
 				}
 			} else { // if not, set by default value
-				if (prop.isTwoState()) {
+				if (prop instanceof TwoStateUIProperty) {
 					model.addRow(new Object[] {prop.getFriendlyName(), twostatedefault_ });
-				} else if (prop.isSingleState()) {
+				} else if (prop instanceof SingleStateUIProperty) {
 					model.addRow(new Object[] {prop.getFriendlyName(),((SingleStateUIProperty) prop).getStateValue() });
-				} else if (prop.isMultiState()) {
+				} else if (prop instanceof MultiStateUIProperty) {
 					model.addRow(new Object[] {prop.getFriendlyName(),((MultiStateUIProperty) prop).getStatesName()[0] });
-				} else if (prop.isFixedState()) {
-					model.addRow(new Object[] {prop.getFriendlyName(),((FixedStateUIProperty) prop).getStatesName()[0] });
+				} else if (prop instanceof ImmutableMultiStateUIProperty) {
+					model.addRow(new Object[] {prop.getFriendlyName(),((ImmutableMultiStateUIProperty) prop).getStatesName()[0] });
 				} else {
 					model.addRow(new Object[] {prop.getFriendlyName(),prop.getPropertyValue() });
 				}
@@ -507,10 +501,10 @@ public class AcquisitionTab extends JPanel {
 				if(column == 1){
 					if (getValueAt(row, column) instanceof Boolean) {
 						return super.getDefaultEditor(Boolean.class);
-					} else if (props_.get(propsfriendlyname_.get(s)).isMultiState()) { 
+					} else if (props_.get(propsfriendlyname_.get(s)) instanceof MultiStateUIProperty) { 
 						return new DefaultCellEditor(new JComboBox<String>(((MultiStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
-					} else if (props_.get(propsfriendlyname_.get(s)).isFixedState()) { 
-						return new DefaultCellEditor(new JComboBox<String>(((FixedStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
+					} else if (props_.get(propsfriendlyname_.get(s)) instanceof ImmutableMultiStateUIProperty) { 
+						return new DefaultCellEditor(new JComboBox<String>(((ImmutableMultiStateUIProperty) props_.get(propsfriendlyname_.get(s))).getStatesName()));
 					} else if (props_.get(propsfriendlyname_.get(s)).hasMMPropertyAllowedValues()){
 						return new DefaultCellEditor(new JComboBox<String>(props_.get(propsfriendlyname_.get(s)).getAllowedValues()));
 					} else {

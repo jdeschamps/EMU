@@ -24,7 +24,7 @@ import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
-import main.java.embl.rieslab.emu.ui.uiproperties.FixedStateUIProperty;
+import main.java.embl.rieslab.emu.ui.uiproperties.ImmutableMultiStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.LaserFlag;
@@ -221,7 +221,7 @@ public class LaserTriggerPanel extends ConfigurablePanel {
 			map.put(HTSMLMConstants.FPGA_BEHAVIOURS[i], String.valueOf(i));
 		}
 		
-		addUIProperty(new FixedStateUIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"From Micro-Mojo FPGA: property dictating the behaviour of the laser trigger, from camera to pulsing.", new LaserFlag(),map));
+		addUIProperty(new ImmutableMultiStateUIProperty(this, getLabel()+" "+TRIGGER_BEHAVIOUR,"From Micro-Mojo FPGA: property dictating the behaviour of the laser trigger, from camera to pulsing.", new LaserFlag(),map));
 		addUIProperty(new UIProperty(this, getLabel()+" "+TRIGGER_SEQUENCE,"From Micro-Mojo FPGA: trigger sequence property, following a 16 bits pattern of 0 (not triggered) and 1 (triggered).", new LaserFlag()));
 		addUIProperty(new UIProperty(this, getLabel()+" "+PULSE_LENGTH,"From Micro-Mojo FPGA: duration of the laser pulses.", new LaserFlag()));
 	}

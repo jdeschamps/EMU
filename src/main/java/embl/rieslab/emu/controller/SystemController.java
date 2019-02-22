@@ -289,7 +289,7 @@ public class SystemController {
 					addPair(uiproperties.get(uiprop),mmregistry_.getMMPropertiesRegistry().getProperty(configprop.get(uiprop)));
 					
 					// test if the property has finite number of states
-					if(uiproperties.get(uiprop).isTwoState()){ // if it is a two-state property
+					if(uiproperties.get(uiprop) instanceof TwoStateUIProperty){ // if it is a two-state property
 						// extract the on/off values
 						TwoStateUIProperty t = (TwoStateUIProperty) uiproperties.get(uiprop);
 						String offval = configprop.get(uiprop+TwoStateUIProperty.getOffStateName());
@@ -299,7 +299,7 @@ public class SystemController {
 							forbiddenValuesProp_.add(uiprop);
 						}
 
-					} else if(uiproperties.get(uiprop).isSingleState()){ // if single state property
+					} else if(uiproperties.get(uiprop) instanceof SingleStateUIProperty){ // if single state property
 						// extract the state value
 						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
 						String value = configprop.get(uiprop+SingleStateUIProperty.getValueName());
@@ -308,7 +308,7 @@ public class SystemController {
 							forbiddenValuesProp_.add(uiprop);
 						}
 						
-					} else if (uiproperties.get(uiprop).isMultiState()) {// if it is a multistate property
+					} else if (uiproperties.get(uiprop) instanceof MultiStateUIProperty) {// if it is a multistate property
 						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties.get(uiprop);
 						int numpos = t.getNumberOfStates();
 						String[] val = new String[numpos];

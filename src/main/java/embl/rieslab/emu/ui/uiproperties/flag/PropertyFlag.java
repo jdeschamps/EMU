@@ -1,5 +1,11 @@
 package main.java.embl.rieslab.emu.ui.uiproperties.flag;
 
+/**
+ * 
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public abstract class PropertyFlag implements Comparable<PropertyFlag>{ 	
 	private final String value; 
 	
