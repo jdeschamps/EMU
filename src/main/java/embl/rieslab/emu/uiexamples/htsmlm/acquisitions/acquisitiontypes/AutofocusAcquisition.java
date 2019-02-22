@@ -314,7 +314,7 @@ public class AutofocusAcquisition implements Acquisition {
 		if(stabprop_ == null){
 			return new NoPropertyFilter();
 		}
-		return new SinglePropertyFilter(stabprop_.getName());
+		return new SinglePropertyFilter(stabprop_.getLabel());
 	}
 
 	@Override

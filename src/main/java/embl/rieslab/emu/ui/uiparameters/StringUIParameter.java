@@ -12,8 +12,8 @@ import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
  */
 public class StringUIParameter extends UIParameter<String>{
 
-	public StringUIParameter(ConfigurablePanel owner, String name, String description, String value) {
-		super(owner, name, description);
+	public StringUIParameter(ConfigurablePanel owner, String label, String description, String value) {
+		super(owner, label, description);
 		setValue(value);
 	}
 	

@@ -53,7 +53,7 @@ public class RegionVotingFocusFinder implements FocusFinderInterface<Double> {
 	}
 
 	/**
-	 * @see autopilot.finder.FocusFinderInterface#getName()
+	 * @see autopilot.finder.FocusFinderInterface#getLabel()
 	 */
 	@Override
 	public String getName() {

@@ -19,7 +19,7 @@ public class SinglePropertyFilter extends PropertyFilter{
 	
 	@Override
 	public boolean filterOut(UIProperty property) {
-		if(property.getName().equals(excludedprop_)){
+		if(property.getLabel().equals(excludedprop_)){
 			return true;
 		}
 		return false;

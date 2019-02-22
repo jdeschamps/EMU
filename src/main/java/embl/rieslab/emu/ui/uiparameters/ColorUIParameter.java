@@ -19,12 +19,12 @@ public class ColorUIParameter extends UIParameter<Color>{
 	 * Constructor, a default color value must be passed.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIParameter.
-	 * @param name Name of the UIParameter
+	 * @param label Name of the UIParameter
 	 * @param description Description of the UIParameter
 	 * @param value Default Color value of the UIParameter
 	 */
-	public ColorUIParameter(ConfigurablePanel owner, String name, String description, Color value) {
-		super(owner, name, description);
+	public ColorUIParameter(ConfigurablePanel owner, String label, String description, Color value) {
+		super(owner, label, description);
 		setValue(value);
 	}
 	

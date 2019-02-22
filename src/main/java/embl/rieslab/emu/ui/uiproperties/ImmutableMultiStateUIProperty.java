@@ -23,13 +23,13 @@ public class ImmutableMultiStateUIProperty extends UIProperty {
 	 * Constructor with PropertyFlag/
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
-	 * @param name Name of the UIProperty
+	 * @param label Name of the UIProperty
 	 * @param description Description of the UIProperty
 	 * @param flag Flag of the UIProperty
 	 * @param states Allowed states
 	 */
-	public ImmutableMultiStateUIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag, LinkedHashMap<String,String> states) {
-		super(owner, name, description, flag);
+	public ImmutableMultiStateUIProperty(ConfigurablePanel owner, String label, String description, PropertyFlag flag, LinkedHashMap<String,String> states) {
+		super(owner, label, description, flag);
 
 		states_ = states;
 	}	
@@ -37,12 +37,12 @@ public class ImmutableMultiStateUIProperty extends UIProperty {
 	 * Constructor without PropertyFlag/
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
-	 * @param name Name of the UIProperty
+	 * @param label Name of the UIProperty
 	 * @param description Description of the UIProperty
 	 * @param states Allowed states
 	 */
-	public ImmutableMultiStateUIProperty(ConfigurablePanel owner, String name, String description, LinkedHashMap<String,String> states) {
-		super(owner, name, description);
+	public ImmutableMultiStateUIProperty(ConfigurablePanel owner, String label, String description, LinkedHashMap<String,String> states) {
+		super(owner, label, description);
 
 		states_ = states;
 	}

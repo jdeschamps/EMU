@@ -370,7 +370,7 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 	
 	public JPanel getgraphpanel(){
 		graphpane_  = new JPanel();
-		newGraph();
+		graph_ = newGraph();
 		graphpane_.add(graph_.getChart());
 		return graphpane_;
 	}
@@ -508,8 +508,8 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 		}
 	}
 	
-	private void newGraph(){
-		graph_ = new TimeChart("Number of locs","time","N",npos_,300,240, true);	
+	private TimeChart newGraph(){
+		return new TimeChart("Number of locs","time","N",npos_,300,240, true);	
 	}
 	
 	public boolean isActivationAtMax(){
@@ -569,7 +569,7 @@ public class ActivationPanel extends ConfigurablePanel implements TaskHolder<Dou
 			if(val != npos_){
 				npos_ = val;
 				graphpane_.remove(graph_.getChart());
-				newGraph();
+				graph_ = newGraph();
 				graphpane_.add(graph_.getChart());
 				graphpane_.updateUI();
 			}

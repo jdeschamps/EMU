@@ -53,7 +53,7 @@ public class QPDPanel extends ConfigurablePanel {
 	public void setupPanel() {
 		this.setLayout(new GridBagLayout());
 		
-		newGraph();
+		graph_ = newGraph();
 		chartupdater_ = new ChartUpdater(graph_,getUIProperty(QPD_X),getUIProperty(QPD_Y),idle_);
 		graphpanel_ = new JPanel();
 		graphpanel_.add(graph_.getChart());
@@ -113,8 +113,8 @@ public class QPDPanel extends ConfigurablePanel {
 		}
 	}
 
-	private void newGraph(){
-		graph_ = new Chart("QPD","X","Y",1,270,270, xymax_);
+	private Chart newGraph(){
+		return new Chart("QPD","X","Y",1,270,270, xymax_);
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class QPDPanel extends ConfigurablePanel {
 			if(newval != xymax_){
 				xymax_ = newval;
 				graphpanel_.remove(graph_.getChart());
-				newGraph();
+				graph_ = newGraph();
 				graphpanel_.add(graph_.getChart());
 				graphpanel_.updateUI();
 				chartupdater_.changeChart(graph_);

@@ -12,8 +12,8 @@ import main.java.embl.rieslab.emu.utils.utils;
  */
 public class DoubleUIParameter extends UIParameter<Double> {
 
-	public DoubleUIParameter(ConfigurablePanel owner, String name, String description, double val) {
-		super(owner, name, description);
+	public DoubleUIParameter(ConfigurablePanel owner, String label, String description, double val) {
+		super(owner, label, description);
 
 		setValue(val);
 	}

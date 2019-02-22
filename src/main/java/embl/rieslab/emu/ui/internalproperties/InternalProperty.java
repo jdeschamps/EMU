@@ -20,7 +20,7 @@ import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
  * @param <V> Wrapper for a primitive type the Atomic type can be easily converted to.
  */
 public abstract class InternalProperty<T, V> {
-	private String name_;
+	private String label_;
 	private T value_;
 	private ArrayList<ConfigurablePanel> listeners_;
 	
@@ -29,11 +29,11 @@ public abstract class InternalProperty<T, V> {
 	 * listeners.
 	 * 
 	 * @param owner ConfigurablePanel that created this InternalProperty
-	 * @param name Name of the InternalProperty
+	 * @param label Name of the InternalProperty
 	 * @param defaultvalue Default value
 	 */
-	public InternalProperty(ConfigurablePanel owner, String name, V defaultvalue){
-		this.name_ = name;
+	public InternalProperty(ConfigurablePanel owner, String label, V defaultvalue){
+		this.label_ = label;
 
 		value_ = initializeDefault(defaultvalue);
 		listeners_ = new ArrayList<ConfigurablePanel>();
@@ -41,12 +41,12 @@ public abstract class InternalProperty<T, V> {
 	}
 	
 	/**
-	 * Returns the name of the InternalProperty.
+	 * Returns the label of the InternalProperty.
 	 * 
-	 * @return Name of the InternalProperty 
+	 * @return Label of the InternalProperty 
 	 */
-	public String getName(){
-		return name_;
+	public String getLabel(){
+		return label_;
 	}
 	
 	/**
@@ -87,7 +87,7 @@ public abstract class InternalProperty<T, V> {
 	 * @param listener ConfigurablePanel with an InternalProperty with same name and type
 	 */
 	public void registerListener(ConfigurablePanel listener) {
-		if(listener.getInternalPropertyType(name_).compareTo(this.getType()) == 0) {
+		if(listener.getInternalPropertyType(label_).compareTo(this.getType()) == 0) {
 			listeners_.add(listener);
 			listener.substituteInternalProperty(this);
 		}
@@ -96,7 +96,7 @@ public abstract class InternalProperty<T, V> {
 	private void notifyListeners(ConfigurablePanel source) {
 		for(int i=0;i<listeners_.size();i++){
 			if(listeners_.get(i) != source){
-				listeners_.get(i).internalpropertyhasChanged(name_);
+				listeners_.get(i).internalpropertyhasChanged(label_);
 			}
 		}
 	}

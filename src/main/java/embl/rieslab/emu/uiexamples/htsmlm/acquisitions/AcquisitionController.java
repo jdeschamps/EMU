@@ -2,7 +2,6 @@ package main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.swing.SwingUtilities;
 
@@ -29,10 +28,8 @@ public class AcquisitionController implements TaskHolder<Integer>{
 	private Experiment exp_;
 	private AcquisitionWizard wizard_;
 	private AcquisitionTask task_;
-	@SuppressWarnings("rawtypes")
-	private HashMap<String,TaskHolder> taskholders_;
-	
-	public AcquisitionController(SystemController controller, AcquisitionPanel owner, AcquisitionInformationPanel infopane, @SuppressWarnings("rawtypes") HashMap<String,TaskHolder> taskholders){
+
+	public AcquisitionController(SystemController controller, AcquisitionPanel owner, AcquisitionInformationPanel infopane){
 		controller_ = controller;
 		owner_ = owner;
 		infopanel_ = infopane;
@@ -41,8 +38,6 @@ public class AcquisitionController implements TaskHolder<Integer>{
 		
 		// placeholder experiment
 		exp_ = new Experiment(0, 0, new ArrayList<Acquisition>());
-		
-		taskholders_ = taskholders;
 	}
 	
 	@Override
@@ -259,6 +254,6 @@ public class AcquisitionController implements TaskHolder<Integer>{
 
 	@SuppressWarnings("rawtypes")
 	public TaskHolder getTaskHolder(String taskName) {
-		return taskholders_.get(taskName);
+		return owner_.getTaskHolders().get(taskName);
 	}
 }

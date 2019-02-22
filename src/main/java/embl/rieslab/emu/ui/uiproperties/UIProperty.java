@@ -14,7 +14,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
  * <p>
  * If correctly instantiated and added to the ConfigurablePanel, the UIProperty will appear in the configuration wizard of EMU. The user can then assign 
  * a MMproperty to this UIProperty. While several UIProperties can listen to a single MMProperty, each UIPropoerty can only be assigned to a single MMproperty.
- * In the configuration wizard, the name of the UIProperty will appear as well as the description in the help window if the help is enabled.
+ * In the configuration wizard, the label of the UIProperty will appear as well as the description in the help window if the help is enabled.
  * <p>
  * If a UI action should change the value of UIProperty (meaning the value of its MMProperty), then the ConfigurablePanel calls {@link #setPropertyValue(String)}.
  * In turns, this will change the value of the MMProperty and trigger a call to {@link #mmPropertyHasChanged(String)} in the other UIProperties listening to the
@@ -36,7 +36,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 @SuppressWarnings("rawtypes")
 public class UIProperty {
 
-	private String name_;
+	private String label_;
 	private String friendlyname_;
 	private String description_;
 	private ConfigurablePanel owner_;
@@ -48,42 +48,42 @@ public class UIProperty {
 	 * Constructor with a PropertyFlag.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
-	 * @param name Name of the UIProperty
+	 * @param label Label of the UIProperty
 	 * @param description Description of the UIProperty
 	 * @param flag Flag of the UIProperty
 	 */
-	public UIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag){
+	public UIProperty(ConfigurablePanel owner, String label, String description, PropertyFlag flag){
 		this.owner_ = owner;
-		this.name_ = name;
+		this.label_ = label;
 		this.description_ = description;
 		this.flag_ = flag;
 		
-		friendlyname_ = name;
+		friendlyname_ = label;
 	}	
 	
 	/**
 	 * Constructor without PropertyFlag, the flag being set to NoFlag.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
-	 * @param name Name of the UIProperty
+	 * @param label Label of the UIProperty
 	 * @param description Description of the UIProperty
 	 */
-	public UIProperty(ConfigurablePanel owner, String name, String description){
+	public UIProperty(ConfigurablePanel owner, String label, String description){
 		this.owner_ = owner;
-		this.name_ = name;
+		this.label_ = label;
 		this.description_ = description;
 		this.flag_ = new NoFlag();
 		
-		friendlyname_ = name;
+		friendlyname_ = label;
 	}
 	
 	/**
-	 * Returns the UIProperty's name
+	 * Returns the UIProperty's label
 	 * 
-	 * @return Name of the UIProperty
+	 * @return Label of the UIProperty
 	 */
-	public String getName(){
-		return name_;
+	public String getLabel(){
+		return label_;
 	}
 	
 	/**
@@ -111,7 +111,7 @@ public class UIProperty {
 			mmproperty_ = prop;
 			assigned_ = true;
 		} else if(assigned_){
-			throw new AlreadyAssignedUIPropertyException(name_);
+			throw new AlreadyAssignedUIPropertyException(label_);
 		}
 	}
 	
@@ -131,7 +131,7 @@ public class UIProperty {
 	 * @param value New value of the MMProperty
 	 */
 	public void mmPropertyHasChanged(String value){
-		owner_.triggerPropertyHasChanged(name_,value);
+		owner_.triggerPropertyHasChanged(label_,value);
 	}
 	
 	/**
@@ -169,11 +169,11 @@ public class UIProperty {
 	/**
 	 * Returns the UIProperty's friendly name.
 	 *
-	 * @return Friendly name, or the UIProperty's name if the friendly name is null
+	 * @return Friendly name, or the UIProperty's label if the friendly name is null
 	 */
 	public String getFriendlyName(){
 		if(friendlyname_ == null){
-			return name_;
+			return label_;
 		}
 		return friendlyname_;
 	}

@@ -300,9 +300,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
 	 */
 	protected double getDoubleUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(parameterName)
-				&& parameters_.get(parameterName).getType().equals(UIParameterType.DOUBLE)) {
-			return ((DoubleUIParameter) parameters_.get(parameterName)).getValue();
+		if(parameters_.containsKey(getLabel()+" - "+parameterName)
+				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.DOUBLE)) {
+			return ((DoubleUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
 		}
 		return 0.;
 	}
@@ -316,9 +316,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the UIParameter, or false if it doesn't exist.
 	 */
 	protected boolean getBoolUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(parameterName)
-				&& parameters_.get(parameterName).getType().equals(UIParameterType.BOOL)) {
-			return ((BoolUIParameter) parameters_.get(parameterName)).getValue();
+		if(parameters_.containsKey(getLabel()+" - "+parameterName)
+				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.BOOL)) {
+			return ((BoolUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
 		}
 		return false;
 	}
@@ -331,9 +331,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the UIParameter, or black if it doesn't exist.
 	 */
 	protected Color getColorUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(parameterName)
-				&& parameters_.get(parameterName).getType().equals(UIParameterType.COLOR)) {
-			return ((ColorUIParameter) parameters_.get(parameterName)).getValue();
+		if(parameters_.containsKey(getLabel()+" - "+parameterName)
+				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.COLOR)) {
+			return ((ColorUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
 		}
 		return Color.black;
 	}
@@ -346,9 +346,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
 	 */
 	protected String getComboUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(parameterName)
-				&& parameters_.get(parameterName).getType().equals(UIParameterType.COMBO)) {
-			return ((ComboUIParameter) parameters_.get(parameterName)).getValue();
+		if(parameters_.containsKey(getLabel()+" - "+parameterName)
+				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.COMBO)) {
+			return ((ComboUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
 		}
 		return "";
 	}
@@ -360,10 +360,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
 	 */
-	protected int getIntegerUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(parameterName)
-				&& parameters_.get(parameterName).getType().equals(UIParameterType.INTEGER)) {
-			return ((IntegerUIParameter) parameters_.get(parameterName)).getValue();
+	protected int getIntegerUIParameterValue(String parameterName) {		
+		if(parameters_.containsKey(getLabel()+" - "+parameterName)
+				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.INTEGER)) {
+			return ((IntegerUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
 		}
 		return 0;
 	}
@@ -376,9 +376,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
 	 */
 	protected String getStringUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(parameterName)
-				&& parameters_.get(parameterName).getType().equals(UIParameterType.STRING)) {
-			return ((StringUIParameter) parameters_.get(parameterName)).getValue();
+		if(parameters_.containsKey(getLabel()+" - "+parameterName)
+				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.STRING)) {
+			return ((StringUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
 		}
 		return "";
 	}
@@ -391,9 +391,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
 	 */
 	protected String getUIPropertyParameterValue(String parameterName) {
-		if(parameters_.containsKey(parameterName)
-				&& parameters_.get(parameterName).getType().equals(UIParameterType.UIPROPERTY)) {
-			return ((UIPropertyParameter) parameters_.get(parameterName)).getValue();
+		if(parameters_.containsKey(getLabel()+" - "+parameterName)
+				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.UIPROPERTY)) {
+			return ((UIPropertyParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
 		}
 		return UIPropertyParameter.NO_PROPERTY;
 	}
@@ -406,7 +406,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param uiproperty UIProperty to add
 	 */
 	protected void addUIProperty(UIProperty uiproperty){
-		properties_.put(uiproperty.getName(),uiproperty);
+		properties_.put(uiproperty.getLabel(),uiproperty);
 	}	
 
 	/**
@@ -426,7 +426,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param internalproperty InternalProperty to add
 	 */
 	protected void addInternalProperty(InternalProperty internalproperty){
-		internalprops_.put(internalproperty.getName(),internalproperty);
+		internalprops_.put(internalproperty.getLabel(),internalproperty);
 	}
 	
 	/**
@@ -449,7 +449,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected void updateAllParameters(){
 		Iterator<String> it = parameters_.keySet().iterator();
 		while(it.hasNext()){
-			triggerParameterHasChanged(parameters_.get(it.next()).getName());
+			triggerParameterHasChanged(parameters_.get(it.next()).getLabel());
 		}
 	}
 	
@@ -480,9 +480,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param internalProperty InternalProperty to substitute with an existing one.
 	 */
 	public void substituteInternalProperty(InternalProperty internalProperty) {
-		if(internalprops_.containsKey(internalProperty.getName())) {
-			if(getInternalPropertyType(internalProperty.getName()).compareTo(internalProperty.getType()) == 0) {
-				internalprops_.put(internalProperty.getName(), internalProperty);
+		if(internalprops_.containsKey(internalProperty.getLabel())) {
+			if(getInternalPropertyType(internalProperty.getLabel()).compareTo(internalProperty.getType()) == 0) {
+				internalprops_.put(internalProperty.getLabel(), internalProperty);
 			}
 		}
 	}

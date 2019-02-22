@@ -257,7 +257,7 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 					textfieldvalue_.setText(newvalue);
 				}
 			} else {
-				System.out.println("Not integer");
+				System.out.println("Not integer: "+newvalue);
 			}
 		}
 	}

@@ -23,13 +23,13 @@ public class ComboUIParameter extends UIParameter<String> {
 	 * default.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIParameter
-	 * @param name Name of the UIParameter
+	 * @param label Label of the UIParameter
 	 * @param description Description of the UIParameter
 	 * @param allowedValues Array of allowed values the UIParameter can take
 	 * @param ind Index of the UIParameter default value
 	 */
-	public ComboUIParameter(ConfigurablePanel owner, String name, String description, String[] allowedValues, int ind) {
-		super(owner, name, description);
+	public ComboUIParameter(ConfigurablePanel owner, String label, String description, String[] allowedValues, int ind) {
+		super(owner, label, description);
 		
 		combovalues_ = allowedValues;
 		if(ind >= 0 && ind<combovalues_.length){

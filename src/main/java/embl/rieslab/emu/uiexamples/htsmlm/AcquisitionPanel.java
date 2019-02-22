@@ -15,6 +15,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -38,6 +39,7 @@ import main.java.embl.rieslab.emu.uiexamples.htsmlm.acquisitions.utils.Experimen
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.constants.HTSMLMConstants;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.TwoStateFlag;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.tasks.TaskHolder;
 
 public class AcquisitionPanel extends ConfigurablePanel{
 
@@ -74,7 +76,7 @@ public class AcquisitionPanel extends ConfigurablePanel{
 		super("Acquisitions");
 		controller_ = controller;
 		
-		acqcontroller_ = new AcquisitionController(controller, this, new AcquisitionInformationPanel(jTextPane_progress), owner.getTaskHolders());
+		acqcontroller_ = new AcquisitionController(controller, this, new AcquisitionInformationPanel(jTextPane_progress));
 		
 		// listen to window movement to place the summary panel at the right place
 		owner_ = owner;
@@ -461,5 +463,10 @@ public class AcquisitionPanel extends ConfigurablePanel{
 	public void setStateButtonToStop(){
 		jToggle_startstop.setSelected(false);
 		jToggle_startstop.setText("Start");
+	}
+
+	@SuppressWarnings("rawtypes")
+	public HashMap<String, TaskHolder> getTaskHolders() {
+		return owner_.getTaskHolders();
 	}
 }

@@ -12,8 +12,8 @@ import main.java.embl.rieslab.emu.utils.utils;
  */
 public class IntegerUIParameter extends UIParameter<Integer>{
 
-	public IntegerUIParameter(ConfigurablePanel owner, String name, String description, int value) {
-		super(owner, name, description);
+	public IntegerUIParameter(ConfigurablePanel owner, String label, String description, int value) {
+		super(owner, label, description);
 		
 		setValue(value);
 	}

@@ -21,23 +21,23 @@ public class SingleStateUIProperty extends UIProperty{
 	 * Constructor with a PropertyFlag.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
-	 * @param name Name of the UIProperty
+	 * @param label Name of the UIProperty
 	 * @param description Description of the UIProperty
 	 * @param flag Flag of the UIProperty
 	 */
-	public SingleStateUIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag) {
-		super(owner, name, description, flag);
+	public SingleStateUIProperty(ConfigurablePanel owner, String label, String description, PropertyFlag flag) {
+		super(owner, label, description, flag);
 	}
 
 	/**
 	 * Constructor with no PropertyFlag.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
-	 * @param name Name of the UIProperty
+	 * @param label Name of the UIProperty
 	 * @param description Description of the UIProperty
 	 */
-	public SingleStateUIProperty(ConfigurablePanel owner, String name, String description) {
-		super(owner, name, description);
+	public SingleStateUIProperty(ConfigurablePanel owner, String label, String description) {
+		super(owner, label, description);
 	}
 
 	/**

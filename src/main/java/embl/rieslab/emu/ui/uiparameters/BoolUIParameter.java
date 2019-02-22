@@ -12,8 +12,8 @@ import main.java.embl.rieslab.emu.ui.uiparameters.UIParameter;
  */
 public class BoolUIParameter extends UIParameter<Boolean>{
 
-	public BoolUIParameter(ConfigurablePanel owner, String name, String description, boolean value) {
-		super(owner, name, description);
+	public BoolUIParameter(ConfigurablePanel owner, String label, String description, boolean value) {
+		super(owner, label, description);
 		
 		setValue(value);
 	}

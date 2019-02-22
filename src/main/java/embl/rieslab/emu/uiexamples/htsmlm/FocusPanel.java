@@ -83,7 +83,7 @@ public class FocusPanel extends ConfigurablePanel {
 	}
 	
 	public void setupPanel() {
-		newGraph();
+		graph_ = newGraph();
 		updater_ = new TimeChartUpdater(graph_,getUIProperty(FOCUS_POSITION),idle_);
 		
 		this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
@@ -379,8 +379,8 @@ public class FocusPanel extends ConfigurablePanel {
 		return null;
 	}
 	
-	private void newGraph(){
-		graph_ = new TimeChart("position","time","position",npos_,310,150,false);
+	private TimeChart newGraph(){
+		return new TimeChart("position","time","position",npos_,310,150,false);
 	}
 
 	@Override
@@ -441,7 +441,7 @@ public class FocusPanel extends ConfigurablePanel {
 			if(val != npos_){
 				npos_ = val;
 				panelGraph_.remove(graph_.getChart());
-				newGraph();
+				graph_ = newGraph();
 				panelGraph_.add(graph_.getChart());
 				panelGraph_.updateUI();
 				updater_.changeChart(graph_);

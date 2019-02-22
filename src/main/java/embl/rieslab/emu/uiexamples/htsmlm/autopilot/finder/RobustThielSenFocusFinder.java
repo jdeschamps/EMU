@@ -81,7 +81,7 @@ public class RobustThielSenFocusFinder implements
 	}
 
 	/**
-	 * @see autopilot.finder.FocusFinderInterface#getName()
+	 * @see autopilot.finder.FocusFinderInterface#getLabel()
 	 */
 	@Override
 	public String getName()

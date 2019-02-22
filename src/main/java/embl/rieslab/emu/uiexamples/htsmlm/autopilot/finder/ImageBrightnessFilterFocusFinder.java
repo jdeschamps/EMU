@@ -71,7 +71,7 @@ public class ImageBrightnessFilterFocusFinder implements
 	}
 
 	/**
-	 * @see autopilot.finder.FocusFinderInterface#getName()
+	 * @see autopilot.finder.FocusFinderInterface#getLabel()
 	 */
 	@Override
 	public String getName() {

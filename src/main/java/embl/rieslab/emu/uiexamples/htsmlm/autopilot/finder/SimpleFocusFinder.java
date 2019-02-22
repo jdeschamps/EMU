@@ -60,7 +60,7 @@ public class SimpleFocusFinder<O> implements FocusFinderInterface<O>
 	}
 
 	/**
-	 * @see autopilot.finder.FocusFinderInterface#getName()
+	 * @see autopilot.finder.FocusFinderInterface#getLabel()
 	 */
 	@Override
 	public String getName()

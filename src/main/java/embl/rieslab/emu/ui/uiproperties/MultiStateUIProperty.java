@@ -22,13 +22,13 @@ public class MultiStateUIProperty extends UIProperty{
 	 * Constructor with a PropertyFlag.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
-	 * @param name Name of the UIProperty
+	 * @param label Name of the UIProperty
 	 * @param description Description of the UIProperty
 	 * @param flag Flag of the UIProperty
 	 * @param size Number of allowed states
 	 */
-	public MultiStateUIProperty(ConfigurablePanel owner, String name, String description, PropertyFlag flag, int size) {
-		super(owner, name, description, flag);
+	public MultiStateUIProperty(ConfigurablePanel owner, String label, String description, PropertyFlag flag, int size) {
+		super(owner, label, description, flag);
 
 		states_ = new String[size];
 		statesname_ = new String[size];
@@ -41,12 +41,12 @@ public class MultiStateUIProperty extends UIProperty{
 	 * Constructor without a PropertyFlag.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
-	 * @param name Name of the UIProperty
+	 * @param label Name of the UIProperty
 	 * @param description Description of the UIProperty
 	 * @param size Number of allowed states
 	 */
-	public MultiStateUIProperty(ConfigurablePanel owner, String name, String description, int size) {
-		super(owner, name, description);
+	public MultiStateUIProperty(ConfigurablePanel owner, String label, String description, int size) {
+		super(owner, label, description);
 
 		states_ = new String[size];
 		statesname_ = new String[size];

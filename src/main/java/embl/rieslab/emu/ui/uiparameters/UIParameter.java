@@ -3,7 +3,8 @@ package main.java.embl.rieslab.emu.ui.uiparameters;
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 
 /**
- * 
+ * UIParameters are used to let the user specify aspects of the ConfigurablePanels through
+ * the configuration wizard.
  * 
  * @author Joran Deschamps
  *
@@ -11,7 +12,7 @@ import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
  */
 public abstract class UIParameter<T> {
 
-	private String name_;
+	private String label_;
 	private String description_;
 	private T value_;
 	private String ownername_;
@@ -20,31 +21,31 @@ public abstract class UIParameter<T> {
 	 * Constructor.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIParameter.
-	 * @param name Name of the UIParameter.
+	 * @param label Label of the UIParameter.
 	 * @param description Description of the UIParameters, used in the configuration wizard help.
 	 */
-	public UIParameter(ConfigurablePanel owner, String name, String description){
+	public UIParameter(ConfigurablePanel owner, String label, String description){
 		ownername_ = owner.getLabel();
-		name_ = name;
+		label_ = label;
 		description_ = description;
 	}
 	
 	/**
-	 * Returns the UIParameter's hash: {ConfigurablePanel's name}-{UIParameter's name}.
+	 * Returns the UIParameter's hash: {ConfigurablePanel's label}-{UIParameter's label}.
 	 * 
 	 * @return UIParameter's hash.
 	 */
 	public String getHash(){
-		return ownername_+" - "+name_;
+		return ownername_+" - "+label_;
 	}
 	
 	/**
-	 * Returns the name of the UIParameter.
+	 * Returns the label of the UIParameter.
 	 * 
-	 * @return UIParameter's name
+	 * @return UIParameter's label
 	 */
-	public String getName(){
-		return name_;
+	public String getLabel(){
+		return label_;
 	}
 
 	/**

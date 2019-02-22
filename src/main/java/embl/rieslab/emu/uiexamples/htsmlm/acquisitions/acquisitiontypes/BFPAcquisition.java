@@ -106,7 +106,7 @@ public class BFPAcquisition implements Acquisition{
 
 	@Override
 	public PropertyFilter getPropertyFilter() {
-		return new SinglePropertyFilter(bfpprop_.getName());
+		return new SinglePropertyFilter(bfpprop_.getLabel());
 	}
 
 	@Override
