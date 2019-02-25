@@ -13,7 +13,7 @@ public abstract class PropertyFlag implements Comparable<PropertyFlag>{
 		this.value = value; 
 	}
 
-	public String getPropertyFlag() {
+	private String getPropertyFlag() {
 		return value;
 	}
 

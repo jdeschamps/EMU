@@ -232,7 +232,7 @@ public class ParametersTable extends JPanel{
 		String s;
 		while(it.hasNext()){
 			s = it.next();
-			if(uipropertySet_.get(s).getFlag().equals(param.getFlag())){
+			if(uipropertySet_.get(s).getFlag().compareTo(param.getFlag()) == 0){
 				props.add(s);
 			}
 		}

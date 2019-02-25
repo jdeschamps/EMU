@@ -19,7 +19,7 @@ public class FlagPropertyFilter extends PropertyFilter {
 	
 	@Override
 	public boolean filterOut(UIProperty property) {
-		if(property.getFlag().equals(flag_)){
+		if(property.getFlag().compareTo(flag_) == 0){
 			return false;
 		}
 		return true;
