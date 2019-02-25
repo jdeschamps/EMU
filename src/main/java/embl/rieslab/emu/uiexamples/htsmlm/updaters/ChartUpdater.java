@@ -18,16 +18,16 @@ public class ChartUpdater {
 	private int idletime_;
 	
 	public ChartUpdater(Chart chart, UIProperty xprop, UIProperty yprop, int idletime){
+		
+		if(chart == null || xprop == null || yprop == null) {
+			throw new NullPointerException();
+		}
+		
 		chart_ = chart;
 		propertyX_ = xprop;
 		propertyY_ = yprop;
 		
 		idletime_ = idletime;
-		
-		// sanity check
-		if(utils.isNumeric(propertyX_.getPropertyValue()) && utils.isNumeric(propertyY_.getPropertyValue())){
-			initialised_ = true;
-		}
 	}
 	
 	public boolean isInitialised(){
@@ -39,6 +39,14 @@ public class ChartUpdater {
 	}
 	
 	public void startUpdater(){
+		// performs sanity check
+		if(!initialised_ && propertyX_ != null && propertyY_ != null) {
+			if(propertyX_.isAssigned() && utils.isNumeric(propertyX_.getPropertyValue()) 
+					&& propertyY_.isAssigned() && utils.isNumeric(propertyY_.getPropertyValue())) {
+				initialised_ = true;
+			}
+		}
+		
 		if(!running_ && initialised_){
 			running_ = true;
 			task_ = new UIupdater( );

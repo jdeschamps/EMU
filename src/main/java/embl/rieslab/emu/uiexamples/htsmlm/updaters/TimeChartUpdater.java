@@ -19,14 +19,14 @@ public class TimeChartUpdater {
 	private int idletime_;
 	
 	public TimeChartUpdater(TimeChart chart, UIProperty prop, int idletime){
+		
+		if(chart == null || prop == null) {
+			throw new NullPointerException();
+		}
+		
 		chart_ = chart;
 		property_ = prop;
 		idletime_ = idletime;
-		
-		// sanity check
-		if(utils.isNumeric(property_.getPropertyValue())){
-			initialised_ = true;
-		}
 	}
 	
 	public boolean isInitialised(){
@@ -38,6 +38,13 @@ public class TimeChartUpdater {
 	}
 	
 	public void startUpdater(){
+		// performs sanity check
+		if(!initialised_ && property_ != null) {
+			if(property_.isAssigned() && utils.isNumeric(property_.getPropertyValue())) {
+				initialised_ = true;
+			}
+		}
+		
 		if(!running_ && initialised_){
 			running_ = true;
 			task_ = new UIupdater( );

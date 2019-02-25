@@ -54,18 +54,22 @@ public class ZStackAcquisition implements Acquisition {
 	private GenericAcquisitionParameters params_;
 	private volatile boolean stopAcq_, running_;
 	
-	public ZStackAcquisition(double exposure, String[] zdevices, String defaultzdevice, TwoStateUIProperty twoStateUIProperty) {
+	public ZStackAcquisition(double exposure, String[] zdevices, String defaultzdevice, TwoStateUIProperty zStabilizationProperty) {
 
-		if(twoStateUIProperty.isAssigned()){
-			stabprop_ = twoStateUIProperty;
-		}
-		
-		if(stabprop_ == null){
+		if(zStabilizationProperty == null) {
+			stabprop_ = null;
 			zstab_ = false;
 			zstabuse_ = false;
-		} else {
-			zstab_ = true;
-			zstabuse_ = true;
+		} else {		
+			if(zStabilizationProperty.isAssigned()){
+				stabprop_ = zStabilizationProperty;
+				zstab_ = true;
+				zstabuse_ = true;
+			} else {
+				stabprop_ = null;
+				zstab_ = false;
+				zstabuse_ = false;
+			}
 		}
 		
 		zstart=-2;

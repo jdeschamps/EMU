@@ -13,10 +13,12 @@ public class TogglePower extends JToggleButton {
 		this.setPreferredSize(new Dimension(30,30));
 		this.setFocusPainted(false);
 
-		this.setIcon(new ImageIcon(getClass().getResource("/images/TogglePower-off.png")));
-		this.setSelectedIcon(new ImageIcon(getClass().getResource("/images/TogglePower-on.png")));
-		this.setRolloverIcon(new ImageIcon(getClass().getResource("/images/TogglePower-rollover.png")));
-		this.setDisabledIcon(new ImageIcon(getClass().getResource("/images/TogglePower-disabled.png")));
+		if(getClass().getResource("/images/TogglePower-off.png") != null) {
+			this.setIcon(new ImageIcon(getClass().getResource("/images/TogglePower-off.png")));
+			this.setSelectedIcon(new ImageIcon(getClass().getResource("/images/TogglePower-on.png")));
+			this.setRolloverIcon(new ImageIcon(getClass().getResource("/images/TogglePower-rollover.png")));
+			this.setDisabledIcon(new ImageIcon(getClass().getResource("/images/TogglePower-disabled.png")));
+		}
 		
 		this.setBorderPainted(false);
 		this.setBorder(null);

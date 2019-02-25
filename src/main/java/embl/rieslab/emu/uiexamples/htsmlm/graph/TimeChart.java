@@ -121,7 +121,7 @@ public class TimeChart {
 		series.clear();
 	}
 	
-	public void addPoint(double point){	// need to test how computationally intensive is a call to this function, UI has a tendency to freeze when MM running
+	public void addPoint(double point){	// need to test how computationally intensive is a call to this function, UI has a tendency to freeze when MM running		
 		point = (Math.floor(point * 100) / 100)-zero_;
 		int n = series.getItemCount();
 		time_counter ++;

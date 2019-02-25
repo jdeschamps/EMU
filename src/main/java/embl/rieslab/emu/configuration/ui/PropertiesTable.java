@@ -206,7 +206,7 @@ public class PropertiesTable extends JPanel {
 					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "",ConfigurationWizard.KEY_ENTERVALUE });
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) {
 					model.addRow(new Object[] {uipropkeys_[i]+ SingleStateUIProperty.getValueName(), "",ConfigurationWizard.KEY_ENTERVALUE });
-				} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) { // if multiple values property
+				} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) { // if multiple values property
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
 						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getStateName(j), "",ConfigurationWizard.KEY_ENTERVALUE });
