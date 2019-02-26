@@ -25,7 +25,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
  * Several extensions of UIProperty exist and have additional properties:
  * <pre>
  * - {@link TwoStateUIProperty} accepts only two states, ON and OFF, whose values are not known at compilation time and can be set in the configuration wizard.
- * - {@link MultiStateUIproperty} accepts multiple states. While the values of the states are also not know at compilation time, the number of states is fixed during
+ * - {@link MultiStateUIProperty} accepts multiple states. While the values of the states are also not know at compilation time, the number of states is fixed during
  * instantiation.
  * - {@link SingleStateUIProperty} accepts a single state, unknown at compilation time.
  * - {@link ImmutableMultiStateUIProperty} accepts multiple states that are fixed at instantiation. 

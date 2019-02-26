@@ -181,7 +181,7 @@ public class MultiStateUIProperty extends UIProperty{
 	/**
 	 * Returns the generic state name for String search and comparison: ".*"+STATE+"\\d+".
 	 * 
-	 * @return
+	 * @return generic state name
 	 */
 	public static String getGenericStateName(){
 		return ".*"+STATE+"\\d+";

@@ -52,7 +52,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * {@code get{type of the InternalProperty}InternalPropertyValue()}.
  *  <p> 
  * For instance, a JToggleButton can be designed to turn on and off a laser. After declaration of the JToggleButton and addition to the panel in {@link #setupPanel()}, 
- * an eventListener can be added to the JToggleButton. The eventListener should then call {@link #changeProperty(String, String)} to modify the corresponding
+ * an eventListener can be added to the JToggleButton. The eventListener should then call {@link #setUIPropertyValue(String, String)} to modify the corresponding
  * UIProperty with a new value being on when the JToggleButton is selected, and an off value when the JToggleButton is unselected. More details can be found in
  * tutorials and the javadocs of the different UIProperties implementations.
  * <p> 
@@ -62,11 +62,11 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * will trigger the same method. The same mechanism is at play for the InternalProperties and the UIParameters. Note that the UIParameters are only changed
  * upon start up and when the user modifies the configuration through the {@link main.java.embl.rieslab.emu.configuration.ConfigurationWizard}. 
  * <p> 
- * In addition, to avoid triggering {@link #changeProperty(String, String)} through the eventListener when modifying the state of a JComponent (as it might happen
+ * In addition, to avoid triggering {@link #setUIPropertyValue(String, String)} through the eventListener when modifying the state of a JComponent (as it might happen
  * depending on the eventListener type), {@link #turnOffComponentTriggering()} can be called in the beginning of the subclasses implementation of 
  * {@link #propertyhasChanged(String, String)} and {@link #turnOnComponentTriggering()} at the end. These methods change the state of an internal member
  * boolean variable. In the eventListener, the method {@link #isComponentTriggeringEnabled()} can query the state of the boolean variable and decide to not
- * call {@link #changeProperty(String, String)}. This mechanism is optional.
+ * call {@link #setUIPropertyValue(String, String)}. This mechanism is optional.
  * 
  * @see main.java.embl.rieslab.emu.ui.uiproperties.UIProperty
  * @see main.java.embl.rieslab.emu.ui.uiparameters.UIParameter
@@ -505,10 +505,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * Checks if the component triggering is enabled. The change in permission is done through {@link #turnOffComponentTriggering()}
 	 * and {@link #turnOnComponentTriggering()}. This is just indicative and only provides a mechanism to avoid triggering 
 	 * the components eventListeners upon calling {@link #propertyhasChanged(String, String)}. For this mechanism to work, 
-	 * {@link #changeProperty(String, String)} needs to be called in the eventListeners ONLY if this method returns true. For instance,
+	 * {@link #setUIPropertyValue(String, String)} needs to be called in the eventListeners ONLY if this method returns true. For instance,
 	 * this can be useful upon loading the UI, as {@link #propertyhasChanged(String, String)} will be called for each UIProperty,
 	 * then in turn {@link #propertyhasChanged(String, String)} will be called and might change the state of a JComponent. Depending
-	 * on the type of eventListeners, this might trigger {@link #changeProperty(String, String)}.
+	 * on the type of eventListeners, this might trigger {@link #setUIPropertyValue(String, String)}.
 	 * 
 	 * @return true if the component triggering is on, false if it is off.
 	 */

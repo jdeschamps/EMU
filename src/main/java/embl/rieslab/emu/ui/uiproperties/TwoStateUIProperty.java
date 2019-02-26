@@ -76,7 +76,7 @@ public class TwoStateUIProperty extends UIProperty{
 	/**
 	 * Sets the value of the OFF state.
 	 * 
-	 * @param newOnValue New value of the OFF state
+	 * @param newOffvalue New value of the OFF state
 	 * @return True if the value was correctly set, false otherwise (for instance if the value is not allowed)
 	 */
 	public boolean setOffStateValue(String newOffvalue){
