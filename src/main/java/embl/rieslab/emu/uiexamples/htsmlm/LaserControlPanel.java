@@ -24,8 +24,8 @@ import main.java.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
 import main.java.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.components.TogglePower;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.LaserFlag;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.others.TogglePower;
 import main.java.embl.rieslab.emu.utils.utils;
 
 public class LaserControlPanel extends ConfigurablePanel {

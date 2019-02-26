@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.others;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.components;
 
 import java.awt.Color;
 import java.awt.Graphics;

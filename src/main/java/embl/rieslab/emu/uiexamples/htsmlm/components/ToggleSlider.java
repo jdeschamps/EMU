@@ -1,4 +1,4 @@
-package main.java.embl.rieslab.emu.uiexamples.htsmlm.others;
+package main.java.embl.rieslab.emu.uiexamples.htsmlm.components;
 
 import java.awt.Dimension;
 
@@ -21,13 +21,14 @@ public class ToggleSlider extends JToggleButton {
 			this.setIcon(new ImageIcon(getClass().getResource("/images/ToggleSlider-off.png")));
 			this.setSelectedIcon(new ImageIcon(getClass().getResource("/images/ToggleSlider-on.png")));
 			//this.setRolloverIcon(new ImageIcon(getClass().getResource("/images/ToggleSlider-rollover.png")));
-			this.setDisabledIcon(new ImageIcon(getClass().getResource("/images/ToggleSlider-disabled.png")));
+			this.setDisabledIcon(new ImageIcon(getClass().getResource("/images/ToggleSlider-disabled.png")));		
+			this.setBorderPainted(false);
+			this.setBorder(null);
+			this.setFocusable(false);
+			this.setContentAreaFilled(false);
 		}
 		
-		this.setBorderPainted(false);
-		this.setBorder(null);
-		this.setFocusable(false);
-		this.setContentAreaFilled(false);
+
 	}
 	
 }

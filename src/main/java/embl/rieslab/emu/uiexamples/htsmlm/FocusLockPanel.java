@@ -24,9 +24,9 @@ import javax.swing.border.TitledBorder;
 import main.java.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.components.TogglePower;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.components.ToggleSlider;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusLockFlag;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.others.TogglePower;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.others.ToggleSlider;
 import main.java.embl.rieslab.emu.utils.ColorRepository;
 import main.java.embl.rieslab.emu.utils.utils;
 
