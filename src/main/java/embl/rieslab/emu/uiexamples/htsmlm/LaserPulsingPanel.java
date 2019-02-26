@@ -256,8 +256,6 @@ public class LaserPulsingPanel extends ConfigurablePanel {
 					logslider_.setValueWithin(val);
 					textfieldvalue_.setText(newvalue);
 				}
-			} else {
-				System.out.println("Not integer: "+newvalue);
 			}
 		}
 	}
