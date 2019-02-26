@@ -1,6 +1,6 @@
-EMU is a plugin for Micro-Manager that helps you build reconfigurable user interface.
+EMU is a plugin for Micro-Manager that helps you build reconfigurable user interfaces.
 
-The push to Github is very fresh, these are the things we will update in the next month:
+The push to Github is very fresh, these are the things we will update next month:
 
 * A better readme
 * Links to examples
