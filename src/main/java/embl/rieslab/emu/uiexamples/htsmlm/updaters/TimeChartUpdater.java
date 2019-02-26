@@ -72,6 +72,11 @@ public class TimeChartUpdater {
 
 			while(running_){	
 				value = Double.parseDouble(property_.getPropertyValue());
+				
+				// round
+				value = (Math.floor(value * 100) / 100);
+
+				
 				publish(value);
 
 				Thread.sleep(idletime_);

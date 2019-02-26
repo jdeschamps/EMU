@@ -64,9 +64,6 @@ public class Chart {
     	
     	
         cp = new ChartPanel(chart) {
-            /**
-			 * 
-			 */
 			private static final long serialVersionUID = 2350250611998987051L;
 
 			@Override

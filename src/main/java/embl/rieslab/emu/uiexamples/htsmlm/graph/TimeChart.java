@@ -20,15 +20,14 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class TimeChart {
 
 	String name_, nameX_, nameY_;
-	int width_, height_, maxN_, minY_=0, maxY_=100;
-    private XYSeries series, buffer;
+	int width_, height_, maxN_, minY_ = 0, maxY_ = 100;
+    private XYSeries series; 
     private double zero_ = 0;
     ChartPanel cp;
     int	time_counter = 0;
     boolean ranged_ = false;
     boolean zeroincluded_ = false;
     double lastpoint_=0;
-    int[] t;
     
 	public TimeChart(String name, String nameX, String nameY, int maxN, int minY, int maxY, int width, int height){
 		name_ = name;
@@ -61,20 +60,13 @@ public class TimeChart {
 	}
 	
 	public void initialize(){	
-		t = new int[maxN_];
-		for(int i=0;i<maxN_;i++){
-			t[i] = i;
-		}
-		
 	    series = new XYSeries(name_);
         XYSeriesCollection dataset = new XYSeriesCollection(series);
 
         JFreeChart chart = ChartFactory.createXYLineChart(null, null,
             null, dataset, PlotOrientation.VERTICAL, false, false, false);
         cp = new ChartPanel(chart) {
-            /**
-			 * 
-			 */
+
 			private static final long serialVersionUID = 1447408262029551263L;
 
 			@Override
@@ -96,6 +88,9 @@ public class TimeChart {
     	
     	ValueAxis xAxis = plot.getDomainAxis();
     	xAxis.setRange(0,maxN_);
+    	xAxis.setVisible(false);
+    	
+    	plot.setDomainGridlinesVisible(false);
     	
     	NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
     	
@@ -121,25 +116,18 @@ public class TimeChart {
 		series.clear();
 	}
 	
-	public void addPoint(double point){	// need to test how computationally intensive is a call to this function, UI has a tendency to freeze when MM running		
-		point = (Math.floor(point * 100) / 100)-zero_;
-		int n = series.getItemCount();
-		time_counter ++;
-		if(n>=maxN_){
+	public void addPoint(double point){	
+		point = point-zero_;
+
+		time_counter++;
+		if(time_counter == maxN_) {
+			((XYPlot) cp.getChart().getPlot()).getDomainAxis().setAutoRange(true);
 			series.remove(0);
-			try {
-				buffer = (XYSeries) series.clone();
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
-			series.clear();
-			for(int i=0;i<maxN_-1;i++){
-				series.add(t[i],buffer.getY(i));
-			}
-			series.add(t[maxN_-1], point);
-		} else {
-			series.add(t[time_counter%maxN_], point);
+		} else if(time_counter >= maxN_){
+			series.remove(0);
 		}
+		series.add(time_counter, point);
+		
 		lastpoint_ = point;
 	}
 	

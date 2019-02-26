@@ -28,6 +28,8 @@ import main.java.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.flags.FocusStabFlag;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.graph.TimeChart;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.graph.TimeChart;
+import main.java.embl.rieslab.emu.uiexamples.htsmlm.updaters.TimeChartUpdater;
 import main.java.embl.rieslab.emu.uiexamples.htsmlm.updaters.TimeChartUpdater;
 import main.java.embl.rieslab.emu.utils.utils;
 
