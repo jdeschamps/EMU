@@ -2,8 +2,6 @@ package main.java.embl.rieslab.emu.micromanager.configgroups;
 
 import mmcorej.StrVector;
 
-// I am a bit confused with the micromanager terminology (configuration, group and channel) and I am not sure if it was conserved in MM2.
-
 /**
  * Class wrapper for a Micro-manager configuration group.
  * 
