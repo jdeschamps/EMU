@@ -80,7 +80,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 			public void focusGained(FocusEvent arg0) {}
 			@Override
 			public void focusLost(FocusEvent arg0) {
-				if(isComponentTriggeringOff()){
+				if(isComponentTriggeringEnabled()){
 	
 					String typed = getUserInput();
 	        	    if(typed == null) {
@@ -104,7 +104,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 		textfieldUser_.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(isComponentTriggeringOff()){
+				if(isComponentTriggeringEnabled()){
 					String typed = getUserInput();
 	        	    if(typed == null) {
 	        	        return;
@@ -140,7 +140,7 @@ public class LaserControlPanel extends ConfigurablePanel {
 		togglebuttonUser_.addItemListener(new ItemListener(){
 			@Override
 			public void itemStateChanged(ItemEvent e) {
-				if(isComponentTriggeringOff()){
+				if(isComponentTriggeringEnabled()){
 					if(e.getStateChange()==ItemEvent.SELECTED){
 						String typed = getUserInput();
 		        	    if(typed == null) {

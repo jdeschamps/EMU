@@ -151,25 +151,25 @@ public class AdditionalControlsPanel extends ConfigurablePanel{
 	@Override
 	public void propertyhasChanged(String name, String newvalue) {
 		if(name.equals(DEVICE_1)){
-			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+			if(newvalue.equals(((TwoStateUIProperty) getUIProperty(DEVICE_1)).getOnStateValue())){
 				togglebuttons_[0].setSelected(true);
 			} else {
 				togglebuttons_[0].setSelected(false);
 			}
 		} else if(name.equals(DEVICE_2)){
-			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+			if(newvalue.equals(((TwoStateUIProperty) getUIProperty(DEVICE_2)).getOnStateValue())){
 				togglebuttons_[1].setSelected(true);
 			} else {
 				togglebuttons_[1].setSelected(false);
 			}
 		} else if(name.equals(DEVICE_3)){
-			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+			if(newvalue.equals(((TwoStateUIProperty) getUIProperty(DEVICE_3)).getOnStateValue())){
 				togglebuttons_[2].setSelected(true);
 			} else {
 				togglebuttons_[2].setSelected(false);
 			}
 		} else if(name.equals(DEVICE_4)){
-			if(newvalue.equals(TwoStateUIProperty.getOnStateName())){
+			if(newvalue.equals(((TwoStateUIProperty) getUIProperty(DEVICE_4)).getOnStateValue())){
 				togglebuttons_[3].setSelected(true);
 			} else {
 				togglebuttons_[3].setSelected(false);

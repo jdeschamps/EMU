@@ -65,7 +65,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * In addition, to avoid triggering {@link #changeProperty(String, String)} through the eventListener when modifying the state of a JComponent (as it might happen
  * depending on the eventListener type), {@link #turnOffComponentTriggering()} can be called in the beginning of the subclasses implementation of 
  * {@link #propertyhasChanged(String, String)} and {@link #turnOnComponentTriggering()} at the end. These methods change the state of an internal member
- * boolean variable. In the eventListener, the method {@link #isComponentTriggeringOff()} can query the state of the boolean variable and decide to not
+ * boolean variable. In the eventListener, the method {@link #isComponentTriggeringEnabled()} can query the state of the boolean variable and decide to not
  * call {@link #changeProperty(String, String)}. This mechanism is optional.
  * 
  * @see main.java.embl.rieslab.emu.ui.uiproperties.UIProperty
@@ -512,19 +512,19 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @return true if the component triggering is on, false if it is off.
 	 */
-	protected boolean isComponentTriggeringOff(){
+	protected boolean isComponentTriggeringEnabled(){
 		return componentTriggering_;
 	}
 
 	/**
-	 * Turns off component triggering. See {@link #isComponentTriggeringOff()}.
+	 * Turns off component triggering. See {@link #isComponentTriggeringEnabled()}.
 	 */
 	protected void turnOffComponentTriggering(){
 		componentTriggering_ = false;
 	}
 	
 	/**
-	 * Turns on component triggering. See {@link #isComponentTriggeringOff()}.
+	 * Turns on component triggering. See {@link #isComponentTriggeringEnabled()}.
 	 */
 	protected void turnOnComponentTriggering(){
 		componentTriggering_ = true;
