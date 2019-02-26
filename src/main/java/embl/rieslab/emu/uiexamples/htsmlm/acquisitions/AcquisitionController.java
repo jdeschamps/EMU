@@ -242,7 +242,7 @@ public class AcquisitionController implements TaskHolder<Integer>{
 	public boolean isAcquistionPropertyEnabled(AcquisitionType type) {
 		if(type.equals(AcquisitionType.BFP) && !owner_.getParameterValues(AcquisitionPanel.PARAM_BFP).equals(UIPropertyParameter.NO_PROPERTY)){
 			return true;
-		} else if(type.equals(AcquisitionType.BF) && !owner_.getParameterValues(AcquisitionPanel.PARAM_BFP).equals(UIPropertyParameter.NO_PROPERTY)){
+		} else if(type.equals(AcquisitionType.BF) && !owner_.getParameterValues(AcquisitionPanel.PARAM_BRIGHTFIELD).equals(UIPropertyParameter.NO_PROPERTY)){
 			return true;
 		}
 		return false;  
