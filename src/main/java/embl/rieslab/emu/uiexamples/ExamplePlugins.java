@@ -3,9 +3,6 @@ package main.java.embl.rieslab.emu.uiexamples;
 import java.util.HashMap;
 
 import main.java.embl.rieslab.emu.plugin.UIPlugin;
-import main.java.embl.rieslab.emu.uiexamples.focuslock.FOCUSLOCK;
-import main.java.embl.rieslab.emu.uiexamples.htsmlm.HTSMLM;
-import main.java.embl.rieslab.emu.uiexamples.lasers.LASERS;
 
 public class ExamplePlugins {
 
