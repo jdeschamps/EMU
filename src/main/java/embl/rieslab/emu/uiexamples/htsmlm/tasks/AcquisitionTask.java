@@ -128,8 +128,16 @@ public class AcquisitionTask  implements Task<Integer>{
 					// move to next stage position
 					currPos = poslist.getPosition(i);
 					try {
-						core_.setXYPosition(xystage, currPos.getX(), currPos.getY()); 
-						core_.setPosition(core_.getFocusDevice(), currPos.getZ());
+						
+						int sizePos = currPos.size();
+						for(int j=0;j<sizePos;j++) {
+							String stage = currPos.get(j).getStageDeviceLabel();
+							if(currPos.get(j).is2DStagePosition()) {
+								core_.setXYPosition(stage, currPos.get(j).get2DPositionX(), currPos.get(j).get2DPositionY());
+							} else if(currPos.get(j).is1DStagePosition()) {
+								core_.setPosition(stage, currPos.get(j).get1DPosition());
+							}
+						}
 
 						// let time for the stage to move to position
 						Thread.sleep(param[0] * 1000);
