@@ -12,15 +12,12 @@ public class ExamplePlugins {
 	public static HashMap<String, UIPlugin> getExamplePlugins(){
 		HashMap<String, UIPlugin> plugins = new HashMap<String, UIPlugin>();
 		
-		UIPlugin plugin = new FOCUSLOCK();
-		plugins.put(plugin.getName(), plugin);
-		
-		plugin = new HTSMLM();
+		/*UIPlugin plugin = new FOCUSLOCK();
 		plugins.put(plugin.getName(), plugin);
 		
 		plugin = new LASERS();
 		plugins.put(plugin.getName(), plugin);
-		
+		*/
 		return plugins;
 	}
 }
