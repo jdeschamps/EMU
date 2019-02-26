@@ -90,10 +90,8 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 
 			public void actionPerformed(ActionEvent e) {
 				boolean b = controller_.launchWizard();
-				if (!b) {
-					JOptionPane.showMessageDialog(null,
-							"Configuration wizard already running.",
-							"Information", JOptionPane.INFORMATION_MESSAGE);
+				if (!b ) {
+					showWizardRunning();
 				}
 			}
 		});
@@ -118,6 +116,11 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         this.setJMenuBar(mb); 
 	}
 
+	protected void showWizardRunning() {
+		JOptionPane.showMessageDialog(null,
+				"Configuration wizard already running.",
+				"Information", JOptionPane.INFORMATION_MESSAGE);
+	}
 
 	@SuppressWarnings("rawtypes")
 	private void retrieveUIPropertiesAndParameters() {

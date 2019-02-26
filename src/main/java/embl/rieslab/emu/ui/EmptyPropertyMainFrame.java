@@ -3,6 +3,7 @@ package main.java.embl.rieslab.emu.ui;
 import java.awt.Dimension;
 import java.util.HashMap;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import main.java.embl.rieslab.emu.controller.SystemController;
@@ -47,4 +48,11 @@ public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 		return new HashMap<String, UIParameter>();
 	}
 
+	@Override
+	protected void showWizardRunning() {
+		JOptionPane.showMessageDialog(null,
+				"No plugin found.",
+				"Information", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
 }

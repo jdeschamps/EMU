@@ -83,6 +83,7 @@ public class SystemController {
 			
 			// loads empty MainFrame and stops here
 			mainframe_ = new EmptyPropertyMainFrame(this);
+			
 		} else { // there are plugins
 			// reads out configuration
 			config = new ConfigurationController(this);
@@ -392,7 +393,10 @@ public class SystemController {
 	 * @return False if a Wizard is already running.
 	 */
 	public boolean launchWizard() {
-		return config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
+		if(config != null) {
+			return config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
+		}
+		return false;
 	}
 	
 	// Pairs a ui property and a Micro-manager property together.

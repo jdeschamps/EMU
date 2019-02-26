@@ -55,6 +55,7 @@ public class ConfigurationController {
 		if(getDefaultConfigurationFile().exists()){
 			configuration_ = ConfigurationIO.read(getDefaultConfigurationFile());
 			if(configuration_ == null){  
+				configuration_ = new GlobalConfiguration(); // empty one
 				return false;
 			}
 			return true;
@@ -72,6 +73,7 @@ public class ConfigurationController {
 		if(f.exists()){	
 			configuration_ = ConfigurationIO.read(f);
 			if(configuration_ == null){
+				configuration_ = new GlobalConfiguration(); // empty one
 				return false;
 			}
 			return true;
