@@ -1,5 +1,7 @@
 package main.java.embl.rieslab.emu.ui;
 
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -63,9 +65,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	 */
 	public ConfigurableMainFrame(String title, SystemController controller){
 		controller_ = controller;
-		
-		panels_ = new ArrayList<ConfigurablePanel>();
-		
+				
         this.setTitle(title);
 		
     	this.addWindowListener(new WindowAdapter() {
@@ -76,9 +76,30 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
     	});
 
         setUpMenu();
-		initComponents();
+		initComponents();		
+		
+		panels_ = listConfigurablePanes(this.getContentPane().getComponents(), new ArrayList<ConfigurablePanel>());
+		
 		linkInternalProperties();
 		retrieveUIPropertiesAndParameters();
+		
+
+	}
+
+	private ArrayList<ConfigurablePanel> listConfigurablePanes(Component[] c, ArrayList<ConfigurablePanel> list) {
+		if(list == null) {
+			throw new NullPointerException();
+		}
+				
+		for(int i=0;i<c.length;i++) {
+			if(c[i] instanceof ConfigurablePanel) {
+				list.add((ConfigurablePanel) c[i]);
+			} else if(c[i] instanceof Container) {
+				listConfigurablePanes(((Container) c[i]).getComponents(), list);
+			}
+		}
+		
+		return list;
 	}
 
 	private void setUpMenu() {
@@ -201,14 +222,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		}
 
 		
-	}
-	/**
-	 * Adds {@code configurablePanel} to the internal List of {@link ConfigurablePanel}s.
-	 * 
-	 * @param configurablePanel ConfigurablePanel to add
-	 */
-	protected void registerConfigurablePanel(ConfigurablePanel configurablePanel){
-		panels_.add(configurablePanel);
 	}
 	
 	/**
