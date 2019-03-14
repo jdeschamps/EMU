@@ -105,7 +105,6 @@ public abstract class ConfigurablePanel extends JPanel{
 		initializeProperties();
 		initializeParameters();
 		initializeInternalProperties();
-		setupPanel();
 	}
 
 	/**
@@ -580,14 +579,6 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * their UIparameter and add them to the map of properties using {@link #addUIParameter(UIParameter)}.
 	 */
 	protected abstract void initializeParameters();
-	
-	/**
-	 * Method called in the constructor of a ConfigurablePanel after {@link #addUIProperty(UIProperty)}, {@link #addUIParameter(UIParameter)} 
-	 * and {@link #addInternalProperty(InternalProperty)}. In this method, the subclasses must instantiate their 
-	 * JComponents and build the JPanel (itself) as in any user interface. In particular, the default values of the
-	 * UIParameters can be used.
-	 */
-	protected abstract void setupPanel();
 	
 	/**
 	 * Method called when an internal property's value has been changed. This allows the ConfigurablePanel
