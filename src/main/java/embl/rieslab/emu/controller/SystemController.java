@@ -247,7 +247,7 @@ public class SystemController {
 			config.setDefaultConfiguration(configName);
 		}
 		
-		config.writeConfiguration(); // to set the default configuration in the confgiuration file.
+		config.writeConfiguration(); // to set the default configuration in the configuration file.
 					
 		// closes mainframe
 		mainframe_.shutDownAllConfigurablePanels();

@@ -78,15 +78,13 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         setUpMenu();
 		initComponents();		
 		
-		panels_ = listConfigurablePanes(this.getContentPane().getComponents(), new ArrayList<ConfigurablePanel>());
+		panels_ = listConfigurablePanels(this.getContentPane().getComponents(), new ArrayList<ConfigurablePanel>());
 		
 		linkInternalProperties();
 		retrieveUIPropertiesAndParameters();
-		
-
 	}
 
-	private ArrayList<ConfigurablePanel> listConfigurablePanes(Component[] c, ArrayList<ConfigurablePanel> list) {
+	private ArrayList<ConfigurablePanel> listConfigurablePanels(Component[] c, ArrayList<ConfigurablePanel> list) {
 		if(list == null) {
 			throw new NullPointerException();
 		}
@@ -95,7 +93,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			if(c[i] instanceof ConfigurablePanel) {
 				list.add((ConfigurablePanel) c[i]);
 			} else if(c[i] instanceof Container) {
-				listConfigurablePanes(((Container) c[i]).getComponents(), list);
+				listConfigurablePanels(((Container) c[i]).getComponents(), list);
 			}
 		}
 		

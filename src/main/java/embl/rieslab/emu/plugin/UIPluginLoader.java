@@ -55,8 +55,9 @@ public class UIPluginLoader {
 			}
         }
         
-        URLClassLoader ucl = new URLClassLoader(urls);
-		ServiceLoader<UIPlugin> serviceLoader = ServiceLoader.load(UIPlugin.class,ucl);
+        URLClassLoader ucl = new URLClassLoader(urls, UIPlugin.class.getClassLoader());
+
+		ServiceLoader<UIPlugin> serviceLoader = ServiceLoader.load(UIPlugin.class, ucl);
 		for (UIPlugin uiPlugin : serviceLoader) {
 			plugins_.put(uiPlugin.getName(), uiPlugin);
 		}
