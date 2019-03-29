@@ -46,8 +46,8 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * abstraction methods: {@link #setUIPropertyValue(String, String)} and setInternalPropertyValue(String, ?). UIParameters should not be modified within the subclasses. 
  * Modifications of the JComponents based on UIProperties, UIParameters and InternalProperties changes take place in the subclasses 
  * implementation of {@link #propertyhasChanged(String, String)}, {@link #parameterhasChanged(String)} and {@link #internalpropertyhasChanged(String)} respectively.
- * To query the value of a UIParameter or an InternalProperty, use respectively the methods {@code get{type of the UIParameter}UIParamterValue()} and
- * {@code get{type of the InternalProperty}InternalPropertyValue()}.
+ * To query the value of a UIParameter or an InternalProperty, use respectively the methods {@code getUIParamterValue()} and
+ * {@code getInternalPropertyValue()}.
  *  <p> 
  * For instance, a JToggleButton can be designed to turn on and off a laser. After declaration of the JToggleButton and addition to the panel in the constructor, 
  * an eventListener can be added to the JToggleButton. The eventListener should then call {@link #setUIPropertyValue(String, String)} to modify the corresponding
