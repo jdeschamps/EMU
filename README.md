@@ -20,5 +20,5 @@ Check out the (soon-to-appear) wiki and the [javadoc](https://jdeschamps.github.
 
 ### Is EMU compatible with drag and drop UI design?
 
-Absolutely! Check out [the tutorial on how to graphically design a UI for EMU with Eclipse](tutorial).
+Absolutely! Check out [the tutorial](tutorial) on how to graphically design a UI for EMU with Eclipse.
 
