@@ -255,9 +255,8 @@ ConfigurablePanel has now a name (but we don't know which one yet)!
 
 9)  Resize the elements and the window so that it there is not too much
     blank space and all the elements fit. You can see how the panel
-    looks by clicking on the following button:
+    looks by clicking on the following button: <img align="right" src="images/E-5_showbutton.PNG">
 
-<img align="left" src="images/E-5_showbutton.PNG">
     
    And this how the panel looks like:
 
