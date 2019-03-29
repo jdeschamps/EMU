@@ -202,6 +202,7 @@ public class ConfigurationWizard {
 
 		// Display the window.
 		frame.pack();
+		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		
 		return frame;

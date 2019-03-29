@@ -31,9 +31,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * <p> 
  * Subclasses of ConfigurablePanel must implements few methods called in the ConfigurablePanel constructor in order to instantiate the
  * UIProperties ({@link #initializeProperties()}), UIParameters ({@link #initializeParameters()}) and InternalProperties ({@link #initializeInternalProperties()}), 
- * as well as setting up the JComponents in the JPanel (itself). All JComponent instantiations should happen in {@link #setupPanel()}. Note 
- * that this method is the last one to be called in the ConfigurablePanel constructor, therefore the JPanel set up can also take place in 
- * the subclass constructor equivalently.
+ * as well as setting up the JComponents in the JPanel (itself). All JComponent instantiations should happen in the constructor. 
  * <p> 
  * UIProperties are aimed at linking the state of a MMProperty with the state of one or multiple JComponenents. InternalProperties are made to allow
  * shared values between ConfigurablePanels, such that a modification to one panel can trigger a change in the other panel. Finally, UIProperties
@@ -51,7 +49,7 @@ import main.java.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * To query the value of a UIParameter or an InternalProperty, use respectively the methods {@code get{type of the UIParameter}UIParamterValue()} and
  * {@code get{type of the InternalProperty}InternalPropertyValue()}.
  *  <p> 
- * For instance, a JToggleButton can be designed to turn on and off a laser. After declaration of the JToggleButton and addition to the panel in {@link #setupPanel()}, 
+ * For instance, a JToggleButton can be designed to turn on and off a laser. After declaration of the JToggleButton and addition to the panel in the constructor, 
  * an eventListener can be added to the JToggleButton. The eventListener should then call {@link #setUIPropertyValue(String, String)} to modify the corresponding
  * UIProperty with a new value being on when the JToggleButton is selected, and an off value when the JToggleButton is unselected. More details can be found in
  * tutorials and the javadocs of the different UIProperties implementations.
@@ -90,8 +88,8 @@ public abstract class ConfigurablePanel extends JPanel{
 	private boolean componentTriggering_ = true;
 	
 	/**
-	 * Constructor, calls the abstract methods {@link #initializeProperties()}, {@link #initializeParameters()}, 
-	 * {@link #initializeInternalProperties()} and finally {@link #setupPanel()} (in that order).
+	 * Constructor, calls the abstract methods {@link #initializeProperties()} and {@link #initializeParameters()}, 
+	 * {@link #initializeInternalProperties()}.
 	 * 
 	 * @param label Label of the panel.
 	 */

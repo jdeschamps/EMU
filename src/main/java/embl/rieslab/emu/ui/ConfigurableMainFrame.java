@@ -27,11 +27,11 @@ import mmcorej.CMMCore;
 /**
  * Class representing the main JFrame of a {@link main.java.embl.rieslab.emu.plugin.UIPlugin}. Subclasses must
  * implement the {@link #initComponents()} method, in which the {@link ConfigurablePanel}s must be instantiated
- * and registered using {@link #registerConfigurablePanel(ConfigurablePanel)}.
+ * and added the same way a JPanel is added to a JFrame.
  * <pre>
  * The ConfigurableMainFrame aggregates the UIParameters and the UIProperties, as well as linking together the
  * InternalProperties. If two UIProperties have the same name, then the last added UIproperty will replace the 
- * first ones. The order is the same as the order of {@link #registerConfigurablePanel(ConfigurablePanel)}. 
+ * first ones. The order is the order of discovery while going through the componenents of the JFrame. 
  * <pre>
  * For UIParameters, on the other hand, two UIParameters are allowed to have the same hash ({ConfigurablePanel name}-{UIParameter name})
  * only if they have the same type. Should such case arise, all UIParameters but the first one to appear (in order
@@ -75,8 +75,11 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
     	    }
     	});
 
+		this.setLocationRelativeTo(null);
         setUpMenu();
 		initComponents();		
+		
+		this.setVisible(true);
 		
 		panels_ = listConfigurablePanels(this.getContentPane().getComponents(), new ArrayList<ConfigurablePanel>());
 		
@@ -329,8 +332,8 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	}
 
 	/**
-	 * Sets-up the frame, in this method the subclasses should instantiate the ConfigurablePanels and register them using 
-	 * {@link #registerConfigurablePanel(ConfigurablePanel)}.
+	 * Sets-up the frame, in this method the subclasses should instantiate the ConfigurablePanels and add them
+	 * to the ConfigurableMainFrame.
 	 */
 	protected abstract void initComponents();
 
