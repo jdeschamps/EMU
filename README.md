@@ -1,7 +1,7 @@
 ## Easier Micro-manager User interface (EMU)
 
 EMU is a plugin for [Micro-Manager](https://micro-manager.org/wiki/Micro-Manager)
- aimed at loading reconfigurable user interfaces. 
+ aimed at loading easily reconfigurable and transferable user interfaces. 
 
 ### Motivation for EMU
 
@@ -18,3 +18,13 @@ If your microscope or set-up has many devices, then the PropertyBrowser can be s
 Finally, plugin are the choice method to obtain an intuitive user interface to control a microscope with many devices. Unfortunately, this often means hard-coded references to the device properties and aspects of the user interface.
 
 EMU operates as a Micro-Manager plugin and loads its own plugins. Once a plugin loaded, the user can navigate the EMU settings to map the device properties (from Micro-Manager) to functions of the user interface. This makes the user interface easily reconfigurable (for instance when a device is exchanged) and transferable to other set-up. In addition, the user interface can define some properties (such as titles or colors) that can also be set through the EMU interface.
+
+### How does EMU work?
+
+The EMU library defines two classes that are the building blocks of the reconfigurable UIs: [ConfigurablePanel](https://jdeschamps.github.io/EMU/main/java/embl/rieslab/emu/ui/ConfigurablePanel.html) and [ConfigurableMainFrame](https://jdeschamps.github.io/EMU/main/java/embl/rieslab/emu/ui/ConfigurableMainFrame.html).
+
+(to be updated soon)
+
+### Is EMU compatible with drag and drop design of user interfaces?
+
+Absolutely! Check out [the tutorial on how to graphically design a UI for EMU with Eclipse](tutorial).
