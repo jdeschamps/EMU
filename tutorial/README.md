@@ -11,7 +11,9 @@ possible to do with EMU and where to find more in-depth explanations.
 
 Here is a preview of the UI we are going to build:
 
-<img align="center" src="images/0-Final.PNG">
+<p align="center">
+<img src="images/0-Final.PNG">
+</p>
 
 You will see that while working on the source code we will not write
 down the name of the properties each button is supposed to change. We
@@ -63,8 +65,9 @@ C - Setting up the eclipse project
 2)  Then we will create our own project: in the "**Package Explorer**"
     window, right-click and create a new "**Java Project**"
 
-
-<img align="center" src="images/C-1_new_project.png">
+<p align="center">
+<img src="images/C-1_new_project.png">
+</p>
 
 
 3)  On the pop-up, sets the name of your project. E.g. "*MyUI*". Make
@@ -79,8 +82,9 @@ C - Setting up the eclipse project
     "*MyUI/src*". The package should appear in the ***src*** source
     folder in your project.
     
-
-  <img align="center" src="images/C-2_package.png">
+<p align="center">
+<img src="images/C-2_package.png">
+</p>
 
 
 D - A bit of background
@@ -172,8 +176,9 @@ The class should appear in the "**Package Explorer**" and its java code pop up.
     on "[Add unimplemented methods]{.underline}". A bunch of methods
     should now appear in the code.
 
-
-<img align="center" src="images/E-1_suggestion.PNG">
+<p align="center">
+<img src="images/E-1_suggestion.PNG">
+</p>
 
 
 > Note: If Eclipse does not suggest anything when the mouse is placed on
@@ -212,8 +217,8 @@ ConfigurablePanel has now a name (but we don't know which one yet)!
     parameters appear should appear, with the line "**Layout** \|
     (absolute)".
 
-
-<img align="center" src="images/E-2_layouts.PNG">
+<p align="center">
+<img src="images/E-2_layouts.PNG">
 
 
 5)  With the ConfigurablePanel selected, in the "**Properties**" window,
@@ -221,8 +226,9 @@ ConfigurablePanel has now a name (but we don't know which one yet)!
     appears. Select "**Titled border**", and give it a name ("*Laser*")
     and a justification (e.g. "*Left*"). Then click ok.
 
-
-<img align="center" src="images/E-3_border.PNG">
+<p align="center">
+<img src="images/E-3_border.PNG">
+</p>
 
 
 6)  Let's now place the first component: a **JLabel**. Select it and
@@ -255,12 +261,17 @@ ConfigurablePanel has now a name (but we don't know which one yet)!
 
 9)  Resize the elements and the window so that it there is not too much
     blank space and all the elements fit. You can see how the panel
-    looks by clicking on the following button: <img align="right" src="images/E-5_showbutton.PNG">
+    looks by clicking on the following button:
+
+<p align="center">    
+<img src="images/E-5_showbutton.PNG">
+</p>
 
     
    And this how the panel looks like:
-
-<img align="center" src="images/E-4_laserpanel.PNG">
+<p align="center">
+<img src="images/E-4_laserpanel.PNG">
+</p>
 
 
 10) For each component, right click on it and select "**Expose
@@ -516,7 +527,9 @@ We are now done with the LaserPanel!
     name related to their position. We advise starting the numbering
     from 0 for consistency with the UIProperty states we will work with.
 
-<img align="center" src="images/E-6_fwpanel.PNG">
+<p align="center">
+<img src="images/E-6_fwpanel.PNG">
+</p>
 
 -   Right click on the first JToggleButton and select "**Set ButtonGroup
     -\> new standard**". A ButtonGroup will appear in the Components
@@ -526,7 +539,9 @@ We are now done with the LaserPanel!
     at a time. The Components window should then look like the image on
     the left.
     
-<img align="center" src="images/E-7_buttongroup.PNG">
+<p align="center">
+<img src="images/E-7_buttongroup.PNG">
+</p>
 
 -   We add an event handler under the form of an item listener to each
     JToggleButton.
@@ -600,8 +615,9 @@ Micro-Manager, so we can put a null value.
     make it bigger just as you would do with a window on the computer.
     Arrange three lasers and the filter wheel panel. 
 
-<img align="center" src="images/F-1_frame.PNG">
-
+<p align="center">
+<img src="images/F-1_frame.PNG">
+</p>
 An important step
     is to go the "Constructor" property of each of the ConfigurablePanel
     (in the properties window) and set the label to a unique name for
@@ -609,8 +625,9 @@ An important step
     ConfigurablePanel, and will ultimately be in the name of the
     UIProperties and UIParameters, so make them unique!):
     
-<img align="center" src="images/F-2_labels.PNG">
-
+<p align="center">
+<img src="images/F-2_labels.PNG">
+</p>
 
 5)  There is one last very important thing to do now, that is to move
     all the content of the constructor (except the "super()" call) to
