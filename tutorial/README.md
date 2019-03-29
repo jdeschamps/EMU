@@ -4,9 +4,7 @@ Micro-Manager. We will put together a user interface to control three
 lasers and one filterwheel using the drag and drop editor of Eclipse.
 
 The tutorial requires a basic understanding of Java as some functions
-need to be implemented. However here, the snippets of code are provided.
-However, custom plugins for your applications will require their own
-methods. At the end of the tutorial, few tips are given on what is
+need to be implemented. However here, the snippets of code are provided. At the end of the tutorial, few tips are given on what is
 possible to do with EMU and where to find more in-depth explanations.
 
 Here is a preview of the UI we are going to build:
