@@ -11,7 +11,7 @@ possible to do with EMU and where to find more in-depth explanations.
 
 Here is a preview of the UI we are going to build:
 
-![Result](images/0-Final.png)
+<img align="center" src="images/0-Final.PNG">
 
 You will see that while working on the source code we will not write
 down the name of the properties each button is supposed to change. We
@@ -29,7 +29,7 @@ Eclipse: **Version: 2018-12 (4.10.0)**
 
 EMU: commit hash **253268c**, commit tag **v1-alpha-release**
 
-Making sure that eclipse runs java 8
+A - Making sure that eclipse runs java 8
 ====================================
 
 1)  In Eclipse, go to "**Window -\> Preferences -\> Java -\> Installed
@@ -37,20 +37,19 @@ Making sure that eclipse runs java 8
     will need to download it and link it to Eclipse (in the same
     window).
 
-Downloading the WindowBuilder plugin for Eclipse 
+B - Downloading the WindowBuilder plugin for Eclipse 
 =================================================
 
 1)  WindowBuilder is an Eclipse plugin to build user interface by
     dragging and dropping the elements. To install the WindowBuilder and
     the Swing designer plugins, go to "**Help -\> Install New
-    Software**". In the window that opens, in "**work with**", select "All Available Sites". Search for "*WindowBuilder*", check all
-    the relevant packages (they should appear within "**General purpose
-    tools**"). Then search for "*Swing Designer*" and again check the
+    Software**". In the window that opens, in "**work with**", select "**All Available Sites**". Search for "*WindowBuilder*", check all
+    the relevant packages (they should appear within "**General purpose tools**"). Then search for "*Swing Designer*" and again check the
     relevant packages. Finally install them.
 
 2)  Restart Eclipse
 
-Setting up the eclipse project
+C - Setting up the eclipse project
 ==============================
 
 1)  First, we import the EMU project in eclipse (refer to the EMU
@@ -64,8 +63,9 @@ Setting up the eclipse project
 2)  Then we will create our own project: in the "**Package Explorer**"
     window, right-click and create a new "**Java Project**"
 
-    ![](media/image2.png){width="2.8631944444444444in"
-    height="2.8715277777777777in"}
+
+<img align="center" src="images/C-1_new_project.png">
+
 
 3)  On the pop-up, sets the name of your project. E.g. "*MyUI*". Make
     sure that **JavaSE-1.8** or equivalent (e.g. jdk1.8, JavaSE8) is
@@ -78,11 +78,12 @@ Setting up the eclipse project
     something like "*main.java.myUI*". Make sure that the source is
     "*MyUI/src*". The package should appear in the ***src*** source
     folder in your project.
+    
 
-    ![C:\\Users\\Ries\\workspaceMM\\EMU\\tutorial\\images\\1-1\_package.png](media/image3.png){width="2.3520833333333333in"
-    height="1.2722222222222221in"}
+  <img align="center" src="images/C-2_package.png">
 
-A bit of background
+
+D - A bit of background
 ===================
 
 In Java Swing (a library for user interface), the main elements of a UI
@@ -131,7 +132,7 @@ a change in the value of a UIProperty have to be done programmatically.
 In this example, we will see that, most of the time, this consists in
 quite simple programming.
 
-Creating the modules of your UI: ConfigurablePanels
+E - Creating the modules of your UI: ConfigurablePanels
 ===================================================
 
 In this section, we will create two panels with several **components**
@@ -160,9 +161,8 @@ interactions with the components.
 > ConfigurablePanels, which are extensions of JPanel. Therefore, in
 > order to build an EMU plugin, we needed to change the nature of
 > "*LaserPanel*" from JPanel to ConfigurablePanel.
->
-> The class should appear in the "**Package Explorer**" and its java
-> code pop up.
+
+The class should appear in the "**Package Explorer**" and its java code pop up.
 
 2)  Eclipse should now point out errors in the code. Place the mouse on
     the underlined error in the declaration of the class: "**public**
@@ -172,9 +172,9 @@ interactions with the components.
     on "[Add unimplemented methods]{.underline}". A bunch of methods
     should now appear in the code.
 
-    ![X:\\users\\Joran\\EMU
-    example\\images\\Suggestion.PNG](media/image4.png){width="6.276119860017498in"
-    height="2.2871686351706035in"}
+
+<img align="center" src="images/E-1_suggestion.PNG">
+
 
 > Note: If Eclipse does not suggest anything when the mouse is placed on
 > the error, then look at the preferences in "**Window/Preferences**" in
@@ -188,17 +188,16 @@ interactions with the components.
     constructor, write "**super**(label);". The method should now look
     as following:
 
-**public** LaserPanel(String label) {
-
-**super**(label);
-
+```java
+public LaserPanel(String label) {
+	super(label);
 }
+```
 
 Save the class, the error warning should disappear. Your
 ConfigurablePanel has now a name (but we don't know which one yet)!
 
-4)  ![](media/image5.png){width="1.5819444444444444in"
-    height="1.5597222222222222in"}At the bottom of the window in which
+4)  At the bottom of the window in which
     the Java code is displayed, click on "**Design**". This opens the
     graphical editor of Eclipse. You should see an empty grey rectangle
     that represents the ConfigurablePanel. In the following points, we
@@ -213,12 +212,18 @@ ConfigurablePanel has now a name (but we don't know which one yet)!
     parameters appear should appear, with the line "**Layout** \|
     (absolute)".
 
-    ![](media/image6.png){width="2.425in" height="1.36875in"}
+
+<img align="center" src="images/E-2_layouts.PNG">
+
 
 5)  With the ConfigurablePanel selected, in the "**Properties**" window,
     click on "..." in front of the "**Border**" property. A new window
     appears. Select "**Titled border**", and give it a name ("*Laser*")
     and a justification (e.g. "*Left*"). Then click ok.
+
+
+<img align="center" src="images/E-3_border.PNG">
+
 
 6)  Let's now place the first component: a **JLabel**. Select it and
     place it on the ConfigurablePanel, write "*50%*" in there. Its
@@ -246,15 +251,18 @@ ConfigurablePanel has now a name (but we don't know which one yet)!
     name it "**laserOnOffButton**". Add an item event handler: "**Add**
     **event handler -\> item -\> itemStateChanged**".
 
-    ![](media/image7.png){width="0.7923611111111111in"
-    height="1.8555555555555556in"}
+
 
 9)  Resize the elements and the window so that it there is not too much
     blank space and all the elements fit. You can see how the panel
     looks by clicking on the following button:
-    (![C:\\Users\\Ries\\workspaceMM\\EMU\\tutorial\\images\\2\_button\_show.PNG](media/image8.png){width="0.35208333333333336in"
-    height="0.30416666666666664in"}). On the left is how our own panel
-    looks like.
+
+<img align="left" src="images/E-5_showbutton.PNG">
+    
+   And this how the panel looks like:
+
+<img align="center" src="images/E-4_laserpanel.PNG">
+
 
 10) For each component, right click on it and select "**Expose
     component**". Set it to "**protected**" and click ok.
@@ -267,130 +275,94 @@ components.
 
 11) Go to the "**Source**" tab.
 
-12) Replace the "**[null]{.underline}**" object returned by "**public**
+12) Replace the "**[null]**" object returned by "**public**
     String getDescription()" by a description of what the panel is
     intended for, e.g.:
-
-\@Override
-
-**public** String getDescription() {
-
-**return** \"Panel controlling the power percentage of a single
-laser.\";
-
+    
+```java
+@Override
+public String getDescription() {
+	return "Panel controlling the power percentage of a single laser.";
 }
+```
 
 13) Let's create two properties: laser percentage and laser operation.
     The first one will be changed when the JSlider is moved, the second
     one when the JToggleButton is clicked. First, create global
     variables that cannot be changed to hold the name of the properties:
 
-    **public** **class** [LaserPanel]{.underline} **extends**
-    ConfigurablePanel {
-
+```java
+public class LaserPanel extends ConfigurablePanel {
     //////// Properties
+    public final static String LASER_PERCENTAGE = "power percentage";
+    public final static String LASER_OPERATION = "enable";
 
-    **public** **final** **static** String ***LASER\_PERCENTAGE*** =
-    \"power percentage\";
+    [...]
+```
 
-    **public** **final** **static** String ***LASER\_OPERATION*** =
-    \"enable\";
-
-    \[...\]
-
-    This is not a necessary step, but using the constant
-    "***LASER\_PERCENTAGE***" instead of \"power percentage\" every time
+   This is not a necessary step, but using the constant
+    "***LASER\_PERCENTAGE***" instead of "power percentage" every time
     we need to call the UIProperty will greatly reduce the chances of
     making a mistake.
 
 14) In the method "**protected** **void** initializeProperties()",
     create the properties and add them to the ConfigurablePanel:
 
-    \@Override
 
-    **protected** **void** initializeProperties() {
+```java
+@Override
+protected void initializeProperties() {	
 
-    // description of the LASER\_PERCENTAGE property
+	// description of the LASER_PERCENTAGE property
+	// (this will be displayed in the help window of EMU)
+	String text1 = "Property changing the percentage of the laser.";
 
-    // (this will be displayed in the help window of EMU)
+	// description of the LASER_OPERATION property
+	String text2 = "Property turning the laser on and off.";
 
-String text1 = \"Property changing the percentage of the laser.\";
+	// Adds a new property called LASER_PERCENTAGE:
+	// new UIProperty(<ConfigurablePanel that created it>, <Name of the property>, <Description>, <FLag>)
+	// Since we might have several lasers, we want the property to have a unique name,
+	// therefore we use the label of the ConfigurablePanel in the name. The NoFlag call
+	// is beyond the scope of this tutorial.
+	addUIProperty(new UIProperty(this, getLabel() + " " + LASER_PERCENTAGE, text1, new NoFlag()));
 
-> // description of the LASER\_OPERATION property
+	// Using <getLabel()+” ”+LASER_PERCENTAGE> here means that EVERY time we need to call the
+	// UIProperty we should use the same expression!
 
-String text2 = \"Property turning the laser on and off.\";
-
-// Adds a new property called LASER\_PERCENTAGE:
-
-// new UIProperty(\<ConfigurablePanel that created it\>, \<Name of the
-property\>,
-
-// \<Description\>, \<FLag\>)
-
-// Since we might have several lasers, we want the property to have a
-unique name,
-
-> // therefore we use the label of the ConfigurablePanel in the name.
-> The NoFlag call
->
-> // is beyond the scope of this tutorial.
-
-[addUIProperty]{.underline}(**new** [UIProperty]{.underline}(**this**,
-getLabel()+\" \"+***LASER\_PERCENTAGE***, text1, **new**
-[NoFlag]{.underline}()));
-
-// Using \<getLabel()+" "+LASER\_PERCENTAGE\> here means that EVERY time
-we need to call the
-
-// UIProperty we should use the same expression!
-
-// We do the same with LASER\_OPERATION, albeit with a different type of
-property.
-
-// Since on/off is only "on" or "off", we ensure that this will always
-be the case by
-
-// making it a two-state property.
-
-[addUIProperty]{.underline}(**new**
-[TwoStateUIProperty]{.underline}(**this**,getLabel()+\"
-\"+***LASER\_OPERATION***, text2,
-
-**new** [NoFlag]{.underline}()));
-
+	// We do the same with LASER_OPERATION, albeit with a different type of property.
+	// Since on/off is only “on” or “off”, we ensure that this will always be the
+	// case by making it a two-state property.
+	addUIProperty(new TwoStateUIProperty(this, getLabel() + " " + LASER_OPERATION, text2, new NoFlag()));
 }
+
+```
 
 Errors should arise. This time again, place the cursor on the
 UIProperty, the TwoStateUIProperty and the NoFlag classes, then Eclipse
 should subject to import the classes and the error will disappear.
-
-![](media/image9.png){width="4.386152668416448in"
-height="0.7426345144356955in"}
 
 15) Now that the properties have been declared in the right method,
     let's implement the effect of the components upon interaction with
     the user. Implements the body of the **mouseListener** that was
     applied to the JSlider as followed:
 
-    \@Override
+```java
+laserPercentageSlider.addMouseListener(new MouseAdapter() {
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// Retrieves the new value of the JSlider
+		int val = laserPercentageSlider.getValue();
+			
+		// Sets the property to this value (remember to use the same name as in the
+		// declaration)
+		setUIPropertyValue(getLabel() + " " + LASER_PERCENTAGE, String.valueOf(val));
 
-    **public** **void** mouseReleased(MouseEvent e) {
-
-    // Retrieves the new value of the JSlider
-
-**int** val = laserPercentageSlider.getValue();
-
-> // Sets the property to this value (remember to use the same name as
-> in the declaration)
-
-setUIPropertyValue(getLabel()+\" \"+ ***LASER\_PERCENTAGE***,
-String.*valueOf*(val));
-
-// let\'s also modify the JLabel!
-
-laserPercentageLabel.setText(String.*valueOf*(val) +\"%\");
-
-}
+		// let's also modify the JLabel!
+		laserPercentageLabel.setText(String.valueOf(val) + "%");
+	}
+});
+```
 
 The code to modify the property is pretty simple: when the user drags
 the slider and let it go, the function "mouseReleased()" is called. In
@@ -398,7 +370,7 @@ its body, it just retrieves the new value of the JSlider and sets the
 UIProperty to this value. Note that the value has to be passed as a
 **String**. An important point is that the method "setUIPropertyValue()"
 expects the name of the UIproperty: this should be the exact same name
-that we set in 14). That is to say here:\
+that we set in 14). That is to say here:
 "***getLabel()+' '+LASER\_PERCENTAGE***".
 
 16) Let's do the same for the **JToggleButton**. Here we have an
@@ -406,34 +378,20 @@ that we set in 14). That is to say here:\
     selected or unselected. Implements the following body of "**public**
     **void** itemStateChanged(ItemEvent e)":
 
-    **public** **void** itemStateChanged(ItemEvent e) {
-
-> **if**(e.getStateChange()==ItemEvent.***SELECTED***){ // if the
-> JToggleButton was selected
-
-// sets the UIProperty to the On state (without any prior on what this
-
-// state is)
-
-> // since we declared the UIProperty as a TwoStateUIProperty, we know
->
-> // this will work out!
-
-setUIPropertyValue(getLabel()+
-
-\" \"+***LASER\_OPERATION***,TwoStateUIProperty.*getOnStateName*());
-
-} **else** **if**(e.getStateChange()==ItemEvent.***DESELECTED***){
-
-// if the JToggleButton was deselected
-
-setUIPropertyValue(getLabel()
-
-+\" \"+***LASER\_OPERATION***,TwoStateUIProperty.*getOffStateName*());
-
-}
-
-}
+```java
+laserOnOffButton.addItemListener(new ItemListener() {
+	public void itemStateChanged(ItemEvent arg0) {
+		if (arg0.getStateChange() == ItemEvent.SELECTED) { // if the JToggleButton was selected
+			// sets the UIProperty to the On state (without any prior on what this
+			// state is)
+			// since we declared the UIProperty as a TwoStateUIProperty, we know
+			// this will work out!
+			setUIPropertyValue(getLabel() + " " + LASER_OPERATION, TwoStateUIProperty.getOnStateName());
+		} else if (arg0.getStateChange() == ItemEvent.DESELECTED) {// if the JToggleButton was deselected						setUIPropertyValue(getLabel() + " " + LASER_OPERATION, TwoStateUIProperty.getOffStateName());
+		}
+	}
+});
+```
 
 Here the UIProperty is a TwoStateUIproperty, and therefore it only
 accepts two states. Because we do not know what this state is, we just
@@ -447,53 +405,32 @@ send the generic "TwoStateUIProperty.*getOnStateName*()" and
     ConfigurablePanel modifies the same device property. Let's have a
     look at an implementation:
 
-\@Override
+```java
+@Override
+protected void propertyhasChanged(String propertyName, String newvalue) {
+	if (propertyName.equals(getLabel() + " " + LASER_PERCENTAGE)) {
+		if (utils.isNumeric(newvalue)) {
+			// rounds it up
+			int val = (int) Double.parseDouble(newvalue);
 
-**protected** **void** propertyhasChanged(String propertyName, String
-newvalue) {
+			if (val >= 0 && val < 100) {
+				laserPercentageSlider.setValue(val);
+				laserPercentageLabel.setText(String.valueOf(val) + "%");
+			}
+		}
+	} else if (propertyName.equals(getLabel() + " " + LASER_OPERATION)) {
 
-**if** (propertyName.equals(getLabel() + \" \" +
-***LASER\_PERCENTAGE***)) {
+		// get the value of the On state of the LASER_OPERATION UIProperty 
+		String onValue = ((TwoStateUIProperty) getUIProperty(getLabel() + " " + LASER_OPERATION)).getOnStateValue();
 
-**if** (utils.*isNumeric*(newvalue)) {
-
-// rounds it up
-
-**int** val = (**int**) Double.*parseDouble*(newvalue);
-
-**if** (val \>= 0 && val \< 100) {
-
-laserPercentageSlider.setValue(val);
-
-laserPercentageLabel.setText(String.*valueOf*(val) + \"%\");
-
+		if (newvalue.equals(onValue)) {
+			laserOnOffButton.setSelected(true);
+		} else {
+			laserOnOffButton.setSelected(false);
+		}
+	}
 }
-
-}
-
-} **else** **if** (propertyName.equals(getLabel() + \" \" +
-***LASER\_OPERATION***)) {
-
-// get the value of the On state of the LASER\_OPERATION UIProperty
-
-> String onValue = ((TwoStateUIProperty) getUIProperty(getLabel() + \"
-> \" +
->
-> ***LASER\_OPERATION***)).getOnStateValue();
-
-**if** (newvalue.equals(onValue)) {
-
-laserOnOffButton.setSelected(**true**);
-
-} **else** {
-
-laserOnOffButton.setSelected(**false**);
-
-}
-
-}
-
-}
+```
 
 Here, we first check which property has changed (by comparing
 "**propertyName**" to the two properties name). If the property is
@@ -514,25 +451,21 @@ the on state or not.
     properties, we start by declaring some constants in the beginning of
     the class:
 
+```java
 //////// Parameters
-
-**public** **final** **static** String ***PARAM\_TITLE*** = \"Name\";
-
-**public** **final** **static** String ***PARAM\_COLOR*** = \"Color\";
+public final static String PARAM_TITLE = "Name";
+public final static String PARAM_COLOR = "Color";	
+```
 
 Then we implement the initialization method:
 
-\@Override
-
-**protected** **void** initializeParameters() {
-
-addUIParameter(**new** StringUIParameter(**this**, ***PARAM\_TITLE***,
-\"Panel title.\",getLabel()));
-
-addUIParameter(**new** ColorUIParameter(**this**, ***PARAM\_COLOR***,
-\"Laser color.\",Color.***black***));
-
+```java
+@Override
+protected void initializeParameters() {
+	addUIParameter(new StringUIParameter(this, PARAM_TITLE, "Panel title.",getLabel()));
+	addUIParameter(new ColorUIParameter(this, PARAM_COLOR, "Laser color.",Color.black));
 }
+```
 
 Here, we create a String parameter for the title with a default value
 which is simply the label of the ConfigurablePanel. We also create a
@@ -542,29 +475,20 @@ classes again to resolve the errors.
 19) The next step is to implement the method called when the value of
     the parameter is changed:
 
-\@Override
-
-**protected** **void** parameterhasChanged(String parameterName) {
-
-**if**(parameterName.equals(***PARAM\_TITLE***)){
-
-> ((TitledBorder)**this**.getBorder())
->
-> .setTitle(getStringUIParameterValue(***PARAM\_TITLE***));
-
-**this**.repaint();
-
-} **else** **if**(parameterName.equals(***PARAM\_COLOR***)){
-
-((TitledBorder) **this**.getBorder())
-
-> .setTitleColor(getColorUIParameterValue(***PARAM\_COLOR***));
-
-**this**.repaint();
-
+```java
+@Override
+protected void parameterhasChanged(String parameterName) {
+	if (parameterName.equals(PARAM_TITLE)) { // if title parameter
+		// retrieves the TitledBorder and changes its title (that way our laser can be called anything in the UI!)
+		((TitledBorder) this.getBorder()).setTitle(getStringUIParameterValue(PARAM_TITLE));
+		this.repaint();
+	} else if (parameterName.equals(PARAM_COLOR)) { // if color parameter
+		// sets the color of the TitledBorder to make the laser more identifiable
+		((TitledBorder) this.getBorder()).setTitleColor(getColorUIParameterValue(PARAM_COLOR));
+		this.repaint();
+	}
 }
-
-}
+```
 
 In this method, we again compare the label of the parameter that has
 changed with our two parameters. Then we retrieve the border of the
@@ -593,9 +517,7 @@ We are now done with the LaserPanel!
     name related to their position. We advise starting the numbering
     from 0 for consistency with the UIProperty states we will work with.
 
-![](media/image10.png){width="1.4472222222222222in"
-height="2.3465277777777778in"}![](media/image11.png){width="2.3802023184601926in"
-height="0.5597014435695538in"}
+<img align="center" src="images/E-6_fwpanel.PNG">
 
 -   Right click on the first JToggleButton and select "**Set ButtonGroup
     -\> new standard**". A ButtonGroup will appear in the Components
@@ -604,6 +526,8 @@ height="0.5597014435695538in"}
     called so). The ButtonGroup ensures that only one filter is selected
     at a time. The Components window should then look like the image on
     the left.
+    
+<img align="center" src="images/E-7_buttongroup.PNG">
 
 -   We add an event handler under the form of an item listener to each
     JToggleButton.
@@ -640,17 +564,16 @@ height="0.5597014435695538in"}
 
 -   Finally we implement the parameterHasChanged method.
 
-Assembling the modules in the main window
+F - Assembling the modules in the main window
 =========================================
 
-As in E-1, right-click on your package, and create a "new -\> other". Select a JFrame and in the pop-up window, give it a name ("MyFrame") and set its superclass to "ConfigurableMainFrame". Eclipse should show some error. First overlay the point on to the class declaration and ask Eclipse to automatically implement the missing methods. Finally, replace the constructor of the class by:
-===================================================================================================================================================================================================================================================================================================================================================================================================
+1) As in E-1, right-click on your package, and create a "new -\> other". Select a JFrame and in the pop-up window, give it a name ("MyFrame") and set its superclass to "ConfigurableMainFrame". Eclipse should show some error. First overlay the point on to the class declaration and ask Eclipse to automatically implement the missing methods. Finally, replace the constructor of the class by:
 
-**public** MyFrame(String title, SystemController controller) {
-
-**super**(title, controller);
-
+```java
+public MyFrame(String title, SystemController controller) {
+	super(title, controller);
 }
+```
 
 Import the SystemController class (using Eclipse help). Now the only
 error left should be in the call to "MyFrame frame = **new**
@@ -670,67 +593,59 @@ Micro-Manager, so we can put a null value.
     LaserPanel. Checked them and click on "ok", they should then be
     added to the Palette.
 
-4)  ![](media/image12.png){width="2.1729166666666666in"
-    height="2.088888888888889in"}Add an **AbsoluteLayout** to the
+4)  Add an **AbsoluteLayout** to the
     ConfigurableMainFrame content panel. Then place the components by
     clicking in the pallet on one of them and tracing in the
     ConfigurableMainFrame their position (and size). If the panel does
     not appear, you probably gave it a 0-by-0 size. Just select it and
     make it bigger just as you would do with a window on the computer.
-    Arrange three lasers and the filter wheel panel. An important step
+    Arrange three lasers and the filter wheel panel. 
+
+<img align="center" src="images/F-1_frame.PNG">
+
+An important step
     is to go the "Constructor" property of each of the ConfigurablePanel
     (in the properties window) and set the label to a unique name for
     each of them (remember this name is the label of each
     ConfigurablePanel, and will ultimately be in the name of the
     UIProperties and UIParameters, so make them unique!):
+    
+<img align="center" src="images/F-2_labels.PNG">
 
-    ![](media/image13.png){width="2.649254155730534in"
-    height="0.7459995625546807in"}
 
 5)  There is one last very important thing to do now, that is to move
     all the content of the constructor (except the "super()" call) to
     the "initComponents()" method.
 
-**public** MyFrame(String title, SystemController controller) {
+```java
+	public MyFrame( String title, SystemController controller) {
+		super(title, controller);
 
-**super**(title, controller);
 
-}
+	}
 
-\@Override
-
-**protected** **void** initComponents() {
-
-setBounds(100, 100, 414, 398);
-
-getContentPane().setLayout(**null**);
-
-LaserPanel laserPanel = **new** LaserPanel(\"Laser 1\");
-
-laserPanel.setBounds(0, 0, 116, 280);
-
-getContentPane().add(laserPanel);
-
-LaserPanel laserPanel\_1 = **new** LaserPanel(\"Laser 2\");
-
-laserPanel\_1.setBounds(139, 0, 116, 280);
-
-getContentPane().add(laserPanel\_1);
-
-FilterWheelPanel filterWheelPanel = **new**
-FilterWheelPanel(\"Filterwheel\");
-
-filterWheelPanel.setBounds(0, 278, 395, 57);
-
-getContentPane().add(filterWheelPanel);
-
-LaserPanel laserPanel\_2 = **new** LaserPanel(\"Laser 3\");
-
-laserPanel\_2.setBounds(279, 0, 116, 280);
-
-getContentPane().add(laserPanel\_2);
-
-}
+	@Override
+	protected void initComponents() {
+		setBounds(100, 100, 414, 398);
+		getContentPane().setLayout(null);
+		
+		LaserPanel laserPanel = new LaserPanel("Laser 1");
+		laserPanel.setBounds(0, 0, 116, 280);
+		getContentPane().add(laserPanel);
+		
+		LaserPanel laserPanel_1 = new LaserPanel("Laser 2");
+		laserPanel_1.setBounds(139, 0, 116, 280);
+		getContentPane().add(laserPanel_1);
+		
+		FilterWheelPanel filterWheelPanel = new FilterWheelPanel("Filterwheel");
+		filterWheelPanel.setBounds(0, 278, 395, 57);
+		getContentPane().add(filterWheelPanel);
+		
+		LaserPanel laserPanel_2 = new LaserPanel("Laser 3");
+		laserPanel_2.setBounds(279, 0, 116, 280);
+		getContentPane().add(laserPanel_2);
+	}
+```
 
 The reason to do so is to ensure that the frame is initiated at the
 right moment. The WindowBuilder from Eclipse generates the code in the
@@ -740,7 +655,7 @@ the constructor. **Another important point** is to remove the
 "setDefaultCloseOperation(JFrame.***EXIT\_ON\_CLOSE***);" line,
 otherwise upon closing your plugin Micro-manager will shut down.
 
-Implementing the plugin class
+G - Implementing the plugin class
 =============================
 
 1)  We need now to implement the plugin class. Right-click on the
@@ -750,25 +665,26 @@ Implementing the plugin class
 
 2)  This class is very simple, you just need to indicate a name in one
     of the method and instantiate your main frame in the other:
+    
+```java
+public class MyPlugin implements UIPlugin {
 
-\@Override
+	@Override
+	public String getName() {
+		// TODO Auto-generated method stub
+		return "MyUI";
+	}
 
-**public** String getName() {
-
-**return** \"MyUI\";
+	@Override
+	public ConfigurableMainFrame getMainFrame(SystemController controller) {
+		// TODO Auto-generated method stub
+		return new MyFrame(getName(), controller);
+	}
 
 }
+```
 
-\@Override
-
-**public** ConfigurableMainFrame
-[getMainFrame]{.underline}(SystemController controller) {
-
-**return** **new** MyFrame(getName(), controller);
-
-}
-
-Declaring the plugin and exporting the .jar
+H - Declaring the plugin and exporting the .jar
 ===========================================
 
 1)  The final thing to do is to add a file that would tell EMU which
@@ -790,7 +706,7 @@ Declaring the plugin and exporting the .jar
     Files\\Micro-Manager-2.0gamma\\EMU\\MyUI.jar". Do not include in the
     .jar the previously created jar.
 
-Loading in Micro-Manager and configuration
+I - Loading in Micro-Manager and configuration
 ==========================================
 
 1)  As a first step, make sure that "**EMU.jar**" is in the
@@ -824,7 +740,7 @@ Loading in Micro-Manager and configuration
 
 5)  Save and try out your UI!
 
-Going further
+J - Going further
 =============
 
 Important steps that we followed:
