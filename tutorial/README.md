@@ -531,11 +531,10 @@ We are now done with the LaserPanel!
 
 -   Right click on the first JToggleButton and select "**Set ButtonGroup
     -\> new standard**". A ButtonGroup will appear in the Components
-    window. Then right-click on each other buttons and set their
-    **ButtonGroup** the newly created buttonGroup (which should be
+    window. Then right-click the other buttons and set their
+    **ButtonGroup** to the newly created buttonGroup (which should be
     called so). The ButtonGroup ensures that only one filter is selected
-    at a time. The Components window should then look like the image on
-    the left.
+    at a time. The Components window should then look like the following image:
     
 <p align="center">
 <img src="images/E-7_buttongroup.PNG">
