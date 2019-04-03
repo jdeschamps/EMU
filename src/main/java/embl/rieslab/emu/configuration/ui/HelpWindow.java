@@ -76,6 +76,10 @@ public class HelpWindow {
 	 * @param newtext Text to be displayed.
 	 */
 	public void update(String newtext){
-		txtarea.setText(newtext);
+		if(newtext != null) {
+			txtarea.setText(newtext);
+		} else {
+			txtarea.setText("Description unavailable");
+		}
 	}
 }
