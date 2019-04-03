@@ -1,24 +1,60 @@
-## Easier Micro-manager User interface (EMU)
+# What is EMU?
 
-EMU is a plugin for [Micro-Manager](https://micro-manager.org/wiki/Micro-Manager) aimed at loading easily reconfigurable and transferable user interfaces. 
+Easier Micro-manager User interface (EMU) is both a [Micro-Manager](https://micro-manager.org/wiki/Micro-Manager) plugin and a library to build easily reconfigurable user interfaces. By using EMU classes, you can put together a user interface to control your devices without having to spell out in your code the name of those devices, their properties or which value they accept. 
 
-### Motivation for EMU
+Once your UI is compiled, the EMU plugin loads it and allows you to map the device properties known to Micro-Manager to the actions of your UI. EMU remembers the configuration and can switch from one configuration to another, or even from one UI to another. Later on, any change in the hardware can be easily and rapidly applied through the EMU interface without having to recompile your code. Transferring your UI to another microscope also then becomes child's play.
+  
+# How does this work?
 
-One is often tempted to implement the user interface for a Micro-Manager controlled set-up by hard-coding the device names. This requires recompiling the plugin everytime a device changes or as soon as the plugin needs to be transferred to another microscope.
+EMU defines two classes that are the building blocks of your UI: [[ConfigurablePanels]] and [[ConfigurableMainFrames]]. These classes are extensions of the well-known JPanel and JFrame for the Java Swing library. As in Swing, the ConfigurablePanels contain JComponents (e.g. buttons) and are assembled into a (unique) ConfigurableMainFrame.
 
-EMU detaches the definition of the user interface from the actual devices, and allows any user to intuitively set which device should be linked to the UI without coding and recompiling.  
+What is special about the ConfigurablePanels is that they also declare [[UIProperties]] and [[UIParameters]]. UIProperties represent the actions of your UI and are intended to be linked to device property from Micro-Manager. Interacting with buttons within your UI would then trigger a call to the UIProperty and subsequently change the value of the device property. 
 
-### How does EMU work? (the short way)
+UIParameters, on the other hand, only take one value at the start of your UI. The UIParameters are a mechanism to modify some aspects of your UI, such as the color of a button or the title of a panel.
 
-The EMU library defines two classes that are the building blocks of the reconfigurable UIs: [ConfigurablePanel](https://jdeschamps.github.io/EMU/main/java/embl/rieslab/emu/ui/ConfigurablePanel.html) and [ConfigurableMainFrame](https://jdeschamps.github.io/EMU/main/java/embl/rieslab/emu/ui/ConfigurableMainFrame.html). ConfigurablePanels contain components (such as buttons or text fields), while the ConfigurableMainFrame assembles these ConfigurablePanels within on window.
+EMU automatically aggregates the UIProperties and the UIParameters and creates an interface to graphically modify which device property is linked to which UIProperty or what is the value of a UIParameter. Effectively, EMU detaches the definition of the user interface from the actual devices, and allows any user to intuitively configure the UI without coding and recompiling.  
 
-In addition, ConfigurablePanels declare [UIProperties](https://jdeschamps.github.io/EMU/main/java/embl/rieslab/emu/ui/uiproperties/UIProperty.html) and [UIParameters](https://jdeschamps.github.io/EMU/main/java/embl/rieslab/emu/ui/uiparameters/UIParameter.html). UIProperties are meant to represent actions of the UI, such as "change laser percentage". UIParameters, on the other hand, offer the possibility to change some aspects of the UI, for instance the titles of the panels, the colors of the buttons or some parameter default values.
+# Example using drag and drop UI tools
 
-EMU loads the ConfigurableMainFrame and allows the user to map the device properties of Micro-Manager to the UIProperties of the interface and set the default values for the UIParameters. The configuration file remembers the choices for each plugin and EMU can switch from one plugin to the other, or from one Plugin configuration to another.
+Let's say you have three lasers and one filterwheel in Micro-Manager. In the device property browser, you would then have a list of properties with the names of your lasers and filterwheels. Among them you would expect properties to turn on and off the lasers, change their respective powers and a property to set the position of the filterwheel. 
+You can use Eclipse's WindowBuilder plugin to create a user interface that looks like that:
 
-Check out the [wiki](https://github.com/jdeschamps/EMU/wiki) and the [javadoc](https://jdeschamps.github.io/EMU).
+<p align="center">
+<img src="https://github.com/jdeschamps/EMU/blob/master/tutorial/images/0-Final.PNG">
+</p>
 
-### Is EMU compatible with drag and drop UI design?
+However, the lasers might be different, so these properties can be named differently. For instance:
 
-Absolutely! Check out [the tutorial](tutorial) on how to graphically design a UI for EMU with Eclipse.
+| Property | Value |
+|---|---|
+| CaltechFW-State | "0" to "6" |
+| JivaLaser1-Name | "UV" |
+| JivaLaser1-Operation | "1" or "0" |
+| JivaLaser1-Power (mW)| "0" to "50" |
+| JivaLaser2-Name  | "561" |
+| JivaLaser2-Operation | "1" or "0" |
+| JivaLaser1-Power (mW)| "0" to "300" |
+| LaseXS-Name | "DL154-S" |
+| LaseXS-Enable | "enable" or "disable" |
+| LaseXS-Power (%)| "0" to "100" |
+
+Here, not only do the laser properties have different names, but they also don't share the same value ranges. Hard-coding in your UI the property names and their values would then be error-prone, unpractical and would require you to recompile your code every time a change happens on the microscope.
+
+By using EMU, you do not use any prior knowledge on your laser in your ConfigurablePanel beyond the fact that it should control a laser. You can use drag and drop tools to automatically create your UI using the EMU classes and then implements few necessary functions:
+
+* declaration of the UIProperties 
+* declaration of the UIParameters
+* how are the UIProperties modified by the components (e.g. button B1 changes property Prop1)
+* how are the components impacted by a change in the UIProperties (e.g. if Prop1 changes, then B1's state changes)
+* how are the components impacted by a change in the UIParameters (e.g. if Param1 changes, then B1's color changes)
+
+All the tailoring to your microscope happens then through the EMU interface by selecting in the menu which device property corresponds to which UIProperty and what are the values of the UIParameters.
+
+Checkout the extensive [Tutorial](https://github.com/jdeschamps/EMU/tree/master/tutorial) on how to build this UI!
+
+# Going further
+
+The [Wiki](https://github.com/jdeschamps/EMU/wiki) includes more detailed explanations on the mechanisms behind EMU classes. You can also check out the [Javadoc](https://jdeschamps.github.io/EMU/).
+
+The Ries lab is using a complex user interface in EMU: [htSMLM - an EMU plugin](https://github.com/jdeschamps/htSMLM)
 
