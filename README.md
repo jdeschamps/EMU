@@ -4,7 +4,7 @@ Easier Micro-manager User interface (EMU) is both a [Micro-Manager](https://micr
 
 Once your UI is compiled, the EMU plugin loads it and allows you to map the device properties known to Micro-Manager to the actions of your UI. EMU remembers the configuration and can switch from one configuration to another, or even from one UI to another. Later on, any change in the hardware can be easily and rapidly applied through the EMU interface without having to recompile your code. Transferring your UI to another microscope also then becomes child's play.
   
-# How does this work?
+# How does it work?
 
 EMU defines two classes that are the building blocks of your UI: [ConfigurablePanels](https://github.com/jdeschamps/EMU/wiki/ConfigurablePanel) and [ConfigurableMainFrames](https://github.com/jdeschamps/EMU/wiki/ConfigurableMainFrame). These classes are extensions of the well-known JPanel and JFrame for the Java Swing library. As in Swing, the ConfigurablePanels contain JComponents (e.g. buttons) and are assembled into a (unique) ConfigurableMainFrame.
 
