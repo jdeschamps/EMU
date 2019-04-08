@@ -314,7 +314,7 @@ public class SystemController {
 						int numpos = t.getNumberOfStates();
 						String[] val = new String[numpos];
 						for(int j=0;j<numpos;j++){								
-							val[j] =  configprop.get(uiprop+MultiStateUIProperty.getStateName(j));
+							val[j] =  configprop.get(uiprop+MultiStateUIProperty.getConfigurationStateName(j));
 						}
 
 						if(!t.setStateValues(val)){

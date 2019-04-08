@@ -16,7 +16,7 @@ public class MultiStateUIProperty extends UIProperty{
 	public final static String STATE = " state ";
 	
 	private String[] states_;
-	private String[] statesname_;
+	private String[] statenames_;
 	
 	/**
 	 * Constructor with a PropertyFlag.
@@ -31,10 +31,10 @@ public class MultiStateUIProperty extends UIProperty{
 		super(owner, label, description, flag);
 
 		states_ = new String[size];
-		statesname_ = new String[size];
+		statenames_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
-			statesname_[i] = "State"+i;
+			statenames_[i] = "State"+i;
 		}
 	}	
 	/**
@@ -49,10 +49,10 @@ public class MultiStateUIProperty extends UIProperty{
 		super(owner, label, description);
 
 		states_ = new String[size];
-		statesname_ = new String[size];
+		statenames_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
-			statesname_[i] = "State"+i;
+			statenames_[i] = "State"+i;
 		}
 	}
 
@@ -94,15 +94,15 @@ public class MultiStateUIProperty extends UIProperty{
 	 * @param stateNames State names
 	 */
 	public void setStatesName(String[] stateNames){
-		if(stateNames.length == statesname_.length){
-			statesname_ = stateNames;
-		} else if (stateNames.length > statesname_.length){
-			for(int i=0; i<statesname_.length;i++){
-				statesname_[i] = stateNames[i];
+		if(stateNames.length == statenames_.length){
+			statenames_ = stateNames;
+		} else if (stateNames.length > statenames_.length){
+			for(int i=0; i<statenames_.length;i++){
+				statenames_[i] = stateNames[i];
 			}
 		} else {
 			for(int i=0; i<stateNames.length;i++){
-				statesname_[i] = stateNames[i];
+				statenames_[i] = stateNames[i];
 			}
 		}
 	}
@@ -139,11 +139,41 @@ public class MultiStateUIProperty extends UIProperty{
 	 * @return Value of the state.
 	 */
 	public String getStateValue(int pos){
-		if(pos<states_.length){
+		if(pos >= 0 && pos<states_.length){
 			return states_[pos];
 		}
 		return "";
 	}
+	
+	/**
+	 * Returns the name of the state in position pos.
+	 * 
+	 * @param pos Position of the state.
+	 * @return Name of the state.
+	 */
+	public String getStateName(int pos){
+		if(pos >= 0 && pos<states_.length){
+			return statenames_[pos];
+		}
+		return "";
+	}
+	
+	/**
+	 * Returns the name of the state corresponding to value. The first
+	 * state will be returned if the value does not correspond to any state.
+	 * 
+	 * @param value Value
+	 * @return Name of the state, or the first state if value does not correspond to any state.
+	 */
+	public String getStateNameFromValue(String value){
+		for(int i=0;i<states_.length;i++){
+			if(states_[i].equals(value)){
+				return statenames_[i];
+			}
+		}	
+		return statenames_[0];
+	}
+	
 	
 	/**
 	 * Sets the value of the MMProperty to {@code val} if {@code val}
@@ -159,8 +189,8 @@ public class MultiStateUIProperty extends UIProperty{
 					return;
 				}
 			}
-			for(int i=0;i<statesname_.length;i++){
-				if(statesname_[i].equals(val)){
+			for(int i=0;i<statenames_.length;i++){
+				if(statenames_[i].equals(val)){
 					getMMProperty().setStringValue(states_[i], this);
 					return;
 				}
@@ -174,7 +204,7 @@ public class MultiStateUIProperty extends UIProperty{
 	 * @param i State number
 	 * @return Generic name
 	 */
-	public static String getStateName(int i){
+	public static String getConfigurationStateName(int i){
 		return STATE+i;
 	}
 	
@@ -192,8 +222,8 @@ public class MultiStateUIProperty extends UIProperty{
 	 * 
 	 * @return State names
 	 */
-	public String[] getStatesName(){
-		return statesname_;
+	public String[] getStateNames(){
+		return statenames_;
 	}
 }
 

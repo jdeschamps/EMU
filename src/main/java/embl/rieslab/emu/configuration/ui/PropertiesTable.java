@@ -100,7 +100,7 @@ public class PropertiesTable extends JPanel {
 				// if multiple values property, adds a line for each of the value to be allocated
 				int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 				for(int j=0;j<numpos;j++){
-					model.addRow(new Object[] {uipropkeys_[i] + MultiStateUIProperty.getStateName(j),"", ConfigurationWizard.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i] + MultiStateUIProperty.getConfigurationStateName(j),"", ConfigurationWizard.KEY_ENTERVALUE });
 				}
 			} 
 		}
@@ -187,13 +187,13 @@ public class PropertiesTable extends JPanel {
 					// gets the number of positions and extracts all position values. If null then sets to default. Finally creates the corresponding row.
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
-						uitemp = propertymapping.get(uipropkeys_[i]+ MultiStateUIProperty.getStateName(j));
+						uitemp = propertymapping.get(uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateName(j));
 
 						if(uitemp == null){
 							uitemp = ConfigurationWizard.KEY_ENTERVALUE;
 						}
 						
-						model.addRow(new Object[] {	uipropkeys_[i] +  MultiStateUIProperty.getStateName(j), "", uitemp });
+						model.addRow(new Object[] {	uipropkeys_[i] +  MultiStateUIProperty.getConfigurationStateName(j), "", uitemp });
 					}
 				} 
 			} else {
@@ -209,7 +209,7 @@ public class PropertiesTable extends JPanel {
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) { // if multiple values property
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
-						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getStateName(j), "",ConfigurationWizard.KEY_ENTERVALUE });
+						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateName(j), "",ConfigurationWizard.KEY_ENTERVALUE });
 					}
 				} 
 			}
