@@ -2,6 +2,7 @@ package main.java.embl.rieslab.emu.ui;
 
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -75,10 +76,11 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
     	    }
     	});
 
-		this.setLocationRelativeTo(null);
         setUpMenu();
 		initComponents();		
 		
+		GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		this.setLocation(g.getCenterPoint().x-this.getWidth()/2,g.getCenterPoint().y-this.getHeight()/2);
 		this.setVisible(true);
 		
 		panels_ = listConfigurablePanels(this.getContentPane().getComponents(), new ArrayList<ConfigurablePanel>());
