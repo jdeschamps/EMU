@@ -395,7 +395,8 @@ laserOnOffButton.addItemListener(new ItemListener() {
 			// since we declared the UIProperty as a TwoStateUIProperty, we know
 			// this will work out!
 			setUIPropertyValue(getLabel() + " " + LASER_OPERATION, TwoStateUIProperty.getOnStateName());
-		} else if (arg0.getStateChange() == ItemEvent.DESELECTED) {// if the JToggleButton was deselected						setUIPropertyValue(getLabel() + " " + LASER_OPERATION, TwoStateUIProperty.getOffStateName());
+		} else if (arg0.getStateChange() == ItemEvent.DESELECTED) {// if the JToggleButton was deselected	
+			setUIPropertyValue(getLabel() + " " + LASER_OPERATION, TwoStateUIProperty.getOffStateName());
 		}
 	}
 });
