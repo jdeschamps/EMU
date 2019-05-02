@@ -222,7 +222,7 @@ public class MultiStateUIProperty extends UIProperty{
 	 * 
 	 * @return State names
 	 */
-	public String[] getStateNames(){
+	public String[] getStatesName(){
 		return statenames_;
 	}
 }
