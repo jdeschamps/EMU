@@ -136,7 +136,7 @@ public class ImmutableMultiStateUIProperty extends UIProperty {
 	 * 
 	 * @return State names
 	 */
-	public String[] getStateNames(){
+	public String[] getStatesNam(){
 		return states_.keySet().toArray(new String[states_.size()]);
 	}	
 	
