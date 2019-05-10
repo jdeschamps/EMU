@@ -168,10 +168,10 @@ The class should appear in the "**Package Explorer**" and its java code pop up.
 
 2)  Eclipse should now point out errors in the code. Place the mouse on
     the underlined error in the declaration of the class: "**public**
-    **class** [LaserPanel]{.underline} **extends** ConfigurablePanel".
+    **class** LaserPanel **extends** ConfigurablePanel".
     Eclipse should describe the error ("The type \[...\] must implement
     the inherited abstract method \[...\]") and offer solutions: click
-    on "[Add unimplemented methods]{.underline}". A bunch of methods
+    on "Add unimplemented methods". A bunch of methods
     should now appear in the code.
 
 <p align="center">
@@ -183,11 +183,11 @@ The class should appear in the "**Package Explorer**" and its java code pop up.
 > the error, then look at the preferences in "**Window/Preferences**" in
 > the section "**Java/Editor/ContentAssist**".
 
-3)  The constructor "**public** [LaserPanel()]{.underline}" should still
+3)  The constructor "**public** LaserPanel()" should still
     contain an error. The reason is that while JPanel basic constructor
     does not have arguments, ConfigurablePanel constructors do. In
     between the parenthesis write "String label": "**public**
-    [LaserPanel(String label)]{.underline}". Finally, in the body of the
+    LaserPanel(String label)". Finally, in the body of the
     constructor, write "**super**(label);". The method should now look
     as following:
 
