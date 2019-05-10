@@ -8,16 +8,16 @@ Once your UI is compiled, the EMU plugin loads it and allows you to map the devi
 
 EMU defines two classes that are the building blocks of your UI: [ConfigurablePanels](https://github.com/jdeschamps/EMU/wiki/ConfigurablePanel) and [ConfigurableMainFrames](https://github.com/jdeschamps/EMU/wiki/ConfigurableMainFrame). These classes are extensions of the well-known JPanel and JFrame for the Java Swing library. As in Swing, the ConfigurablePanels contain JComponents (e.g. buttons) and are assembled into a (unique) ConfigurableMainFrame.
 
-What is special about the ConfigurablePanels is that they also declare [UIProperties](https://github.com/jdeschamps/EMU/wiki/UIProperty) and [UIParameters](https://github.com/jdeschamps/EMU/wiki/UIParameter). UIProperties represent the actions of your UI and are intended to be linked to device property from Micro-Manager. Interacting with buttons within your UI would then trigger a call to the UIProperty and subsequently change the value of the device property. 
+What is special about the ConfigurablePanels is that they also declare [UIProperties](https://github.com/jdeschamps/EMU/wiki/UIProperty) and [UIParameters](https://github.com/jdeschamps/EMU/wiki/UIParameter). UIProperties represent the actions of your UI and are intended to be linked to device properties from Micro-Manager. Interacting with buttons within your UI then triggers a call to the UIProperty and subsequently change the value of the device property. 
 
-UIParameters, on the other hand, only take one value at the start of your UI. The UIParameters are a mechanism to modify some aspects of your UI, such as the color of a button or the title of a panel.
+UIParameters, on the other hand, only take one value at the start of your UI. The UIParameters are a mechanism to modify some aspects of your UI, such as the color of a button, the title of a panel or useful parameters.
 
 EMU automatically aggregates the UIProperties and the UIParameters and creates an interface to graphically modify which device property is linked to which UIProperty or what is the value of a UIParameter. Effectively, EMU detaches the definition of the user interface from the actual devices, and allows any user to intuitively configure the UI without coding and recompiling.  
 
 # Example using drag and drop UI tools
 
 Let's say you have three lasers and one filterwheel in Micro-Manager. In the device property browser, you would then have a list of properties with the names of your lasers and filterwheels. Among them you would expect properties to turn on and off the lasers, change their respective powers and a property to set the position of the filterwheel. 
-You can use Eclipse's WindowBuilder plugin to create a user interface that looks like that:
+You can use Eclipse's WindowBuilder plugin to create a user interface that looks like that (see the [tutorial](https://github.com/jdeschamps/EMU/tree/master/tutorial)):
 
 <p align="center">
 <img src="https://github.com/jdeschamps/EMU/blob/master/tutorial/images/0-Final.PNG">
@@ -25,7 +25,7 @@ You can use Eclipse's WindowBuilder plugin to create a user interface that looks
 
 However, the lasers might be different, so these properties can be named differently. For instance:
 
-| Property | Value |
+| Device property (MM) | Value |
 |---|---|
 | CaltechFW-State | "0" to "6" |
 | JivaLaser1-Name | "UV" |
