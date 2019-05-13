@@ -78,6 +78,7 @@ public abstract class MMProperty<T> {
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
+		this.type_ = type;
 		
 		this.readOnly = false;
 		this.hasLimits = true;
@@ -107,6 +108,7 @@ public abstract class MMProperty<T> {
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
+		this.type_ = type;
 		
 		this.allowedValues = arrayFromStrings(allowedValues);
 		
