@@ -57,7 +57,7 @@ public class MMPropertyFactory {
 			} 
 			
 			// instantiate using the type and the constructors for read-only, limited or allowed values
-			if(type.equals("Float")){
+			if(type.equals(MMProperty.TYPE_FLOAT)){
 				if(hasLimits){
 					p = new FloatMMProperty(core_, deviceLabel, propertyLabel, upLimit, downLimit);
 				} else if(!allowedValuesIsNull){
@@ -65,7 +65,7 @@ public class MMPropertyFactory {
 				} else {
 					p = new FloatMMProperty(core_, deviceLabel, propertyLabel, readOnly);
 				}
-			} else if(type.equals("Integer")){
+			} else if(type.equals(MMProperty.TYPE_INTEGER)){
 				if(hasLimits){
 					p = new IntegerMMProperty(core_, deviceLabel, propertyLabel, upLimit, downLimit);				
 				} else if(!allowedValuesIsNull){
@@ -75,9 +75,9 @@ public class MMPropertyFactory {
 				}
 			} else { // String or Undef	
 				if(!allowedValuesIsNull){
-					p = new StringMMProperty(core_, deviceLabel, propertyLabel, allowedValues);
+					p = new StringMMProperty(core_, type, deviceLabel, propertyLabel, allowedValues);
 				} else {
-					p = new StringMMProperty(core_, deviceLabel, propertyLabel);		
+					p = new StringMMProperty(core_, type, deviceLabel, propertyLabel);		
 				}
 			}
 		} catch (Exception e) {

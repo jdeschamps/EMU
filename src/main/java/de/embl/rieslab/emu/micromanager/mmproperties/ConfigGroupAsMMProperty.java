@@ -39,7 +39,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	 */
 	@SuppressWarnings("rawtypes")
 	public ConfigGroupAsMMProperty(Application app, CMMCore core, String groupName, String[] groupChannelNames, ArrayList<MMProperty> affectedMMProps) {
-		super(core, KEY_MMCONFDEVICE, groupName, groupChannelNames);
+		super(core, MMProperty.TYPE_CONFIG, KEY_MMCONFDEVICE, groupName, groupChannelNames);
 		app_ = app;
 		affectedmmprops_ = affectedMMProps;
 	}

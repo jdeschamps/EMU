@@ -37,7 +37,7 @@ public class MMRegistry {
 		
 		// extracts MM properties
 		mmproperties_ = new MMPropertiesRegistry(studio_.getCMMCore());
-		mmconfiggroups_ = new MMConfigurationGroupsRegistry(studio_.getCMMCore());
+		mmconfiggroups_ = new MMConfigurationGroupsRegistry(studio_.getCMMCore(), mmproperties_);
 		
 		// registers mmconfigs as mmproperties (so that they can be linked to UIProperties)
 		registerMMConfAsDevice();
@@ -73,20 +73,9 @@ public class MMRegistry {
 		while(it.hasNext()){
 			String group = it.next();
 			String[] values = mmconfiggroups_.getMMConfigurationGroups().get(group).getConfigurations().toArray();
+			ArrayList<MMProperty> affectedmmprops = mmconfiggroups_.getMMConfigurationGroups().get(group).getAffectedProperties();
 			
-			ArrayList<MMProperty> affectedmmprops = new ArrayList<MMProperty>();
-			Configuration conf;
-			try {
-				conf = studio_.core().getConfigGroupState(group);
-				for(int i=0;i<conf.size();i++){
-					affectedmmprops.add(mmproperties_.getProperties().get(conf.getSetting(i).getDeviceLabel()+"-"+conf.getSetting(i).getPropertyName()));
-				}
-				
-				dev.registerProperty(new ConfigGroupAsMMProperty(studio_.app(), studio_.core(), group, values, affectedmmprops));
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			dev.registerProperty(new ConfigGroupAsMMProperty(studio_.app(), studio_.core(), group, values, affectedmmprops));
 		}
 		
 		mmproperties_.addMMDevice(dev);

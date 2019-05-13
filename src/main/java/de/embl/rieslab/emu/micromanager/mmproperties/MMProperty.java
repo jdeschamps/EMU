@@ -17,11 +17,18 @@ import mmcorej.CMMCore;
  */
 public abstract class MMProperty<T> {
 
+	public final static String TYPE_FLOAT = "Float";
+	public final static String TYPE_INTEGER = "Integer";
+	public final static String TYPE_STRING = "String";
+	public final static String TYPE_UNDEF = "Undef";
+	public final static String TYPE_CONFIG = "Config";
+	
 	private CMMCore core_;
 	
 	private String label_;
 	private String devicelabel_;
 	private String hash_;
+	private String type_;
 	
 	private boolean readOnly;							
 	private boolean hasLimits;						
@@ -41,10 +48,11 @@ public abstract class MMProperty<T> {
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
-	MMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly){
+	MMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel, boolean readOnly){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
+		this.type_ = type;
 		
 		this.readOnly = readOnly;
 		this.hasLimits = false;
@@ -66,7 +74,7 @@ public abstract class MMProperty<T> {
 	 * @param upperLimit Upper limit of the device property value.
 	 * @param lowerLimit Lower limit of the device property value.
 	 */
-	MMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upperLimit, double lowerLimit){
+	MMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel, double upperLimit, double lowerLimit){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
@@ -95,7 +103,7 @@ public abstract class MMProperty<T> {
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param allowedValues Array of allowed values.
 	 */
-	MMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues){
+	MMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel, String[] allowedValues){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
@@ -500,6 +508,15 @@ public abstract class MMProperty<T> {
 		}
 		
 		return isAllowed(convertToValue(val));
+	}
+	
+	/**
+	 * Returns the property type, "Float", "Integer", "String", "Undef" or "Config". 
+	 * 
+	 * @return property type.
+	 */
+	public String getType() {
+		return type_;
 	}
 	
 }

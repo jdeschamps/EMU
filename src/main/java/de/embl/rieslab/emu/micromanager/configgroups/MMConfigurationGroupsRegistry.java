@@ -1,9 +1,14 @@
 package main.java.de.embl.rieslab.emu.micromanager.configgroups;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import main.java.de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
+import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import mmcorej.CMMCore;
+import mmcorej.Configuration;
 import mmcorej.StrVector;
 
 /**
@@ -24,20 +29,32 @@ public class MMConfigurationGroupsRegistry {
 	 * 
 	 * @param core Micro-manager CMMCore instance.
 	 */
-	public MMConfigurationGroupsRegistry(CMMCore core){
+	public MMConfigurationGroupsRegistry(CMMCore core, MMPropertiesRegistry mmproperties){
 		core_ = core;
 		
 		groups_ = new HashMap<String, MMConfigurationGroup>();
 		
-		retrieveConfigurationGroups();
+		retrieveConfigurationGroups(mmproperties);
 	}
 
-	private void retrieveConfigurationGroups() {
+	private void retrieveConfigurationGroups(MMPropertiesRegistry mmproperties) {
 		StrVector groups = core_.getAvailableConfigGroups();
 		
 		if(groups != null){
 			for(int i=0;i<groups.size();i++){
-				groups_.put(groups.get(i), new MMConfigurationGroup(groups.get(i),core_.getAvailableConfigs(groups.get(i))));
+				ArrayList<MMProperty> affectedmmprops = new  ArrayList<MMProperty>();
+				
+				Configuration conf;
+				try {
+					conf = core_.getConfigGroupState(groups.get(i));
+					for(int j=0;j<conf.size();j++){
+						affectedmmprops.add(mmproperties.getProperties().get(conf.getSetting(j).getDeviceLabel()+"-"+conf.getSetting(j).getPropertyName()));
+					}
+					groups_.put(groups.get(i), new MMConfigurationGroup(groups.get(i),core_.getAvailableConfigs(groups.get(i)),affectedmmprops));
+
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
 	}
@@ -82,7 +99,7 @@ public class MMConfigurationGroupsRegistry {
 	/**
 	 * Returns the current configuration of the MM configuration group {@code mmConfigurationGroup}.
 	 * 
-	 * @param mmConfigurationGroup MM configuration group/
+	 * @param mmConfigurationGroup MM configuration group
 	 * @return The state of mmConfigurationGroup.
 	 */
 	public String getCurrentMMConfigurationChannel(String mmConfigurationGroup){

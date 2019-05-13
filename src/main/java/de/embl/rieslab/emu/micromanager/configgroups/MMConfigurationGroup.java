@@ -1,5 +1,8 @@
 package main.java.de.embl.rieslab.emu.micromanager.configgroups;
 
+import java.util.ArrayList;
+
+import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import mmcorej.StrVector;
 
 /**
@@ -10,6 +13,7 @@ import mmcorej.StrVector;
  */
 public class MMConfigurationGroup {
 
+	private ArrayList<MMProperty> affectedmmprops_;
 	private StrVector configs_;
 	private String name_;
 	
@@ -19,9 +23,10 @@ public class MMConfigurationGroup {
 	 * @param name Name of the configuration group
 	 * @param config StrVector returned by Micro-manager and representing the different channels in the configuration group.
 	 */
-	public MMConfigurationGroup(String name, StrVector config){
+	public MMConfigurationGroup(String name, StrVector config, ArrayList<MMProperty> affectedmmprops){
 		name_ = name;
 		configs_ = config;
+		affectedmmprops_ = affectedmmprops;
 	}
 	
 	/**
@@ -76,5 +81,23 @@ public class MMConfigurationGroup {
 	 */
 	public String getName(){
 		return name_;
+	}
+	
+	/**
+	 * Returns the number of MM properties affected by this configuration group. 
+	 * 
+	 * @return Number of affected properties.
+	 */
+	public int getNumberOfMMProperties() {
+		return affectedmmprops_.size();
+	}
+	
+	/**
+	 * Returns a list of the MMProperties affected by this configuration group.
+	 * 
+	 * @return List of MMproperties.
+	 */
+	public  ArrayList<MMProperty> getAffectedProperties(){
+		return affectedmmprops_;
 	}
 }
