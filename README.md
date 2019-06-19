@@ -30,10 +30,10 @@ However, the lasers might be different, so these properties can be named differe
 | CaltechFW-State | "0" to "6" |
 | JivaLaser1-Name | "UV" |
 | JivaLaser1-Operation | "1" or "0" |
-| JivaLaser1-Power (mW)| "0" to "50" |
+| JivaLaser1-Power percentage| "0" to "100" |
 | JivaLaser2-Name  | "561" |
 | JivaLaser2-Operation | "1" or "0" |
-| JivaLaser1-Power (mW)| "0" to "300" |
+| JivaLaser1-Power percentage| "0" to "100" |
 | LaseXS-Name | "DL154-S" |
 | LaseXS-Enable | "enable" or "disable" |
 | LaseXS-Power (%)| "0" to "100" |
