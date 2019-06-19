@@ -6,7 +6,7 @@ Once your UI is compiled, the EMU plugin loads it and allows you to map the devi
   
 # How does it work?
 
-EMU defines two classes that are the building blocks of your UI: [ConfigurablePanels](https://github.com/jdeschamps/EMU/wiki/ConfigurablePanel) and [ConfigurableMainFrames](https://github.com/jdeschamps/EMU/wiki/ConfigurableMainFrame). These classes are extensions of the well-known JPanel and JFrame for the Java Swing library. As in Swing, the ConfigurablePanels contain JComponents (e.g. buttons) and are assembled into a (unique) ConfigurableMainFrame.
+EMU defines two classes that are the building blocks of your UI: [ConfigurablePanels](https://github.com/jdeschamps/EMU/wiki/ConfigurablePanel) and [ConfigurableMainFrames](https://github.com/jdeschamps/EMU/wiki/ConfigurableMainFrame). These classes are extensions of the well-known JPanel and JFrame of the Java Swing library. As in Swing, the ConfigurablePanels contain JComponents (e.g. buttons) and are assembled into a (unique) ConfigurableMainFrame.
 
 What is special about the ConfigurablePanels is that they also declare [UIProperties](https://github.com/jdeschamps/EMU/wiki/UIProperty) and [UIParameters](https://github.com/jdeschamps/EMU/wiki/UIParameter). UIProperties represent the actions of your UI and are intended to be linked to device properties from Micro-Manager. Interacting with buttons within your UI then triggers a call to the UIProperty and subsequently change the value of the device property. 
 
