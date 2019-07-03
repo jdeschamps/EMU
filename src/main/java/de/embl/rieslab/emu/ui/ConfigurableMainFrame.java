@@ -251,6 +251,19 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	}
 	
 	/**
+	 * Adds all listeners to the JComponents.
+	 */
+	public void addAllListeners() {
+		Iterator<ConfigurablePanel> it = panels_.iterator();
+		ConfigurablePanel pan;
+		while(it.hasNext()){
+			pan = it.next();
+
+			pan.addListeners();
+		}	
+	}
+	
+	/**
 	 * Shuts down all ConfigurablePanels by calling {@link ConfigurablePanel#shutDown()} on
 	 * each panel.
 	 * 
@@ -338,5 +351,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	 * to the ConfigurableMainFrame.
 	 */
 	protected abstract void initComponents();
+
+
 
 }

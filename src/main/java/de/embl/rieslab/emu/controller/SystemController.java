@@ -214,7 +214,7 @@ public class SystemController {
 			String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
 			
 			if(configuration != null){
-				// then load system
+				// then loads the system
 				try {
 					reloadSystem(newPlugin, configuration);
 					applyConfiguration();
@@ -282,16 +282,16 @@ public class SystemController {
 
 				// if the ui property is not allocated, add to the list of unallocated properties.  
 				if (configprop.get(uiprop).equals(GlobalConfiguration.KEY_UNALLOCATED)) {
-					// register missing allocation
+					// registers missing allocation
 					unallocatedprop_.add(uiprop);
 					
 				} else if (mmregistry_.getMMPropertiesRegistry().isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
-					// link the properties
+					// links the properties
 					addPair(uiproperties.get(uiprop),mmregistry_.getMMPropertiesRegistry().getProperty(configprop.get(uiprop)));
 					
-					// test if the property has finite number of states
+					// tests if the property has finite number of states
 					if(uiproperties.get(uiprop) instanceof TwoStateUIProperty){ // if it is a two-state property
-						// extract the on/off values
+						// extracts the on/off values
 						TwoStateUIProperty t = (TwoStateUIProperty) uiproperties.get(uiprop);
 						String offval = configprop.get(uiprop+TwoStateUIProperty.getOffStateName());
 						String onval = configprop.get(uiprop+TwoStateUIProperty.getOnStateName());
@@ -301,7 +301,7 @@ public class SystemController {
 						}
 
 					} else if(uiproperties.get(uiprop) instanceof SingleStateUIProperty){ // if single state property
-						// extract the state value
+						// extracts the state value
 						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
 						String value = configprop.get(uiprop+SingleStateUIProperty.getValueName());
 						
@@ -322,7 +322,7 @@ public class SystemController {
 						}
 					}
 				} else {
-					// register missing allocation
+					// registers missing allocation
 					unallocatedprop_.add(uiprop);
 				}
 			} 
@@ -370,18 +370,21 @@ public class SystemController {
 		boolean sane = config.sanityCheck(mainframe_);
 		
 		if(!sane){
-			// show dialog
+			// shows dialog
 			SystemDialogs.showConfigurationDidNotPassSanityCheck();
 		} 
 		
-		// Allocate UI properties and parameters
+		// Allocates UI properties and parameters
 		readProperties(config.getPropertiesConfiguration());
 		readParameters(config.getParametersConfiguration());
 
-		// update all properties and parameters
+		// updates all properties and parameters
 		mainframe_.updateAllConfigurablePanels();
 		
-		// update menu
+		// adds all action listeners
+		mainframe_.addAllListeners();
+				
+		// updates menu
 		mainframe_.updateMenu();
 	}
 	
@@ -501,7 +504,7 @@ public class SystemController {
 	 * Updates all properties and parameters by calling {@link main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame#updateAllConfigurablePanels()}
 	 * 
 	 */
-	public void update(){
+	public void forceUpdate(){
 		if(mainframe_ != null){
 			mainframe_.updateAllConfigurablePanels();
 		}

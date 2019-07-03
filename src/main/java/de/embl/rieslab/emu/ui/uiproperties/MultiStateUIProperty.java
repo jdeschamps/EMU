@@ -146,6 +146,15 @@ public class MultiStateUIProperty extends UIProperty{
 	}
 	
 	/**
+	 * Returns the array of values.
+	 * 
+	 * @return State array.
+	 */
+	public String[] getStateValues(){
+		return states_;
+	}
+	
+	/**
 	 * Returns the name of the state in position pos.
 	 * 
 	 * @param pos Position of the state.

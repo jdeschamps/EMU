@@ -31,7 +31,8 @@ import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
  * <p> 
  * Subclasses of ConfigurablePanel must implements few methods called in the ConfigurablePanel constructor in order to instantiate the
  * UIProperties ({@link #initializeProperties()}), UIParameters ({@link #initializeParameters()}) and InternalProperties ({@link #initializeInternalProperties()}), 
- * as well as setting up the JComponents in the JPanel (itself). All JComponent instantiations should happen in the constructor. 
+ * as well as setting up the JComponents in the JPanel (itself). All JComponent instantiations should happen in the constructor. Action listeners can be
+ * added to the JComponents in {@link #addListeners()}, in case the states or values of the UIProperty are necessary.  
  * <p> 
  * UIProperties are aimed at linking the state of a MMProperty with the state of one or multiple JComponenents. InternalProperties are made to allow
  * shared values between ConfigurablePanels, such that a modification to one panel can trigger a change in the other panel. Finally, UIProperties
@@ -187,7 +188,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param propertyName UIProperty's name
 	 * @param newValue New value
 	 */
-	protected void setUIPropertyValue(String propertyName, String newValue){
+	public void setUIPropertyValue(String propertyName, String newValue){
 		// makes sure the call does NOT run on EDT
 		Thread t = new Thread("Property change: " + propertyName) {
 			public void run() {
@@ -561,22 +562,28 @@ public abstract class ConfigurablePanel extends JPanel{
 	}
 
 	/**
-	 * Method called in the constructor of a ConfigurablePanel. In this method, the subclasses must create
-	 * their UIproperty and add them to the map of properties using {@link #addUIProperty(UIProperty)}.
+	 * In this method, the subclasses must create their UIproperty and add them to the map of properties using 
+	 * {@link #addUIProperty(UIProperty)}. The method is called in the constructor of a ConfigurablePanel.  
 	 */
 	protected abstract void initializeProperties();
 	
 	/**
-	 * Method called in the constructor of a ConfigurablePanel. In this method, the subclasses must create
-	 * their InternalProperties and add them to the map of internal properties using {@link #addInternalProperty(InternalProperty)}.
+	 * In this method, the subclasses must create their InternalProperties and add them to the map of internal properties 
+	 * using {@link #addInternalProperty(InternalProperty)}. The method is called in the constructor of a ConfigurablePanel.  
 	 */
 	protected abstract void initializeInternalProperties();
 	
 	/**
-	 * Method called in the constructor of a ConfigurablePanel. In this method, the subclasses must create
-	 * their UIparameter and add them to the map of properties using {@link #addUIParameter(UIParameter)}.
+	 * In this method, the subclasses must create their UIparameter and add them to the map of properties using 
+	 * {@link #addUIParameter(UIParameter)}. The method is called in the constructor of a ConfigurablePanel.  
 	 */
 	protected abstract void initializeParameters();
+	
+	/**
+	 * In this method, the subclasses can add Swing action listeners to its JComponents. Since the method is called after loading 
+	 * a configuration, the values of the UIproperty states are known and can be used with the static methods of {@link main.java.de.embl.rieslab.emu.utils.SwingUIActions}.  
+	 */
+	protected abstract void addListeners();
 	
 	/**
 	 * Method called when an internal property's value has been changed. This allows the ConfigurablePanel
