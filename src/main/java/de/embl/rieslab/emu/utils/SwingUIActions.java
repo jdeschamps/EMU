@@ -15,8 +15,7 @@ import javax.swing.JToggleButton;
 
 import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.de.embl.rieslab.emu.utils.actions.BooleanAction;
-import main.java.de.embl.rieslab.emu.utils.actions.DoubleAction;
+import main.java.de.embl.rieslab.emu.utils.actions.Action;
 
 public class SwingUIActions {
 
@@ -169,7 +168,7 @@ public class SwingUIActions {
 		});
 	}
 
-	public static void addDoubleValueAction(final DoubleAction action, final JTextField txtf) {
+	public static void addDoubleValueAction(final Action<Double> action, final JTextField txtf) {
 		txtf.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				String s = txtf.getText().replaceAll(",",".");
@@ -195,7 +194,7 @@ public class SwingUIActions {
 	}
 
 
-	public static void addDoubleValueAction(final DoubleAction action, final JTextField txtf, double min, double max) {
+	public static void addDoubleValueAction(final Action<Double> action, final JTextField txtf, double min, double max) {
 		txtf.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				String s = txtf.getText().replaceAll(",",".");
@@ -284,7 +283,7 @@ public class SwingUIActions {
 		});
 	}
 
-	public static void addBooleanValueAction(final BooleanAction action, final JToggleButton tglb) {
+	public static void addBooleanValueAction(final Action<Boolean> action, final JToggleButton tglb) {
 		tglb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
