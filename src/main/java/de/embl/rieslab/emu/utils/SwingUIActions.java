@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
 import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
+import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.de.embl.rieslab.emu.utils.actions.Action;
 
@@ -21,7 +22,7 @@ public class SwingUIActions {
 
 	/**
 	 * Adds a Swing action listener to a JComboBox. The action listener cause the property corresponding to {@code propertyKey} in the  
-	 * ConfigurablePanel {@code cp} to be set to the item selected in the JCombobox cbx everytime the user interact with it.
+	 * ConfigurablePanel {@code cp} to be set to the item selected in the JCombobox cbx every time the user interact with it.
 	 * 
 	 * @param cp ConfigurablePanel owning the property.
 	 * @param propertyKey UIProperty to modify when the JComboBox changes.
@@ -246,7 +247,8 @@ public class SwingUIActions {
 		});
 	}
 
-	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, int min, int max, final JTextField txtf) {
+	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JTextField txtf, int min, int max) {
+		
 		sld.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				int val = sld.getValue();
@@ -254,6 +256,36 @@ public class SwingUIActions {
 					String strval = String.valueOf(val);
 					txtf.setText(strval);
 					cp.setUIPropertyValue(propertyKey, strval);
+				}
+			}
+		});
+		
+		txtf.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {	
+				String s = txtf.getText();
+				if (utils.isInteger(s)) {
+					int val = Integer.parseInt(s);
+					if(val >= min && val <= max) {
+						sld.setValue(val);
+						cp.setUIPropertyValue(propertyKey, s);
+					}
+				}
+	         }
+	    });
+		
+		txtf.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent ex) {}
+
+			@Override
+			public void focusLost(FocusEvent ex) {
+				String s = txtf.getText();
+				if (utils.isInteger(s)) {
+					int val = Integer.parseInt(s);
+					if(val >= min && val <= max) {
+						sld.setValue(val);
+						cp.setUIPropertyValue(propertyKey, s);
+					}
 				}
 			}
 		});
@@ -293,10 +325,10 @@ public class SwingUIActions {
 		});
 	}
 
-	public static void addSingleValueAction(final ConfigurablePanel cp, final String propertyKey, final AbstractButton btn, String value) {
+	public static void addSingleValueAction(final ConfigurablePanel cp, final String propertyKey, final AbstractButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cp.setUIPropertyValue(propertyKey, value);
+				cp.setUIPropertyValue(propertyKey, SingleStateUIProperty.getValueName());
 			}
 		});
 	}

@@ -38,7 +38,7 @@ public class MultiStateUIProperty extends UIProperty{
 		}
 	}	
 	/**
-	 * Constructor without a PropertyFlag.
+	 * Constructor without a PropertyFlag defining the number of states.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
 	 * @param label Name of the UIProperty

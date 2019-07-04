@@ -20,16 +20,16 @@ public class UIPropertyTest {
 		TestConfigurablePanel cp = new TestConfigurablePanel("myPanel");
 		
 		// tests that the UIProperty exists
-		assertNotNull(cp.getPublicUIProperty(cp.PROP));
+		assertNotNull(cp.getPublicUIProperty(cp.UIPROP));
 		
 		// creates a dummy MMProperty
 		TestMMProperty mmprop = new TestMMProperty();
 		
 		// pairs UIProperty and MMProperty
-		PropertyPair.pair(cp.getPublicUIProperty(cp.PROP), mmprop);
+		PropertyPair.pair(cp.getPublicUIProperty(cp.UIPROP), mmprop);
 				
 		// sets the UIProperty value
-		cp.setUIPropertyValue(cp.PROP, NEWVALUE);
+		cp.setUIPropertyValue(cp.UIPROP, NEWVALUE);
 		
 		// waits to let the other thread finish
 		try {
@@ -54,7 +54,7 @@ public class UIPropertyTest {
 		}
 		
 		// checks that the value has been set in the cp
-		assertEquals(NEWVALUE2, cp.propValue);
+		assertEquals(NEWVALUE2, cp.uiPropValue);
 	}
 		
 }

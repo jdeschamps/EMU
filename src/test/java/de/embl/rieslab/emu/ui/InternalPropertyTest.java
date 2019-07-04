@@ -31,6 +31,6 @@ public class InternalPropertyTest {
 		cp1.setPublicInternalProperty(cp1.INTPROP, d);
 		
 		// tests that cp2 internal property has changed consequently
-		assertEquals(d, cp2.internalPropValue, 1E-20);
+		assertEquals(d, cp2.intInternalPropValue, 1E-20);
 	}
 }

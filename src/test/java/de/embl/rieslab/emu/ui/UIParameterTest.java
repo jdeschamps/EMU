@@ -18,7 +18,7 @@ public class UIParameterTest {
 		TestConfigurablePanel cp = new TestConfigurablePanel("myPanel");
 		
 		// tests that the UIParameter exists
-		assertNotNull(cp.getPublicUIParameter(UIParameter.getHash(cp, cp.PARAM)));
+		assertNotNull(cp.getPublicUIParameter(UIParameter.getHash(cp, cp.INTPARAM)));
 		
 		// wraps cp in a configurablemainframe
 		TestConfigurableMainFrame cmf = new TestConfigurableMainFrame() {
@@ -30,7 +30,7 @@ public class UIParameterTest {
 		};
 	
 		// grabs the UIParameter
-		IntegerUIParameter param = (IntegerUIParameter) cp.getPublicUIParameter(UIParameter.getHash(cp, cp.PARAM));
+		IntegerUIParameter param = (IntegerUIParameter) cp.getPublicUIParameter(UIParameter.getHash(cp, cp.INTPARAM));
 		
 		// changes its value
 		int value = 2;
@@ -48,6 +48,6 @@ public class UIParameterTest {
 		}
 		
 		// checks that the parameter has changed
-		assertEquals(value, cp.paramValue);
+		assertEquals(value, cp.intParamVal);
 	}
 }

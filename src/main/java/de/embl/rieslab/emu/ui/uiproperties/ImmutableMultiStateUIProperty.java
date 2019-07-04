@@ -20,7 +20,7 @@ public class ImmutableMultiStateUIProperty extends UIProperty {
 	private LinkedHashMap<String,String> states_;
 	
 	/**
-	 * Constructor with PropertyFlag/
+	 * Constructor with PropertyFlag.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
 	 * @param label Name of the UIProperty
@@ -34,7 +34,7 @@ public class ImmutableMultiStateUIProperty extends UIProperty {
 		states_ = states;
 	}	
 	/**
-	 * Constructor without PropertyFlag/
+	 * Constructor without PropertyFlag.
 	 * 
 	 * @param owner ConfigurablePanel that instantiated the UIProperty
 	 * @param label Name of the UIProperty
