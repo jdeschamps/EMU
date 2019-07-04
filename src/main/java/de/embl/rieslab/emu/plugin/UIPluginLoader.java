@@ -13,7 +13,6 @@ import main.java.de.embl.rieslab.emu.controller.SystemConstants;
 import main.java.de.embl.rieslab.emu.controller.SystemController;
 import main.java.de.embl.rieslab.emu.plugin.UIPlugin;
 import main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame;
-import main.java.de.embl.rieslab.emu.uiexamples.ExamplePlugins;
 
 /**
  * Loader of EMU plugins. It uses the java.util.ServiceLoader to detect and load
@@ -38,7 +37,7 @@ public class UIPluginLoader {
 	public UIPluginLoader(SystemController controller){
 		controller_ = controller;
 		
-		plugins_ = ExamplePlugins.getExamplePlugins();
+		plugins_ = new HashMap<String, UIPlugin>();
 
         File loc = new File(SystemConstants.HOME);
 
