@@ -45,7 +45,6 @@ public class SystemController {
 	private ConfigurationController config; // Configuration controller, with all known plugin configurations
 	private ConfigurableMainFrame mainframe_; // Main frame of the current plugin
 	private UIPluginLoader pluginloader_; // loader for EMU plugins
-	private ArrayList<PropertyPair> pairs_; // UIProperty - MMProperty pairs
 	private ArrayList<String> unallocatedprop_;  // list of unallocated properties
 	private ArrayList<String> forbiddenValuesProp_; // forbidden properties value
 	private String currentPlugin; // reference to the current loaded plugin
@@ -58,7 +57,6 @@ public class SystemController {
 	public SystemController(Studio studio){
 		studio_ = studio;
 	
-		pairs_ = new ArrayList<PropertyPair>();
 		unallocatedprop_ = new ArrayList<String>();
 		forbiddenValuesProp_ = new ArrayList<String>();
 		
@@ -269,7 +267,6 @@ public class SystemController {
 		String uiprop;
 		unallocatedprop_.clear(); // clear the list of unallocated properties, props with forbidden values
 		forbiddenValuesProp_.clear();
-		pairs_.clear(); // and the list of pairs
 		
 		HashMap<String, UIProperty> uiproperties = mainframe_.getUIProperties();
 		
@@ -405,7 +402,7 @@ public class SystemController {
 	// Pairs a ui property and a Micro-manager property together.
 	@SuppressWarnings("rawtypes")
 	private void addPair(UIProperty ui, MMProperty mm){
-		pairs_.add(new PropertyPair(ui,mm));
+		PropertyPair.pair(ui,mm);
 	}
 	
 	/**

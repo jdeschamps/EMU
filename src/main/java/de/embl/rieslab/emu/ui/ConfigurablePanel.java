@@ -138,21 +138,35 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected HashMap<String,UIParameter> getUIParameters(){
 		return parameters_;
 	}	
-		
+	
 	/**
-	 * Returns the {@link main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty} named {@code propertyName}.
+	 * Returns the {@link main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty}
+	 * named {@code propertyName}.
 	 * 
 	 * @param propertyName Name of the UIProperty
 	 * @return Corresponding UIProperty, null if it doesn't exist.
 	 */
-	// maybe this should not be exposed to avoid modifying the property value on the EDT
-	protected UIProperty getUIProperty(String propertyName){
-		if(properties_.containsKey(propertyName)){
+	protected UIParameter getUIParameter(String parameterName) {
+		if (parameters_.containsKey(parameterName)) {
+			return parameters_.get(parameterName);
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the {@link main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty}
+	 * named {@code propertyName}.
+	 * 
+	 * @param propertyName Name of the UIProperty
+	 * @return Corresponding UIProperty, null if it doesn't exist.
+	 */
+	protected UIProperty getUIProperty(String propertyName) {
+		if (properties_.containsKey(propertyName)) {
 			return properties_.get(propertyName);
 		}
 		return null;
 	}
-	
+
 	/**
 	 * Sets the UIProperty {@code propertyName} friendly name to {@code friendlyName}.
 	 * 

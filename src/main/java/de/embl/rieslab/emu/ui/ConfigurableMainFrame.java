@@ -105,7 +105,10 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		return list;
 	}
 
-	private void setUpMenu() {
+	/**
+	 * Sets up the menu bar.
+	 */
+	protected void setUpMenu() {
 		JMenuBar mb=new JMenuBar(); 
         
 		JMenu menu = new JMenu("Menu");

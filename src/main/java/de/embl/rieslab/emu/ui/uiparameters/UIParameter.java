@@ -40,6 +40,17 @@ public abstract class UIParameter<T> {
 	}
 	
 	/**
+	 * Methods to generate the hash used in EMU for the UIParameter of a ConfigurablePanel.
+	 * 
+	 * @param owner ConfigurablePanel declaring the UIParameter
+	 * @param parameterName Label of the UIParameter
+	 * @return The UIParameter hash
+	 */
+	public static String getHash(ConfigurablePanel owner, String parameterName) {
+		return owner.getLabel()+" - "+parameterName;
+	}
+	
+	/**
 	 * Returns the label of the UIParameter.
 	 * 
 	 * @return UIParameter's label

@@ -12,21 +12,10 @@ import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
  */
 @SuppressWarnings("rawtypes")
 public class PropertyPair {
-
-	private UIProperty uiprop_;
-	private MMProperty mmprop_;
-	
-	public PropertyPair(UIProperty ui, MMProperty mm){
-		uiprop_ = ui;
-		mmprop_ = mm;
-		
-		pair();
-	}
-	
-	public void pair(){
+	public static void pair(UIProperty ui, MMProperty mm){
 		try {
-			uiprop_.assignProperty(mmprop_);
-			mmprop_.addListener(uiprop_);
+			ui.assignProperty(mm);
+			mm.addListener(ui);
 		} catch (AlreadyAssignedUIPropertyException e) {
 			e.printStackTrace();
 		}
