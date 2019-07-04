@@ -259,7 +259,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		while(it.hasNext()){
 			pan = it.next();
 
-			pan.addListeners();
+			pan.addComponentListeners();
 		}	
 	}
 	

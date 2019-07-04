@@ -10,7 +10,6 @@ import main.java.de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMPr
 import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMDevice;
 import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
-import mmcorej.Configuration;
 
 /**
  * Class instantiating the {@link MMPropertiesRegistry} and {@link MMConfigurationGroupsRegistry}. In addition, it

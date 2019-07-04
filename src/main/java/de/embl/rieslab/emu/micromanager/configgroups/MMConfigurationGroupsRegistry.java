@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
 import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import mmcorej.CMMCore;

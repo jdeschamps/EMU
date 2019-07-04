@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -17,6 +15,8 @@ import javax.swing.JToggleButton;
 
 import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
+import main.java.de.embl.rieslab.emu.utils.actions.BooleanAction;
+import main.java.de.embl.rieslab.emu.utils.actions.DoubleAction;
 
 public class SwingUIActions {
 
@@ -169,6 +169,64 @@ public class SwingUIActions {
 		});
 	}
 
+	public static void addDoubleValueAction(final DoubleAction action, final JTextField txtf) {
+		txtf.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				String s = txtf.getText().replaceAll(",",".");
+				if (utils.isNumeric(s)) {
+					action.performAction(Double.valueOf(s));
+				}
+			}
+		});
+
+		txtf.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent ex) {
+			}
+
+			@Override
+			public void focusLost(FocusEvent ex) {
+				String s = txtf.getText().replaceAll(",",".");
+				if (utils.isNumeric(s)) {
+					action.performAction(Double.valueOf(s));
+				}
+			}
+		});
+	}
+
+
+	public static void addDoubleValueAction(final DoubleAction action, final JTextField txtf, double min, double max) {
+		txtf.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				String s = txtf.getText().replaceAll(",",".");
+				if (utils.isNumeric(s)) {
+					double val = Double.valueOf(s);
+					if(Double.compare(val, min) >= 0 && Double.compare(val, max) <= 0) {
+						action.performAction(val);
+					}
+				}
+			}
+		});
+
+		txtf.addFocusListener(new FocusListener() {
+			@Override
+			public void focusGained(FocusEvent ex) {
+			}
+
+			@Override
+			public void focusLost(FocusEvent ex) {
+				String s = txtf.getText().replaceAll(",",".");
+				if (utils.isNumeric(s)) {
+					double val = Double.valueOf(s);
+					if(Double.compare(val, min) >= 0 && Double.compare(val, max) <= 0) {
+						action.performAction(val);
+					}
+				}
+			}
+		});
+	}
+
+	
 	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, int min, int max) {
 		sld.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
@@ -176,6 +234,15 @@ public class SwingUIActions {
 				if (val >= min && val <= max) {
 					cp.setUIPropertyValue(propertyKey, String.valueOf(val));
 				}
+			}
+		});
+	}
+	
+	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld) {
+		sld.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent e) {
+				int val = sld.getValue();
+				cp.setUIPropertyValue(propertyKey, String.valueOf(val));
 			}
 		});
 	}
@@ -193,15 +260,36 @@ public class SwingUIActions {
 		});
 	}
 
+	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JTextField txtf) {
+		sld.addMouseListener(new MouseAdapter() {
+			public void mouseReleased(MouseEvent e) {
+				String strval = String.valueOf(sld.getValue());
+				txtf.setText(strval);
+				cp.setUIPropertyValue(propertyKey, strval);
+			}
+		});
+	}
+
 	public static void addBooleanValueAction(final ConfigurablePanel cp, final String propertyKey, final JToggleButton tglb) {
-		tglb.addItemListener(new ItemListener() {
-			@Override
-			public void itemStateChanged(ItemEvent e) {
-				if (e.getStateChange() == ItemEvent.SELECTED) {
+		tglb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
+				boolean selected = abstractButton.getModel().isSelected();
+				if (selected) {
 					cp.setUIPropertyValue(propertyKey, TwoStateUIProperty.getOnStateName());
-				} else if (e.getStateChange() == ItemEvent.DESELECTED) {
+				} else {
 					cp.setUIPropertyValue(propertyKey, TwoStateUIProperty.getOffStateName());
 				}
+			}
+		});
+	}
+
+	public static void addBooleanValueAction(final BooleanAction action, final JToggleButton tglb) {
+		tglb.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent actionEvent) {
+				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
+				boolean selected = abstractButton.getModel().isSelected();
+				action.performAction(selected);
 			}
 		});
 	}
