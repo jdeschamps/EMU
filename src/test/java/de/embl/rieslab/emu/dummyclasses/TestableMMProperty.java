@@ -3,13 +3,12 @@ package test.java.de.embl.rieslab.emu.dummyclasses;
 import main.java.de.embl.rieslab.emu.micromanager.mmproperties.EmptyMMProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
-public class TestMMProperty extends EmptyMMProperty<String> {
+public class TestableMMProperty extends EmptyMMProperty<String> {
 
 	public static final String DEV = "MyDevice";
-	public static final String PROP = "MyProperty";
 	
-	public TestMMProperty() {
-		super("String", DEV, PROP);
+	public TestableMMProperty(String propname) {
+		super("String", DEV, propname);
 		this.value = "default";
 	}
 

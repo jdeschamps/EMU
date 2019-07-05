@@ -4,21 +4,23 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import test.java.de.embl.rieslab.emu.dummyclasses.TestConfigurableMainFrame;
-import test.java.de.embl.rieslab.emu.dummyclasses.TestConfigurablePanel;
+import test.java.de.embl.rieslab.emu.dummyclasses.TestableConfigurableMainFrame;
+import test.java.de.embl.rieslab.emu.dummyclasses.TestableConfigurablePanel;
 
 public class InternalPropertyTest {
 
 	@Test
 	public void testInternalProperty() {
 		double d = 3.1415;
+		boolean b = true;
+		int i = 99;
 		
 		// creates two configurablepanels
-		TestConfigurablePanel cp1 = new TestConfigurablePanel("panel1");
-		TestConfigurablePanel cp2 = new TestConfigurablePanel("panel2");
+		TestableConfigurablePanel cp1 = new TestableConfigurablePanel("panel1");
+		TestableConfigurablePanel cp2 = new TestableConfigurablePanel("panel2");
 		
 		// creates a configurablemainframe
-		TestConfigurableMainFrame cmf = new TestConfigurableMainFrame() {
+		TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() {
 
 			@Override
 			protected void initComponents() {
@@ -28,9 +30,13 @@ public class InternalPropertyTest {
 		};
 						
 		// change the internal property of cp1
-		cp1.setPublicInternalProperty(cp1.INTPROP, d);
+		cp1.setPublicInternalProperty(cp1.INTPROP, i);
+		cp1.setPublicInternalProperty(cp1.BOOLPROP, b);
+		cp1.setPublicInternalProperty(cp1.DOUBLEPROP, d);
 		
 		// tests that cp2 internal property has changed consequently
-		assertEquals(d, cp2.intInternalPropValue, 1E-20);
+		assertEquals(i, cp2.intInternalPropValue);
+		assertEquals(d, cp2.doubleInternalPropValue, 1E-20);
+		assertEquals(b, cp2.boolInternalPropValue);
 	}
 }

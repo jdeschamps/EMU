@@ -25,9 +25,10 @@ import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
+import main.java.de.embl.rieslab.emu.utils.ColorRepository;
 import main.java.de.embl.rieslab.emu.utils.SwingUIActions;
 
-public class TestConfigurablePanel extends ConfigurablePanel {
+public class TestableConfigurablePanel extends ConfigurablePanel {
 
 	/**
 	 * 
@@ -36,7 +37,7 @@ public class TestConfigurablePanel extends ConfigurablePanel {
 	
 	// properties
 	public final String UIPROP = "UIProp";	
-	public final String UIPROP2 = "UIProp";	
+	public final String UIPROP2 = "UIProp2";	
 	public final String MULTPROP = "MultiProp";	
 	public final String SINGPROP = "SingleProp";	
 	public final String TWOSTPROP = "TwoStateProp";	
@@ -75,6 +76,8 @@ public class TestConfigurablePanel extends ConfigurablePanel {
 	public String stringParamVal;
 	public String propParamVal;
 	
+	public final String STATE3 = "State3";
+	
 	// components
 	public JTextField textfield1, textfield2;
 	public JSlider slider;
@@ -82,7 +85,7 @@ public class TestConfigurablePanel extends ConfigurablePanel {
 	public JButton button;
 	public JComboBox<String> combobox;
 	
-	public TestConfigurablePanel(String label) {
+	public TestableConfigurablePanel(String label) {
 		super(label);
 
 		textfield1 = new JTextField(); // to link to the uiprop
@@ -95,7 +98,6 @@ public class TestConfigurablePanel extends ConfigurablePanel {
 	
 	@Override
 	protected void addComponentListeners() {
-		
 		SwingUIActions.addDoubleValueAction(this, UIPROP, textfield1);
 		SwingUIActions.addBooleanValueAction(this, TWOSTPROP, toggle);
 		SwingUIActions.addSingleValueAction(this, SINGPROP, button);
@@ -123,8 +125,9 @@ public class TestConfigurablePanel extends ConfigurablePanel {
 	@Override
 	protected void initializeParameters() {
 		boolParamVal = false;
-		colorParamVal = Color.black;
-		String[] combovalues = new String[] { "State1", "State2", "State3"};
+		colorParamVal = ColorRepository.getColor(ColorRepository.strblack);
+		comboParamVal = "State1";
+		String[] combovalues = new String[] {comboParamVal, "State2", STATE3};
 		doubleParamVal = 2.;
 		intParamVal = 4;
 		stringParamVal = "Title";
@@ -155,6 +158,8 @@ public class TestConfigurablePanel extends ConfigurablePanel {
 	protected void propertyhasChanged(String propertyName, String newvalue) {
 		if(propertyName.equals(UIPROP)) {
 			uiPropValue = newvalue;
+		} else if(propertyName.equals(UIPROP2)) {
+			uiPropValue2 = newvalue;
 		} else if(propertyName.equals(MULTPROP)) {
 			multiPropValue = newvalue;
 		} else if(propertyName.equals(SINGPROP)) {
@@ -167,13 +172,13 @@ public class TestConfigurablePanel extends ConfigurablePanel {
 	@Override
 	protected void parameterhasChanged(String parameterName) {
 		if(parameterName.equals(BOOLPARAM)) {
-			boolParamVal = this.getBoolInternalPropertyValue(BOOLPARAM);
+			boolParamVal = this.getBoolUIParameterValue(BOOLPARAM);
 		} else if(parameterName.equals(COLORPARAM)) {
 			colorParamVal = this.getColorUIParameterValue(COLORPARAM);
 		}else if(parameterName.equals(COMBOPARAM)) {
 			comboParamVal = this.getComboUIParameterValue(COMBOPARAM);
 		}else if(parameterName.equals(DOUBLEPARAM)) {
-			doubleParamVal = this.getIntegerUIParameterValue(DOUBLEPARAM);
+			doubleParamVal = this.getDoubleUIParameterValue(DOUBLEPARAM);
 		}else if(parameterName.equals(INTPARAM)) {
 			intParamVal = this.getIntegerUIParameterValue(INTPARAM);
 		}else if(parameterName.equals(STRINGPARAM)) {
@@ -205,6 +210,14 @@ public class TestConfigurablePanel extends ConfigurablePanel {
 	}
 	
 	public void setPublicInternalProperty(String propertyName, double newValue) {
+		this.setInternalPropertyValue(propertyName, newValue);
+	}
+	
+	public void setPublicInternalProperty(String propertyName, int newValue) {
+		this.setInternalPropertyValue(propertyName, newValue);
+	}
+	
+	public void setPublicInternalProperty(String propertyName, boolean newValue) {
 		this.setInternalPropertyValue(propertyName, newValue);
 	}
 };

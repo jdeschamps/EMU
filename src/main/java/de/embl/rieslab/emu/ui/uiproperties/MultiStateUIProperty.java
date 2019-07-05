@@ -3,6 +3,7 @@ package main.java.de.embl.rieslab.emu.ui.uiproperties;
 import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
+import main.java.de.embl.rieslab.emu.utils.utils;
 
 /**
  * A UIProperty with multiple allowed states, whose values are unknown at compilation time. Upon instantiation
@@ -204,6 +205,14 @@ public class MultiStateUIProperty extends UIProperty{
 					return;
 				}
 			}
+			
+			// maybe comment out to leave this possibility
+		/*	if(utils.isInteger(val)) {
+				int v = Integer.parseInt(val);
+				if(v >= 0 && v < states_.length) {
+					getMMProperty().setStringValue(states_[v], this);
+				}
+			}*/
 		}
 	}
 	

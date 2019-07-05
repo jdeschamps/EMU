@@ -3,14 +3,14 @@ package test.java.de.embl.rieslab.emu.dummyclasses;
 import main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import mmcorej.CMMCore;
 
-public abstract class TestConfigurableMainFrame extends ConfigurableMainFrame{
+public abstract class TestableConfigurableMainFrame extends ConfigurableMainFrame{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5515001170950109376L;
 
-	public TestConfigurableMainFrame() {
+	public TestableConfigurableMainFrame() {
 		super("", null);
 	}
 	
