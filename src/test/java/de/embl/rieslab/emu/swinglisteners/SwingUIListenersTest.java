@@ -5,12 +5,10 @@ import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
 import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
 import test.java.de.embl.rieslab.emu.testableclasses.TestableMMProperty;

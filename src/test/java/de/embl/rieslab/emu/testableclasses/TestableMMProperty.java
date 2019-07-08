@@ -62,4 +62,10 @@ public class TestableMMProperty extends EmptyMMProperty<String> {
 		value = stringval;
 		notifyListeners(source, stringval);
 	}
+
+	@Override
+	protected boolean isInRange(String val) {
+		return true;
+	}
+
 };
