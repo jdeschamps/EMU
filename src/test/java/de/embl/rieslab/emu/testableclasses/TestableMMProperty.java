@@ -1,4 +1,4 @@
-package test.java.de.embl.rieslab.emu.dummyclasses;
+package test.java.de.embl.rieslab.emu.testableclasses;
 
 import main.java.de.embl.rieslab.emu.micromanager.mmproperties.EmptyMMProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;

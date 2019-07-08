@@ -1,4 +1,4 @@
-package test.java.de.embl.rieslab.emu.dummyclasses;
+package test.java.de.embl.rieslab.emu.testableclasses;
 
 import java.awt.Color;
 
@@ -8,6 +8,7 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
+import main.java.de.embl.rieslab.emu.swinglisteners.SwingUIListeners;
 import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.de.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
 import main.java.de.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
@@ -26,7 +27,6 @@ import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import main.java.de.embl.rieslab.emu.utils.ColorRepository;
-import main.java.de.embl.rieslab.emu.utils.SwingUIActions;
 
 public class TestableConfigurablePanel extends ConfigurablePanel {
 
@@ -78,6 +78,8 @@ public class TestableConfigurablePanel extends ConfigurablePanel {
 	
 	public final String STATE3 = "State3";
 	
+	public String[] combovalues;
+	
 	// components
 	public JTextField textfield1, textfield2;
 	public JSlider slider;
@@ -93,16 +95,18 @@ public class TestableConfigurablePanel extends ConfigurablePanel {
 		slider = new JSlider(); // to use with textfield
 		toggle = new JToggleButton(); // to link to a two state prop
 		button = new JButton(); // to link to a single state prop
-		combobox = new JComboBox<String>(); // to multi prop
+		
+		combovalues = new String[] {comboParamVal, "State2", STATE3};
+		combobox = new JComboBox<String>(combovalues); 
 	}
 	
 	@Override
 	protected void addComponentListeners() {
-		SwingUIActions.addDoubleValueAction(this, UIPROP, textfield1);
-		SwingUIActions.addBooleanValueAction(this, TWOSTPROP, toggle);
-		SwingUIActions.addSingleValueAction(this, SINGPROP, button);
-		SwingUIActions.addIndexValueAction(this, MULTPROP, combobox);
-		SwingUIActions.addIntegerValueAction(this, UIPROP2, slider, textfield2, 0, 100);
+		SwingUIListeners.addDoubleValueAction(this, UIPROP, textfield1);
+		SwingUIListeners.addBooleanValueAction(this, TWOSTPROP, toggle);
+		SwingUIListeners.addSingleValueAction(this, SINGPROP, button);
+		SwingUIListeners.addIndexValueAction(this, MULTPROP, combobox);
+		SwingUIListeners.addIntegerValueAction(this, UIPROP2, slider, textfield2, 0, 100);
 	}
 
 	

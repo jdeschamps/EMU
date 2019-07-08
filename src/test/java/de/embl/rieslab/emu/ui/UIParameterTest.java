@@ -14,8 +14,8 @@ import main.java.de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import main.java.de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import main.java.de.embl.rieslab.emu.utils.ColorRepository;
-import test.java.de.embl.rieslab.emu.dummyclasses.TestableConfigurableMainFrame;
-import test.java.de.embl.rieslab.emu.dummyclasses.TestableConfigurablePanel;
+import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
+import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
 
 public class UIParameterTest {
 

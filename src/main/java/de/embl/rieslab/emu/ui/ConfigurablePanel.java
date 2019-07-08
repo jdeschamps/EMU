@@ -595,7 +595,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	
 	/**
 	 * In this method, the subclasses can add Swing action listeners to its JComponents. Since the method is called after loading 
-	 * a configuration, the values of the UIproperty states are known and can be used with the static methods of {@link main.java.de.embl.rieslab.emu.utils.SwingUIActions}.  
+	 * a configuration, the values of the UIproperty states are known and can be used with the static methods of {@link main.java.de.embl.rieslab.emu.swinglisteners.SwingUIListeners}.  
 	 */
 	protected abstract void addComponentListeners();
 	

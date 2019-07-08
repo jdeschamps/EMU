@@ -192,27 +192,31 @@ public class MultiStateUIProperty extends UIProperty{
 	 */
 	@Override
 	public void setPropertyValue(String val) {
-		if(isAssigned()) {
-			for(int i=0;i<states_.length;i++){
-				if(states_[i].equals(val)){
+		if (isAssigned()) {
+			// checks if it corresponds to a valid state
+			for (int i = 0; i < states_.length; i++) {
+				if (states_[i].equals(val)) {
 					getMMProperty().setStringValue(val, this);
 					return;
 				}
 			}
-			for(int i=0;i<statenames_.length;i++){
-				if(statenames_[i].equals(val)){
+			
+			// or if it corresponds to a valid state name 
+			for (int i = 0; i < statenames_.length; i++) {
+				if (statenames_[i].equals(val)) {
 					getMMProperty().setStringValue(states_[i], this);
 					return;
 				}
 			}
-			
-			// maybe comment out to leave this possibility
-		/*	if(utils.isInteger(val)) {
+
+			// otherwise, accept indices
+			if (utils.isInteger(val)) {
 				int v = Integer.parseInt(val);
-				if(v >= 0 && v < states_.length) {
+				if (v >= 0 && v < states_.length) {
 					getMMProperty().setStringValue(states_[v], this);
 				}
-			}*/
+
+			}
 		}
 	}
 	

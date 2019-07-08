@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.utils.actions;
+package main.java.de.embl.rieslab.emu.swinglisteners;
 
 public interface Action<T> {
 

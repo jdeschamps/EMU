@@ -4,8 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import test.java.de.embl.rieslab.emu.dummyclasses.TestableConfigurableMainFrame;
-import test.java.de.embl.rieslab.emu.dummyclasses.TestableConfigurablePanel;
+import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
+import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
 
 public class InternalPropertyTest {
 

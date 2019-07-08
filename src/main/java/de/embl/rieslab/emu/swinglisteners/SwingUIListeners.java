@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.utils;
+package main.java.de.embl.rieslab.emu.swinglisteners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,9 +16,9 @@ import javax.swing.JToggleButton;
 import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.de.embl.rieslab.emu.utils.actions.Action;
+import main.java.de.embl.rieslab.emu.utils.utils;
 
-public class SwingUIActions {
+public class SwingUIListeners {
 
 	/**
 	 * Adds a Swing action listener to a JComboBox. The action listener cause the property corresponding to {@code propertyKey} in the  

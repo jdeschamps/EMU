@@ -9,8 +9,8 @@ import main.java.de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import test.java.de.embl.rieslab.emu.dummyclasses.TestableConfigurablePanel;
-import test.java.de.embl.rieslab.emu.dummyclasses.TestableMMProperty;
+import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
+import test.java.de.embl.rieslab.emu.testableclasses.TestableMMProperty;
 
 public class UIPropertyTest {
 
