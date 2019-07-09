@@ -6,10 +6,11 @@ import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 public class TestableMMProperty extends EmptyMMProperty<String> {
 
 	public static final String DEV = "MyDevice";
+	public static final String DEFVAL = "default";
 	
 	public TestableMMProperty(String propname) {
 		super("String", DEV, propname);
-		this.value = "default";
+		this.value = DEFVAL;
 	}
 
 	@Override

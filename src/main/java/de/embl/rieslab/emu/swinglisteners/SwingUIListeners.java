@@ -28,7 +28,7 @@ public class SwingUIListeners {
 	 * @param propertyKey UIProperty to modify when the JComboBox changes.
 	 * @param cbx JCombobox holding the different UIproperty states.
 	 */
-	public static void addStringValueAction(final ConfigurablePanel cp, final String propertyKey, final JComboBox<?> cbx) {
+	public static void addActionListenerOnStringValue(final ConfigurablePanel cp, final String propertyKey, final JComboBox<?> cbx) {
 		cbx.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		String val = String.valueOf(cbx.getSelectedItem());
@@ -37,7 +37,7 @@ public class SwingUIListeners {
         });
 	}
 	
-	public static void addIndexValueAction(final ConfigurablePanel cp, final String propertyKey, final JComboBox<?> cbx) {
+	public static void addActionListenerOnSelectedIndex(final ConfigurablePanel cp, final String propertyKey, final JComboBox<?> cbx) {
 		cbx.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		String val = String.valueOf(cbx.getSelectedIndex());
@@ -46,7 +46,7 @@ public class SwingUIListeners {
         });
 	}
 	
-	public static void addIndexValueAction(final ConfigurablePanel cp, final String propertyKey, final JComboBox<?> cbx, String[] values) {
+	public static void addActionListenerOnSelectedIndex(final ConfigurablePanel cp, final String propertyKey, final JComboBox<?> cbx, String[] values) {
 		cbx.addActionListener(new ActionListener(){
 	    	public void actionPerformed(ActionEvent e){
 	    		int ind = cbx.getSelectedIndex();
@@ -58,7 +58,7 @@ public class SwingUIListeners {
         });
 	}
 
-	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf, int min, int max) {
+	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf, int min, int max) {
 		txtf.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {	
 				String s = txtf.getText();
@@ -88,7 +88,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addDoubleValueAction(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf, double min, double max) {
+	public static void addActionListenerOnDoubleValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf, double min, double max) {
 		txtf.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {	
 				String s = txtf.getText().replaceAll(",",".");
@@ -119,7 +119,7 @@ public class SwingUIListeners {
 	}
 
 
-	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf) {
+	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf) {
 		txtf.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				String s = txtf.getText();
@@ -144,7 +144,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addDoubleValueAction(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf) {
+	public static void addActionListenerOnDoubleValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf) {
 		txtf.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				String s = txtf.getText().replaceAll(",",".");
@@ -169,7 +169,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addDoubleValueAction(final Action<Double> action, final JTextField txtf) {
+	public static void addActionListenerToTrigger(final Trigger<Double> action, final JTextField txtf) {
 		txtf.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				String s = txtf.getText().replaceAll(",",".");
@@ -195,7 +195,7 @@ public class SwingUIListeners {
 	}
 
 
-	public static void addDoubleValueAction(final Action<Double> action, final JTextField txtf, double min, double max) {
+	public static void addActionListenerToTrigger(final Trigger<Double> action, final JTextField txtf, double min, double max) {
 		txtf.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				String s = txtf.getText().replaceAll(",",".");
@@ -227,7 +227,7 @@ public class SwingUIListeners {
 	}
 
 	
-	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, int min, int max) {
+	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, int min, int max) {
 		sld.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				int val = sld.getValue();
@@ -238,7 +238,7 @@ public class SwingUIListeners {
 		});
 	}
 	
-	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld) {
+	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld) {
 		sld.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				int val = sld.getValue();
@@ -247,8 +247,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JTextField txtf, int min, int max) {
-		
+	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JTextField txtf, int min, int max) {
 		sld.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				int val = sld.getValue();
@@ -291,7 +290,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addIntegerValueAction(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JTextField txtf) {
+	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JTextField txtf) {
 		sld.addMouseListener(new MouseAdapter() {
 			public void mouseReleased(MouseEvent e) {
 				String strval = String.valueOf(sld.getValue());
@@ -301,7 +300,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addBooleanValueAction(final ConfigurablePanel cp, final String propertyKey, final JToggleButton tglb) {
+	public static void addActionListenerOnTwoState(final ConfigurablePanel cp, final String propertyKey, final JToggleButton tglb) {
 		tglb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
@@ -315,7 +314,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addBooleanValueAction(final Action<Boolean> action, final JToggleButton tglb) {
+	public static void addActionListenerToTrigger(final Trigger<Boolean> action, final JToggleButton tglb) {
 		tglb.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent actionEvent) {
 				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
@@ -325,7 +324,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addSingleValueAction(final ConfigurablePanel cp, final String propertyKey, final AbstractButton btn) {
+	public static void addActionListenerOnSingleState(final ConfigurablePanel cp, final String propertyKey, final AbstractButton btn) {
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				cp.setUIPropertyValue(propertyKey, SingleStateUIProperty.getValueName());

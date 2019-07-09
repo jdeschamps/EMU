@@ -111,11 +111,11 @@ public class TestableConfigurablePanel extends ConfigurablePanel {
 	
 	@Override
 	protected void addComponentListeners() {
-		SwingUIListeners.addDoubleValueAction(this, UIPROP, textfield1);
-		SwingUIListeners.addBooleanValueAction(this, TWOSTPROP, toggle);
-		SwingUIListeners.addSingleValueAction(this, SINGPROP, button);
-		SwingUIListeners.addIndexValueAction(this, MULTPROP, combobox);
-		SwingUIListeners.addIntegerValueAction(this, UIPROP2, slider, textfield2, 0, 100);
+		SwingUIListeners.addActionListenerOnDoubleValue(this, UIPROP, textfield1);
+		SwingUIListeners.addActionListenerOnTwoState(this, TWOSTPROP, toggle);
+		SwingUIListeners.addActionListenerOnSingleState(this, SINGPROP, button);
+		SwingUIListeners.addActionListenerOnSelectedIndex(this, MULTPROP, combobox);
+		SwingUIListeners.addActionListenerOnIntegerValue(this, UIPROP2, slider, textfield2, 0, 100);
 	}
 
 	

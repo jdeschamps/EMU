@@ -200,7 +200,6 @@ public class MultiStateUIProperty extends UIProperty{
 					return;
 				}
 			}
-			
 			// or if it corresponds to a valid state name 
 			for (int i = 0; i < statenames_.length; i++) {
 				if (statenames_[i].equals(val)) {
@@ -208,7 +207,6 @@ public class MultiStateUIProperty extends UIProperty{
 					return;
 				}
 			}
-
 			// otherwise, accept indices
 			if (utils.isInteger(val)) {
 				int v = Integer.parseInt(val);

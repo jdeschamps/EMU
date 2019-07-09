@@ -63,7 +63,7 @@ public class ParametersTable extends JPanel{
 		uipropertySet_ = uipropertySet;
 		help_ = help;
 		
-		// Color JComboBox: available colors within the EMU
+		// Color JComboBox: available colors within EMU
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();
 		color = new JComboBox<String>();
 		String[] colors = ColorRepository.getColors();
