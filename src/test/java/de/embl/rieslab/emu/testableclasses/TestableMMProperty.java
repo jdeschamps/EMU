@@ -1,7 +1,7 @@
-package test.java.de.embl.rieslab.emu.testableclasses;
+package de.embl.rieslab.emu.testableclasses;
 
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.EmptyMMProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.micromanager.mmproperties.EmptyMMProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 public class TestableMMProperty extends EmptyMMProperty<String> {
 

@@ -1,8 +1,8 @@
-package main.java.de.embl.rieslab.emu.ui.uiparameters;
+package de.embl.rieslab.emu.ui.uiparameters;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
 /**
  * UIParameter corresponding to a UIProperty of the UIPlugin. This is useful when

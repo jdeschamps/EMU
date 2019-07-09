@@ -1,4 +1,4 @@
-package test.java.de.embl.rieslab.emu.configuration;
+package de.embl.rieslab.emu.configuration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -11,11 +11,11 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import main.java.de.embl.rieslab.emu.configuration.ConfigurationIO;
-import main.java.de.embl.rieslab.emu.configuration.GlobalConfiguration;
-import main.java.de.embl.rieslab.emu.configuration.GlobalConfigurationWrapper;
-import main.java.de.embl.rieslab.emu.configuration.PluginConfiguration;
-import main.java.de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.configuration.ConfigurationIO;
+import de.embl.rieslab.emu.configuration.GlobalConfiguration;
+import de.embl.rieslab.emu.configuration.GlobalConfigurationWrapper;
+import de.embl.rieslab.emu.configuration.PluginConfiguration;
+import de.embl.rieslab.emu.controller.SystemConstants;
 
 public class ConfigurationIOTest {
 

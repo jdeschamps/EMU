@@ -1,17 +1,17 @@
-package test.java.de.embl.rieslab.emu.swinglisteners;
+package de.embl.rieslab.emu.swinglisteners;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import org.junit.Test;
 
-import main.java.de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
-import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
-import test.java.de.embl.rieslab.emu.testableclasses.TestableMMProperty;
+import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
+import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
+import de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
+import de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
+import de.embl.rieslab.emu.testableclasses.TestableMMProperty;
 
 public class SwingUIListenersTest {
 

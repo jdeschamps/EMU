@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration.ui;
+package de.embl.rieslab.emu.configuration.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Font;

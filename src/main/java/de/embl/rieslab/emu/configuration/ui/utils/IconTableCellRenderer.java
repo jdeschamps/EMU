@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration.ui.utils;
+package de.embl.rieslab.emu.configuration.ui.utils;
 
 import java.awt.Component;
 
@@ -6,7 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import main.java.de.embl.rieslab.emu.utils.ColorRepository;
+import de.embl.rieslab.emu.utils.ColorRepository;
 
 /**
  * TableCellRenderer using {@link ColorIcon}.

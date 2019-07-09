@@ -1,8 +1,8 @@
-package main.java.de.embl.rieslab.emu.ui.uiproperties;
+package de.embl.rieslab.emu.ui.uiproperties;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
 /**
  * UIProperty that only accepts two states: ON or OFF. The value of these states are not known at compilation time and can be changed in

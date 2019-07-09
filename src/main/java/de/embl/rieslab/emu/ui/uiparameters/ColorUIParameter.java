@@ -1,10 +1,10 @@
-package main.java.de.embl.rieslab.emu.ui.uiparameters;
+package de.embl.rieslab.emu.ui.uiparameters;
 
 import java.awt.Color;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.de.embl.rieslab.emu.utils.ColorRepository;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.utils.ColorRepository;
 
 /**
  * UIParameter representing a {@link java.awt.Color}. It can be used to change

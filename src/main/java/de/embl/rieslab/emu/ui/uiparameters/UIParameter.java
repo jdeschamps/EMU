@@ -1,6 +1,6 @@
-package main.java.de.embl.rieslab.emu.ui.uiparameters;
+package de.embl.rieslab.emu.ui.uiparameters;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
 
 /**
  * UIParameters are used to let the user specify aspects of the ConfigurablePanels through

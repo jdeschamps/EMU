@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.plugin;
+package de.embl.rieslab.emu.plugin;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ServiceLoader;
 
-import main.java.de.embl.rieslab.emu.controller.SystemConstants;
-import main.java.de.embl.rieslab.emu.controller.SystemController;
-import main.java.de.embl.rieslab.emu.plugin.UIPlugin;
-import main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame;
+import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.SystemController;
+import de.embl.rieslab.emu.plugin.UIPlugin;
+import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 
 /**
  * Loader of EMU plugins. It uses the java.util.ServiceLoader to detect and load

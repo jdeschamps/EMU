@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.exceptions;
+package de.embl.rieslab.emu.exceptions;
 
 /**
  * Exception thrown when a process attempts to assign a UIProperty that has already been assigned.

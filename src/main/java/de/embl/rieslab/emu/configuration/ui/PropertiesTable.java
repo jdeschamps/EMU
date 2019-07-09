@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration.ui;
+package de.embl.rieslab.emu.configuration.ui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -19,14 +19,14 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import main.java.de.embl.rieslab.emu.configuration.ConfigurationWizard;
-import main.java.de.embl.rieslab.emu.configuration.GlobalConfiguration;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.utils.UIPropertyUtils;
+import de.embl.rieslab.emu.configuration.ConfigurationWizard;
+import de.embl.rieslab.emu.configuration.GlobalConfiguration;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.utils.UIPropertyUtils;
 
 /**
  * JPanel displaying a table allowing the user to allocate device properties from Micro-Manager with

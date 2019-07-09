@@ -1,11 +1,11 @@
-package main.java.de.embl.rieslab.emu.ui.internalproperties;
+package de.embl.rieslab.emu.ui.internalproperties;
 
 import java.util.ArrayList;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
 
 /**
- * An InternalProperty is aimed at passing information between {@link main.java.de.embl.rieslab.emu.ui.ConfigurablePanel}s
+ * An InternalProperty is aimed at passing information between {@link de.embl.rieslab.emu.ui.ConfigurablePanel}s
  * using an atomic variable of type T. In the ConfigurablePanel, the value can then be retrieved as a wrapper for one of
  * the corresponding primitive type. An InternalProperty is instantiated with a {@code name}. InternalProperties with the
  * same name will be shared between the different ConfigurablePanels that created them, as long as they are of the same InternalPropertyType.

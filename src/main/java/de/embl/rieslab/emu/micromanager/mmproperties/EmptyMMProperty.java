@@ -1,6 +1,6 @@
-package main.java.de.embl.rieslab.emu.micromanager.mmproperties;
+package de.embl.rieslab.emu.micromanager.mmproperties;
 
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 public abstract class EmptyMMProperty<T> extends MMProperty<T>{
 

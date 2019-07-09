@@ -1,21 +1,21 @@
-package test.java.de.embl.rieslab.emu.ui;
+package de.embl.rieslab.emu.ui;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-import main.java.de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
-import main.java.de.embl.rieslab.emu.utils.ColorRepository;
-import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
-import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
+import de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
+import de.embl.rieslab.emu.utils.ColorRepository;
+import de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
+import de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
 
 public class UIParameterTest {
 

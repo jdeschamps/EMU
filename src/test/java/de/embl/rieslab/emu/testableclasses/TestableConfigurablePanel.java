@@ -1,32 +1,33 @@
-package test.java.de.embl.rieslab.emu.testableclasses;
+package de.embl.rieslab.emu.testableclasses;
 
 import java.awt.Color;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import main.java.de.embl.rieslab.emu.swinglisteners.SwingUIListeners;
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.de.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
-import main.java.de.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
-import main.java.de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
-import main.java.de.embl.rieslab.emu.utils.ColorRepository;
+import de.embl.rieslab.emu.swinglisteners.SwingUIListeners;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
+import de.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
+import de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
+import de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
+import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
+import de.embl.rieslab.emu.utils.ColorRepository;
 
 public class TestableConfigurablePanel extends ConfigurablePanel {
 
@@ -98,6 +99,14 @@ public class TestableConfigurablePanel extends ConfigurablePanel {
 		
 		combovalues = new String[] {comboParamVal, "State2", STATE3};
 		combobox = new JComboBox<String>(combovalues); 
+		
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.add(textfield1);
+		this.add(textfield2);
+		this.add(slider);
+		this.add(toggle);
+		this.add(button);
+		this.add(combobox);
 	}
 	
 	@Override

@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.controller;
+package de.embl.rieslab.emu.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,30 +7,30 @@ import java.util.Map;
 
 import org.micromanager.Studio;
 
-import main.java.de.embl.rieslab.emu.configuration.ConfigurationController;
-import main.java.de.embl.rieslab.emu.configuration.GlobalConfiguration;
-import main.java.de.embl.rieslab.emu.controller.SystemDialogs;
-import main.java.de.embl.rieslab.emu.exceptions.IncompatiblePluginConfigurationException;
-import main.java.de.embl.rieslab.emu.micromanager.MMRegistry;
-import main.java.de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
-import main.java.de.embl.rieslab.emu.plugin.UIPluginLoader;
-import main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame;
-import main.java.de.embl.rieslab.emu.ui.EmptyPropertyMainFrame;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.configuration.ConfigurationController;
+import de.embl.rieslab.emu.configuration.GlobalConfiguration;
+import de.embl.rieslab.emu.controller.SystemDialogs;
+import de.embl.rieslab.emu.exceptions.IncompatiblePluginConfigurationException;
+import de.embl.rieslab.emu.micromanager.MMRegistry;
+import de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.plugin.UIPluginLoader;
+import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
+import de.embl.rieslab.emu.ui.EmptyPropertyMainFrame;
+import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
+import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
 /**
  * EMU controller class, bridging Micro-manager and the EMU UIPlugins using a configuration controller. 
  * Upon starting, it extracts the Micro-Manager device properties and configuration groups using an 
- * instance of {@link main.java.de.embl.rieslab.emu.micromanager.MMRegistry}. It then checks the available 
- * {@link main.java.de.embl.rieslab.emu.plugin.UIPlugin} through an {@link main.java.de.embl.rieslab.emu.plugin.UIPluginLoader}. It also makes use of a
- * {@link main.java.de.embl.rieslab.emu.configuration.ConfigurationController} to read the plugin configurations.
+ * instance of {@link de.embl.rieslab.emu.micromanager.MMRegistry}. It then checks the available 
+ * {@link de.embl.rieslab.emu.plugin.UIPlugin} through an {@link de.embl.rieslab.emu.plugin.UIPluginLoader}. It also makes use of a
+ * {@link de.embl.rieslab.emu.configuration.ConfigurationController} to read the plugin configurations.
  * Finally, it extracts the UIProperties and UIParameters from the loaded plugin and pair them to the corresponding
  * MMProperties or state values. During running time, it can update the properties and change the current plugin or 
  * configuration.
@@ -421,7 +421,7 @@ public class SystemController {
 	/**
 	 * Returns the Micro-manager configuration groups.
 	 * 
-	 * @return {@link main.java.de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry}
+	 * @return {@link de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry}
 	 */
 	public MMConfigurationGroupsRegistry getMMConfigGroupRegistry(){
 		return mmregistry_.getMMConfigurationGroupsRegistry();
@@ -498,7 +498,7 @@ public class SystemController {
 	}
 	
 	/**
-	 * Updates all properties and parameters by calling {@link main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame#updateAllConfigurablePanels()}
+	 * Updates all properties and parameters by calling {@link de.embl.rieslab.emu.ui.ConfigurableMainFrame#updateAllConfigurablePanels()}
 	 * 
 	 */
 	public void forceUpdate(){

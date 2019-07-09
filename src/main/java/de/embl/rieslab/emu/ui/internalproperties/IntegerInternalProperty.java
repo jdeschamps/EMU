@@ -1,8 +1,8 @@
-package main.java.de.embl.rieslab.emu.ui.internalproperties;
+package de.embl.rieslab.emu.ui.internalproperties;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
 
 public class IntegerInternalProperty extends InternalProperty<AtomicInteger, Integer> {
 

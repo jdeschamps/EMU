@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration.globalsettings;
+package de.embl.rieslab.emu.configuration.globalsettings;
 
 /**
  * Defines a setting valid for the whole of EMU, regardless of which UI is loaded. 
@@ -27,8 +27,8 @@ public abstract class GlobalSetting<T> {
 	}
 
 	/**
-	 * Returns the setting value as a String. Used to display the setting in the {@link main.java.de.embl.rieslab.emu.configuration.ui.GlobalSettingsTable GlobalSettingsTable}.
-	 * @see main.java.de.embl.rieslab.emu.configuration.ui.GlobalSettingsTable
+	 * Returns the setting value as a String. Used to display the setting in the {@link de.embl.rieslab.emu.configuration.ui.GlobalSettingsTable GlobalSettingsTable}.
+	 * @see de.embl.rieslab.emu.configuration.ui.GlobalSettingsTable
 	 * 
 	 * @return Setting's string value.
 	 */

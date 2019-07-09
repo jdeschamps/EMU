@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.ui;
+package de.embl.rieslab.emu.ui;
 
 import java.awt.Dimension;
 import java.util.HashMap;
@@ -6,10 +6,10 @@ import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import main.java.de.embl.rieslab.emu.controller.SystemController;
-import main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.controller.SystemController;
+import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
+import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 /**
  * Empty ConfigurableMainFrame. Used when no plugin is found.

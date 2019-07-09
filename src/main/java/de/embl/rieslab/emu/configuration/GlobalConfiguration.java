@@ -1,11 +1,11 @@
-package main.java.de.embl.rieslab.emu.configuration;
+package de.embl.rieslab.emu.configuration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import main.java.de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
+import de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
 
 /**
  * Class holding the list of known {@link PluginConfiguration}s and the name of
@@ -77,7 +77,7 @@ public class GlobalConfiguration {
 	}
 	
 	/** 
-	 * Generates a {@link main.java.de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting} that enables
+	 * Generates a {@link de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting} that enables
 	 * the user to disable the "unallocated properties warning" prompt at each start of EMU.   
 	 * 
 	 * @return The GlobalSetting.
@@ -249,7 +249,7 @@ public class GlobalConfiguration {
 	}
 
 	/**
-	 * Set the values of the {@link main.java.de.embl.rieslab.emu.configuration.globalsettings.GlobalSetting}s.
+	 * Set the values of the {@link de.embl.rieslab.emu.configuration.globalsettings.GlobalSetting}s.
 	 * 
 	 * @param globalSettings A HashMap containing the String values of the settings indexed by their name. 
 	 */

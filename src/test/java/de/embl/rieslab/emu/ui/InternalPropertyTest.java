@@ -1,11 +1,11 @@
-package test.java.de.embl.rieslab.emu.ui;
+package de.embl.rieslab.emu.ui;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
-import test.java.de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
+import de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
+import de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
 
 public class InternalPropertyTest {
 

@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration;
+package de.embl.rieslab.emu.configuration;
 
 import java.io.File;
 import java.io.FileInputStream;

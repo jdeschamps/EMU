@@ -1,8 +1,8 @@
-package main.java.de.embl.rieslab.emu.micromanager.mmproperties;
+package de.embl.rieslab.emu.micromanager.mmproperties;
 
 import java.util.ArrayList;
 
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
 /**

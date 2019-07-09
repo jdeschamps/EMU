@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.controller;
+package de.embl.rieslab.emu.controller;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -15,8 +15,8 @@ import javax.swing.JOptionPane;
 public class SystemDialogs {
 
 	/**
-	 * This dialog pops up when the {@link main.java.de.embl.rieslab.emu.controller.SystemController} does not
-	 * know which {@link main.java.de.embl.rieslab.emu.plugin.UIPlugin} to instantiate. It lets the user decide
+	 * This dialog pops up when the {@link de.embl.rieslab.emu.controller.SystemController} does not
+	 * know which {@link de.embl.rieslab.emu.plugin.UIPlugin} to instantiate. It lets the user decide
 	 * from an array of known plugin names.
 	 * 
 	 * @param plugins Array of plugin names.
@@ -36,8 +36,8 @@ public class SystemDialogs {
 	}
 	
 	/**
-	 * This dialog pops up when the {@link main.java.de.embl.rieslab.emu.controller.SystemController} does not
-	 * know which {@link main.java.de.embl.rieslab.emu.configuration.PluginConfiguration} to instantiate. It lets the user decide
+	 * This dialog pops up when the {@link de.embl.rieslab.emu.controller.SystemController} does not
+	 * know which {@link de.embl.rieslab.emu.configuration.PluginConfiguration} to instantiate. It lets the user decide
 	 * from an array of known configuration names.
 	 *  
 	 * @param configs Array of configuration names.
@@ -57,7 +57,7 @@ public class SystemDialogs {
 	}
 	
 	/**
-	 * Dialog displayed when the {@link main.java.de.embl.rieslab.emu.controller.SystemController} does not find any {@link main.java.de.embl.rieslab.emu.plugin.UIPlugin}.
+	 * Dialog displayed when the {@link de.embl.rieslab.emu.controller.SystemController} does not find any {@link de.embl.rieslab.emu.plugin.UIPlugin}.
 	 * 
 	 */
 	public static void showNoPluginFound(){
@@ -69,7 +69,7 @@ public class SystemDialogs {
 	}
 	
 	/**
-	 * Used by the {@link main.java.de.embl.rieslab.emu.controller.SystemController} to signify the user of missing UIParameters or UIProperties
+	 * Used by the {@link de.embl.rieslab.emu.controller.SystemController} to signify the user of missing UIParameters or UIProperties
 	 * in the configuration.
 	 * 
 	 */

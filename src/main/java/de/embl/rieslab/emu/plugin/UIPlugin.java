@@ -1,12 +1,12 @@
-package main.java.de.embl.rieslab.emu.plugin;
+package de.embl.rieslab.emu.plugin;
 
-import main.java.de.embl.rieslab.emu.controller.SystemController;
-import main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame;
+import de.embl.rieslab.emu.controller.SystemController;
+import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 
 /**
  * Interface for an EMU plugin. The plugin main class should implement this interface and
- * the jar should contain META-INF/services/main.java.embl.rieslab.emu.plugin.EMUPlugin file
- * containing the package location of the plugin (example: "main.java.myui.myplugin").
+ * the jar should contain META-INF/services/embl.rieslab.emu.plugin.EMUPlugin file
+ * containing the package location of the plugin (example: "myui.myplugin").
  * 
  * @author Joran Deschamps
  *

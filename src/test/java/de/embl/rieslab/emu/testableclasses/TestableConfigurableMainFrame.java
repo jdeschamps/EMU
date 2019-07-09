@@ -1,6 +1,6 @@
-package test.java.de.embl.rieslab.emu.testableclasses;
+package de.embl.rieslab.emu.testableclasses;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurableMainFrame;
+import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import mmcorej.CMMCore;
 
 public abstract class TestableConfigurableMainFrame extends ConfigurableMainFrame{

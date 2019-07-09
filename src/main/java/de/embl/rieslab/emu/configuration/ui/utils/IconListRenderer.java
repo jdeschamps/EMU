@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration.ui.utils;
+package de.embl.rieslab.emu.configuration.ui.utils;
 
 import java.awt.Component;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration.ui;
+package de.embl.rieslab.emu.configuration.ui;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -20,16 +20,16 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import main.java.de.embl.rieslab.emu.configuration.ui.utils.ColorIcon;
-import main.java.de.embl.rieslab.emu.configuration.ui.utils.IconListRenderer;
-import main.java.de.embl.rieslab.emu.configuration.ui.utils.IconTableCellRenderer;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.de.embl.rieslab.emu.utils.ColorRepository;
-import main.java.de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.configuration.ui.utils.ColorIcon;
+import de.embl.rieslab.emu.configuration.ui.utils.IconListRenderer;
+import de.embl.rieslab.emu.configuration.ui.utils.IconTableCellRenderer;
+import de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.utils.ColorRepository;
+import de.embl.rieslab.emu.utils.utils;
 
 /**
  * JPanel displaying a table allowing the user to set the values of the UIParameters.

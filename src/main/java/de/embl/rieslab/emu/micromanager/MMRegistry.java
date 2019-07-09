@@ -1,15 +1,15 @@
-package main.java.de.embl.rieslab.emu.micromanager;
+package de.embl.rieslab.emu.micromanager;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.micromanager.Studio;
 
-import main.java.de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMDevice;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
+import de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMDevice;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 
 /**
  * Class instantiating the {@link MMPropertiesRegistry} and {@link MMConfigurationGroupsRegistry}. In addition, it

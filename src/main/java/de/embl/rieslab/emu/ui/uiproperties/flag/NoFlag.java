@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.ui.uiproperties.flag;
+package de.embl.rieslab.emu.ui.uiproperties.flag;
 
 public final class NoFlag extends PropertyFlag{
 

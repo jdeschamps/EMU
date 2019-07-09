@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu;
+package de.embl.rieslab.emu;
 
 import java.io.File;
 
@@ -9,8 +9,8 @@ import org.micromanager.Studio;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SciJavaPlugin;
 
-import main.java.de.embl.rieslab.emu.controller.SystemConstants;
-import main.java.de.embl.rieslab.emu.controller.SystemController;
+import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.SystemController;
 
 
 @Plugin(type = MenuPlugin.class)

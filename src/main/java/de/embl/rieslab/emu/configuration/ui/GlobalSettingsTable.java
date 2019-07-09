@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration.ui;
+package de.embl.rieslab.emu.configuration.ui;
 
 import java.awt.Component;
 import java.awt.Font;
@@ -17,8 +17,8 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import main.java.de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
-import main.java.de.embl.rieslab.emu.configuration.globalsettings.GlobalSetting;
+import de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
+import de.embl.rieslab.emu.configuration.globalsettings.GlobalSetting;
 
 /**
  * A JPanel containing a JTable tailored for GlobalSettings. The first column contains the names of the settings, 

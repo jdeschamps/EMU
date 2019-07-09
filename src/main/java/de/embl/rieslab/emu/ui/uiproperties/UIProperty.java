@@ -1,14 +1,14 @@
-package main.java.de.embl.rieslab.emu.ui.uiproperties;
+package de.embl.rieslab.emu.ui.uiproperties;
 
-import main.java.de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
+import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
+import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
 /**
- * A UIProperty object is aimed at linking a user interface action with a {@link main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty} from 
+ * A UIProperty object is aimed at linking a user interface action with a {@link de.embl.rieslab.emu.micromanager.mmproperties.MMProperty} from 
  * Micro-Manager. It should be instantiated in the initializeProperties() implementation of a ConfigurablePanel subclass and add using the addUIProperty()
  * method of ConfigurablePanels.
  * <p>

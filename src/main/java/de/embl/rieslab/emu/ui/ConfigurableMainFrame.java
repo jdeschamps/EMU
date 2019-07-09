@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.ui;
+package de.embl.rieslab.emu.ui;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -17,16 +17,16 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import main.java.de.embl.rieslab.emu.controller.SystemController;
-import main.java.de.embl.rieslab.emu.controller.SystemDialogs;
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.de.embl.rieslab.emu.ui.internalproperties.InternalProperty;
-import main.java.de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.controller.SystemController;
+import de.embl.rieslab.emu.controller.SystemDialogs;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.internalproperties.InternalProperty;
+import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
 /**
- * Class representing the main JFrame of a {@link main.java.de.embl.rieslab.emu.plugin.UIPlugin}. Subclasses must
+ * Class representing the main JFrame of a {@link de.embl.rieslab.emu.plugin.UIPlugin}. Subclasses must
  * implement the {@link #initComponents()} method, in which the {@link ConfigurablePanel}s must be instantiated
  * and added the same way a JPanel is added to a JFrame.
  * <p>

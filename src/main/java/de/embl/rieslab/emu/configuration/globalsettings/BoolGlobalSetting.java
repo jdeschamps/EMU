@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration.globalsettings;
+package de.embl.rieslab.emu.configuration.globalsettings;
 
 /**
  * A {@link GlobalSetting} with boolean value.

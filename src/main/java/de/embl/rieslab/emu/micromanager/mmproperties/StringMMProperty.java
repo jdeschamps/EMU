@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.micromanager.mmproperties;
+package de.embl.rieslab.emu.micromanager.mmproperties;
 
 import mmcorej.CMMCore;
 

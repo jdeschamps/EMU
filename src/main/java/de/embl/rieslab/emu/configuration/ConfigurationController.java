@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration;
+package de.embl.rieslab.emu.configuration;
 
 import java.io.File;
 import java.util.HashMap;
@@ -7,14 +7,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import main.java.de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
-import main.java.de.embl.rieslab.emu.controller.SystemConstants;
-import main.java.de.embl.rieslab.emu.controller.SystemController;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
-import main.java.de.embl.rieslab.emu.ui.ConfigurableFrame;
+import de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
+import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.SystemController;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import de.embl.rieslab.emu.ui.ConfigurableFrame;
 
 /**
- * Controller class for the configuration of the current UI. This class bridges the {@link main.java.de.embl.rieslab.emu.controller.SystemController}
+ * Controller class for the configuration of the current UI. This class bridges the {@link de.embl.rieslab.emu.controller.SystemController}
  * with the {@link ConfigurationWizard}, the {@link GlobalConfiguration}. The ConfigurationController starts the configuration wizard to allow
  * the user to modify the current configuration. It also contains inform the SystemController on the different configurations. Finally, it
  * calls the {@link ConfigurationIO} to read and write the configurations from/to files.
@@ -38,7 +38,7 @@ public class ConfigurationController {
 	}
 
 	/**
-	 * Returns the default path to the configuration file as defined in {@link main.java.de.embl.rieslab.emu.controller.SystemConstants}.
+	 * Returns the default path to the configuration file as defined in {@link de.embl.rieslab.emu.controller.SystemConstants}.
 	 * 
 	 * @return Default configuration file.
 	 */
@@ -136,7 +136,7 @@ public class ConfigurationController {
 	}
 
 	/**
-	 * Checks if the configuration contains all the properties and parameters as defined in the {@link main.java.de.embl.rieslab.emu.ui.ConfigurableFrame}.
+	 * Checks if the configuration contains all the properties and parameters as defined in the {@link de.embl.rieslab.emu.ui.ConfigurableFrame}.
 	 * 
 	 * @param maininterface Current plugin' ConfigurableFrame. 
 	 * @return True if the current configuration contains all the properties and parameters defined in the plugin's ConfigurableFrame. 
@@ -208,7 +208,7 @@ public class ConfigurationController {
 
 	/**
 	 * Retrieves the pairs of UIProperty name and MMProperty names (and UIProperty state values), as well as the pairs of UIParameter names and values,
-	 * and writes them to the configuration file. It then calls the {@link main.java.de.embl.rieslab.emu.controller.SystemController} to update the system. 
+	 * and writes them to the configuration file. It then calls the {@link de.embl.rieslab.emu.controller.SystemController} to update the system. 
 	 * This method is called by the {@link ConfigurationWizard} upon saving of the configuration by the user.
 	 * 
 	 * @param configName Name of the configuration.

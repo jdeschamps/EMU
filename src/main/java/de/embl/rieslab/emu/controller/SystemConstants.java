@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.controller;
+package de.embl.rieslab.emu.controller;
 
 /**
  * Constants used in the EMU library.

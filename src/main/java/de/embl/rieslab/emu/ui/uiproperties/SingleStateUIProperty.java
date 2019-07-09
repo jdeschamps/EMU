@@ -1,8 +1,8 @@
-package main.java.de.embl.rieslab.emu.ui.uiproperties;
+package de.embl.rieslab.emu.ui.uiproperties;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
 /**
  * A UIProperty that accepts only a single state, whose value can be set by the user in the

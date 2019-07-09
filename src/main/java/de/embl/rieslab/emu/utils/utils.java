@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.utils;
+package de.embl.rieslab.emu.utils;
 
 import java.awt.Color;
 import java.util.regex.Pattern;

@@ -1,8 +1,8 @@
-package main.java.de.embl.rieslab.emu.micromanager.configgroups;
+package de.embl.rieslab.emu.micromanager.configgroups;
 
 import java.util.ArrayList;
 
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import mmcorej.StrVector;
 
 /**

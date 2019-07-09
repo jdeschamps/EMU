@@ -1,8 +1,8 @@
-package main.java.de.embl.rieslab.emu.ui.internalproperties;
+package de.embl.rieslab.emu.ui.internalproperties;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import main.java.de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.ConfigurablePanel;
 
 public class BoolInternalProperty extends InternalProperty<AtomicBoolean, Boolean>{
 

@@ -1,7 +1,7 @@
-package main.java.de.embl.rieslab.emu.exceptions;
+package de.embl.rieslab.emu.exceptions;
 
 /**
- * Exception thrown when the {@link main.java.de.embl.rieslab.emu.controller.SystemController} is asked
+ * Exception thrown when the {@link de.embl.rieslab.emu.controller.SystemController} is asked
  * to reload the system with a UIPlugin and PluginConfiguration that are not compatible.
  * 
  * @author Joran Deschamps

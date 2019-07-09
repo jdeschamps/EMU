@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration;
+package de.embl.rieslab.emu.configuration;
 
 import java.util.Map;
 import java.util.TreeMap;

@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.configuration;
+package de.embl.rieslab.emu.configuration;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -16,13 +16,13 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import main.java.de.embl.rieslab.emu.configuration.globalsettings.GlobalSetting;
-import main.java.de.embl.rieslab.emu.configuration.ui.GlobalSettingsTable;
-import main.java.de.embl.rieslab.emu.configuration.ui.HelpWindow;
-import main.java.de.embl.rieslab.emu.configuration.ui.ParametersTable;
-import main.java.de.embl.rieslab.emu.configuration.ui.PropertiesTable;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
-import main.java.de.embl.rieslab.emu.ui.ConfigurableFrame;
+import de.embl.rieslab.emu.configuration.globalsettings.GlobalSetting;
+import de.embl.rieslab.emu.configuration.ui.GlobalSettingsTable;
+import de.embl.rieslab.emu.configuration.ui.HelpWindow;
+import de.embl.rieslab.emu.configuration.ui.ParametersTable;
+import de.embl.rieslab.emu.configuration.ui.PropertiesTable;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import de.embl.rieslab.emu.ui.ConfigurableFrame;
 
 /**
  * UI used to configure the system by allocating UI properties to existing device properties in Micro-manager, the 

@@ -1,8 +1,8 @@
-package main.java.de.embl.rieslab.emu.ui.uiproperties;
+package de.embl.rieslab.emu.ui.uiproperties;
 
-import main.java.de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
-import main.java.de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
 /**
  * Class used to pair a UIproperty with a MMProperty.

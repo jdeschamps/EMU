@@ -1,11 +1,11 @@
-package main.java.de.embl.rieslab.emu.micromanager.configgroups;
+package de.embl.rieslab.emu.micromanager.configgroups;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
-import main.java.de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import mmcorej.CMMCore;
 import mmcorej.Configuration;
 import mmcorej.StrVector;

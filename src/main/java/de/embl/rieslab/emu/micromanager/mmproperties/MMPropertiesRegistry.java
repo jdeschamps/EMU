@@ -1,4 +1,4 @@
-package main.java.de.embl.rieslab.emu.micromanager.mmproperties;
+package de.embl.rieslab.emu.micromanager.mmproperties;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -128,7 +128,7 @@ public class MMPropertiesRegistry {
 
 	/**
 	 * Clears all Micro-manager device property listeners (which are of the class UIProperty). 
-	 * Called during reloading of the system by the {@link main.java.de.embl.rieslab.emu.controller.SystemController}.
+	 * Called during reloading of the system by the {@link de.embl.rieslab.emu.controller.SystemController}.
 	 * 
 	 */
 	public void clearAllListeners(){
