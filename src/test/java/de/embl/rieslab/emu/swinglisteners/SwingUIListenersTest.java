@@ -4,11 +4,20 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 import java.awt.AWTException;
+import java.awt.Point;
 import java.awt.Robot;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.JToggleButton;
+import javax.swing.SwingUtilities;
 
 import org.junit.Test;
 
@@ -138,7 +147,7 @@ public class SwingUIListenersTest {
 	
 	
 	@Test
-	public void testJComboboxActionListenerOnIndexwithArray() {
+	public void testJComboboxActionListenerOnIndexWithArray() {
 		final String prop = "My Prop";
 		final String[] combovals = {"MyValue1", "MyValue2", "MyValue3"}; // values shown to the user (maybe set by a UIParameter) 
 		final String[] vals = {"CoolName1", "CoolName2", "CoolName3"}; // friendly names used to trigger the UIProperty 
@@ -156,7 +165,7 @@ public class SwingUIListenersTest {
 			}
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerOnSelectedIndex(this, prop, combo, vals); // uses names for the values sent to the UIProperty
+				SwingUIListeners.addActionListenerOnSelectedIndex(this, prop, combo, vals); 
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
@@ -192,9 +201,9 @@ public class SwingUIListenersTest {
 		/// Test 2: value of the MMProperty has changed
 		assertEquals(vals[selectedIndex], mmprop.getStringValue());	
 	}
-	
+
 	@Test
-	public void testJTextFieldActionListenerOnIntegerOutput() throws AWTException {
+	public void testJTextFieldActionListenerOnIntegerValue() throws AWTException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
@@ -210,7 +219,127 @@ public class SwingUIListenersTest {
 			}
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, textfield); // uses names for the values sent to the UIProperty
+				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, textfield);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		// changes the text of the JtextField, this does not trigger the action listeners
+		int value = 21;
+		textfield.setText(String.valueOf(value)); 
+		
+		// triggers an "Enter" key
+		Robot r = new Robot();
+		r.keyPress(KeyEvent.VK_ENTER);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(String.valueOf(value), mmprop.getStringValue());	
+	}
+
+	@Test
+	public void testJTextFieldActionListenerOnStringValue() throws AWTException {
+		final String prop = "My Prop";
+		final JTextField textfield = new JTextField();
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(textfield);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerOnStringValue(this, prop, textfield);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		// changes the text of the JtextField, this does not trigger the action listeners
+		final String value = "£$£!14,:{";
+		textfield.setText(value); 
+		
+		// triggers an "Enter" key
+		Robot r = new Robot();
+		r.keyPress(KeyEvent.VK_ENTER);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(value, mmprop.getStringValue());	
+	}
+	
+	@Test
+	public void testJTextFieldActionListenerOnIntegerValueWithFeedbackToSlider() throws AWTException {
+		final String prop = "My Prop";
+		final JTextField textfield = new JTextField();
+		final JSlider slider = new JSlider(); // 0 - 100
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(textfield);
+				this.add(slider);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, textfield, slider);
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
@@ -249,11 +378,31 @@ public class SwingUIListenersTest {
 		
 		////////////////////////////////////////////////
 		/// Test 2: value of the MMProperty has changed
-		assertEquals(String.valueOf(value), mmprop.getStringValue());	
+		assertEquals(String.valueOf(value), mmprop.getStringValue());
+		assertEquals(value, slider.getValue());	
+		
+		// changes the text of the JtextField, this does not trigger the action listeners
+		int value2 = 110;
+		textfield.setText(String.valueOf(value2)); 
+		
+		// triggers an "Enter2 key
+		r.keyPress(KeyEvent.VK_ENTER);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		///////////////////////////////////////////////////
+		/// Test 3: value of the MMProperty has not changed
+		assertEquals(String.valueOf(value), mmprop.getStringValue());
+		assertEquals(value, slider.getValue());	
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnBoundedIntegerOutput() throws AWTException {
+	public void testJTextFieldActionListenerOnBoundedIntegerValue() throws AWTException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		final int min = -4;
@@ -271,7 +420,7 @@ public class SwingUIListenersTest {
 			}
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, textfield, min, max); // uses names for the values sent to the UIProperty
+				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, textfield, min, max); 
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
@@ -350,7 +499,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnDoubleOutput() throws AWTException {
+	public void testJTextFieldActionListenerOnDoubleValue() throws AWTException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
@@ -366,7 +515,7 @@ public class SwingUIListenersTest {
 			}
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerOnDoubleValue(this, prop, textfield); // uses names for the values sent to the UIProperty
+				SwingUIListeners.addActionListenerOnDoubleValue(this, prop, textfield); 
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
@@ -426,7 +575,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnBoundedDoubleOutput() throws AWTException {
+	public void testJTextFieldActionListenerOnBoundedDoubleValue() throws AWTException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		final double min = -4.022;
@@ -444,7 +593,7 @@ public class SwingUIListenersTest {
 			}
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerOnDoubleValue(this, prop, textfield, min, max); // uses names for the values sent to the UIProperty
+				SwingUIListeners.addActionListenerOnDoubleValue(this, prop, textfield, min, max); 
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
@@ -521,101 +670,674 @@ public class SwingUIListenersTest {
 		/// Test 4: value of the MMProperty has not changed
 		assertEquals(String.valueOf(value), mmprop.getStringValue());
 	}
-	
-	
-	
-	
-	public void testActionOnComponents() {
-		// creates a testing configurable panel
-		TestableConfigurablePanel cp = new TestableConfigurablePanel("myPanel");
-		
-		// creates dummy MMProperties
-		TestableMMProperty mmprop1 = new TestableMMProperty("Prop1");
-		TestableMMProperty mmprop2 = new TestableMMProperty("Prop2");
-		TestableMMProperty mmprop3 = new TestableMMProperty("Prop3");
-		TestableMMProperty mmprop4 = new TestableMMProperty("Prop4");
-		TestableMMProperty mmprop5 = new TestableMMProperty("Prop5");
-		
-		// pairs UIProperty and MMProperty and set states
-		PropertyPair.pair(cp.getPublicUIProperty(cp.UIPROP), mmprop1);
-		PropertyPair.pair(cp.getPublicUIProperty(cp.UIPROP2), mmprop2);
-		
-		PropertyPair.pair(cp.getPublicUIProperty(cp.MULTPROP), mmprop3);
-		MultiStateUIProperty multi = (MultiStateUIProperty) cp.getPublicUIProperty(cp.MULTPROP);
-		int n = multi.getNumberOfStates();
-		assertEquals(cp.sizeMultiProp,n);
-		String[] vals = new String[n];
-		for(int i=0;i<n;i++) {
-			vals[i] = "MyState "+i;
-		}
-		multi.setStateValues(vals);
-		
-		PropertyPair.pair(cp.getPublicUIProperty(cp.SINGPROP), mmprop4);
-		SingleStateUIProperty sing = (SingleStateUIProperty) cp.getPublicUIProperty(cp.SINGPROP);
-		String singleVal = "My Single value";
-		sing.setStateValue(singleVal);
-		
-		PropertyPair.pair(cp.getPublicUIProperty(cp.TWOSTPROP), mmprop5);
-		TwoStateUIProperty twost = (TwoStateUIProperty) cp.getPublicUIProperty(cp.TWOSTPROP);
-		String offst = "My off state";
-		String onst = "My on state";
-		twost.setOnStateValue(onst);
-		twost.setOffStateValue(offst);
-		
-		// creates a configurablemainframe, in order to call the configureAllListeners method
-		TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() {
 
+	@Test
+	public void testJTextFieldActionListenerToDoubleTrigger() throws AWTException {
+		final String prop = "My Prop";
+		final JTextField textfield = new JTextField();
+		
+		final double defmyValue = 1.45;
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			
+			@Override
+			public void setUpComponent() {
+				this.add(textfield);
+			}
+			@Override
+			protected void initializeProperties() {}
+			
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerToDoubleTrigger(d -> myDoubleValue = d, textfield); 
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
 			@Override
 			protected void initComponents() {
 				this.add(cp);
 			}
 		};
-		cmf.addAllListeners(); // method usually automatically when loading a configuration
-		
-		// check that the singlestateUIproperty state is singleVal
-		assertEquals(singleVal, sing.getStateValue());
-		assertEquals(offst, twost.getOffStateValue());
-		assertEquals(onst, twost.getOnStateValue());
-		
-		// test that the default value of mmprop4 is not singleVal
-		assertNotEquals(singleVal, mmprop4.getValue());
-		assertNotEquals(onst, mmprop5.getValue());
-		
-		// click on the JButton
-		cp.button.doClick();
-		cp.toggle.doClick();
-		int indexcombo = 2;
-		cp.combobox.setSelectedIndex(indexcombo);
 
+		cp.myDoubleValue = defmyValue;
+
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		////////////////////////////////////////////
+		/// Test 1: default value
+		assertEquals(defmyValue, cp.myDoubleValue, 1E-20);
+		
+		// changes the text of the JtextField, this does not trigger the action listeners
+		double value = 12.68;
+		textfield.setText(String.valueOf(value)); 
+		
+		// triggers an "Enter" key
+		Robot r = new Robot();
+		r.keyPress(KeyEvent.VK_ENTER);
+		
 		// waits to let the other thread finish
 		try {
-			Thread.sleep(100);
+			Thread.sleep(20);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		// test that the new values have been changed
-		assertEquals(singleVal, mmprop4.getValue());
-		assertEquals(onst, mmprop5.getValue());
-		assertEquals(vals[indexcombo], mmprop3.getValue());
-		
-		// click off the togglebutton
-		cp.toggle.doClick();
+		///////////////////////////////////////////////////
+		/// Test 2: value has been updated
+		assertEquals(value, cp.myDoubleValue, 1E-20);	
+	}
 
+	@Test
+	public void testJToggleButtonActionListenerToBoolTrigger() {
+		final String prop = "My Prop";
+		final JToggleButton btn = new JToggleButton();
+				
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			
+			@Override
+			public void setUpComponent() {
+				this.add(btn);
+			}
+			@Override
+			protected void initializeProperties() {}
+			
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerToBooleanTrigger(d -> myBoolValue = d, btn); 
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+
+		cp.myBoolValue = false;
+
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		////////////////////////////////////////////
+		/// Test 1: default value
+		assertEquals(false, cp.myBoolValue);
+		
+		// click on the button
+		btn.doClick();
+		
 		// waits to let the other thread finish
 		try {
-			Thread.sleep(100);
+			Thread.sleep(20);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-		// test the off value
-		assertEquals(offst, mmprop5.getValue());
+		///////////////////////////////////////////////////
+		/// Test 2: value has been updated
+		assertEquals(true, cp.myBoolValue);	
+		
+		// click on the button
+		btn.doClick();
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		///////////////////////////////////////////////////
+		/// Test 3: value has been updated
+		assertEquals(false, cp.myBoolValue);	
+	}
+	
+	@Test
+	public void testJTextFieldActionListenerToDoubleTriggerBounded() throws AWTException {
+		final String prop = "My Prop";
+		final JTextField textfield = new JTextField();
+		
+		final double defmyValue = 1.45;
+		final double min = -1.46;
+		final double max = 21.456;
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			
+			@Override
+			public void setUpComponent() {
+				this.add(textfield);
+			}
+			@Override
+			protected void initializeProperties() {}
+			
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerToDoubleTrigger(d -> myDoubleValue = d, textfield, min, max); 
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+
+		cp.myDoubleValue = defmyValue;
+
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		////////////////////////////////////////////
+		/// Test 1: default value
+		assertEquals(defmyValue, cp.myDoubleValue, 1E-20);
+		
+		// changes the text of the JtextField, this does not trigger the action listeners
+		double value = 21.457;
+		textfield.setText(String.valueOf(value)); 
+		
+		// triggers an "Enter2 key
+		Robot r = new Robot();
+		r.keyPress(KeyEvent.VK_ENTER);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		///////////////////////////////////////////////////
+		/// Test 3: value has not been updated
+		assertEquals(defmyValue, cp.myDoubleValue, 1E-20);
+		
+		// changes the text of the JtextField, this does not trigger the action listeners
+		value = -1.477;
+		textfield.setText(String.valueOf(value)); 
+		
+		// triggers an "Enter2 key
+		r.keyPress(KeyEvent.VK_ENTER);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		///////////////////////////////////////////////////
+		/// Test 4: value has not been updated
+		assertEquals(defmyValue, cp.myDoubleValue, 1E-20);
+
+		
+		// changes the text of the JtextField, this does not trigger the action listeners
+		value = 20;
+		textfield.setText(String.valueOf(value)); 
+		
+		// triggers an "Enter2 key
+		r.keyPress(KeyEvent.VK_ENTER);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		///////////////////////////////////////////////////
+		/// Test 5: value has been updated
+		assertEquals(value, cp.myDoubleValue, 1E-20);
+	}
+	
+	@Test
+	public void testJSliderActionListenerOnIntegerValue() throws AWTException {
+		final String prop = "My Prop";
+		int value = 21;
+		final JSlider slider = new JSlider(0,100,value);
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(slider);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, slider);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		Point pt = new Point(slider.getLocation()); 
+		SwingUtilities.convertPointToScreen(pt, slider); 
+		int w = slider.getSize().width;
+		
+		// click once in the middle of the JSlider to advance one value
+		Robot r = new Robot();
+		r.mouseMove(pt.x+(int) w/2, pt.y);
+		r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+		r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(String.valueOf(value+1), mmprop.getStringValue());	
+	}
+	
+	@Test
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackToTextField() throws AWTException {
+		final String prop = "My Prop";
+		int value = 21;
+		final JSlider slider = new JSlider(0,100,value);
+		final JTextField textfield = new JTextField(prop);
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(slider);
+				this.add(textfield);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, slider, textfield);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		Point pt = new Point(slider.getLocation()); 
+		SwingUtilities.convertPointToScreen(pt, slider); 
+		int w = slider.getSize().width;
+		
+		// click once in the middle of the JSlider to advance one value
+		Robot r = new Robot();
+		r.mouseMove(pt.x+(int) w/2, pt.y);
+		r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+		r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(String.valueOf(value+1), mmprop.getStringValue());	
+		assertEquals(String.valueOf(value+1), textfield.getText());	
+	}		
+	
+	@Test
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackToLabel() throws AWTException {
+		final String prop = "My Prop";
+		int value = 21;
+		final JSlider slider = new JSlider(0,100,value);
+		final JLabel label = new JLabel(prop);
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(slider);
+				this.add(label);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, slider, label);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		Point pt = new Point(slider.getLocation()); 
+		SwingUtilities.convertPointToScreen(pt, slider); 
+		int w = slider.getSize().width;
+		
+		// click once in the middle of the JSlider to advance one value
+		Robot r = new Robot();
+		r.mouseMove(pt.x+(int) w/2, pt.y);
+		r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+		r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(String.valueOf(value+1), mmprop.getStringValue());	
+		assertEquals(String.valueOf(value+1), label.getText());	
+	}	
+	
+	@Test
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackPreSuffixes() throws AWTException {
+		final String prop = "My Prop";
+		int value = 21;
+		final JSlider slider = new JSlider(0,100,value);
+		final JLabel label = new JLabel(prop);
+		final String prefix = "My slider: ";
+		final String suffix = "%";
+		
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(slider);
+				this.add(label);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerOnIntegerValue(this, prop, slider, label, prefix, suffix);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		Point pt = new Point(slider.getLocation()); 
+		SwingUtilities.convertPointToScreen(pt, slider); 
+		int w = slider.getSize().width;
+		
+		// click once in the middle of the JSlider to advance one value
+		Robot r = new Robot();
+		r.mouseMove(pt.x+(int) w/2, pt.y);
+		r.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+		r.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(50);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(String.valueOf(value+1), mmprop.getStringValue());	
+		assertEquals(prefix+String.valueOf(value+1)+suffix, label.getText());	
+	}	
+
+	@Test
+	public void testButtonGroupActionListenerOnSelectedIndex() {
+		final String prop = "My Prop";
+		final JToggleButton button1 = new JToggleButton();
+		final JToggleButton button2 = new JToggleButton();
+		final JToggleButton button3 = new JToggleButton();
+		final ButtonGroup bg = new ButtonGroup();
+		bg.add(button1);
+		bg.add(button2);
+		bg.add(button3);
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(button1);
+				this.add(button2);
+				this.add(button3);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerOnSelectedIndex(this, prop, bg);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		// click on button2
+		button2.doClick();
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals("1", mmprop.getStringValue());		
+	}
+
+	@Test
+	public void testButtonGroupActionListenerOnSelectedIndexWithArray() {
+		final String prop = "My Prop";
+		final JToggleButton button1 = new JToggleButton();
+		final JToggleButton button2 = new JToggleButton();
+		final JToggleButton button3 = new JToggleButton();
+		final ButtonGroup bg = new ButtonGroup();
+		bg.add(button1);
+		bg.add(button2);
+		bg.add(button3);
+		
+		final String[] vals = {"One", "Two", "Three"}; 
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(button1);
+				this.add(button2);
+				this.add(button3);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerOnSelectedIndex(this, prop, bg, vals);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		// click on button2
+		button2.doClick();
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(vals[1], mmprop.getStringValue());		
+	}
+
+	@Test
+	public void testAbstractButtonActionListenerToSingleState() {
+		final String prop = "My Prop";
+		final JButton btn = new JButton();
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			@Override
+			public void setUpComponent() {
+				this.add(btn);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new SingleStateUIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addActionListenerToSingleState(this, prop, btn);;
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		// sets single state
+		String myValue = "My value";
+		((SingleStateUIProperty) cp.property).setStateValue(myValue);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		// click on button
+		btn.doClick();
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(myValue, mmprop.getStringValue());		
 	}
 	
 	private abstract class ComponentTestPanel extends ConfigurablePanel{
 
 		public UIProperty property;
+		public double myDoubleValue;
+		public int myIntValue;
+		public boolean myBoolValue;
 		
 		public ComponentTestPanel(String label) {
 			super(label);
