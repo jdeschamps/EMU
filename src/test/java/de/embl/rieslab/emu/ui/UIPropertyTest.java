@@ -154,11 +154,11 @@ public class UIPropertyTest {
 		twost.setOffStateValue(offst);
 
 		// sets the value of the mmprop directly
-		mmprop1.setStringValue(NEWVALUE, null);
-		mmprop2.setStringValue(NEWVALUE2, null);
-		mmprop3.setStringValue(NEWVALUE3, null);
-		mmprop4.setStringValue(NEWVALUE4, null);
-		mmprop5.setStringValue(NEWVALUE5, null);
+		mmprop1.setValue(NEWVALUE, null);
+		mmprop2.setValue(NEWVALUE2, null);
+		mmprop3.setValue(NEWVALUE3, null);
+		mmprop4.setValue(NEWVALUE4, null);
+		mmprop5.setValue(NEWVALUE5, null);
 
 		// waits to let the other thread finish
 		try {

@@ -124,9 +124,9 @@ public class ImmutableMultiStateUIProperty extends UIProperty {
 	public void setPropertyValue(String value) {
 		if (isAssigned()) {
 			if(states_.containsKey(value)){ // if value is the name of one of the state
-				getMMProperty().setStringValue(states_.get(value), this);
+				getMMProperty().setValue(states_.get(value), this);
 			} else if(isStateValue(value)){ // if value corresponds to a state
-				getMMProperty().setStringValue(value, this);
+				getMMProperty().setValue(value, this);
 			}
 		}
 	}

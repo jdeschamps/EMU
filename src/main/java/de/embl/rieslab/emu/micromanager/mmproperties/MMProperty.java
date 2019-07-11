@@ -33,7 +33,6 @@ public abstract class MMProperty<T> {
 	private boolean readOnly;							
 	private boolean hasLimits;						
 	private boolean hasAllowedValues;
-	private double upperLimit, lowerLimit;
 	private T[] allowedValues;
 	protected T value;
 	private T maxValue, minValue;
@@ -84,10 +83,14 @@ public abstract class MMProperty<T> {
 		this.hasLimits = true;
 		this.hasAllowedValues = false;
 		
-		this.upperLimit = upperLimit;
-		this.lowerLimit = lowerLimit;
-		this.maxValue = convertToValue(upperLimit);
-		this.minValue = convertToValue(lowerLimit);
+		// as a safeguard
+		if(Double.compare(upperLimit, lowerLimit) < 0) {
+			this.maxValue = convertToValue(lowerLimit);
+			this.minValue = convertToValue(upperLimit);
+		} else {
+			this.maxValue = convertToValue(upperLimit);
+			this.minValue = convertToValue(lowerLimit);			
+		}
 
 		hash_ = devicelabel_+"-"+label_;
 		
@@ -168,7 +171,7 @@ public abstract class MMProperty<T> {
 	 * @param stringval New value.
 	 * @param source UIProperty at the origin of the update.
 	 */
-	public void setStringValue(String stringval, UIProperty source){
+	public void setValue(String stringval, UIProperty source){
 		if(!isReadOnly()){
 			if(stringval == null){
 				return;
@@ -251,32 +254,6 @@ public abstract class MMProperty<T> {
 	}
 	
 	/**
-	 * Sets a maximum to the value of the device property. The maximum should be smaller than
-	 * the upper limit. Maximum value is only used in device property that have limits. If these
-	 * conditions are not met, nothing happens.
-	 * 
-	 * @param val Maximum value.
-	 */
-	public void setMax(T val){
-		if(hasLimits() && isInRange(val)){
-			maxValue = val;
-		}
-	}
-	
-	/**
-	 * Sets a minimum to the value of the device property. The minimum should be larger than
-	 * the lower limit. Minimum value is only used in device property that have limits. If these
-	 * conditions are not met, nothing happens.
-	 * 
-	 * @param val Minimum value.
-	 */
-	public void setMin(T val){
-		if(hasLimits() && isInRange(val)){
-			minValue = val;
-		}
-	}
-
-	/**
 	 * Returns the maximum value as a String. If the device property doesn't have limits, then
 	 * the method returns null.
 	 * 
@@ -329,32 +306,6 @@ public abstract class MMProperty<T> {
 	}
 
 	/**
-	 * Returns the lower limit. If the device property doesn't have limits, then
-	 * the method returns null.
-	 * 
-	 * @return Lower limit value, or null if the device property doesn't have limits.
-	 */
-	public Double getLowerLimit(){
-		if(hasLimits()){
-			return lowerLimit;
-		}
-		return null;
-	}
-	
-	/**
-	 * Returns the upper limit. If the device property doesn't have limits, then
-	 * the method returns null.
-	 * 
-	 * @return Upper limit value, or null if the device property doesn't have limits.
-	 */
-	public Double getUpperLimit(){
-		if(hasLimits()){
-			return upperLimit;
-		}
-		return null;
-	}
-	
-	/**
 	 * Returns the parent device label.
 	 * 
 	 * @return Device label.
@@ -379,17 +330,6 @@ public abstract class MMProperty<T> {
 	 */
 	public String getHash(){
 		return hash_;
-	}
-	
-	/**
-	 * Tests if the value {@code strval} is in range of the device property limits (if applicable).
-	 * 
-	 * @param strval Value
-	 * @return True if in range, false otherwise.
-	 */
-	protected boolean isInRange(String strval){
-		T val = convertToValue(strval);
-		return isInRange(val);
 	}
 	
 	/**
@@ -476,23 +416,11 @@ public abstract class MMProperty<T> {
 	 * @param val2 Second value
 	 * @return True if equal, false otherwise. 
 	 */
-	protected abstract boolean areEqual(T val1, T val2);
-	
-	/**
-	 * Tests if {@code val} in the allowed range of the MMProperty, that is to say is smaller
-	 * than the upper limit and larger than the lower limit. If minimum and maximum have 
-	 * been set to values different than the upper and lower limit, then {@code val} is in range 
-	 * if it is contained between the minimum and the maximum. If the property doesn't have
-	 * limits, this method should return true.
-	 * @param val Value to be checked
-	 * @return True if in range, false otherwise
-	 */
-	protected abstract boolean isInRange(T val);
+	protected abstract boolean areEquals(T val1, T val2);
 	
 	/**
 	 * Tests if {@code val} is allowed. If the property has neither limits nor allowed values,
-	 * then the method should return true. If the property has limits, then this method
-	 * should be equivalent to isInRange().
+	 * then the method should return true.
 	 * @param val Value to be checked
 	 * @return True if allowed, false otherwise.
 	 */

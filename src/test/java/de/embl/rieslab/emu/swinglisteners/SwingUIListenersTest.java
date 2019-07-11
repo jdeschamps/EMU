@@ -1004,7 +1004,7 @@ public class SwingUIListenersTest {
 		
 		// waits to let the other thread finish
 		try {
-			Thread.sleep(50);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -1069,7 +1069,7 @@ public class SwingUIListenersTest {
 		
 		// waits to let the other thread finish
 		try {
-			Thread.sleep(50);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -1137,7 +1137,7 @@ public class SwingUIListenersTest {
 		
 		// waits to let the other thread finish
 		try {
-			Thread.sleep(50);
+			Thread.sleep(100);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}

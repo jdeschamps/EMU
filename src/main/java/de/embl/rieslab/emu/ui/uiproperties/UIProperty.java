@@ -153,7 +153,7 @@ public class UIProperty {
 	 */
 	public void setPropertyValue(String newValue){
 		if(assigned_){
-			mmproperty_.setStringValue(newValue, this);
+			mmproperty_.setValue(newValue, this);
 		}  
 	}
 	

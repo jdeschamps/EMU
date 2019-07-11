@@ -72,7 +72,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	 * @inheritDoc
 	 */
 	@Override
-	public void setStringValue(String stringval, UIProperty source){
+	public void setValue(String stringval, UIProperty source){
 		if(!isReadOnly()){
 			if(isAllowed(stringval)){
 				try{
@@ -150,19 +150,9 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	 * @inheritDoc
 	 */
 	@Override
-	public boolean isInRange(String val) {
-		// doesn't have a range
-		System.out.println("Call to in range");
-		return true;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	@Override
 	public boolean isAllowed(String val) { // always has allowed values, so no "hasAllowedValues" to prevent null object
 		for(int i=0;i<getAllowedValues().length;i++){
-			if(areEqual(val, getAllowedValues()[i])){
+			if(areEquals(val, getAllowedValues()[i])){
 				return true;
 			}
 		}
@@ -173,7 +163,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	 * @inheritDoc
 	 */
 	@Override
-	public boolean areEqual(String val1, String val2) {
+	public boolean areEquals(String val1, String val2) {
 		return val1.equals(val2);
 	}
 

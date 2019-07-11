@@ -1,5 +1,6 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
+import de.embl.rieslab.emu.utils.utils;
 import mmcorej.CMMCore;
 
 /**
@@ -52,11 +53,10 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 */
 	@Override
 	public Integer convertToValue(String s) {
-		try{
-			Integer val = Integer.parseInt(s);
-			return val;
-		} catch(Exception e){
-			System.out.println(getDeviceLabel()+" - "+getMMPropertyLabel()+": error parsing int "+s); 
+		if(utils.isInteger(s)) {
+			return Integer.valueOf(s);
+		} else if(utils.isNumeric(s)) {
+			return Double.valueOf(s).intValue();
 		}
 		return null;
 	}
@@ -101,10 +101,9 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	/**
 	 * @inheritDoc
 	 */
-	@Override
-	public boolean isInRange(Integer val) {
+	private boolean isInRange(Integer val) {
 		if(hasLimits()){
-			if(val>=getLowerLimit() && val<=getUpperLimit() && val<=getMax() && val>=getMin()){
+			if(val<=getMax() && val>=getMin()){
 				return true;
 			}
 			return false;
@@ -121,9 +120,11 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 			return false;
 		}
 		
-		if(hasAllowedValues()){
+		if(isReadOnly()) {
+			return false;
+		} else if(hasAllowedValues()){
 			for(int i=0;i<getAllowedValues().length;i++){
-				if(areEqual(val, getAllowedValues()[i])){
+				if(areEquals(val, getAllowedValues()[i])){
 					return true;
 				}
 			}
@@ -138,8 +139,8 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 * @inheritDoc
 	 */
 	@Override
-	public boolean areEqual(Integer val1, Integer val2) {
-		return val1 == val2;
+	public boolean areEquals(Integer val1, Integer val2) {
+		return val1.equals(val2);
 	}
 
 }

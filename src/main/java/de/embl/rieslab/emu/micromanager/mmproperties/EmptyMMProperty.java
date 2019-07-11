@@ -15,6 +15,6 @@ public abstract class EmptyMMProperty<T> extends MMProperty<T>{
 	public abstract String getStringValue();
 	
 	@Override
-	public abstract void setStringValue(String stringval, UIProperty source);
+	public abstract void setValue(String stringval, UIProperty source);
 	
 }

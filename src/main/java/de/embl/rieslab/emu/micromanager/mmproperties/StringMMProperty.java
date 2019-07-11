@@ -12,7 +12,7 @@ import mmcorej.CMMCore;
 public class StringMMProperty extends MMProperty<String> {
 
 	/**
-	 * Builds a String MMProperty without limits or allowed values. The property can be read-only.
+	 * Builds a String MMProperty without limits or allowed values. The property is read-only.
 	 * @param core Micro-manager core.
 	 * @param type Micro-manager property type (String or Undef)
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
@@ -79,36 +79,21 @@ public class StringMMProperty extends MMProperty<String> {
 	 * @inheritDoc
 	 */
 	@Override
-	public boolean isInRange(String val) {
-		if(hasLimits()){
-			if(val.compareTo(String.valueOf(getLowerLimit()))>=0 && val.compareTo(String.valueOf(getUpperLimit()))<=0 
-					&& val.compareTo(getMin())>=0 && val.compareTo(getMax())<=0 ){
-				return true;
-			}
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * @inheritDoc
-	 */
-	@Override
 	public boolean isAllowed(String val) {
 		if(val == null){
 			return false;
 		}
 		
-		if(hasAllowedValues()){
+		if(isReadOnly()) {
+			return false;
+		} else if(hasAllowedValues()){
 			for(int i=0;i<getAllowedValues().length;i++){
-				if(areEqual(val, getAllowedValues()[i])){
+				if(areEquals(val, getAllowedValues()[i])){
 					return true;
 				}
 			}
 			return false;
-		} else if(hasLimits()){
-			return isInRange(val);
-		}
+		} 
 		return true;
 	}
 
@@ -116,7 +101,7 @@ public class StringMMProperty extends MMProperty<String> {
 	 * @inheritDoc
 	 */
 	@Override
-	public boolean areEqual(String val1, String val2) {
+	public boolean areEquals(String val1, String val2) {
 		return val1.equals(val2);
 	}
 }

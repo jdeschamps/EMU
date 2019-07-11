@@ -39,7 +39,7 @@ public class TestableMMProperty extends EmptyMMProperty<String> {
 	}
 
 	@Override
-	protected boolean areEqual(String val1, String val2) {
+	protected boolean areEquals(String val1, String val2) {
 		return val1.equals(val2);
 	}
 
@@ -59,14 +59,8 @@ public class TestableMMProperty extends EmptyMMProperty<String> {
 	}
 
 	@Override
-	public void setStringValue(String stringval, UIProperty source) {
+	public void setValue(String stringval, UIProperty source) {
 		value = stringval;
 		notifyListeners(source, stringval);
 	}
-
-	@Override
-	protected boolean isInRange(String val) {
-		return true;
-	}
-
 };

@@ -196,14 +196,14 @@ public class MultiStateUIProperty extends UIProperty{
 			// checks if it corresponds to a valid state
 			for (int i = 0; i < states_.length; i++) {
 				if (states_[i].equals(val)) {
-					getMMProperty().setStringValue(val, this);
+					getMMProperty().setValue(val, this);
 					return;
 				}
 			}
 			// or if it corresponds to a valid state name 
 			for (int i = 0; i < statenames_.length; i++) {
 				if (statenames_[i].equals(val)) {
-					getMMProperty().setStringValue(states_[i], this);
+					getMMProperty().setValue(states_[i], this);
 					return;
 				}
 			}
@@ -211,7 +211,7 @@ public class MultiStateUIProperty extends UIProperty{
 			if (utils.isInteger(val)) {
 				int v = Integer.parseInt(val);
 				if (v >= 0 && v < states_.length) {
-					getMMProperty().setStringValue(states_[v], this);
+					getMMProperty().setValue(states_[v], this);
 				}
 
 			}

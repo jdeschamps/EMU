@@ -71,7 +71,7 @@ public class SingleStateUIProperty extends UIProperty{
 	@Override
 	public void setPropertyValue(String val) {
 		if (isAssigned()) {
-			getMMProperty().setStringValue(state_, this);
+			getMMProperty().setValue(state_, this);
 		}
 	}
 	

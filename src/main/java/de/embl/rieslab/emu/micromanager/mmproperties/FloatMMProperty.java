@@ -1,6 +1,7 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
 
+import de.embl.rieslab.emu.utils.utils;
 import mmcorej.CMMCore;
 
 /**
@@ -53,11 +54,9 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 */
 	@Override
 	public Float convertToValue(String s) {
-		try{
-			Float val = Float.parseFloat(s);
-			return val;
-		} catch(Exception e){
-			System.out.println(getDeviceLabel()+" - "+getMMPropertyLabel()+": error parsing float "+s); 			
+		if(utils.isNumeric(s)) {
+			return Float.parseFloat(s);
+
 		}
 		return null;
 	}
@@ -98,19 +97,11 @@ public class FloatMMProperty extends MMProperty<Float> {
 		return val.toString();
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	@Override
-	public boolean isInRange(Float val) {
-		if(hasLimits()){
-			if(val.compareTo(new Float(getLowerLimit()))>=0 && val.compareTo(new Float(getUpperLimit()))<=0 
-					&& val.compareTo(getMax())<=0 && val.compareTo(getMin())>=0){
-				return true;
-			}
-			return false;
+	private boolean isInRange(Float val) {
+		if(val.compareTo(getMax())<=0 && val.compareTo(getMin())>=0){
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -122,9 +113,11 @@ public class FloatMMProperty extends MMProperty<Float> {
 			return false;
 		}
 		
-		if(hasAllowedValues()){
+		if(isReadOnly()) {
+			return false;
+		} else if(hasAllowedValues()){
 			for(int i=0;i<getAllowedValues().length;i++){
-				if(areEqual(val, getAllowedValues()[i])){
+				if(areEquals(val, getAllowedValues()[i])){
 					return true;
 				}
 			}
@@ -139,8 +132,8 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 * @inheritDoc
 	 */
 	@Override
-	public boolean areEqual(Float val1, Float val2) {
-		return val1 == val2;
+	public boolean areEquals(Float val1, Float val2) {
+		return Float.compare(val1, val2) == 0;
 	}
 	
 }
