@@ -18,7 +18,7 @@ public class StringMMProperty extends MMProperty<String> {
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 */
-	public StringMMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel) {
+	StringMMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel) {
 		super(core, type, deviceLabel, propertyLabel, true);
 	}
 	

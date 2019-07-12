@@ -19,7 +19,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
-	public IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
+	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
 		super(core, MMProperty.TYPE_INTEGER, deviceLabel, propertyLabel, readOnly);
 	}
 	

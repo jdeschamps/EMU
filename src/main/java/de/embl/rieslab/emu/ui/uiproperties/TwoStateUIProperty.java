@@ -112,9 +112,9 @@ public class TwoStateUIProperty extends UIProperty{
 	@Override
 	public void setPropertyValue(String newValue) {
 		if(isAssigned()) {
-			if (newValue.equals(getOnStateName()) || newValue.equals(getOnStateValue())) {
+			if (getOnStateName().equals(newValue) || getOnStateValue().equals(newValue)) {
 				getMMProperty().setValue(getOnStateValue(), this);
-			} else if(newValue.equals(getOffStateName()) || newValue.equals(getOffStateValue())) {
+			} else if(getOffStateName().equals(newValue) || getOffStateValue().equals(newValue)) {
 				getMMProperty().setValue(getOffStateValue(), this);
 			}
 		}

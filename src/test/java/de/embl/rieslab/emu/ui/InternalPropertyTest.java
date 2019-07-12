@@ -20,7 +20,10 @@ public class InternalPropertyTest {
 		TestableConfigurablePanel cp2 = new TestableConfigurablePanel("panel2");
 		
 		// creates a configurablemainframe
+		@SuppressWarnings("unused")
 		TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() {
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void initComponents() {

@@ -20,7 +20,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
-	public FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
+	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
 		super(core, MMProperty.TYPE_FLOAT, deviceLabel, propertyLabel, readOnly);
 	}
 	

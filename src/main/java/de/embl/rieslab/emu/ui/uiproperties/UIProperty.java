@@ -241,7 +241,7 @@ public class UIProperty {
 	 * @return Limits or null if the MMProperty does not have any or if the UIProperty is not assigned.
 	 */
 	public String[] getLimits(){
-		if(hasMMPropertyAllowedValues()){
+		if(hasMMPropertyLimits()){
 			String[] lim = {mmproperty_.getStringMin(),mmproperty_.getStringMax()};
 			return lim;
 		}
@@ -267,7 +267,7 @@ public class UIProperty {
 		if(assigned_){
 			return mmproperty_.isStringAllowed(val);
 		}
-		return true;
+		return false;
 	}
 	
 	/**

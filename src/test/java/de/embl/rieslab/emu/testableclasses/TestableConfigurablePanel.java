@@ -213,6 +213,7 @@ public class TestableConfigurablePanel extends ConfigurablePanel {
 	//////////////////////////////////////////////////////////////////////////////
 	// specific methods to get access to non-visible methods (a bit hacky...)
 	
+	@SuppressWarnings("rawtypes")
 	public UIParameter getPublicUIParameter(String s) {
 		return this.getUIParameter(s);
 	}

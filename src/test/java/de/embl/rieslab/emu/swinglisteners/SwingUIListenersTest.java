@@ -1,7 +1,6 @@
 package de.embl.rieslab.emu.swinglisteners;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 import java.awt.AWTException;
 import java.awt.Point;
@@ -9,7 +8,6 @@ import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -22,14 +20,11 @@ import javax.swing.SwingUtilities;
 import org.junit.Test;
 
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
-import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
-import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
-import de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
 import de.embl.rieslab.emu.testableclasses.TestableMMProperty;
 
 public class SwingUIListenersTest {
@@ -42,6 +37,8 @@ public class SwingUIListenersTest {
 		final JComboBox<String> combo = new JComboBox<String>(vals);
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(combo);
@@ -57,6 +54,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -97,6 +99,8 @@ public class SwingUIListenersTest {
 		final JComboBox<String> combo = new JComboBox<String>(vals);
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(combo);
@@ -112,6 +116,9 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -154,6 +161,8 @@ public class SwingUIListenersTest {
 		final JComboBox<String> combo = new JComboBox<String>(combovals);
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(combo);
@@ -169,6 +178,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -208,6 +222,8 @@ public class SwingUIListenersTest {
 		final JTextField textfield = new JTextField();
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(textfield);
@@ -223,6 +239,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -267,6 +288,8 @@ public class SwingUIListenersTest {
 		final JTextField textfield = new JTextField();
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(textfield);
@@ -282,6 +305,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -327,6 +355,10 @@ public class SwingUIListenersTest {
 		final JSlider slider = new JSlider(); // 0 - 100
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(textfield);
@@ -343,6 +375,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -409,6 +446,10 @@ public class SwingUIListenersTest {
 		final int max = 12;
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(textfield);
@@ -424,6 +465,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -504,6 +550,10 @@ public class SwingUIListenersTest {
 		final JTextField textfield = new JTextField();
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(textfield);
@@ -519,6 +569,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -582,6 +637,10 @@ public class SwingUIListenersTest {
 		final double max = 12.586;
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(textfield);
@@ -597,6 +656,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -673,13 +737,17 @@ public class SwingUIListenersTest {
 
 	@Test
 	public void testJTextFieldActionListenerToDoubleTrigger() throws AWTException {
-		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
 		final double defmyValue = 1.45;
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
 			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void setUpComponent() {
 				this.add(textfield);
@@ -693,6 +761,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -730,11 +803,15 @@ public class SwingUIListenersTest {
 
 	@Test
 	public void testJToggleButtonActionListenerToBoolTrigger() {
-		final String prop = "My Prop";
 		final JToggleButton btn = new JToggleButton();
 				
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
 			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void setUpComponent() {
 				this.add(btn);
@@ -748,6 +825,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -794,7 +876,6 @@ public class SwingUIListenersTest {
 	
 	@Test
 	public void testJTextFieldActionListenerToDoubleTriggerBounded() throws AWTException {
-		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
 		final double defmyValue = 1.45;
@@ -803,6 +884,11 @@ public class SwingUIListenersTest {
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
 			
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			public void setUpComponent() {
 				this.add(textfield);
@@ -816,6 +902,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -895,6 +986,10 @@ public class SwingUIListenersTest {
 		final JSlider slider = new JSlider(0,100,value);
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(slider);
@@ -910,6 +1005,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -958,6 +1058,10 @@ public class SwingUIListenersTest {
 		final JTextField textfield = new JTextField(prop);
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(slider);
@@ -974,6 +1078,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -1023,6 +1132,10 @@ public class SwingUIListenersTest {
 		final JLabel label = new JLabel(prop);
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(slider);
@@ -1039,6 +1152,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -1091,6 +1209,10 @@ public class SwingUIListenersTest {
 		
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(slider);
@@ -1107,6 +1229,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -1160,6 +1287,10 @@ public class SwingUIListenersTest {
 		bg.add(button3);
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(button1);
@@ -1177,6 +1308,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -1224,6 +1360,10 @@ public class SwingUIListenersTest {
 		final String[] vals = {"One", "Two", "Three"}; 
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(button1);
@@ -1241,6 +1381,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -1280,6 +1425,10 @@ public class SwingUIListenersTest {
 		final JButton btn = new JButton();
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
 				this.add(btn);
@@ -1295,6 +1444,11 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+
 			@Override
 			protected void initComponents() {
 				this.add(cp);
@@ -1334,6 +1488,10 @@ public class SwingUIListenersTest {
 	
 	private abstract class ComponentTestPanel extends ConfigurablePanel{
 
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 		public UIProperty property;
 		public double myDoubleValue;
 		public int myIntValue;
