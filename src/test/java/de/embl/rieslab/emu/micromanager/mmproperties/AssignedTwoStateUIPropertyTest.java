@@ -68,16 +68,113 @@ public class AssignedTwoStateUIPropertyTest {
 		cp.property.setPropertyValue(offval);
 		assertEquals(offval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue("1");
+		cp.property.setPropertyValue(TwoStateUIProperty.getOnStateName());
+		assertEquals(onval, cp.property.getPropertyValue());
+
+		cp.property.setPropertyValue(TwoStateUIProperty.getOffStateName());
 		assertEquals(offval, cp.property.getPropertyValue());
-		
+
+		cp.property.setPropertyValue("1");
+		assertEquals(onval, cp.property.getPropertyValue());
+
+		cp.property.setPropertyValue("0");
+		assertEquals(offval, cp.property.getPropertyValue());
+
+		cp.property.setPropertyValue("true");
+		assertEquals(onval, cp.property.getPropertyValue());
+
+		cp.property.setPropertyValue("false");
+		assertEquals(offval, cp.property.getPropertyValue());
+
 		cp.property.setPropertyValue(null);
 		assertEquals(offval, cp.property.getPropertyValue());
 		
 		cp.property.setPropertyValue("");
 		assertEquals(offval, cp.property.getPropertyValue());
 		
+		cp.property.setPropertyValue("fdsfeg");
+		assertEquals(offval, cp.property.getPropertyValue());
+		
 		cp.property.setPropertyValue("2.48");
+		assertEquals(offval, cp.property.getPropertyValue());
+	}
+	
+
+	@Test
+	public void testAssigningOnAndOff01Values() {
+		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
+
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+			@Override
+			public Integer getValue() { // avoids NullPointerException
+				return 0;
+			}
+			
+			@Override
+			public String getStringValue() {
+				return convertToString(value);
+			}
+			
+			@Override
+			public void setValue(String stringval, UIProperty source){
+				value = convertToValue(stringval);
+			}
+		};
+		
+		PropertyPair.pair(cp.property, mmprop);
+
+		// set state values opposite to accepted value to test priority given to the value
+		final String offval = "1";
+		final String onval = "0";
+		cp.property.setOffStateValue(offval);
+		cp.property.setOnStateValue(onval);	
+
+		cp.property.setPropertyValue("0");
+		assertEquals(onval, cp.property.getPropertyValue());
+
+		cp.property.setPropertyValue("1");
+		assertEquals(offval, cp.property.getPropertyValue());
+	}
+	
+	@Test
+	public void testAssigningOnAndOffBooleanValues() {
+		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
+
+		final StringMMProperty mmprop = new StringMMProperty(null, MMProperty.TYPE_STRING, "", "", new String[] {"true", "false"}) {
+			@Override
+			public String getValue() { // avoids NullPointerException
+				return "";
+			}
+			
+			@Override
+			public String getStringValue() {
+				return convertToString(value);
+			}
+			
+			@Override
+			public void setValue(String stringval, UIProperty source){
+				value = convertToValue(stringval);
+			}
+		};
+		
+		PropertyPair.pair(cp.property, mmprop);
+
+		// set state values opposite to accepted value to test priority given to the value
+		final String offval = "true";
+		final String onval = "false";
+		cp.property.setOffStateValue(offval);
+		cp.property.setOnStateValue(onval);	
+
+		cp.property.setPropertyValue("false");
+		assertEquals(onval, cp.property.getPropertyValue());
+
+		cp.property.setPropertyValue("true");
+		assertEquals(offval, cp.property.getPropertyValue());
+		
+		cp.property.setPropertyValue("1");
+		assertEquals(onval, cp.property.getPropertyValue());
+
+		cp.property.setPropertyValue("0");
 		assertEquals(offval, cp.property.getPropertyValue());
 	}
 	
