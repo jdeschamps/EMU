@@ -42,7 +42,10 @@ public class ColorUIParameter extends UIParameter<Color>{
 	 */
 	@Override
 	public boolean isSuitable(String val) {
-		return true;
+		if(val == null) {
+			return false;
+		}
+		return ColorRepository.isColor(val);
 	}
 	
 	/**

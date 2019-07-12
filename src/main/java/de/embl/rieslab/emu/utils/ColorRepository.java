@@ -81,4 +81,13 @@ public class ColorRepository {
 		}
 		return strblack;
 	}
+
+	public static boolean isColor(String s) {
+		for(int i=0;i<colors.length;i++){
+			if(colors[i].equals(s)){
+				return true;
+			}
+		}
+		return false;
+	}
 }

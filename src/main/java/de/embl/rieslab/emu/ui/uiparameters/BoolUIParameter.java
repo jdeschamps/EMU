@@ -31,6 +31,10 @@ public class BoolUIParameter extends UIParameter<Boolean>{
 	 */
 	@Override
 	public boolean isSuitable(String val) {
+		if(val == null) {
+			return false;
+		}
+		
 		if(val.equals("true") || val.equals("false")){
 			return true;
 		}

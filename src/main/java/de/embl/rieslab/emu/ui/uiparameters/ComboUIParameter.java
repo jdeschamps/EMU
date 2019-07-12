@@ -52,6 +52,10 @@ public class ComboUIParameter extends UIParameter<String> {
 	 */
 	@Override
 	public boolean isSuitable(String val) {
+		if(val == null) {
+			return false;
+		}
+		
 		for(int i=0;i<combovalues_.length;i++){
 			if(combovalues_[i].equals(val)){
 				return true;

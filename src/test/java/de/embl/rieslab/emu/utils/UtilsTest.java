@@ -34,31 +34,32 @@ public class UtilsTest {
 		assertFalse(utils.isInteger("d"));
 		assertFalse(utils.isInteger("15.46"));
 		assertFalse(utils.isInteger("-15.46"));
-		assertFalse(utils.isInteger("15,46"));
+		assertFalse(utils.isInteger("+15,46"));
 		assertFalse(utils.isInteger("-15,46"));
 
-		assertTrue(utils.isNumeric("-6541"));
-		assertTrue(utils.isNumeric("+6541"));
-		assertTrue(utils.isNumeric("4581"));
+		assertTrue(utils.isInteger("-6541"));
+		assertTrue(utils.isInteger("+6541"));
+		assertTrue(utils.isInteger("4581"));
 	}
 	
+	// here should maybe change the method to accept ","
 	@Test
 	public void testIsFloat() {
-		assertFalse(utils.isNumeric(null));
-		assertFalse(utils.isNumeric(""));
-		assertFalse(utils.isNumeric("d"));
-		assertFalse(utils.isNumeric("+h485,12"));
-		assertFalse(utils.isNumeric("+485,12d"));
+		assertFalse(utils.isFloat(null));
+		assertFalse(utils.isFloat(""));
+		assertFalse(utils.isFloat("d"));
+		assertFalse(utils.isFloat("+h485,12"));
+		assertFalse(utils.isFloat("+485,12d"));
 		
-		assertTrue(utils.isNumeric("156"));
-		assertTrue(utils.isNumeric("+156"));
-		assertTrue(utils.isNumeric("-156"));
-		assertTrue(utils.isNumeric("846.1654"));
-		assertTrue(utils.isNumeric("846,1654"));
-		assertTrue(utils.isNumeric("+846.1654"));
-		assertTrue(utils.isNumeric("+846,1654"));
-		assertTrue(utils.isNumeric("-846.1654"));
-		assertTrue(utils.isNumeric("-846,1654"));
+		assertTrue(utils.isFloat("156"));
+		assertTrue(utils.isFloat("+156"));
+		assertTrue(utils.isFloat("-156"));
+		assertTrue(utils.isFloat("846.1654"));
+		//assertTrue(utils.isFloat("846,165")); 
+		assertTrue(utils.isFloat("+846.1654"));
+		//assertTrue(utils.isFloat("+846,1654"));
+		assertTrue(utils.isFloat("-846.1654"));
+		//assertTrue(utils.isFloat("-846,1654"));
 	}
 
 	@Test

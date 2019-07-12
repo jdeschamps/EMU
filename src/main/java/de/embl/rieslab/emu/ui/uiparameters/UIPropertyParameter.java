@@ -55,6 +55,9 @@ public class UIPropertyParameter extends UIParameter<String>{
 	 */
 	@Override
 	public boolean isSuitable(String val) {
+		if(val == null) {
+			return false;
+		}
 		return true;
 	}
 	

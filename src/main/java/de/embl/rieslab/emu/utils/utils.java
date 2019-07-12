@@ -26,7 +26,7 @@ public class utils {
 	        return false;
 	    }
 	    int i = 0;
-	    if (str.charAt(0) == '-') {
+	    if (str.charAt(0) == '-' || str.charAt(0) == '+') {
 	        if (length == 1) {
 	            return false;
 	        }
@@ -42,6 +42,10 @@ public class utils {
 	}
 	
 	public static boolean isFloat(String val) {
+		if(val == null) {
+			return false;
+		}
+		
 		final String Digits     = "(\\p{Digit}+)";
 		final String HexDigits  = "(\\p{XDigit}+)";
 		// an exponent is 'e' or 'E' followed by an optionally 

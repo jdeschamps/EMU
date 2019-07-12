@@ -5,6 +5,8 @@ import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
+import de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
@@ -14,10 +16,10 @@ import de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import de.embl.rieslab.emu.utils.ColorRepository;
-import de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
-import de.embl.rieslab.emu.testableclasses.TestableConfigurablePanel;
 
-public class UIParameterTest {
+public class ConfigurablePanelTest {
+
+	
 
 	@Test
 	public void testUIParameter() {
