@@ -171,10 +171,10 @@ public abstract class MMProperty<T> {
 	 * @param stringval New value.
 	 * @param source UIProperty at the origin of the update.
 	 */
-	public void setValue(String stringval, UIProperty source){
+	public boolean setValue(String stringval, UIProperty source){
 		if(!isReadOnly()){
 			if(stringval == null){
-				return;
+				return false;
 			}
 			
 			T val = convertToValue(stringval);
@@ -186,6 +186,7 @@ public abstract class MMProperty<T> {
 					if(core_.hasProperty(devicelabel_, label_)){
 						core_.setProperty(devicelabel_,label_,stringval);
 						notifyListeners(source, stringval);
+						return true;
 					}
 				} catch (Exception e){
 					System.out.println("Error in setting property ["+getHash()+"] to ["+val+"] from ["+stringval+"]");
@@ -195,6 +196,7 @@ public abstract class MMProperty<T> {
 				System.out.println("VALUE NOT ALLOWED: in ["+getHash()+"], set value ["+val+"] from ["+stringval+"]");
 			}
 		}
+		return false;
 	}
 	
 	/**
@@ -339,6 +341,9 @@ public abstract class MMProperty<T> {
 	 * @param listener Parent UIProperty
 	 */
 	public void addListener(UIProperty listener){
+		if(listener == null) {
+			throw new NullPointerException("MMproperty listeners cannot be null");
+		}
 		listeners_.add(listener);
 	}
 	

@@ -72,7 +72,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	 * @inheritDoc
 	 */
 	@Override
-	public void setValue(String stringval, UIProperty source){
+	public boolean setValue(String stringval, UIProperty source){
 		if(!isReadOnly()){
 			if(isAllowed(stringval)){
 				try{
@@ -84,6 +84,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 					notifyMMProperties();
 					
 					app_.refreshGUI();
+					return true;
 					
 				} catch (Exception e){
 					System.out.println("Error in setting configuration ["+getHash()+"] to ["+stringval+"] from ["+value+"]");
@@ -94,6 +95,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 				System.out.println("VALUE NOT ALLOWED: in ["+getHash()+"], set value ["+stringval+"] from ["+value+"]");
 			}
 		}
+		return false;
 	}
 
 	/**

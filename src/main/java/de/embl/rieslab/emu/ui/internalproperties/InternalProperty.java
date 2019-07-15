@@ -74,7 +74,10 @@ public abstract class InternalProperty<T, V> {
 	 * @param val New value
 	 * @param source ConfigurablePanel at the origin of the update
 	 */
-	public void setInternalPropertyValue(V val, ConfigurablePanel source) {
+	public void setInternalPropertyValue(V val, ConfigurablePanel source) {	
+		if(val == null) {
+			throw new NullPointerException();
+		}
 		setAtomicValue(val);
 		notifyListeners(source);
 	}

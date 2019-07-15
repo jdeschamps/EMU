@@ -1,6 +1,8 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -9,8 +11,8 @@ import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
-public class AssignedTwoStateUIPropertyTest {
-	
+public class TwoStateUIPropertyTest {
+
 	@Test
 	public void testSettingOnOffValues() {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
@@ -27,11 +29,42 @@ public class AssignedTwoStateUIPropertyTest {
 		final String offval = "4";
 		final String onval = "8";
 		
-		cp.property.setOffStateValue(offval);
+		boolean b = cp.property.setOffStateValue(offval);
+		assertTrue(b);
 		assertEquals(offval, cp.property.getOffStateValue());
 		
-		cp.property.setOnStateValue(onval);	
+		b = cp.property.setOnStateValue(onval);	
+		assertTrue(b);
 		assertEquals(onval, cp.property.getOnStateValue());
+	}
+
+	@Test
+	public void testSettingWrongOnOffValues() {
+		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
+
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+			@Override
+			public Integer getValue() { // avoids NullPointerException
+				return 0;
+			}
+		};
+		
+		PropertyPair.pair(cp.property, mmprop);
+
+		final String offval = "4.1";
+		
+		boolean b = cp.property.setOffStateValue(offval); // IntegerMMProperty round up doubles to an int
+		assertTrue(b);
+		assertEquals(offval, cp.property.getOffStateValue());
+		
+		b = cp.property.setOnStateValue("");	
+		assertFalse(b);
+		
+		b = cp.property.setOnStateValue(null);	
+		assertFalse(b);
+		
+		b = cp.property.setOnStateValue("dfsdf");	
+		assertFalse(b);
 	}
 	
 	@Test
@@ -50,8 +83,9 @@ public class AssignedTwoStateUIPropertyTest {
 			}
 			
 			@Override
-			public void setValue(String stringval, UIProperty source){
+			public boolean setValue(String stringval, UIProperty source){
 				value = convertToValue(stringval);
+				return true;
 			}
 		};
 		
@@ -62,40 +96,52 @@ public class AssignedTwoStateUIPropertyTest {
 		cp.property.setOffStateValue(offval);
 		cp.property.setOnStateValue(onval);	
 
-		cp.property.setPropertyValue(onval);
+		boolean b  = cp.property.setPropertyValue(onval);
+		assertTrue(b);
 		assertEquals(onval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue(offval);
+		b = cp.property.setPropertyValue(offval);
+		assertTrue(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue(TwoStateUIProperty.getOnStateName());
+		b = cp.property.setPropertyValue(TwoStateUIProperty.getOnStateName());
+		assertTrue(b);
 		assertEquals(onval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue(TwoStateUIProperty.getOffStateName());
+		b = cp.property.setPropertyValue(TwoStateUIProperty.getOffStateName());
+		assertTrue(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue("1");
+		b = cp.property.setPropertyValue("1");
+		assertTrue(b);
 		assertEquals(onval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue("0");
+		b = cp.property.setPropertyValue("0");
+		assertTrue(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue("true");
+		b = cp.property.setPropertyValue("true");
+		assertTrue(b);
 		assertEquals(onval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue("false");
+		b = cp.property.setPropertyValue("false");
+		assertTrue(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue(null);
+		b = cp.property.setPropertyValue(null);
+		assertFalse(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 		
-		cp.property.setPropertyValue("");
+		b = cp.property.setPropertyValue("");
+		assertFalse(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 		
-		cp.property.setPropertyValue("fdsfeg");
+		b = cp.property.setPropertyValue("fdsfeg");
+		assertFalse(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 		
-		cp.property.setPropertyValue("2.48");
+		b = cp.property.setPropertyValue("2.48");
+		assertFalse(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 	}
 	
@@ -116,8 +162,9 @@ public class AssignedTwoStateUIPropertyTest {
 			}
 			
 			@Override
-			public void setValue(String stringval, UIProperty source){
+			public boolean setValue(String stringval, UIProperty source){
 				value = convertToValue(stringval);
+				return true;
 			}
 		};
 		
@@ -129,10 +176,12 @@ public class AssignedTwoStateUIPropertyTest {
 		cp.property.setOffStateValue(offval);
 		cp.property.setOnStateValue(onval);	
 
-		cp.property.setPropertyValue("0");
+		boolean b = cp.property.setPropertyValue("0");
+		assertTrue(b);
 		assertEquals(onval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue("1");
+		b = cp.property.setPropertyValue("1");
+		assertTrue(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 	}
 	
@@ -152,29 +201,34 @@ public class AssignedTwoStateUIPropertyTest {
 			}
 			
 			@Override
-			public void setValue(String stringval, UIProperty source){
+			public boolean setValue(String stringval, UIProperty source){
 				value = convertToValue(stringval);
+				return true;
 			}
 		};
 		
 		PropertyPair.pair(cp.property, mmprop);
 
-		// set state values opposite to accepted value to test priority given to the value
+		// set state values opposite to values otherwise accepted
 		final String offval = "true";
 		final String onval = "false";
 		cp.property.setOffStateValue(offval);
 		cp.property.setOnStateValue(onval);	
 
-		cp.property.setPropertyValue("false");
+		boolean b = cp.property.setPropertyValue("false");
+		assertTrue(b);
 		assertEquals(onval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue("true");
+		b = cp.property.setPropertyValue("true");
+		assertTrue(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 		
-		cp.property.setPropertyValue("1");
+		b = cp.property.setPropertyValue("1");
+		assertTrue(b);
 		assertEquals(onval, cp.property.getPropertyValue());
 
-		cp.property.setPropertyValue("0");
+		b = cp.property.setPropertyValue("0");
+		assertTrue(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 	}
 	

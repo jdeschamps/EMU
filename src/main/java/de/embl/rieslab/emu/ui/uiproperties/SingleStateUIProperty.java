@@ -69,10 +69,11 @@ public class SingleStateUIProperty extends UIProperty{
 	 * 
 	 */
 	@Override
-	public void setPropertyValue(String val) {
-		if (isAssigned()) {
-			getMMProperty().setValue(state_, this);
+	public boolean setPropertyValue(String val) {
+		if (val != null && isAssigned() && (val.equals(state_) || val.equals(SingleStateUIProperty.getValueName()))) {
+			return getMMProperty().setValue(state_, this);
 		}
+		return false;
 	}
 	
 	/**

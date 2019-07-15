@@ -53,6 +53,19 @@ public class UIProperty {
 	 * @param flag Flag of the UIProperty
 	 */
 	public UIProperty(ConfigurablePanel owner, String label, String description, PropertyFlag flag){
+		if(owner == null) {
+			throw new NullPointerException("ConfigurablePanel owner cannot be null.");
+		}
+		if(label == null) {
+			throw new NullPointerException("The UIProperty label cannot be null.");
+		}
+		if(description == null) {
+			throw new NullPointerException("The UIProperty description cannot be null.");
+		}
+		if(flag == null) {
+			throw new NullPointerException("The UIProperty flag cannot be null.");
+		}
+		
 		this.owner_ = owner;
 		this.label_ = label;
 		this.description_ = description;
@@ -69,6 +82,16 @@ public class UIProperty {
 	 * @param description Description of the UIProperty
 	 */
 	public UIProperty(ConfigurablePanel owner, String label, String description){
+		if(owner == null) {
+			throw new NullPointerException("ConfigurablePanel owner cannot be null.");
+		}
+		if(label == null) {
+			throw new NullPointerException("The UIProperty label cannot be null.");
+		}
+		if(description == null) {
+			throw new NullPointerException("The UIProperty description cannot be null.");
+		}
+		
 		this.owner_ = owner;
 		this.label_ = label;
 		this.description_ = description;
@@ -151,10 +174,11 @@ public class UIProperty {
 	 * 
 	 * @param newValue New value
 	 */
-	public void setPropertyValue(String newValue){
+	public boolean setPropertyValue(String newValue){
 		if(assigned_){
-			mmproperty_.setValue(newValue, this);
+			return mmproperty_.setValue(newValue, this);
 		}  
+		return false;
 	}
 	
 	/**
@@ -184,7 +208,11 @@ public class UIProperty {
 	 * @param newFriendlyName New friendly name
 	 */
 	public void setFriendlyName(String newFriendlyName){
-		friendlyname_ = newFriendlyName;
+		if(newFriendlyName != null) {
+			friendlyname_ = newFriendlyName;
+		} else {
+			throw new NullPointerException("Null friendly names are not allowed.");
+		}
 	}
 
 	/**

@@ -2,9 +2,11 @@ package de.embl.rieslab.emu.ui.uiproperties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
@@ -18,6 +20,56 @@ public class UIPropertyTest {
 		assertEquals(cp.DESC, cp.property.getDescription());
 		assertFalse(cp.property.isAssigned());
 	}
+	
+	@Test (expected = NullPointerException.class)
+	public void testUIPropertyNullPairing() throws AlreadyAssignedUIPropertyException {
+		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
+
+		cp.property.assignProperty(null);		
+		assertTrue(cp.property.isAssigned());
+	}
+	
+	@Test (expected = NullPointerException.class)
+	public void testUIPropertyNullOwner() throws AlreadyAssignedUIPropertyException {
+		@SuppressWarnings("unused")
+		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				property = new UIProperty(null, PROP, DESC);
+			}
+		};
+	}	
+	
+	@Test (expected = NullPointerException.class)
+	public void testUIPropertyNullLabel() throws AlreadyAssignedUIPropertyException {
+		@SuppressWarnings("unused")
+		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				property = new UIProperty(this, null, DESC);
+			}
+		};
+	}	
+	
+	@Test (expected = NullPointerException.class)
+	public void testUIPropertyNullDescription() throws AlreadyAssignedUIPropertyException {
+		@SuppressWarnings("unused")
+		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				property = new UIProperty(this, PROP, null);
+			}
+		};
+	}	
 
 	@Test
 	public void testUIPropertyFlag() {
@@ -34,7 +86,21 @@ public class UIPropertyTest {
 		
 		assertEquals(cp.flag, cp.property.getFlag());
 	}
-	
+
+	@Test (expected = NullPointerException.class)
+	public void testNullPropertyFlag() {
+		@SuppressWarnings("unused")
+		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				property = new UIProperty(this, PROP, DESC, null);
+			}
+		};
+	}
+
 	@Test
 	public void testUIPropertyFriendlyName() {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
@@ -42,6 +108,13 @@ public class UIPropertyTest {
 		final String s = "MyFriendlyName";
 		cp.property.setFriendlyName(s);
 		assertEquals(s, cp.property.getFriendlyName());
+	}
+
+	@Test (expected = NullPointerException.class)
+	public void testUIPropertyNullFriendlyName() {
+		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
+		
+		cp.property.setFriendlyName(null);
 	}
 
 	@Test

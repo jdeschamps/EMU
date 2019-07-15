@@ -59,8 +59,9 @@ public class TestableMMProperty extends EmptyMMProperty<String> {
 	}
 
 	@Override
-	public void setValue(String stringval, UIProperty source) {
+	public boolean setValue(String stringval, UIProperty source) {
 		value = stringval;
 		notifyListeners(source, stringval);
+		return true;
 	}
 };

@@ -14,7 +14,7 @@ import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
-public class AssignedUIPropertyTest {
+public class UIPropertyTest {
 
 	@Test
 	public void testUIPropertyPairing() throws AlreadyAssignedUIPropertyException {
@@ -29,7 +29,7 @@ public class AssignedUIPropertyTest {
 		cp.property.assignProperty(mmprop);		
 		assertTrue(cp.property.isAssigned());
 	}
-		
+	
 	@Test
 	public void testUIPropertyReadOnly() {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
@@ -57,8 +57,9 @@ public class AssignedUIPropertyTest {
 			}
 			
 			@Override
-			public void setValue(String stringval, UIProperty source){ // bypassing communication with MM core
+			public boolean setValue(String stringval, UIProperty source){ // bypassing communication with MM core
 				value = convertToValue(stringval);
+				return true;
 			}
 			
 			@Override
@@ -71,7 +72,8 @@ public class AssignedUIPropertyTest {
 		PropertyPair.pair(cp.property, mmprop);	
 		
 		String val = "15";
-		cp.property.setPropertyValue(String.valueOf(val));
+		boolean b = cp.property.setPropertyValue(String.valueOf(val));
+		assertTrue(b);
 		assertEquals(val, cp.property.getPropertyValue());
 	}
 
@@ -144,7 +146,7 @@ public class AssignedUIPropertyTest {
 		assertFalse(cp.property.isValueAllowed("8"));
 	}
 	
-	@Test (expected = Exception.class)
+	@Test (expected = AlreadyAssignedUIPropertyException.class)
 	public void testUIPropertyAlreadyAssigned() throws AlreadyAssignedUIPropertyException {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 

@@ -110,19 +110,20 @@ public class TwoStateUIProperty extends UIProperty{
 	 * is either equal to the ON state or to the OFF state, or their respective value.
 	 */
 	@Override
-	public void setPropertyValue(String newValue) {
+	public boolean setPropertyValue(String newValue) {
 		if(newValue != null && isAssigned()) {
 			if (newValue.equals(getOnStateValue()) || newValue.equals(getOnStateName())) {
-				getMMProperty().setValue(getOnStateValue(), this);
+				return getMMProperty().setValue(getOnStateValue(), this);
 			} else if(newValue.equals(getOffStateValue()) || newValue.equals(getOffStateName())) {
-				getMMProperty().setValue(getOffStateValue(), this);
+				return getMMProperty().setValue(getOffStateValue(), this);
 			} else {
 				if(newValue.equals("1") || newValue.equals("true")) {
-					getMMProperty().setValue(getOnStateValue(), this);
+					return getMMProperty().setValue(getOnStateValue(), this);
 				} else if(newValue.equals("0") || newValue.equals("false")) {
-					getMMProperty().setValue(getOffStateValue(), this);
+					return getMMProperty().setValue(getOffStateValue(), this);
 				}
 			}
 		}
+		return false;
 	}
 }

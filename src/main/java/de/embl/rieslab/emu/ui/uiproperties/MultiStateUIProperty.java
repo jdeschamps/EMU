@@ -35,7 +35,7 @@ public class MultiStateUIProperty extends UIProperty{
 		statenames_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
-			statenames_[i] = "State"+i;
+			statenames_[i] = STATE+i;
 		}
 	}	
 	/**
@@ -49,11 +49,15 @@ public class MultiStateUIProperty extends UIProperty{
 	public MultiStateUIProperty(ConfigurablePanel owner, String label, String description, int size) {
 		super(owner, label, description);
 
+		if(size <= 0) {
+			throw new IllegalArgumentException("The number of state of a MultiStateUIProperty cannot be negative or zero.");
+		}
+		
 		states_ = new String[size];
 		statenames_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
-			statenames_[i] = "State"+i;
+			statenames_[i] = STATE+i;
 		}
 	}
 
@@ -74,7 +78,6 @@ public class MultiStateUIProperty extends UIProperty{
 			}
 		}
 		
-		
 		if(vals.length == states_.length){
 			states_ = vals;
 		} else if (vals.length > states_.length){
@@ -94,17 +97,28 @@ public class MultiStateUIProperty extends UIProperty{
 	 * 
 	 * @param stateNames State names
 	 */
-	public void setStatesName(String[] stateNames){
+	public boolean setStateNames(String[] stateNames){
+		for(String s: stateNames) {
+			if(s == null) {
+				throw new NullPointerException("State names cannot be null.");
+			} else if(s.equals("")) {
+				throw new IllegalArgumentException("State names cannot be empty.");
+			}
+		}
+		
 		if(stateNames.length == statenames_.length){
 			statenames_ = stateNames;
+			return true;
 		} else if (stateNames.length > statenames_.length){
 			for(int i=0; i<statenames_.length;i++){
 				statenames_[i] = stateNames[i];
 			}
+			return true;
 		} else {
 			for(int i=0; i<stateNames.length;i++){
 				statenames_[i] = stateNames[i];
 			}
+			return true;
 		}
 	}
 	
@@ -191,31 +205,30 @@ public class MultiStateUIProperty extends UIProperty{
 	 * 
 	 */
 	@Override
-	public void setPropertyValue(String val) {
+	public boolean setPropertyValue(String val) {
 		if (isAssigned()) {
 			// checks if it corresponds to a valid state
 			for (int i = 0; i < states_.length; i++) {
 				if (states_[i].equals(val)) {
-					getMMProperty().setValue(val, this);
-					return;
+					return getMMProperty().setValue(val, this);
 				}
 			}
 			// or if it corresponds to a valid state name 
 			for (int i = 0; i < statenames_.length; i++) {
 				if (statenames_[i].equals(val)) {
-					getMMProperty().setValue(states_[i], this);
-					return;
+					return getMMProperty().setValue(states_[i], this);
 				}
 			}
 			// otherwise, accept indices
 			if (utils.isInteger(val)) {
 				int v = Integer.parseInt(val);
 				if (v >= 0 && v < states_.length) {
-					getMMProperty().setValue(states_[v], this);
+					return getMMProperty().setValue(states_[v], this);
 				}
 
 			}
 		}
+		return false;
 	}
 	
 	/**
