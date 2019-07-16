@@ -95,6 +95,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param label Label of the panel.
 	 */
 	public ConfigurablePanel(String label){
+		if(label == null) {
+			throw new NullPointerException("A ConfigurablePanel label cannot be null.");
+		}
+		
 		label_ = label;
 		
 		properties_ = new HashMap<String,UIProperty>();
@@ -418,6 +422,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param uiproperty UIProperty to add
 	 */
 	protected void addUIProperty(UIProperty uiproperty){
+		if(uiproperty == null) {
+			throw new NullPointerException("Null UIProperties are not allowed.");
+		}
+		
 		properties_.put(uiproperty.getLabel(),uiproperty);
 	}	
 

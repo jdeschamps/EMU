@@ -1,15 +1,15 @@
 package de.embl.rieslab.emu.testableclasses;
 
-import de.embl.rieslab.emu.micromanager.mmproperties.EmptyMMProperty;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
-public class TestableMMProperty extends EmptyMMProperty<String> {
+public class TestableMMProperty extends MMProperty<String> {
 
 	public static final String DEV = "MyDevice";
 	public static final String DEFVAL = "default";
 	
 	public TestableMMProperty(String propname) {
-		super("String", DEV, propname);
+		super(null, "String", DEV, propname, false);
 		this.value = DEFVAL;
 	}
 
