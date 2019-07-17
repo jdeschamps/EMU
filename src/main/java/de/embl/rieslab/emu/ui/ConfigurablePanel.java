@@ -154,7 +154,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 */
 	protected UIParameter getUIParameter(String parameterName) {
 		if(parameterName == null) {
-			throw new NullPointerException("UIParameter's name cannot be null.");
+			throw new NullPointerException("UIParameters name cannot be null.");
 		}
 		
 		if (parameters_.containsKey(UIParameter.getHash(this,parameterName))) {
@@ -173,12 +173,30 @@ public abstract class ConfigurablePanel extends JPanel{
 	 */
 	protected UIProperty getUIProperty(String propertyName) {
 		if(propertyName == null) {
-			throw new NullPointerException("UIProperty's name cannot be null.");
+			throw new NullPointerException("UIProperties name cannot be null.");
 		}
 		if (properties_.containsKey(propertyName)) {
 			return properties_.get(propertyName);
 		}else {
 			throw new IllegalArgumentException("["+propertyName+"] is not a known UIProperty");
+		}
+	}
+
+	/**
+	 * Returns the {@link de.embl.rieslab.emu.ui.internalproperties.InternalProperty}
+	 * named {@code propertyName}.
+	 * 
+	 * @param propertyName Name of the InternalProperty
+	 * @return Corresponding InternalProperty.
+	 */
+	protected InternalProperty getInternalProperty(String propertyName) {
+		if(propertyName == null) {
+			throw new NullPointerException("InternalProperties name cannot be null.");
+		}
+		if (internalprops_.containsKey(propertyName)) {
+			return internalprops_.get(propertyName);
+		}else {
+			throw new IllegalArgumentException("["+propertyName+"] is not a known InternalProperty");
 		}
 	}
 
@@ -586,8 +604,11 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param paramHash
 	 * @param uiParameter
 	 */
-	public void substituteParameter(String paramHash, UIParameter uiParameter) {
-		parameters_.put(paramHash, uiParameter);
+	public void substituteParameter(UIParameter uiParameter) {
+		final String hash = uiParameter.getHash();
+		if(parameters_.containsKey(hash) && parameters_.get(hash).getType() == uiParameter.getType()) {
+			parameters_.put(hash, uiParameter);
+		}
 	}
 	
 	/**
@@ -617,10 +638,10 @@ public abstract class ConfigurablePanel extends JPanel{
 		}
 		return InternalPropertyType.NONE;
 	}
-	
+
 	/**
 	 * Returns the UIPropertyType of the UIProperty called {@code propertyName}. If there is no such
-	 * InternalProperty, returns UIPropertyType.NONE.
+	 * UIProperty, returns UIPropertyType.NONE.
 	 * 
 	 * @param propertyName Name of the UIProperty
 	 * @return The corresponding UIPropertyType, UIPropertyType.NONE if there is no such UIProperty.
@@ -630,6 +651,20 @@ public abstract class ConfigurablePanel extends JPanel{
 			return properties_.get(propertyName).getType();
 		}
 		return UIPropertyType.NONE;
+	}
+
+	/**
+	 * Returns the UIParameterType of the UIParameter called {@code parameterName}. If there is no such
+	 * UIParameter, returns UIParameterType.NONE.
+	 * 
+	 * @param parameterName Name of the UIParameter
+	 * @return The corresponding UIParameterType, UIParameterType.NONE if there is no such UIParameter.
+	 */
+	public UIParameterType getUIParameterType(String parameterName) {
+		if(parameters_.containsKey(UIParameter.getHash(this, parameterName))) {
+			return parameters_.get(UIParameter.getHash(this, parameterName)).getType();
+		}
+		return UIParameterType.NONE;
 	}
 	
 	/**

@@ -187,7 +187,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			// avoid concurrent modification of the hashmap, by substituting the UIParameter in the 
 			// second PropertyPanel
 			for(int i=0;i<subst.size();i++){
-				pan.substituteParameter(subst.get(i), parameters_.get(subst.get(i)));
+				pan.substituteParameter(parameters_.get(subst.get(i)));
 			}
 		}	
 	}

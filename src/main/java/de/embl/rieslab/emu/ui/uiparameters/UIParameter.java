@@ -144,7 +144,7 @@ public abstract class UIParameter<T> {
 	 *
 	 */
 	public enum UIParameterType { 
-		INTEGER("Integer"), DOUBLE("Double"), STRING("String"), COLOR("Color"), BOOL("Boolean"), COMBO("Combo"), UIPROPERTY("UIProperty"); 
+		INTEGER("Integer"), DOUBLE("Double"), STRING("String"), COLOR("Color"), BOOL("Boolean"), COMBO("Combo"), UIPROPERTY("UIProperty"), NONE("None"); 
 		
 		private String value; 
 		

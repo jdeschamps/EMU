@@ -12,6 +12,10 @@ import org.junit.Test;
 import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.exceptions.IncorrectParameterTypeException;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
+import de.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
+import de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
+import de.embl.rieslab.emu.ui.internalproperties.InternalProperty;
 import de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
@@ -280,9 +284,9 @@ public class ConfigurablePanelTest {
 			assertEquals(params[i], cp.getUIParameter(params[i]).getLabel());
 		}
 
-		assertEquals(UIParameterType.STRING, cp.getUIParameter(params[0]).getType());
-		assertEquals(UIParameterType.INTEGER, cp.getUIParameter(params[1]).getType());
-		assertEquals(UIParameterType.BOOL, cp.getUIParameter(params[2]).getType());
+		assertEquals(UIParameterType.STRING, cp.getUIParameterType(params[0]));
+		assertEquals(UIParameterType.INTEGER, cp.getUIParameterType(params[1]));
+		assertEquals(UIParameterType.BOOL, cp.getUIParameterType(params[2]));
 	}
 
 	
@@ -852,7 +856,7 @@ public class ConfigurablePanelTest {
 		final String defval = "default";
 		final String[] params = {"PARAM1", "PARAM2", "PARAM3"};
 		
-		ConfigurableTestPanel cp = new ConfigurableTestPanel("My") {
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -900,8 +904,90 @@ public class ConfigurablePanelTest {
 		assertEquals(nval1, cp.getUIParameter(params[0]).getStringValue());
 	}
 
-	// test adding UIParameter
 	// substitute param
+	@Test
+	public void testSubsituteUIParameter() throws IncorrectParameterTypeException {
+		final String defval = "default";
+		final String param = "Param";
+		final String panel = "MyPanel";
+
+		ConfigurableTestPanel cp1 = new ConfigurableTestPanel(panel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new StringUIParameter(this, param, "", defval));
+			}
+		};
+		
+		ConfigurableTestPanel cp2 = new ConfigurableTestPanel(panel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new StringUIParameter(this, param, "", defval));
+			}
+		};
+  
+		assertEquals(defval, cp1.getStringUIParameterValue(param));
+		assertEquals(defval, cp2.getStringUIParameterValue(param));
+		
+		// change cp2's UIParameter value
+		final String nval = "Rock the Casbah";
+		cp2.getUIParameter(param).setStringValue(nval);
+		assertEquals(defval, cp1.getStringUIParameterValue(param));
+		assertEquals(nval, cp2.getStringUIParameterValue(param));
+		
+		//substitute the UIParameter
+		cp1.substituteParameter(cp2.getUIParameter(param));
+
+		// check that the value has changed in cp1's UIParameter
+		assertEquals(nval, cp1.getStringUIParameterValue(param));
+	}
+	
+
+	
+	////////////////////////////////////////////
+	//////////// InternalProperties ////////////
+	////////////////////////////////////////////
+
+	@Test
+	public void testAddInternalProperty() {
+		final int defval = 1;
+		final String[] intprop = {"InternalProp1", "InternalProp2", "InternalProp3"};
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop[0], new Integer(defval)));
+				this.addInternalProperty(new BoolInternalProperty(this, intprop[1], new Boolean(false)));
+				this.addInternalProperty(new DoubleInternalProperty(this, intprop[2], new Double(2.1)));
+			}
+		};
+		
+		@SuppressWarnings("rawtypes")
+		HashMap<String, InternalProperty> list = cp.getInternalProperties();
+		assertEquals(3, list.size());
+		
+		for(int i=0;i<intprop.length;i++) {
+			assertTrue(list.containsKey(intprop[i]));
+			assertNotNull(list.get(intprop[i]));
+			assertEquals(intprop[i], list.get(intprop[i]).getLabel());
+		}
+
+		for(int i=0;i<intprop.length;i++) {
+			assertNotNull(cp.getInternalProperty(intprop[i]));
+			assertEquals(intprop[i], cp.getInternalProperty(intprop[i]).getLabel());
+		}
+
+		assertEquals(InternalProperty.InternalPropertyType.INTEGER, cp.getInternalProperty(intprop[0]).getType());
+		assertEquals(InternalProperty.InternalPropertyType.BOOLEAN, cp.getInternalProperty(intprop[1]).getType());
+		assertEquals(InternalProperty.InternalPropertyType.DOUBLE, cp.getInternalProperty(intprop[2]).getType());
+	}
+	
+	
 	// subsitute internalprop
 	// test adding InternalProperty
 	// getters for different types
