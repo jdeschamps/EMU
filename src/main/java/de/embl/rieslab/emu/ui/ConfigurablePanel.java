@@ -549,7 +549,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 */
 	protected void addUIParameter(UIParameter uiparameter){
 		if(uiparameter == null) {
-			throw new NullPointerException("UIParameter cannot be null.");
+			throw new NullPointerException("Null UIParameters are not allowed.");
 		}
 		parameters_.put(uiparameter.getHash(),uiparameter);
 	}
@@ -561,6 +561,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param internalproperty InternalProperty to add
 	 */
 	protected void addInternalProperty(InternalProperty internalproperty){
+		if(internalproperty == null) {
+			throw new NullPointerException("Null InternalProperties are not allowed.");
+		}
 		internalprops_.put(internalproperty.getLabel(),internalproperty);
 	}
 	

@@ -982,11 +982,26 @@ public class ConfigurablePanelTest {
 			assertEquals(intprop[i], cp.getInternalProperty(intprop[i]).getLabel());
 		}
 
-		assertEquals(InternalProperty.InternalPropertyType.INTEGER, cp.getInternalProperty(intprop[0]).getType());
-		assertEquals(InternalProperty.InternalPropertyType.BOOLEAN, cp.getInternalProperty(intprop[1]).getType());
-		assertEquals(InternalProperty.InternalPropertyType.DOUBLE, cp.getInternalProperty(intprop[2]).getType());
+		assertEquals(InternalProperty.InternalPropertyType.INTEGER, cp.getInternalPropertyType(intprop[0]));
+		assertEquals(InternalProperty.InternalPropertyType.BOOLEAN, cp.getInternalPropertyType(intprop[1]));
+		assertEquals(InternalProperty.InternalPropertyType.DOUBLE, cp.getInternalPropertyType(intprop[2]));
 	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testAddNullInternalProperty(){		
+		new ConfigurableTestPanel("MyPanel") {
 	
+			private static final long serialVersionUID = 1L;
+	
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(null);
+			}
+		};
+	}
+
+// getInternalProperty(null)
+	//getInternalPropertyType(null)
 	
 	// subsitute internalprop
 	// test adding InternalProperty
