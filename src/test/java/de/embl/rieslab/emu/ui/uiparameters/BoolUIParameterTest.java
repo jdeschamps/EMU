@@ -54,6 +54,42 @@ public class BoolUIParameterTest {
 		assertEquals(false, cp.parameter.getValue());	
 	}
 	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullOwner() {
+		new BoolParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				parameter = new BoolUIParameter(null, PARAM, DESC, false);
+			}
+		};
+	}
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullLabel() {
+		new BoolParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				parameter = new BoolUIParameter(this, null, DESC, false);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDescription() {
+		new BoolParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				parameter = new BoolUIParameter(this, PARAM, null, false);
+			}
+		};
+	}
+	
 	private class BoolParamTestPanel extends ConfigurablePanel{
 
 		private static final long serialVersionUID = -3307917280544843397L;

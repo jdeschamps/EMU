@@ -1,6 +1,7 @@
 package de.embl.rieslab.emu.swinglisteners;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.awt.AWTException;
 import java.awt.Point;
@@ -19,19 +20,25 @@ import javax.swing.SwingUtilities;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
-import de.embl.rieslab.emu.testableclasses.TestableConfigurableMainFrame;
+import mmcorej.CMMCore;
+import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.exceptions.IncorrectPropertyTypeException;
 import de.embl.rieslab.emu.testableclasses.TestableMMProperty;
 
 public class SwingUIListenersTest {
 
+	// TODO
+	// write tests for null values passed as parameters
 	
 	@Test
-	public void testJComboboxActionListenerOnString() {
+	public void testJComboboxActionListenerOnString() throws AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final String[] vals = {"MyValue1", "MyValue2", "MyValue3"};  
 		final JComboBox<String> combo = new JComboBox<String>(vals);
@@ -93,7 +100,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJComboboxActionListenerOnIndex() {
+	public void testJComboboxActionListenerOnIndex() throws AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final String[] vals = {"MyValue1", "MyValue2", "MyValue3"};  
 		final JComboBox<String> combo = new JComboBox<String>(vals);
@@ -154,7 +161,7 @@ public class SwingUIListenersTest {
 	
 	
 	@Test
-	public void testJComboboxActionListenerOnIndexWithArray() {
+	public void testJComboboxActionListenerOnIndexWithArray() throws AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final String[] combovals = {"MyValue1", "MyValue2", "MyValue3"}; // values shown to the user (maybe set by a UIParameter) 
 		final String[] vals = {"CoolName1", "CoolName2", "CoolName3"}; // friendly names used to trigger the UIProperty 
@@ -217,7 +224,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testJTextFieldActionListenerOnIntegerValue() throws AWTException {
+	public void testJTextFieldActionListenerOnIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
@@ -283,7 +290,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testJTextFieldActionListenerOnStringValue() throws AWTException {
+	public void testJTextFieldActionListenerOnStringValue() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
@@ -349,7 +356,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnIntegerValueWithFeedbackToSlider() throws AWTException {
+	public void testJTextFieldActionListenerOnIntegerValueWithFeedbackToSlider() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		final JSlider slider = new JSlider(); // 0 - 100
@@ -439,7 +446,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnBoundedIntegerValue() throws AWTException {
+	public void testJTextFieldActionListenerOnBoundedIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		final int min = -4;
@@ -545,7 +552,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnDoubleValue() throws AWTException {
+	public void testJTextFieldActionListenerOnDoubleValue() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
@@ -630,7 +637,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnBoundedDoubleValue() throws AWTException {
+	public void testJTextFieldActionListenerOnBoundedDoubleValue() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		final double min = -4.022;
@@ -980,7 +987,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJSliderActionListenerOnIntegerValue() throws AWTException {
+	public void testJSliderActionListenerOnIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		int value = 21;
 		final JSlider slider = new JSlider(0,100,value);
@@ -1051,7 +1058,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJSliderActionListenerOnIntegerValueWithFeedbackToTextField() throws AWTException {
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackToTextField() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		int value = 21;
 		final JSlider slider = new JSlider(0,100,value);
@@ -1125,7 +1132,7 @@ public class SwingUIListenersTest {
 	}		
 	
 	@Test
-	public void testJSliderActionListenerOnIntegerValueWithFeedbackToLabel() throws AWTException {
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackToLabel() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		int value = 21;
 		final JSlider slider = new JSlider(0,100,value);
@@ -1199,7 +1206,7 @@ public class SwingUIListenersTest {
 	}	
 	
 	@Test
-	public void testJSliderActionListenerOnIntegerValueWithFeedbackPreSuffixes() throws AWTException {
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackPreSuffixes() throws AWTException, AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		int value = 21;
 		final JSlider slider = new JSlider(0,100,value);
@@ -1276,7 +1283,7 @@ public class SwingUIListenersTest {
 	}	
 
 	@Test
-	public void testButtonGroupActionListenerOnSelectedIndex() {
+	public void testButtonGroupActionListenerOnSelectedIndex() throws AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JToggleButton button1 = new JToggleButton();
 		final JToggleButton button2 = new JToggleButton();
@@ -1307,6 +1314,7 @@ public class SwingUIListenersTest {
 				SwingUIListeners.addActionListenerOnSelectedIndex(this, prop, bg);
 			}
 		};
+		
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
 			/**
 			 * 
@@ -1345,9 +1353,79 @@ public class SwingUIListenersTest {
 		/// Test 2: value of the MMProperty has changed
 		assertEquals("1", mmprop.getStringValue());		
 	}
+	
+	@Test
+	public void testJToggleButtonActionListenerToTwoState() throws AlreadyAssignedUIPropertyException {
+		final String prop = "My Prop";
+		final JToggleButton button = new JToggleButton();
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+
+			private static final long serialVersionUID = 1L;
+			@Override
+			public void setUpComponent() {
+				this.add(button);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new TwoStateUIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				try {
+					SwingUIListeners.addActionListenerToTwoState(this, prop, button);
+				} catch (IncorrectPropertyTypeException e) {
+					e.printStackTrace();
+				}
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		// assign on and off states
+		final String onval = "We will", offval = "rock you!";
+		boolean b = ((TwoStateUIProperty) cp.property).setOnStateValue(onval);
+		assertTrue(b);
+		b = ((TwoStateUIProperty) cp.property).setOffStateValue(offval);
+		assertTrue(b);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		// click on button2
+		button.doClick();
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(onval, mmprop.getStringValue());		
+	}
 
 	@Test
-	public void testButtonGroupActionListenerOnSelectedIndexWithArray() {
+	public void testButtonGroupActionListenerOnSelectedIndexWithArray() throws AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JToggleButton button1 = new JToggleButton();
 		final JToggleButton button2 = new JToggleButton();
@@ -1420,7 +1498,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testAbstractButtonActionListenerToSingleState() {
+	public void testAbstractButtonActionListenerToSingleState() throws AlreadyAssignedUIPropertyException {
 		final String prop = "My Prop";
 		final JButton btn = new JButton();
 		
@@ -1440,7 +1518,11 @@ public class SwingUIListenersTest {
 			}
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerToSingleState(this, prop, btn);;
+				try {
+					SwingUIListeners.addActionListenerToSingleState(this, prop, btn);
+				} catch (IncorrectPropertyTypeException e) {
+					e.printStackTrace();
+				};
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
@@ -1526,4 +1608,32 @@ public class SwingUIListenersTest {
 		@Override
 		public String getDescription() {return "";}
 	}
+
+	private abstract class TestableConfigurableMainFrame extends ConfigurableMainFrame{
+	
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 5515001170950109376L;
+	
+		public TestableConfigurableMainFrame() {
+			super("", null);
+		}
+		
+		@Override
+		protected CMMCore getCore(){
+			return null;
+		}
+		
+		@Override
+		public void updateMenu() {
+			// Do nothing
+		}
+		
+		@Override
+		protected void setUpMenu() {
+			// Do nothing
+		}
+	}
+
 }

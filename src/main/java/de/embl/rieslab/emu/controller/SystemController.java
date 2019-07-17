@@ -10,6 +10,7 @@ import org.micromanager.Studio;
 import de.embl.rieslab.emu.configuration.ConfigurationController;
 import de.embl.rieslab.emu.configuration.GlobalConfiguration;
 import de.embl.rieslab.emu.controller.SystemDialogs;
+import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.exceptions.IncompatiblePluginConfigurationException;
 import de.embl.rieslab.emu.micromanager.MMRegistry;
 import de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
@@ -284,7 +285,11 @@ public class SystemController {
 					
 				} else if (mmregistry_.getMMPropertiesRegistry().isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
 					// links the properties
-					addPair(uiproperties.get(uiprop),mmregistry_.getMMPropertiesRegistry().getProperty(configprop.get(uiprop)));
+					try {
+						addPair(uiproperties.get(uiprop),mmregistry_.getMMPropertiesRegistry().getProperty(configprop.get(uiprop)));
+					} catch (AlreadyAssignedUIPropertyException e) {
+						e.printStackTrace();
+					}
 					
 					// tests if the property has finite number of states
 					if(uiproperties.get(uiprop) instanceof TwoStateUIProperty){ // if it is a two-state property
@@ -401,7 +406,7 @@ public class SystemController {
 	
 	// Pairs a ui property and a Micro-manager property together.
 	@SuppressWarnings("rawtypes")
-	private void addPair(UIProperty ui, MMProperty mm){
+	private void addPair(UIProperty ui, MMProperty mm) throws AlreadyAssignedUIPropertyException{
 		PropertyPair.pair(ui,mm);
 	}
 	

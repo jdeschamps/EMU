@@ -24,6 +24,55 @@ public class ColorUIParameterTest {
 		assertEquals(cp.DESC, cp.parameter.getDescription());
 	}
 
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDefaultValue() {
+		new ColorParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				parameter = new ColorUIParameter(this, PARAM, DESC, null);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullOwner() {
+		new ColorParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				parameter = new ColorUIParameter(null, PARAM, DESC, Color.black);
+			}
+		};
+	}
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullLabel() {
+		new ColorParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				parameter = new ColorUIParameter(this, null, DESC, Color.black);
+			}
+		};
+	}
+
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDescription() {
+		new ColorParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				parameter = new ColorUIParameter(this, PARAM, null, Color.black);
+			}
+		};
+	}
+	
 	@Test
 	public void testAreValuesSuitable() {
 		ColorParamTestPanel cp = new ColorParamTestPanel("My panel");

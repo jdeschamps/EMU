@@ -258,5 +258,14 @@ public class MultiStateUIProperty extends UIProperty{
 	public String[] getStatesName(){
 		return statenames_;
 	}
+	
+	/**
+	 * Returns a String describing the UIPropertyType of the UIProperty.
+	 * 
+	 * @return UIProperty type
+	 */
+	public UIPropertyType getType() {
+		return UIPropertyType.MULTISTATE;
+	}
 }
 

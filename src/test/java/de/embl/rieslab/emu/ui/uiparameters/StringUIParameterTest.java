@@ -51,6 +51,60 @@ public class StringUIParameterTest {
 		assertEquals(s, cp.parameter.getValue());	
 	}
 	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullOwner() {
+		new StringParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = "Like a rolling stone";
+				
+				parameter = new StringUIParameter(null, PARAM, DESC, def_val);
+			}
+		};
+	}
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullLabel() {
+		new StringParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = "Like a rolling stone";
+				
+				parameter = new StringUIParameter(this, null, DESC, def_val);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDescription() {
+		new StringParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = "Like a rolling stone";
+				
+				parameter = new StringUIParameter(this, PARAM, null, def_val);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDefaultvalue() {
+		new StringParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				parameter = new StringUIParameter(this, PARAM, DESC, null);
+			}
+		};
+	}
+	
 	private class StringParamTestPanel extends ConfigurablePanel{
 
 		private static final long serialVersionUID = -3307917280544843397L;
@@ -65,7 +119,7 @@ public class StringUIParameterTest {
 
 		@Override
 		protected void initializeParameters() {
-			def_val = "MyDefault";
+			def_val = "Like a rolling stone";
 			
 			parameter = new StringUIParameter(this, PARAM, DESC, def_val);
 		}

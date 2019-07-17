@@ -55,6 +55,49 @@ public class IntegerUIParameterTest {
 		assertEquals(Integer.valueOf(s), cp.parameter.getValue());	
 	}
 	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullOwner() {
+		new IntegerParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = 42;
+				
+				parameter = new IntegerUIParameter(null, PARAM, DESC, def_val);
+			}
+		};
+	}
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullLabel() {
+		new IntegerParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = 42;
+				
+				parameter = new IntegerUIParameter(this, null, DESC, def_val);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDescription() {
+		new IntegerParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = 42;
+				
+				parameter = new IntegerUIParameter(this, PARAM, null, def_val);
+			}
+		};
+	}
+	
+	
 	private class IntegerParamTestPanel extends ConfigurablePanel{
 
 		private static final long serialVersionUID = -3307917280544843397L;
@@ -69,7 +112,7 @@ public class IntegerUIParameterTest {
 
 		@Override
 		protected void initializeParameters() {
-			def_val = 15;
+			def_val = 42;
 			
 			parameter = new IntegerUIParameter(this, PARAM, DESC, def_val);
 		}

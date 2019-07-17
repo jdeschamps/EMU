@@ -31,11 +31,20 @@ public class ComboUIParameter extends UIParameter<String> {
 	public ComboUIParameter(ConfigurablePanel owner, String label, String description, String[] allowedValues, int ind) {
 		super(owner, label, description);
 		
+		if(allowedValues == null) {
+			throw new NullPointerException("The allowed values array cannot be null.");
+		}
+		for(String s: allowedValues) {
+			if(s == null) {
+				throw new NullPointerException("The allowed values cannot be null.");
+			}
+		}
+
 		combovalues_ = allowedValues;
-		if(ind >= 0 && ind<combovalues_.length){
+		if(ind >= 0 && ind <combovalues_.length){
 			setValue(combovalues_[ind]);
 		} else {
-			setValue(combovalues_[0]);
+			throw new IllegalArgumentException("["+ind+"] is not a valid index, it should obey: 0 <= ind < "+combovalues_.length+".");
 		}
 	}
 	

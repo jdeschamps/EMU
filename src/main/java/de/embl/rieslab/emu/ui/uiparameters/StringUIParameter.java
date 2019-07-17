@@ -14,6 +14,11 @@ public class StringUIParameter extends UIParameter<String>{
 
 	public StringUIParameter(ConfigurablePanel owner, String label, String description, String value) {
 		super(owner, label, description);
+		
+		if(value == null) {
+			throw new NullPointerException("The UIParameter value cannot be set to null.");
+		}
+		
 		setValue(value);
 	}
 	

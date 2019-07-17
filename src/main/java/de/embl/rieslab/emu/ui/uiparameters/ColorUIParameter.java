@@ -25,6 +25,11 @@ public class ColorUIParameter extends UIParameter<Color>{
 	 */
 	public ColorUIParameter(ConfigurablePanel owner, String label, String description, Color value) {
 		super(owner, label, description);
+		
+		if(value == null) {
+			throw new NullPointerException("The default value cannot be null.");
+		}
+		
 		setValue(value);
 	}
 	

@@ -12,12 +12,16 @@ import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
  */
 @SuppressWarnings("rawtypes")
 public class PropertyPair {
-	public static void pair(UIProperty ui, MMProperty mm){
-		try {
-			ui.assignProperty(mm);
-			mm.addListener(ui);
-		} catch (AlreadyAssignedUIPropertyException e) {
-			e.printStackTrace();
+	public static void pair(UIProperty ui, MMProperty mm) throws AlreadyAssignedUIPropertyException{
+		if(ui == null) {
+			throw new NullPointerException("Cannot pair a null UIProperty.");
 		}
+		
+		if(mm == null) {
+			throw new NullPointerException("Cannot pair a null MMProperty.");
+		}
+		
+		ui.assignProperty(mm);
+		mm.addListener(ui);
 	}
 }

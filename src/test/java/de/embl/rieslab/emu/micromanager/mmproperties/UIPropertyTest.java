@@ -12,6 +12,7 @@ import de.embl.rieslab.emu.micromanager.mmproperties.StringMMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 
 public class UIPropertyTest {
@@ -28,10 +29,11 @@ public class UIPropertyTest {
 
 		cp.property.assignProperty(mmprop);		
 		assertTrue(cp.property.isAssigned());
+		assertEquals(UIPropertyType.UIPROPERTY, cp.property.getType());
 	}
 	
 	@Test
-	public void testUIPropertyReadOnly() {
+	public void testUIPropertyReadOnly() throws AlreadyAssignedUIPropertyException {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", true) {
@@ -47,7 +49,7 @@ public class UIPropertyTest {
 	}
 
 	@Test
-	public void testUIPropertySetValue() { 
+	public void testUIPropertySetValue() throws AlreadyAssignedUIPropertyException { 
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -78,7 +80,7 @@ public class UIPropertyTest {
 	}
 
 	@Test
-	public void testUIPropertyAllowedValues() { 
+	public void testUIPropertyAllowedValues() throws AlreadyAssignedUIPropertyException { 
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel") {
 
 			private static final long serialVersionUID = 1L;
@@ -115,7 +117,7 @@ public class UIPropertyTest {
 	}
 	
 	@Test
-	public void testUIPropertyBoundedValues() { 
+	public void testUIPropertyBoundedValues() throws AlreadyAssignedUIPropertyException { 
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		
 		final double min = -1.56;

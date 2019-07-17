@@ -55,6 +55,62 @@ public class UIPropertyParameterTest {
 		assertEquals(s, cp.parameter.getValue());	
 	}
 	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullOwner() {
+		new UIPropertyParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				flag = new PropertyFlag("Union Jack") {};
+				
+				parameter = new UIPropertyParameter(null, PARAM, DESC, flag);
+			}
+		};
+	}
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullLabel() {
+		new UIPropertyParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				flag = new PropertyFlag("Union Jack") {};
+				
+				parameter = new UIPropertyParameter(this, null, DESC, flag);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDescription() {
+		new UIPropertyParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				flag = new PropertyFlag("Union Jack") {};
+				
+				parameter = new UIPropertyParameter(this, PARAM, null, flag);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullFlag() {
+		new UIPropertyParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				flag = new PropertyFlag("Union Jack") {};
+				
+				parameter = new UIPropertyParameter(this, PARAM, DESC, null);
+			}
+		};
+	}
+	
 	private class UIPropertyParamTestPanel extends ConfigurablePanel{
 
 		private static final long serialVersionUID = -3307917280544843397L;
@@ -69,7 +125,7 @@ public class UIPropertyParameterTest {
 
 		@Override
 		protected void initializeParameters() {
-			flag = new PropertyFlag("MyFlag") {};
+			flag = new PropertyFlag("Union Jack") {};
 			
 			parameter = new UIPropertyParameter(this, PARAM, DESC, flag);
 		}

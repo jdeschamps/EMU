@@ -50,6 +50,81 @@ public class ComboUIParameterTest {
 		}		
 	}
 	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDefaultValue() {
+		new ComboParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				vals = new String[] {"154.652", "fdsfs", "true784"};
+				def_val = 1;
+				
+				parameter = new ComboUIParameter(this, PARAM, DESC, null, def_val);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullOwner() {
+		new ComboParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				vals = new String[] {"154.652", "fdsfs", "true784"};
+				def_val = 1;
+				
+				parameter = new ComboUIParameter(null, PARAM, DESC, vals, def_val);
+			}
+		};
+	}
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullLabel() {
+		new ComboParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				vals = new String[] {"154.652", "fdsfs", "true784"};
+				def_val = 1;
+				
+				parameter = new ComboUIParameter(this, null, DESC, vals, def_val);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDescription() {
+		new ComboParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				vals = new String[] {"154.652", "fdsfs", "true784"};
+				def_val = 1;
+				
+				parameter = new ComboUIParameter(this, PARAM, null, vals, def_val);
+			}
+		};
+	}
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullValueInAllowedArray() {
+		new ComboParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				vals = new String[] {"154.652", null, "true784"};
+				def_val = 1;
+				
+				parameter = new ComboUIParameter(this, DESC, null, vals, def_val);
+			}
+		};
+	}
+	
 	private class ComboParamTestPanel extends ConfigurablePanel{
 
 		private static final long serialVersionUID = -3307917280544843397L;

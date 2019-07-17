@@ -55,6 +55,48 @@ public class DoubleUIParameterTest {
 		assertEquals(Double.valueOf(s), cp.parameter.getValue());	
 	}
 	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullOwner() {
+		new DoubleParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = -2.485;
+				
+				parameter = new DoubleUIParameter(null, PARAM, DESC, def_val);
+			}
+		};
+	}
+	
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullLabel() {
+		new DoubleParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = -2.485;
+				
+				parameter = new DoubleUIParameter(this, null, DESC, def_val);
+			}
+		};
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetNullDescription() {
+		new DoubleParamTestPanel("My panel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				def_val = -2.485;
+				
+				parameter = new DoubleUIParameter(this, PARAM, null, def_val);
+			}
+		};
+	}
+	
 	private class DoubleParamTestPanel extends ConfigurablePanel{
 
 		private static final long serialVersionUID = -3307917280544843397L;

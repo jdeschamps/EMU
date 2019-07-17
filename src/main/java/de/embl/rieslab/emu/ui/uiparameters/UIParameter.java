@@ -25,6 +25,16 @@ public abstract class UIParameter<T> {
 	 * @param description Description of the UIParameters, used in the configuration wizard help.
 	 */
 	public UIParameter(ConfigurablePanel owner, String label, String description){
+		if(owner == null) {
+			throw new NullPointerException("The ConfigurablePanel cannot be null.");
+		}
+		if(label == null) {
+			throw new NullPointerException("The UIParameter label cannot be null.");
+		}
+		if(description == null) {
+			throw new NullPointerException("The UIParameter description cannot be null.");
+		}
+		
 		ownername_ = owner.getLabel();
 		label_ = label;
 		description_ = description;
@@ -134,7 +144,7 @@ public abstract class UIParameter<T> {
 	 *
 	 */
 	public enum UIParameterType { 
-		INTEGER("Integer"), DOUBLE("Double"), FLOAT("Float"), STRING("String"), COLOR("Color"), BOOL("Boolean"), COMBO("COMBO"), UIPROPERTY("UIProperty"); 
+		INTEGER("Integer"), DOUBLE("Double"), STRING("String"), COLOR("Color"), BOOL("Boolean"), COMBO("Combo"), UIPROPERTY("UIProperty"); 
 		
 		private String value; 
 		

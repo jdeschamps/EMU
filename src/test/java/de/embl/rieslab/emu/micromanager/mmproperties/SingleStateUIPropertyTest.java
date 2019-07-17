@@ -6,15 +6,24 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 
 public class SingleStateUIPropertyTest {
 
 	@Test
-	public void testSettingStateValue() {
+	public void testUIPropertyType() throws AlreadyAssignedUIPropertyException {
+		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
+
+		assertEquals(UIPropertyType.SINGLESTATE, cp.property.getType());
+	}
+	
+	@Test
+	public void testSettingStateValue() throws AlreadyAssignedUIPropertyException {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -34,7 +43,7 @@ public class SingleStateUIPropertyTest {
 	}
 	
 	@Test
-	public void testSettingWrongStateValue() {
+	public void testSettingWrongStateValue() throws AlreadyAssignedUIPropertyException {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -57,7 +66,7 @@ public class SingleStateUIPropertyTest {
 	}
 
 	@Test
-	public void testSettingValue() {
+	public void testSettingValue() throws AlreadyAssignedUIPropertyException {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -112,7 +121,7 @@ public class SingleStateUIPropertyTest {
 	}
 
 	@Test
-	public void testSettingGenericValue() {
+	public void testSettingGenericValue() throws AlreadyAssignedUIPropertyException {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {

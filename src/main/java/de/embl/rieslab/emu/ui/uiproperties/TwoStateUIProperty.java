@@ -70,6 +70,7 @@ public class TwoStateUIProperty extends UIProperty{
 			onstate_ = newOnValue;	
 			return true;
 		}
+		
 		return false;
 	}
 	
@@ -125,5 +126,14 @@ public class TwoStateUIProperty extends UIProperty{
 			}
 		}
 		return false;
+	}	
+	
+	/**
+	 * Returns a String describing the UIPropertyType of the UIProperty.
+	 * 
+	 * @return UIProperty type
+	 */
+	public UIPropertyType getType() {
+		return UIPropertyType.TWOSTATE;
 	}
 }

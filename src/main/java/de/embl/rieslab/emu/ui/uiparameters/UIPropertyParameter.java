@@ -37,6 +37,10 @@ public class UIPropertyParameter extends UIParameter<String>{
 	public UIPropertyParameter(ConfigurablePanel owner, String name, String description, PropertyFlag propertyflag) {
 		super(owner, name, description);
 		
+		if(propertyflag == null) {
+			throw new NullPointerException("The UIPropertyParameter's property flag cannot be null.");
+		}
+		
 		propertyflag_ = propertyflag;
 		
 		setValue(NO_PROPERTY);

@@ -309,4 +309,13 @@ public class UIProperty {
 		}
 		return false;
 	}
+	
+	/**
+	 * Returns a String describing the UIPropertyType of the UIProperty.
+	 * 
+	 * @return UIProperty type
+	 */
+	public UIPropertyType getType() {
+		return UIPropertyType.UIPROPERTY;
+	}
 }

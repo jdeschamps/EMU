@@ -141,4 +141,13 @@ public class ImmutableMultiStateUIProperty extends UIProperty {
 		return states_.keySet().toArray(new String[states_.size()]);
 	}	
 	
+	/**
+	 * Returns a String describing the UIPropertyType of the UIProperty.
+	 * 
+	 * @return UIProperty type
+	 */
+	public UIPropertyType getType() {
+		return UIPropertyType.IMMUTMULTISTATE;
+	}
+	
 }

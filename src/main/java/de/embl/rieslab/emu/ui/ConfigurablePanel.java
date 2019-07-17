@@ -7,6 +7,7 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import de.embl.rieslab.emu.exceptions.IncorrectParameterTypeException;
 import de.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
 import de.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
 import de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
@@ -22,6 +23,7 @@ import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter.UIParameterType;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 
 /**
  * Building block of EMU, this abstract class extends a JPanel. It holds a map of {@link de.embl.rieslab.emu.ui.uiproperties.UIProperty},
@@ -144,17 +146,22 @@ public abstract class ConfigurablePanel extends JPanel{
 	}	
 	
 	/**
-	 * Returns the {@link de.embl.rieslab.emu.ui.uiproperties.UIProperty}
+	 * Returns the {@link de.embl.rieslab.emu.ui.uiproperties.UIParameter}
 	 * named {@code propertyName}.
 	 * 
-	 * @param propertyName Name of the UIProperty
-	 * @return Corresponding UIProperty, null if it doesn't exist.
+	 * @param propertyName Name of the UIParameter
+	 * @return Corresponding UIParameter, null if it doesn't exist.
 	 */
 	protected UIParameter getUIParameter(String parameterName) {
-		if (parameters_.containsKey(parameterName)) {
-			return parameters_.get(parameterName);
+		if(parameterName == null) {
+			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		return null;
+		
+		if (parameters_.containsKey(UIParameter.getHash(this,parameterName))) {
+			return parameters_.get(UIParameter.getHash(this,parameterName));
+		} else {
+			throw new IllegalArgumentException("["+parameterName+"] is not a known UIParameter");
+		}
 	}
 
 	/**
@@ -165,10 +172,14 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Corresponding UIProperty, null if it doesn't exist.
 	 */
 	protected UIProperty getUIProperty(String propertyName) {
+		if(propertyName == null) {
+			throw new NullPointerException("UIProperty's name cannot be null.");
+		}
 		if (properties_.containsKey(propertyName)) {
 			return properties_.get(propertyName);
+		}else {
+			throw new IllegalArgumentException("["+propertyName+"] is not a known UIProperty");
 		}
-		return null;
 	}
 
 	/**
@@ -178,6 +189,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param friendlyName New friendly name
 	 */
 	protected void setUIPropertyFriendlyName(String propertyName, String friendlyName){
+		if(propertyName == null) {
+			throw new NullPointerException("UIProperty's name cannot be null.");
+		}
+
 		if(properties_.containsKey(propertyName)){
 			properties_.get(propertyName).setFriendlyName(friendlyName);
 		}
@@ -190,10 +205,15 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return String value of the property, null if the property doesn't exist.
 	 */
 	protected String getUIPropertyValue(String propertyName){
+		if(propertyName == null) {
+			throw new NullPointerException("UIProperty's name cannot be null.");
+		}
+		
 		if(properties_.containsKey(propertyName)){
 			return properties_.get(propertyName).getPropertyValue();
+		} else {
+			throw new IllegalArgumentException("["+propertyName+"] is not a known UIProperty.");
 		}
-		return null;
 	}
 	
 	/**
@@ -207,6 +227,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param newValue New value
 	 */
 	public void setUIPropertyValue(String propertyName, String newValue){
+		if(propertyName == null) {
+			throw new NullPointerException("The UIProperty's label cannot be null.");
+		}
+		
 		// makes sure the call does NOT run on EDT
 		Thread t = new Thread("Property change: " + propertyName) {
 			public void run() {
@@ -309,110 +333,180 @@ public abstract class ConfigurablePanel extends JPanel{
 	}
 	
 	/**
-	 * Returns the value of the DoubleUIParameter called {@code parameterName}. If no such UIParameter exists
-	 * then returns 0.
+	 * Returns the value of the DoubleUIParameter called {@code parameterName}.
 	 * 
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
+	 * @throws IncorrectParameterTypeException 
+	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
 	 */
-	protected double getDoubleUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(getLabel()+" - "+parameterName)
-				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.DOUBLE)) {
-			return ((DoubleUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
+	protected double getDoubleUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+		if(parameterName == null) {
+			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		return 0.;
+		
+		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
+			if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.DOUBLE)) {
+				return ((DoubleUIParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
+			} else {
+				throw new IncorrectParameterTypeException(parameterName, UIParameter.UIParameterType.DOUBLE.toString(),
+						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
+			}
+		} else {
+			throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+		}
 	}
 
 	
 	/**
-	 * Returns the value of the BoolUIParameter called {@code parameterName}. If no such UIParameter exists
-	 * then returns false.
+	 * Returns the value of the BoolUIParameter called {@code parameterName}.
 	 * 
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or false if it doesn't exist.
+	 * @throws IncorrectParameterTypeException 
+	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
 	 */
-	protected boolean getBoolUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(getLabel()+" - "+parameterName)
-				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.BOOL)) {
-			return ((BoolUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
+	protected boolean getBoolUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+		if(parameterName == null) {
+			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		return false;
+		
+		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
+			if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.BOOL)) {
+				return ((BoolUIParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
+			} else {
+				throw new IncorrectParameterTypeException(parameterName, UIParameter.UIParameterType.BOOL.toString(),
+						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
+			}
+		} else {
+		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+		}
 	}
 
 	/**
-	 * Returns the value of the ColorUIParameter called {@code parameterName}. If no such UIParameter exists
-	 * then returns black.
+	 * Returns the value of the ColorUIParameter called {@code parameterName}. 
 	 * 
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or black if it doesn't exist.
+	 * @throws IncorrectParameterTypeException 
+	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
 	 */
-	protected Color getColorUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(getLabel()+" - "+parameterName)
-				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.COLOR)) {
-			return ((ColorUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
+	protected Color getColorUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+		if(parameterName == null) {
+			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		return Color.black;
+		
+		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
+			if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.COLOR)) {
+				return ((ColorUIParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
+			} else {
+				throw new IncorrectParameterTypeException(parameterName, UIParameter.UIParameterType.COLOR.toString(),
+						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
+			}
+		} else {
+		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+		}
 	}
 
 	/**
-	 * Returns the value of the ComboUIParameter called {@code parameterName}. If no such UIParameter exists
-	 * then returns an empty String.
+	 * Returns the value of the ComboUIParameter called {@code parameterName}. 
 	 * 
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
+	 * @throws IncorrectParameterTypeException 
+	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
 	 */
-	protected String getComboUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(getLabel()+" - "+parameterName)
-				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.COMBO)) {
-			return ((ComboUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
+	protected String getComboUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+		if(parameterName == null) {
+			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		return "";
+		
+		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
+			if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.COMBO)) {
+				return ((ComboUIParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
+			} else {
+				throw new IncorrectParameterTypeException(parameterName, UIParameter.UIParameterType.COMBO.toString(),
+						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
+			}
+		} else {
+		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+		}
 	}
 
 	/**
-	 * Returns the value of the IntegerUIParameter called {@code parameterName}. If no such UIParameter exists
-	 * then returns 0.
+	 * Returns the value of the IntegerUIParameter called {@code parameterName}. 
 	 * 
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
+	 * @throws IncorrectParameterTypeException 
+	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
 	 */
-	protected int getIntegerUIParameterValue(String parameterName) {		
-		if(parameters_.containsKey(getLabel()+" - "+parameterName)
-				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.INTEGER)) {
-			return ((IntegerUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
+	protected int getIntegerUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+		if(parameterName == null) {
+			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		return 0;
+		
+		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
+			if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.INTEGER)) {
+				return ((IntegerUIParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
+			} else {
+				throw new IncorrectParameterTypeException(parameterName, UIParameter.UIParameterType.INTEGER.toString(),
+						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
+			}
+		} else {
+		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+		}
 	}
 
 	/**
-	 * Returns the value of the StringUIParameter called {@code parameterName}. If no such UIParameter exists
-	 * then returns an empty String.
+	 * Returns the value of the StringUIParameter called {@code parameterName}. 
 	 * 
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
+	 * @throws IncorrectParameterTypeException 
+	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
 	 */
-	protected String getStringUIParameterValue(String parameterName) {
-		if(parameters_.containsKey(getLabel()+" - "+parameterName)
-				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.STRING)) {
-			return ((StringUIParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
+	protected String getStringUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+		if(parameterName == null) {
+			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		return "";
+		
+		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
+				if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.STRING)) {
+					return ((StringUIParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
+				} else {
+					throw new IncorrectParameterTypeException(parameterName, UIParameter.UIParameterType.STRING.toString(),
+							parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
+				}
+		} else {
+			throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+		}
 	}
 
 	/**
-	 * Returns the value of the UIPropertyParameter called {@code parameterName}. If no such UIParameter exists
-	 * then returns 0.
+	 * Returns the value of the UIPropertyParameter called {@code parameterName}.
 	 * 
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
+	 * @throws IncorrectParameterTypeException 
+	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
 	 */
-	protected String getUIPropertyParameterValue(String parameterName) {
-		if(parameters_.containsKey(getLabel()+" - "+parameterName)
-				&& parameters_.get(getLabel()+" - "+parameterName).getType().equals(UIParameterType.UIPROPERTY)) {
-			return ((UIPropertyParameter) parameters_.get(getLabel()+" - "+parameterName)).getValue();
+	protected String getUIPropertyParameterValue(String parameterName) throws IncorrectParameterTypeException {
+		if(parameterName == null) {
+			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		return UIPropertyParameter.NO_PROPERTY;
+		
+		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
+			if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.UIPROPERTY)) {
+				return ((UIPropertyParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
+			} else {
+				throw new IncorrectParameterTypeException(parameterName, UIParameter.UIParameterType.UIPROPERTY.toString(),
+						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
+			}
+	} else {
+		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
 	}
+}
 	
 
 	/**
@@ -436,6 +530,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param uiparameter UIParameter to add
 	 */
 	protected void addUIParameter(UIParameter uiparameter){
+		if(uiparameter == null) {
+			throw new NullPointerException("UIParameter cannot be null.");
+		}
 		parameters_.put(uiparameter.getHash(),uiparameter);
 	}
 	
@@ -519,6 +616,20 @@ public abstract class ConfigurablePanel extends JPanel{
 			return internalprops_.get(propertyName).getType();
 		}
 		return InternalPropertyType.NONE;
+	}
+	
+	/**
+	 * Returns the UIPropertyType of the UIProperty called {@code propertyName}. If there is no such
+	 * InternalProperty, returns UIPropertyType.NONE.
+	 * 
+	 * @param propertyName Name of the UIProperty
+	 * @return The corresponding UIPropertyType, UIPropertyType.NONE if there is no such UIProperty.
+	 */
+	public UIPropertyType getUIPropertyType(String propertyName) {
+		if(properties_.containsKey(propertyName)) {
+			return properties_.get(propertyName).getType();
+		}
+		return UIPropertyType.NONE;
 	}
 	
 	/**

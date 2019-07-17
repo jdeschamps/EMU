@@ -6,15 +6,25 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 
 public class TwoStateUIPropertyTest {
 
+
 	@Test
-	public void testSettingOnOffValues() {
+	public void testUIPropertyType() throws AlreadyAssignedUIPropertyException {
+		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
+
+		assertEquals(UIPropertyType.TWOSTATE, cp.property.getType());
+	}
+	
+	@Test
+	public void testSettingOnOffValues() throws AlreadyAssignedUIPropertyException {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -39,7 +49,7 @@ public class TwoStateUIPropertyTest {
 	}
 
 	@Test
-	public void testSettingWrongOnOffValues() {
+	public void testSettingWrongOnOffValues() throws AlreadyAssignedUIPropertyException {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -68,7 +78,7 @@ public class TwoStateUIPropertyTest {
 	}
 	
 	@Test
-	public void testSettingValue() {
+	public void testSettingValue() throws AlreadyAssignedUIPropertyException {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -147,7 +157,7 @@ public class TwoStateUIPropertyTest {
 	
 
 	@Test
-	public void testAssigningOnAndOff01Values() {
+	public void testAssigningOnAndOff01Values() throws AlreadyAssignedUIPropertyException {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -186,7 +196,7 @@ public class TwoStateUIPropertyTest {
 	}
 	
 	@Test
-	public void testAssigningOnAndOffBooleanValues() {
+	public void testAssigningOnAndOffBooleanValues() throws AlreadyAssignedUIPropertyException {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final StringMMProperty mmprop = new StringMMProperty(null, MMProperty.TYPE_STRING, "", "", new String[] {"true", "false"}) {

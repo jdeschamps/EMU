@@ -84,4 +84,13 @@ public class SingleStateUIProperty extends UIProperty{
 	public static String getValueName(){
 		return " "+STATE;
 	}
+	
+	/**
+	 * Returns a String describing the UIPropertyType of the UIProperty.
+	 * 
+	 * @return UIProperty type
+	 */
+	public UIPropertyType getType() {
+		return UIPropertyType.SINGLESTATE;
+	}
 }
