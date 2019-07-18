@@ -19,7 +19,7 @@ import javax.swing.JToggleButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import de.embl.rieslab.emu.exceptions.IncorrectPropertyTypeException;
+import de.embl.rieslab.emu.exceptions.IncorrectUIPropertyTypeException;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
@@ -604,7 +604,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addActionListenerToTwoState(final ConfigurablePanel cp, final String propertyKey, final JToggleButton tglb) throws IncorrectPropertyTypeException {
+	public static void addActionListenerToTwoState(final ConfigurablePanel cp, final String propertyKey, final JToggleButton tglb) throws IncorrectUIPropertyTypeException {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
 		}
@@ -615,7 +615,7 @@ public class SwingUIListeners {
 			throw new NullPointerException("The JToggleButton cannot be null.");
 		}
 		if(!cp.getUIPropertyType(propertyKey).equals(UIPropertyType.TWOSTATE)) {
-			throw new IncorrectPropertyTypeException(UIPropertyType.TWOSTATE.getTypeValue(), cp.getUIPropertyType(propertyKey).getTypeValue());
+			throw new IncorrectUIPropertyTypeException(UIPropertyType.TWOSTATE.getTypeValue(), cp.getUIPropertyType(propertyKey).getTypeValue());
 		}
 		
 		tglb.addActionListener(new ActionListener() {
@@ -678,7 +678,7 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addActionListenerToSingleState(final ConfigurablePanel cp, final String propertyKey, final AbstractButton btn) throws IncorrectPropertyTypeException {
+	public static void addActionListenerToSingleState(final ConfigurablePanel cp, final String propertyKey, final AbstractButton btn) throws IncorrectUIPropertyTypeException {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
 		}
@@ -689,7 +689,7 @@ public class SwingUIListeners {
 			throw new NullPointerException("The AbstractButton cannot be null.");
 		}
 		if(!cp.getUIPropertyType(propertyKey).equals(UIPropertyType.SINGLESTATE)) {
-			throw new IncorrectPropertyTypeException(UIPropertyType.SINGLESTATE.getTypeValue(), cp.getUIPropertyType(propertyKey).getTypeValue());
+			throw new IncorrectUIPropertyTypeException(UIPropertyType.SINGLESTATE.getTypeValue(), cp.getUIPropertyType(propertyKey).getTypeValue());
 		}
 		
 		btn.addActionListener(new ActionListener() {

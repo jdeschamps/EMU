@@ -136,4 +136,13 @@ public class TwoStateUIProperty extends UIProperty{
 	public UIPropertyType getType() {
 		return UIPropertyType.TWOSTATE;
 	}
+	
+	/**
+	 * Tests if the current MMProperty value is the ON state.
+	 * 
+	 * @return True if it is, false otherwise.
+	 */
+	public boolean isOnState() {
+		return this.getPropertyValue().equals(onstate_);
+	}
 }

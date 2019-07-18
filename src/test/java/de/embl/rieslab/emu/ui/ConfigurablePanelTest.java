@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.exceptions.IncorrectInternalPropertyTypeException;
-import de.embl.rieslab.emu.exceptions.IncorrectParameterTypeException;
+import de.embl.rieslab.emu.exceptions.IncorrectUIParameterTypeException;
 import de.embl.rieslab.emu.exceptions.UnknownInternalPropertyException;
 import de.embl.rieslab.emu.exceptions.UnknownUIParameterException;
 import de.embl.rieslab.emu.exceptions.UnknownUIPropertyException;
@@ -170,9 +170,6 @@ public class ConfigurablePanelTest {
 	// get and set UIProperty value
 	/**
 	 * Tests setting and getting a UIProperty value.
-	 * 
-	 * @throws AlreadyAssignedUIPropertyException
-	 * @throws UnknownUIPropertyException
 	 */
 	@Test 
 	public void testGetSetPropertyValue() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException {		
@@ -206,7 +203,6 @@ public class ConfigurablePanelTest {
 	
 	/**
 	 * Tests getting the value of a null UIProperty.
-	 * @throws UnknownUIPropertyException 
 	 */
 	@Test (expected = NullPointerException.class)
 	public void testGetNullPropertyValue() throws UnknownUIPropertyException {		
@@ -225,7 +221,6 @@ public class ConfigurablePanelTest {
 	
 	/**
 	 * Tests getting the value of an unknown UIProperty.
-	 * @throws UnknownUIPropertyException 
 	 */
 	@Test (expected = UnknownUIPropertyException.class)
 	public void testGetWrongPropertyValue() throws UnknownUIPropertyException {		
@@ -242,6 +237,9 @@ public class ConfigurablePanelTest {
 		cp.getUIPropertyValue("I am not quite dead");
 	}
 
+	/**
+	 * Test setting the value of a UIProperty to null. 
+	 */
 	@Test 
 	public void testSetNullPropertyValue() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException {		
 		final String uipropLabel = "MyProp";
@@ -267,6 +265,10 @@ public class ConfigurablePanelTest {
 	}
 	
 	// UIProperty friendly name
+	/**
+	 * Tests setting a UIProperty friendly name.
+	 * @throws UnknownUIPropertyException
+	 */
 	@Test 
 	public void testSetFriendlyName() throws UnknownUIPropertyException {		
 		final String uipropLabel = "MyProp";
@@ -381,7 +383,21 @@ public class ConfigurablePanelTest {
 		cp.getUIParameterType(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
+	public void testGetUnknownUIParameterType() {
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new StringUIParameter(this, "MyProp", "", "Vive la France!"));
+			}
+		};
+
+		assertEquals(UIParameter.UIParameterType.NONE, cp.getUIParameterType("Omelette"));
+	}
+
+	@Test(expected = UnknownUIParameterException.class)
 	public void testGetWrongUIParameter() throws UnknownUIParameterException {
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
 			private static final long serialVersionUID = 1L;
@@ -397,7 +413,7 @@ public class ConfigurablePanelTest {
 
 	// get StringUIParameter value
 	@Test 
-	public void testGetStringUIParameterValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetStringUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String defval = "default";
 		final String param = "Param";
 		
@@ -419,7 +435,7 @@ public class ConfigurablePanelTest {
 	}
 	
 	@Test(expected = NullPointerException.class) 
-	public void testGetStringUIParameterNullValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetStringUIParameterNullValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String defval = "default";
 		final String param = "Param";
 		
@@ -435,8 +451,8 @@ public class ConfigurablePanelTest {
 		cp.getStringUIParameterValue(null);
 	}
 	
-	@Test(expected = IllegalArgumentException.class) 
-	public void testGetStringUIParameterWrongValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = UnknownUIParameterException.class) 
+	public void testGetStringUIParameterWrongValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String defval = "default";
 		final String param = "Param";
 		
@@ -452,8 +468,8 @@ public class ConfigurablePanelTest {
 		cp.getStringUIParameterValue("Rosebud");
 	}
 	
-	@Test(expected = IncorrectParameterTypeException.class) 
-	public void testGetStringUIParameterWrongType() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = IncorrectUIParameterTypeException.class) 
+	public void testGetStringUIParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -470,7 +486,7 @@ public class ConfigurablePanelTest {
 
 	// get BoolUIParameter value
 	@Test 
-	public void testGetBoolUIParameterValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetBoolUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final boolean defval = false;
 		final String param = "Param";
 		
@@ -493,7 +509,7 @@ public class ConfigurablePanelTest {
 	
 	
 	@Test(expected = NullPointerException.class) 
-	public void testGetBoolUIParameterNullValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetBoolUIParameterNullValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final boolean defval = false;
 		final String param = "Param";
 		
@@ -509,8 +525,8 @@ public class ConfigurablePanelTest {
 		cp.getBoolUIParameterValue(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class) 
-	public void testGetBoolUIParameterWrongValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = UnknownUIParameterException.class) 
+	public void testGetBoolUIParameterWrongValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final boolean defval = false;
 		final String param = "Param";
 		
@@ -526,8 +542,8 @@ public class ConfigurablePanelTest {
 		cp.getBoolUIParameterValue("Rosebud");
 	}
 	
-	@Test(expected = IncorrectParameterTypeException.class) 
-	public void testGetBoolUIParameterWrongType() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = IncorrectUIParameterTypeException.class) 
+	public void testGetBoolUIParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -545,7 +561,7 @@ public class ConfigurablePanelTest {
 
 	// get IntegerUIParameter value
 	@Test 
-	public void testGetIntegerUIParameterValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetIntegerUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final int defval = 42;
 		final String param = "Param";
 		
@@ -568,7 +584,7 @@ public class ConfigurablePanelTest {
 	
 	
 	@Test(expected = NullPointerException.class) 
-	public void testGetIntegerUIParameterNullValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetIntegerUIParameterNullValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final int defval = 42;
 		final String param = "Param";
 		
@@ -584,8 +600,8 @@ public class ConfigurablePanelTest {
 		cp.getIntegerUIParameterValue(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class) 
-	public void testGetIntegerUIParameterWrongValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = UnknownUIParameterException.class) 
+	public void testGetIntegerUIParameterWrongValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final int defval = 42;
 		final String param = "Param";
 		
@@ -601,8 +617,8 @@ public class ConfigurablePanelTest {
 		cp.getIntegerUIParameterValue("Rosebud");
 	}
 
-	@Test(expected = IncorrectParameterTypeException.class) 
-	public void testGetIntegerUIParameterWrongType() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = IncorrectUIParameterTypeException.class) 
+	public void testGetIntegerUIParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final boolean defval = false;
 		final String param = "Param";
 		
@@ -620,7 +636,7 @@ public class ConfigurablePanelTest {
 	
 	// get DoubleUIParameter value
 	@Test 
-	public void testGetDoubleUIParameterValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetDoubleUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final double defval = 42.195;
 		final String param = "Param";
 		
@@ -643,7 +659,7 @@ public class ConfigurablePanelTest {
 	
 	
 	@Test(expected = NullPointerException.class) 
-	public void testGetDoubleUIParameterNullValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetDoubleUIParameterNullValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final double defval = 42.195;
 		final String param = "Param";
 		
@@ -659,8 +675,8 @@ public class ConfigurablePanelTest {
 		cp.getDoubleUIParameterValue(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class) 
-	public void testGetDoubleUIParameterWrongValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = UnknownUIParameterException.class) 
+	public void testGetDoubleUIParameterWrongValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final double defval = 42.195;
 		final String param = "Param";
 		
@@ -676,8 +692,8 @@ public class ConfigurablePanelTest {
 		cp.getDoubleUIParameterValue("Rosebud");
 	}
 
-	@Test(expected = IncorrectParameterTypeException.class) 
-	public void testGetDoubleUIParameterWrongType() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = IncorrectUIParameterTypeException.class) 
+	public void testGetDoubleUIParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final boolean defval = false;
 		final String param = "Param";
 		
@@ -695,7 +711,7 @@ public class ConfigurablePanelTest {
 	
 	// get ComboUIParameter value
 	@Test 
-	public void testGetComboUIParameterValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetComboUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final int defval = 2;
 		final String[] vals = {"SuperVal", "MediocreVal", "UnitTesting is tough", "SomeVal"};
 		final String param = "Param";
@@ -718,7 +734,7 @@ public class ConfigurablePanelTest {
 	
 	
 	@Test(expected = NullPointerException.class) 
-	public void testGetComboUIParameterNullValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetComboUIParameterNullValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final int defval = 2;
 		final String[] vals = {"SuperVal", "MediocreVal", "UnitTesting is tough", "SomeVal"};
 		final String param = "Param";
@@ -735,8 +751,8 @@ public class ConfigurablePanelTest {
 		cp.getComboUIParameterValue(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class) 
-	public void testGetComboUIParameterWrongValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = UnknownUIParameterException.class) 
+	public void testGetComboUIParameterWrongValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final int defval = 2;
 		final String[] vals = {"SuperVal", "MediocreVal", "UnitTesting is tough", "SomeVal"};
 		final String param = "Param";
@@ -753,8 +769,8 @@ public class ConfigurablePanelTest {
 		cp.getComboUIParameterValue("Rosebud");
 	}
 
-	@Test(expected = IncorrectParameterTypeException.class) 
-	public void testGetComboUIParameterWrongType() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = IncorrectUIParameterTypeException.class) 
+	public void testGetComboUIParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final boolean defval = false;
 		final String param = "Param";
 		
@@ -773,7 +789,7 @@ public class ConfigurablePanelTest {
 	
 	// get ColorUIParameter value
 	@Test 
-	public void testGetColorUIParameterValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetColorUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -794,7 +810,7 @@ public class ConfigurablePanelTest {
 	
 	
 	@Test(expected = NullPointerException.class) 
-	public void testGetColorUIParameterNullValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetColorUIParameterNullValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -809,8 +825,8 @@ public class ConfigurablePanelTest {
 		cp.getColorUIParameterValue(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class) 
-	public void testGetColorUIParameterWrongValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = UnknownUIParameterException.class) 
+	public void testGetColorUIParameterWrongValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -825,8 +841,8 @@ public class ConfigurablePanelTest {
 		cp.getColorUIParameterValue("Rosebud");
 	}
 
-	@Test(expected = IncorrectParameterTypeException.class) 
-	public void testGetColorUIParameterWrongType() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = IncorrectUIParameterTypeException.class) 
+	public void testGetColorUIParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final boolean defval = false;
 		final String param = "Param";
 		
@@ -845,7 +861,7 @@ public class ConfigurablePanelTest {
 	
 	// get UIPropertyParameter value
 	@Test 
-	public void testGetUIPropertyParameterValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetUIPropertyParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -867,7 +883,7 @@ public class ConfigurablePanelTest {
 	
 	
 	@Test(expected = NullPointerException.class) 
-	public void testGetUIPropertyParameterNullValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testGetUIPropertyParameterNullValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -882,8 +898,8 @@ public class ConfigurablePanelTest {
 		cp.getUIPropertyParameterValue(null);
 	}
 
-	@Test(expected = IllegalArgumentException.class) 
-	public void testGetUIPropertyParameterWrongValue() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = UnknownUIParameterException.class) 
+	public void testGetUIPropertyParameterWrongValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -898,8 +914,8 @@ public class ConfigurablePanelTest {
 		cp.getUIPropertyParameterValue("Rosebud");
 	}
 
-	@Test(expected = IncorrectParameterTypeException.class) 
-	public void testGetUIPropertyParameterWrongType() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	@Test(expected = IncorrectUIParameterTypeException.class) 
+	public void testGetUIPropertyParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final boolean defval = false;
 		final String param = "Param";
 		
@@ -936,7 +952,7 @@ public class ConfigurablePanelTest {
 				if(parameterName.equals(params[0])) {
 					try {
 						val1 = this.getStringUIParameterValue(parameterName);
-					} catch (IncorrectParameterTypeException e) {
+					} catch (IncorrectUIParameterTypeException e) {
 						e.printStackTrace();
 					} catch (UnknownUIParameterException e) {
 						e.printStackTrace();
@@ -944,7 +960,7 @@ public class ConfigurablePanelTest {
 				} else if(parameterName.equals(params[1])) {
 					try {
 						val2 = this.getStringUIParameterValue(parameterName);
-					} catch (IncorrectParameterTypeException e) {
+					} catch (IncorrectUIParameterTypeException e) {
 						e.printStackTrace();
 					} catch (UnknownUIParameterException e) {
 						e.printStackTrace();
@@ -952,7 +968,7 @@ public class ConfigurablePanelTest {
 				} else if(parameterName.equals(params[2])) {
 					try {
 						val3 = this.getStringUIParameterValue(parameterName);
-					} catch (IncorrectParameterTypeException e) {
+					} catch (IncorrectUIParameterTypeException e) {
 						e.printStackTrace();
 					} catch (UnknownUIParameterException e) {
 						e.printStackTrace();
@@ -975,9 +991,9 @@ public class ConfigurablePanelTest {
 		assertEquals(nval1, cp.getUIParameter(params[0]).getStringValue());
 	}
 
-	// substitute param
+	// substitute UIParameter
 	@Test
-	public void testSubsituteUIParameter() throws IncorrectParameterTypeException, UnknownUIParameterException {
+	public void testSubsituteUIParameter() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String defval = "default";
 		final String param = "Param";
 		final String panel = "MyPanel";
@@ -1014,6 +1030,78 @@ public class ConfigurablePanelTest {
 
 		// check that the value has changed in cp1's UIParameter
 		assertEquals(nval, cp1.getStringUIParameterValue(param));
+	}
+
+	@Test
+	public void testSubsituteUIParameterOfDifferentType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
+		final String defval = "default";
+		final String param = "Param";
+		final String panel = "MyPanel";
+
+		ConfigurableTestPanel cp1 = new ConfigurableTestPanel(panel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new StringUIParameter(this, param, "", defval));
+			}
+		};
+		
+		ConfigurableTestPanel cp2 = new ConfigurableTestPanel(panel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new IntegerUIParameter(this, param, "", 1));
+			}
+		};
+  
+		assertEquals(UIParameter.UIParameterType.STRING, cp1.getUIParameterType(param));
+		assertEquals(UIParameter.UIParameterType.INTEGER, cp2.getUIParameterType(param));
+		
+		//substitute the UIParameter
+		cp1.substituteParameter(cp2.getUIParameter(param));
+
+		// check that the type of cp1's UIParameter has not changed
+		assertEquals(UIParameter.UIParameterType.STRING, cp1.getUIParameterType(param));
+	}
+	
+	@Test
+	public void testSubsituteUIParameterOfDifferentHash() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
+		final String defval = "default";
+		final String param = "Param";
+		final String param2 = "Param2";
+		final String panel = "MyPanel";
+
+		ConfigurableTestPanel cp1 = new ConfigurableTestPanel(panel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new StringUIParameter(this, param, "", defval));
+			}
+		};
+		
+		ConfigurableTestPanel cp2 = new ConfigurableTestPanel(panel) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new StringUIParameter(this, param2, "", defval));
+			}
+		};
+  
+		assertEquals(UIParameter.UIParameterType.STRING, cp1.getUIParameterType(param));
+		assertEquals(UIParameter.UIParameterType.STRING, cp2.getUIParameterType(param2));
+		
+		//substitute the UIParameter
+		cp1.substituteParameter(cp2.getUIParameter(param2));
+
+		// check that the type of cp1's UIParameter has not changed
+		assertEquals(UIParameter.UIParameterType.STRING, cp1.getUIParameterType(param));
+		
+		// and that param2 is unknown
+		assertEquals(UIParameter.UIParameterType.NONE, cp1.getUIParameterType(param2));
 	}
 	
 
@@ -1088,6 +1176,23 @@ public class ConfigurablePanelTest {
 		cp.getInternalProperty(null);
 	}
 	
+	@Test(expected = UnknownInternalPropertyException.class) 
+	public void testGetUnknownInternalProperty() throws UnknownInternalPropertyException{		
+		final int defval = 1;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop, new Integer(defval)));
+			}
+		};
+		
+		cp.getInternalProperty("Alice");
+	}
+	
 	@Test(expected = NullPointerException.class) 
 	public void testGetNullInternalPropertyType(){		
 		final int defval = 1;
@@ -1129,7 +1234,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test(expected = NullPointerException.class) 
-	public void testSetIntegerNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testSetIntegerNullInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final int defval = 1;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1146,8 +1251,13 @@ public class ConfigurablePanelTest {
 		cp.setInternalPropertyValue(null, val);
 	}
 
+	/**
+	 * Sets the value of a DoubleInternalProperty calling setInternalProperty(String, int).
+	 * @throws IncorrectInternalPropertyTypeException
+	 * @throws UnknownInternalPropertyException 
+	 */
 	@Test(expected = IncorrectInternalPropertyTypeException.class) 
-	public void testSetIntegerInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException {
+	public void testSetIntegerInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final double defval = 1.56;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1165,7 +1275,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test
-	public void testGetIntegerInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testGetIntegerInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final int defval = 1;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1184,7 +1294,7 @@ public class ConfigurablePanelTest {
 		assertEquals(val, cp.getIntegerInternalPropertyValue(intprop));
 	}
 
-	@Test
+	@Test(expected = NullPointerException.class) 
 	public void testGetIntegerNullInternalProperty() throws IncorrectInternalPropertyTypeException {
 		final int defval = 1;
 		final String intprop = "InternalProp";
@@ -1201,17 +1311,319 @@ public class ConfigurablePanelTest {
 		cp.getIntegerInternalPropertyValue(null);
 	}
 	
+	// double InternalProperty
+	@Test
+	public void testSetDoubleInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
+		final double defval = 1.59;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new DoubleInternalProperty(this, intprop, new Double(defval)));
+			}
+		};
+		
+		assertEquals(defval, (double) cp.getInternalProperty(intprop).getInternalPropertyValue(), 1E-20);
+		
+		double val = -5.4945;
+		cp.setInternalPropertyValue(intprop, val);
+		
+		assertEquals(val, (double) cp.getInternalProperty(intprop).getInternalPropertyValue(), 1E-20);
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetDoubleNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+		final double defval = 1.59;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new DoubleInternalProperty(this, intprop, new Double(defval)));
+			}
+		};
+		
+		double val = -5.4945;
+		cp.setInternalPropertyValue(null, val);
+	}
+
+	/**
+	 * Sets the value of an IntegerInternalProperty using a call to setInternalProperty(String, double)
+	 * @throws IncorrectInternalPropertyTypeException
+	 */
+	@Test(expected = IncorrectInternalPropertyTypeException.class) 
+	public void testSetDoubleInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException {
+		final int defval = 1;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop, new Integer(defval)));
+			}
+		};
+		
+		double val = -5.4945;
+		cp.setInternalPropertyValue(intprop, val);
+	}
+
+	@Test
+	public void testGetDoubleInternalProperty() throws IncorrectInternalPropertyTypeException {
+		final double defval = 1.59;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new DoubleInternalProperty(this, intprop, new Double(defval)));
+			}
+		};
+		
+		double val = -5.448;
+		cp.setInternalPropertyValue(intprop, val);
+
+		assertEquals(val, cp.getDoubleInternalPropertyValue(intprop), 1E-20);
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testGetDoubleNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+		final double defval = 1.59;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new DoubleInternalProperty(this, intprop, new Double(defval)));
+			}
+		};
+
+		cp.getDoubleInternalPropertyValue(null);
+	}
 	
+	// BoolInternalProperty
+	@Test
+	public void testSetBoolInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
+		final boolean defval = false;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new BoolInternalProperty(this, intprop, new Boolean(defval)));
+			}
+		};
+		
+		assertEquals(defval, (boolean) cp.getInternalProperty(intprop).getInternalPropertyValue());
+		
+		boolean val = true;
+		cp.setInternalPropertyValue(intprop, val);
+		
+		assertEquals(val, (boolean) cp.getInternalProperty(intprop).getInternalPropertyValue());
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testSetBoolNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+		final boolean defval = false;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new BoolInternalProperty(this, intprop, new Boolean(defval)));
+			}
+		};
+		
+		boolean val = true;
+		cp.setInternalPropertyValue(null, val);
+	}
+
+	/**
+	 * Sets the value of an IntegerInternalProperty using a call to setInternalProperty(String, boolean)
+	 * @throws IncorrectInternalPropertyTypeException
+	 */
+	@Test(expected = IncorrectInternalPropertyTypeException.class) 
+	public void testSetBoolInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException {
+		final int defval = 1;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop, new Integer(defval)));
+			}
+		};
+		
+		boolean val = true;
+		cp.setInternalPropertyValue(intprop, val);
+	}
+
+	@Test
+	public void testGetBoolInternalProperty() throws IncorrectInternalPropertyTypeException {
+		final boolean defval = false;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new BoolInternalProperty(this, intprop, new Boolean(defval)));
+			}
+		};
+		
+		
+		boolean val = true;
+		cp.setInternalPropertyValue(intprop, val);
+
+		assertEquals(val, cp.getBoolInternalPropertyValue(intprop));
+	}
+
+	@Test(expected = NullPointerException.class) 
+	public void testGetBoolNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+		final boolean defval = false;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new BoolInternalProperty(this, intprop, new Boolean(defval)));
+			}
+		};
+		
+		cp.getBoolInternalPropertyValue(null);
+	}
+
+	// substitute internalprop
+	@Test
+	public void testSubsituteInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
+		final int defval = 1;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp1 = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop, new Integer(defval)));
+			}
+		};
+
+		ConfigurableTestPanel cp2 = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop, new Integer(defval)));
+			}
+		};
+
+		assertEquals(defval, cp1.getIntegerInternalPropertyValue(intprop));
+		assertEquals(defval, cp2.getIntegerInternalPropertyValue(intprop));
+		
+		// change cp2 property's value
+		int val = -3;
+		cp2.setInternalPropertyValue(intprop, val);
+		
+		// substitute property in cp1
+		cp1.substituteInternalProperty(cp2.getInternalProperty(intprop));
+		
+		assertEquals(val, cp1.getIntegerInternalPropertyValue(intprop));
+	}
+
+	@Test
+	public void testSubsituteInternalPropertyOfDifferentType() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
+		final int defval = 1;
+		final String intprop = "InternalProp";
+		ConfigurableTestPanel cp1 = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop, new Integer(defval)));
+			}
+		};
+
+		ConfigurableTestPanel cp2 = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new DoubleInternalProperty(this, intprop, new Double(1.48)));
+			}
+		};
+
+		assertEquals(InternalProperty.InternalPropertyType.INTEGER, cp1.getInternalPropertyType(intprop));
+		assertEquals(InternalProperty.InternalPropertyType.DOUBLE, cp2.getInternalPropertyType(intprop));
+		
+		// substitute property in cp1
+		cp1.substituteInternalProperty(cp2.getInternalProperty(intprop));
+		
+		// should not have worked
+		assertEquals(InternalProperty.InternalPropertyType.INTEGER, cp1.getInternalPropertyType(intprop));
+	}
+
+	@Test
+	public void testSubsituteInternalPropertyOfDifferentLabel() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
+		final int defval = 1;
+		final String intprop = "InternalProp";
+		final String intprop2 = "InternalProp2";
+		ConfigurableTestPanel cp1 = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop, new Integer(defval)));
+			}
+		};
+
+		ConfigurableTestPanel cp2 = new ConfigurableTestPanel("MyPanel") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeInternalProperties() {
+				this.addInternalProperty(new IntegerInternalProperty(this, intprop2, new Integer(defval)));
+			}
+		};
+
+		assertEquals(InternalProperty.InternalPropertyType.INTEGER, cp1.getInternalPropertyType(intprop));
+		assertEquals(InternalProperty.InternalPropertyType.INTEGER, cp2.getInternalPropertyType(intprop2));
+		
+		// substitute property in cp1
+		cp1.substituteInternalProperty(cp2.getInternalProperty(intprop2));
+		
+		// should not have worked
+		assertEquals(InternalProperty.InternalPropertyType.NONE, cp1.getInternalPropertyType(intprop2));
+	}
 	
-	// subsitute internalprop
-	// getters for different types
+
 	// component trigger enabled and on/off
 	// update all params and all props
 	// test the triggering of hasChanged()
-	// test two internal properties same
-	// test all the nulls
 	// test the order of events
-	// write the main frame tests to figure out what is missing
 	
 	
 	private class ConfigurableTestPanel extends ConfigurablePanel{

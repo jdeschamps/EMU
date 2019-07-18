@@ -29,7 +29,7 @@ import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import mmcorej.CMMCore;
 import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
-import de.embl.rieslab.emu.exceptions.IncorrectPropertyTypeException;
+import de.embl.rieslab.emu.exceptions.IncorrectUIPropertyTypeException;
 import de.embl.rieslab.emu.testableclasses.TestableMMProperty;
 
 public class SwingUIListenersTest {
@@ -1375,7 +1375,7 @@ public class SwingUIListenersTest {
 			protected void addComponentListeners() {
 				try {
 					SwingUIListeners.addActionListenerToTwoState(this, prop, button);
-				} catch (IncorrectPropertyTypeException e) {
+				} catch (IncorrectUIPropertyTypeException e) {
 					e.printStackTrace();
 				}
 			}
@@ -1520,7 +1520,7 @@ public class SwingUIListenersTest {
 			protected void addComponentListeners() {
 				try {
 					SwingUIListeners.addActionListenerToSingleState(this, prop, btn);
-				} catch (IncorrectPropertyTypeException e) {
+				} catch (IncorrectUIPropertyTypeException e) {
 					e.printStackTrace();
 				};
 			}
