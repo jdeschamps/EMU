@@ -7,7 +7,11 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import de.embl.rieslab.emu.exceptions.IncorrectInternalPropertyTypeException;
 import de.embl.rieslab.emu.exceptions.IncorrectParameterTypeException;
+import de.embl.rieslab.emu.exceptions.UnknownInternalPropertyException;
+import de.embl.rieslab.emu.exceptions.UnknownUIParameterException;
+import de.embl.rieslab.emu.exceptions.UnknownUIPropertyException;
 import de.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
 import de.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
 import de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
@@ -151,8 +155,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @param propertyName Name of the UIParameter
 	 * @return Corresponding UIParameter, null if it doesn't exist.
+	 * @throws UnknownUIParameterException 
 	 */
-	protected UIParameter getUIParameter(String parameterName) {
+	protected UIParameter getUIParameter(String parameterName) throws UnknownUIParameterException {
 		if(parameterName == null) {
 			throw new NullPointerException("UIParameters name cannot be null.");
 		}
@@ -160,7 +165,7 @@ public abstract class ConfigurablePanel extends JPanel{
 		if (parameters_.containsKey(UIParameter.getHash(this,parameterName))) {
 			return parameters_.get(UIParameter.getHash(this,parameterName));
 		} else {
-			throw new IllegalArgumentException("["+parameterName+"] is not a known UIParameter");
+			throw new UnknownUIParameterException(parameterName);
 		}
 	}
 
@@ -170,15 +175,16 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @param propertyName Name of the UIProperty
 	 * @return Corresponding UIProperty, null if it doesn't exist.
+	 * @throws UnknownUIPropertyException 
 	 */
-	protected UIProperty getUIProperty(String propertyName) {
+	protected UIProperty getUIProperty(String propertyName) throws UnknownUIPropertyException {
 		if(propertyName == null) {
 			throw new NullPointerException("UIProperties name cannot be null.");
 		}
 		if (properties_.containsKey(propertyName)) {
 			return properties_.get(propertyName);
 		}else {
-			throw new IllegalArgumentException("["+propertyName+"] is not a known UIProperty");
+			throw new UnknownUIPropertyException(propertyName);
 		}
 	}
 
@@ -188,15 +194,16 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @param propertyName Name of the InternalProperty
 	 * @return Corresponding InternalProperty.
+	 * @throws UnknownInternalPropertyException 
 	 */
-	protected InternalProperty getInternalProperty(String propertyName) {
+	protected InternalProperty getInternalProperty(String propertyName) throws UnknownInternalPropertyException {
 		if(propertyName == null) {
 			throw new NullPointerException("InternalProperties name cannot be null.");
 		}
 		if (internalprops_.containsKey(propertyName)) {
 			return internalprops_.get(propertyName);
 		}else {
-			throw new IllegalArgumentException("["+propertyName+"] is not a known InternalProperty");
+			throw new UnknownInternalPropertyException(propertyName);
 		}
 	}
 
@@ -221,8 +228,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @param propertyName Name of the property
 	 * @return String value of the property, null if the property doesn't exist.
+	 * @throws UnknownUIPropertyException 
 	 */
-	protected String getUIPropertyValue(String propertyName){
+	protected String getUIPropertyValue(String propertyName) throws UnknownUIPropertyException{
 		if(propertyName == null) {
 			throw new NullPointerException("UIProperty's name cannot be null.");
 		}
@@ -230,7 +238,7 @@ public abstract class ConfigurablePanel extends JPanel{
 		if(properties_.containsKey(propertyName)){
 			return properties_.get(propertyName).getPropertyValue();
 		} else {
-			throw new IllegalArgumentException("["+propertyName+"] is not a known UIProperty.");
+			throw new UnknownUIPropertyException(propertyName);
 		}
 	}
 	
@@ -266,12 +274,20 @@ public abstract class ConfigurablePanel extends JPanel{
 	 *  
 	 * @param propertyName Name of the InternalProperty
 	 * @param newValue New value
+	 * @throws IncorrectInternalPropertyTypeException 
 	 */
-	protected void setInternalPropertyValue(String propertyName, int newValue){
+	protected void setInternalPropertyValue(String propertyName, int newValue) throws IncorrectInternalPropertyTypeException{
+		if(propertyName == null) {
+			throw new NullPointerException("An InternalProperty label cannot be null.");
+		}
+		
 		// runs on EDT, is this a problem?
-		if (internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.INTEGER)) {
-			((IntegerInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+		if (internalprops_.containsKey(propertyName)){
+			if (internalprops_.get(propertyName).getType().equals(InternalPropertyType.INTEGER)) {
+				((IntegerInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+			} else {
+				throw new IncorrectInternalPropertyTypeException(InternalPropertyType.INTEGER.getTypeValue(), internalprops_.get(propertyName).getType().getTypeValue());
+			}
 		}
 	}
 	
@@ -281,12 +297,20 @@ public abstract class ConfigurablePanel extends JPanel{
 	 *  
 	 * @param propertyName Name of the InternalProperty
 	 * @param newValue New value
+	 * @throws IncorrectInternalPropertyTypeException 
 	 */
-	protected void setInternalPropertyValue(String propertyName, boolean newValue){
+	protected void setInternalPropertyValue(String propertyName, boolean newValue) throws IncorrectInternalPropertyTypeException{
+		if(propertyName == null) {
+			throw new NullPointerException("An InternalProperty's label cannot be null.");
+		}
+		
 		// runs on EDT, is this a problem?
-		if (internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.BOOLEAN)) {
-			((BoolInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+		if (internalprops_.containsKey(propertyName)) {
+			if(internalprops_.get(propertyName).getType().equals(InternalPropertyType.BOOLEAN)) {
+				((BoolInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+			} else {
+				throw new IncorrectInternalPropertyTypeException(InternalPropertyType.BOOLEAN.getTypeValue(), internalprops_.get(propertyName).getType().getTypeValue());
+			}
 		}
 	}
 	
@@ -296,12 +320,20 @@ public abstract class ConfigurablePanel extends JPanel{
 	 *  
 	 * @param propertyName name of the InternalProperty
 	 * @param newValue New value
+	 * @throws IncorrectInternalPropertyTypeException 
 	 */
-	protected void setInternalPropertyValue(String propertyName, double newValue){
+	protected void setInternalPropertyValue(String propertyName, double newValue) throws IncorrectInternalPropertyTypeException{
+		if(propertyName == null) {
+			throw new NullPointerException("An InternalProperty's label cannot be null.");
+		}
+		
 		// runs on EDT, is this a problem?
-		if (internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.DOUBLE)) {
-			((DoubleInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+		if (internalprops_.containsKey(propertyName)) {
+			if( internalprops_.get(propertyName).getType().equals(InternalPropertyType.DOUBLE)) {
+				((DoubleInternalProperty) internalprops_.get(propertyName)).setInternalPropertyValue(newValue, this);
+			} else {
+				throw new IncorrectInternalPropertyTypeException(InternalPropertyType.DOUBLE.getTypeValue(), internalprops_.get(propertyName).getType().getTypeValue());
+			}
 		}
 	}
 
@@ -313,6 +345,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the InternalProperty, or 0 if it doesn't exists.
 	 */
 	protected int getIntegerInternalPropertyValue(String propertyName) {
+		if(propertyName == null) {
+			throw new NullPointerException("An InternalProperty's label cannot be null.");
+		}
+		
 		if(internalprops_.containsKey(propertyName)
 				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.INTEGER)) {
 			return ((IntegerInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
@@ -328,6 +364,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the InternalProperty, or false if it doesn't exists.
 	 */
 	protected boolean getBoolInternalPropertyValue(String propertyName) {
+		if(propertyName == null) {
+			throw new NullPointerException("An InternalProperty's label cannot be null.");
+		}
 		if(internalprops_.containsKey(propertyName)
 				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.BOOLEAN)) {
 			return ((BoolInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
@@ -343,6 +382,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Value of the InternalProperty, or 0 if it doesn't exists.
 	 */
 	protected double getDoubleInternalPropertyValue(String propertyName) {
+		if(propertyName == null) {
+			throw new NullPointerException("An InternalProperty's label cannot be null.");
+		}
 		if(internalprops_.containsKey(propertyName)
 				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.DOUBLE)) {
 			return ((DoubleInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
@@ -356,9 +398,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
 	 * @throws IncorrectParameterTypeException 
-	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
+	 * @throws UnknownUIParameterException 
 	 */
-	protected double getDoubleUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+	protected double getDoubleUIParameterValue(String parameterName) throws IncorrectParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
@@ -371,7 +413,7 @@ public abstract class ConfigurablePanel extends JPanel{
 						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
 			}
 		} else {
-			throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+			throw new UnknownUIParameterException(parameterName);
 		}
 	}
 
@@ -382,9 +424,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or false if it doesn't exist.
 	 * @throws IncorrectParameterTypeException 
-	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
+	 * @throws UnknownUIParameterException 
 	 */
-	protected boolean getBoolUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+	protected boolean getBoolUIParameterValue(String parameterName) throws IncorrectParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
@@ -397,7 +439,7 @@ public abstract class ConfigurablePanel extends JPanel{
 						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
 			}
 		} else {
-		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+			throw new UnknownUIParameterException(parameterName);
 		}
 	}
 
@@ -407,9 +449,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or black if it doesn't exist.
 	 * @throws IncorrectParameterTypeException 
-	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
+	 * @throws UnknownUIParameterException 
 	 */
-	protected Color getColorUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+	protected Color getColorUIParameterValue(String parameterName) throws IncorrectParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
@@ -422,7 +464,7 @@ public abstract class ConfigurablePanel extends JPanel{
 						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
 			}
 		} else {
-		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+			throw new UnknownUIParameterException(parameterName);
 		}
 	}
 
@@ -432,9 +474,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
 	 * @throws IncorrectParameterTypeException 
-	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
+	 * @throws UnknownUIParameterException 
 	 */
-	protected String getComboUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+	protected String getComboUIParameterValue(String parameterName) throws IncorrectParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
@@ -447,7 +489,7 @@ public abstract class ConfigurablePanel extends JPanel{
 						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
 			}
 		} else {
-		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+			throw new UnknownUIParameterException(parameterName);
 		}
 	}
 
@@ -457,9 +499,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
 	 * @throws IncorrectParameterTypeException 
-	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
+	 * @throws UnknownUIParameterException 
 	 */
-	protected int getIntegerUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+	protected int getIntegerUIParameterValue(String parameterName) throws IncorrectParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
@@ -472,7 +514,7 @@ public abstract class ConfigurablePanel extends JPanel{
 						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
 			}
 		} else {
-		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+			throw new UnknownUIParameterException(parameterName);
 		}
 	}
 
@@ -482,9 +524,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
 	 * @throws IncorrectParameterTypeException 
-	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
+	 * @throws UnknownUIParameterException 
 	 */
-	protected String getStringUIParameterValue(String parameterName) throws IncorrectParameterTypeException {
+	protected String getStringUIParameterValue(String parameterName) throws IncorrectParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
@@ -497,7 +539,7 @@ public abstract class ConfigurablePanel extends JPanel{
 							parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
 				}
 		} else {
-			throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+			throw new UnknownUIParameterException(parameterName);
 		}
 	}
 
@@ -507,9 +549,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter, or 0 if it doesn't exist.
 	 * @throws IncorrectParameterTypeException 
-	 * @throws IllegalArgumentException is {@code parameterName} is unknown or of the wrong type
+	 * @throws UnknownUIParameterException 
 	 */
-	protected String getUIPropertyParameterValue(String parameterName) throws IncorrectParameterTypeException {
+	protected String getUIPropertyParameterValue(String parameterName) throws IncorrectParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
@@ -522,7 +564,7 @@ public abstract class ConfigurablePanel extends JPanel{
 						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
 			}
 	} else {
-		throw new IllegalArgumentException("The UIParameter ["+parameterName+"] is unknown.");
+		throw new UnknownUIParameterException(parameterName);
 	}
 }
 	
@@ -636,6 +678,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return The corresponding InternalPropertyType, InternalPropertyType.NONE if there is no such InternalProperty.
 	 */
 	public InternalPropertyType getInternalPropertyType(String propertyName) {
+		if(propertyName == null) {
+			throw new NullPointerException("An InternalProperty cannot have a null label.");
+		}
+		
 		if(internalprops_.containsKey(propertyName)) {
 			return internalprops_.get(propertyName).getType();
 		}
@@ -650,6 +696,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return The corresponding UIPropertyType, UIPropertyType.NONE if there is no such UIProperty.
 	 */
 	public UIPropertyType getUIPropertyType(String propertyName) {
+		if(propertyName == null) {
+			throw new NullPointerException("A UIProperty cannot have a null label.");
+		}
 		if(properties_.containsKey(propertyName)) {
 			return properties_.get(propertyName).getType();
 		}
@@ -664,6 +713,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return The corresponding UIParameterType, UIParameterType.NONE if there is no such UIParameter.
 	 */
 	public UIParameterType getUIParameterType(String parameterName) {
+		if(parameterName == null) {
+			throw new NullPointerException("A UIParameter cannot have a null label.");
+		}
 		if(parameters_.containsKey(UIParameter.getHash(this, parameterName))) {
 			return parameters_.get(UIParameter.getHash(this, parameterName)).getType();
 		}
