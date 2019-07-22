@@ -32,7 +32,7 @@ import mmcorej.CMMCore;
  * <p>
  * The ConfigurableMainFrame aggregates the UIParameters and the UIProperties, as well as linking together the
  * InternalProperties. If two UIProperties have the same name, then the last added UIproperty will replace the 
- * first ones. The order is the order of discovery while going through the componenents of the JFrame. 
+ * first ones. The order is the order of discovery while going through the components of the JFrame. 
  * <p>
  * For UIParameters, on the other hand, two UIParameters are allowed to have the same hash ({ConfigurablePanel name}-{UIParameter name})
  * only if they have the same type. Should such case arise, all UIParameters but the first one to appear (in order
@@ -118,7 +118,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			public void actionPerformed(ActionEvent e) {
 				boolean b = controller_.launchWizard();
 				if (!b ) {
-					showWizardRunning();
+					showWizardRunningMessage();
 				}
 			}
 		});
@@ -143,7 +143,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         this.setJMenuBar(mb); 
 	}
 
-	protected void showWizardRunning() {
+	protected void showWizardRunningMessage() {
 		JOptionPane.showMessageDialog(null,
 				"Configuration wizard already running.",
 				"Information", JOptionPane.INFORMATION_MESSAGE);
@@ -208,7 +208,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			Iterator<String> propsit = panelinternalprops.keySet().iterator();
 			while(propsit.hasNext()) { // iterate over one panel's internal props
 				String internalprop = propsit.next();
-				if(allinternalprops.containsKey(internalprop)) { // if the internal property already exist
+				if(allinternalprops.containsKey(internalprop)) { // if the internal property already exists
 					// add to a temporary HashMap, and will take care of them later to avoid a concurrent modifications of panelinternalprops
 					tempinternalprops.put(internalprop, panelinternalprops.get(internalprop));
 				} else {
@@ -218,7 +218,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			
 			// Now substitute all the internal properties from the temporary HashMap with the internal
 			// property already in allinternalprops. So far they have the same name, but could have
-			// different type. In the following calls, if the properties have different type, then nothing
+			// different type. In the following calls, if the properties have different types, then nothing
 			// will happen. In this case, we just ignore it. Doing it here at the end avoids concurrent 
 			// modification of the ConfigurablePanel hashmap.
 			propsit = tempinternalprops.keySet().iterator();

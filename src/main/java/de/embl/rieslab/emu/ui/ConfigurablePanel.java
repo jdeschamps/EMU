@@ -67,11 +67,6 @@ import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
  * will trigger the same method. The same mechanism is at play for the InternalProperties and the UIParameters. Note that the UIParameters are only changed
  * upon start up and when the user modifies the configuration through the {@link de.embl.rieslab.emu.configuration.ConfigurationWizard}. 
  * <p> 
- * In addition, to avoid triggering {@link #setUIPropertyValue(String, String)} through the eventListener when modifying the state of a JComponent (as it might happen
- * depending on the eventListener type), {@link #turnOffComponentTriggering()} can be called in the beginning of the subclasses implementation of 
- * {@link #propertyhasChanged(String, String)} and {@link #turnOnComponentTriggering()} at the end. These methods change the state of an internal member
- * boolean variable. In the eventListener, the method {@link #isComponentTriggeringEnabled()} can query the state of the boolean variable and decide to not
- * call {@link #setUIPropertyValue(String, String)}. This mechanism is optional.
  * 
  * @see de.embl.rieslab.emu.ui.uiproperties.UIProperty
  * @see de.embl.rieslab.emu.ui.uiparameters.UIParameter
@@ -257,15 +252,17 @@ public abstract class ConfigurablePanel extends JPanel{
 			throw new NullPointerException("The UIProperty's label cannot be null.");
 		}
 		
-		// makes sure the call does NOT run on EDT
-		Thread t = new Thread("Property change: " + propertyName) {
-			public void run() {
-				if (properties_.containsKey(propertyName)) {
-					properties_.get(propertyName).setPropertyValue(newValue);
+		if(isComponentTriggeringEnabled()) {
+			// makes sure the call does NOT run on EDT
+			Thread t = new Thread("Property change: " + propertyName) {
+				public void run() {
+					if (properties_.containsKey(propertyName)) {
+						properties_.get(propertyName).setPropertyValue(newValue);
+					}
 				}
-			}
-		};
-		t.start();
+			};
+			t.start();
+		}
 	}
 	
 	/**
@@ -727,30 +724,25 @@ public abstract class ConfigurablePanel extends JPanel{
 	
 	/**
 	 * Checks if the component triggering is enabled. The change in permission is done through {@link #turnOffComponentTriggering()}
-	 * and {@link #turnOnComponentTriggering()}. This is just indicative and only provides a mechanism to avoid triggering 
-	 * the components eventListeners upon calling {@link #propertyhasChanged(String, String)}. For this mechanism to work, 
-	 * {@link #setUIPropertyValue(String, String)} needs to be called in the eventListeners ONLY if this method returns true. For instance,
-	 * this can be useful upon loading the UI, as {@link #propertyhasChanged(String, String)} will be called for each UIProperty,
-	 * then in turn {@link #propertyhasChanged(String, String)} will be called and might change the state of a JComponent. Depending
-	 * on the type of eventListeners, this might trigger {@link #setUIPropertyValue(String, String)}.
+	 * and {@link #turnOnComponentTriggering()}.
 	 * 
 	 * @return true if the component triggering is on, false if it is off.
 	 */
-	protected boolean isComponentTriggeringEnabled(){
+	private boolean isComponentTriggeringEnabled(){
 		return componentTriggering_;
 	}
 
 	/**
 	 * Turns off component triggering. See {@link #isComponentTriggeringEnabled()}.
 	 */
-	protected void turnOffComponentTriggering(){
+	private void turnOffComponentTriggering(){
 		componentTriggering_ = false;
 	}
 	
 	/**
 	 * Turns on component triggering. See {@link #isComponentTriggeringEnabled()}.
 	 */
-	protected void turnOnComponentTriggering(){
+	private void turnOnComponentTriggering(){
 		componentTriggering_ = true;
 	}
 
@@ -767,7 +759,9 @@ public abstract class ConfigurablePanel extends JPanel{
 		// Makes sure that the updating runs on EDT
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				turnOffComponentTriggering();
 				propertyhasChanged(propertyName, newValue);
+				turnOnComponentTriggering();
 			}
 		});
 	}

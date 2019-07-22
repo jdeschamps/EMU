@@ -49,7 +49,7 @@ public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 	}
 
 	@Override
-	protected void showWizardRunning() {
+	protected void showWizardRunningMessage() {
 		JOptionPane.showMessageDialog(null,
 				"No plugin found.",
 				"Information", JOptionPane.INFORMATION_MESSAGE);

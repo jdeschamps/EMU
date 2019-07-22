@@ -1,11 +1,16 @@
 package de.embl.rieslab.emu.ui;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.awt.Color;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.util.HashMap;
+
+import javax.swing.JToggleButton;
 
 import org.junit.Test;
 
@@ -98,6 +103,68 @@ public class ConfigurablePanelTest {
 		assertEquals(UIPropertyType.UIPROPERTY, cp.getUIPropertyType(props[0]));
 		assertEquals(UIPropertyType.TWOSTATE, cp.getUIPropertyType(props[1]));
 		assertEquals(UIPropertyType.MULTISTATE, cp.getUIPropertyType(props[2]));
+	}
+	
+	@Test 
+	public void testUpdateAllProperties() throws UnknownUIPropertyException, AlreadyAssignedUIPropertyException {
+		final String[] props = {"PROP1", "PROP2", "PROP3"};
+		final String[] mmprops = {"MMPROP1", "MMPROP2", "MMPROP3"};
+		
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("My") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				this.addUIProperty(new UIProperty(this, props[0], ""));
+				this.addUIProperty(new UIProperty(this, props[1], ""));
+				this.addUIProperty(new UIProperty(this, props[2], ""));
+			}
+			
+			@Override
+			protected void propertyhasChanged(String propertyName, String newvalue) {
+				if(propertyName.equals(props[0])) {
+					this.val1 = newvalue;
+				} else if(propertyName.equals(props[1])) {
+					this.val2 = newvalue;
+				} else if(propertyName.equals(props[2])) {
+					this.val3 = newvalue;
+				} 
+			}
+		};
+
+		TestableMMProperty mmprop1 = new TestableMMProperty(mmprops[0]);
+		TestableMMProperty mmprop2 = new TestableMMProperty(mmprops[1]);
+		TestableMMProperty mmprop3 = new TestableMMProperty(mmprops[2]);
+
+		PropertyPair.pair(cp.getUIProperty(props[0]), mmprop1);
+		PropertyPair.pair(cp.getUIProperty(props[1]), mmprop2);
+		PropertyPair.pair(cp.getUIProperty(props[2]), mmprop3);
+		
+		String[] newval = {"fsdfs","2fs","gtt"};
+		mmprop1.setValue(newval[0], cp.getUIProperty(props[0]));
+		mmprop2.setValue(newval[1], cp.getUIProperty(props[1]));
+		mmprop3.setValue(newval[2], cp.getUIProperty(props[2]));
+
+		assertEquals(newval[0], mmprop1.getValue());
+		assertEquals(newval[1], mmprop2.getValue());
+		assertEquals(newval[2], mmprop3.getValue());
+		
+		assertEquals("", cp.val1);
+		assertEquals("", cp.val2);
+		assertEquals("", cp.val3);
+		
+		cp.updateAllProperties();
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		assertEquals(newval[0], cp.val1);
+		assertEquals(newval[1], cp.val2);
+		assertEquals(newval[2], cp.val3);
 	}
 
 	/**
@@ -1620,11 +1687,132 @@ public class ConfigurablePanelTest {
 	}
 	
 
-	// component trigger enabled and on/off
-	// update all params and all props
-	// test the triggering of hasChanged()
-	// test the order of events
 	
+	////////////////////////////////////////
+	//////////// Trigger on/off ////////////
+	////////////////////////////////////////
+	/**
+	 * Only tests that the safeguard mechanism preventing a UIProperty update to originate from ConfigurablePanel.propertyhasChanged(String, String).
+	 * 
+	 * @throws AlreadyAssignedUIPropertyException
+	 * @throws UnknownUIPropertyException
+	 */
+	@Test
+	public void testComponentTriggerSafeGuard() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException {
+		
+		// In the absence of the component trigger on/off (called in the method triggerPropertyHasChanged(String, String) and 
+		// setUIPropertyValue(String, String)), multiple call to the same MMProperty or an infinite loop (when multiple UIProperties
+		// are involved) can occur when ConfigurablePanel.propertyhasChanged(String, String) modifies the state of a JComponent, 
+		// which in turn triggers an action listener and hereby a call to ConfigurablePanel.setUIProperty(String, String).
+		// The component trigger mechanism is private in the ConfigurablePanel and prevents updating a UIProperty/MMproperty during
+		// a call to ConfigurablePanel.propertyhasChanged(String, String).
+		
+		
+		final String uipropLabel = "MyProp";
+		final JToggleButton tgl1 = new JToggleButton();
+		final JToggleButton tgl2 = new JToggleButton();
+		tgl2.setSelected(true);
+		final String[] vals = {"0", "1"};
+		
+		final ConfigurableTestPanel cp1 = new ConfigurableTestPanel("My") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void addComponentListeners() {
+				tgl1.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent ev) {
+						if (ev.getStateChange() == ItemEvent.SELECTED) {
+							System.out.println("cp1: set value 0");
+							setUIPropertyValue(uipropLabel, vals[0]);
+						} else if (ev.getStateChange() == ItemEvent.DESELECTED) {
+							System.out.println("cp1: set value 1");
+							setUIPropertyValue(uipropLabel, vals[1]);
+						}
+					}
+				});	
+			}
+			
+			@Override
+			protected void initializeProperties() {
+				this.addUIProperty(new UIProperty(this, uipropLabel, ""));
+			}
+
+			@Override
+			protected void propertyhasChanged(String propertyName, String newvalue) {
+				if(propertyName.equals(uipropLabel)) {
+					if(newvalue.equals(vals[1])) {
+						System.out.println("cp1: set selected");
+						tgl1.setSelected(true);
+					} else {
+						System.out.println("cp1: set unselected");
+						tgl1.setSelected(false);
+					}
+				}
+			}
+		};		
+		
+		final ConfigurableTestPanel cp2 = new ConfigurableTestPanel("My") {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void addComponentListeners() {
+				tgl2.addItemListener(new ItemListener() {
+					public void itemStateChanged(ItemEvent ev) {
+						if (ev.getStateChange() == ItemEvent.SELECTED) {
+							setUIPropertyValue(uipropLabel, vals[1]);
+						} else if (ev.getStateChange() == ItemEvent.DESELECTED) {
+							setUIPropertyValue(uipropLabel, vals[0]);
+						}
+					}
+				});	
+			}
+			
+			@Override
+			protected void initializeProperties() {
+				this.addUIProperty(new UIProperty(this, uipropLabel, ""));
+			}
+
+			@Override
+			protected void propertyhasChanged(String propertyName, String newvalue) {
+				if(propertyName.equals(uipropLabel)) {
+					if(newvalue.equals(vals[1])) {
+						tgl2.setSelected(true);
+					} else {
+						tgl2.setSelected(false);
+					}
+				}
+			}
+		};
+
+		TestableMMProperty mmprop = new TestableMMProperty("MyProp");
+		PropertyPair.pair(cp1.getUIProperty(uipropLabel), mmprop);
+		PropertyPair.pair(cp2.getUIProperty(uipropLabel), mmprop);
+
+		cp1.addComponentListeners();
+		cp2.addComponentListeners();
+		
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getValue());
+		assertFalse(tgl1.isSelected());
+		assertTrue(tgl2.isSelected());
+		
+		// set tgl1 selected, this should trigger setUIproperty(String, String) and change mmprop to val[0]
+		tgl1.setSelected(true);
+		
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		assertEquals(vals[0], mmprop.getValue());
+		
+		// In turn, mmprop will update cp2, and set tgl2 unselected. 
+		// Since it was previously selected, this should trigger the item listener
+		assertFalse(tgl2.isSelected());
+
+		// Selecting tgl2 should not call setUIProperty, therefore mmprop should not be equal to val[1]		
+		// which was actually tested just before.
+	}
 	
 	private class ConfigurableTestPanel extends ConfigurablePanel{
 
