@@ -136,8 +136,10 @@ public class DoubleUIParameterTest {
 
 		@Override
 		protected void addComponentListeners() {}
-		
+
 		@Override
-		public String getDescription() {return "";}
+		public String getDescription() {
+			return "";
+		}
 	}
 }

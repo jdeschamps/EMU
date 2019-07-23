@@ -847,5 +847,5 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @return Description of the ConfigurablePanel.
 	 */
 	public abstract String getDescription();
-
+	
 }

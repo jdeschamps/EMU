@@ -1,7 +1,9 @@
 package de.embl.rieslab.emu.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
@@ -12,10 +14,15 @@ import java.util.Iterator;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.controller.SystemDialogs;
@@ -53,6 +60,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	private ArrayList<ConfigurablePanel> panels_;
 	private SystemController controller_;
     private JMenu switch_plugin, switch_configuration;
+    private JMenuItem plugin_description;
 	private HashMap<String, UIProperty> properties_;
 	@SuppressWarnings("rawtypes")
 	private HashMap<String, UIParameter> parameters_;
@@ -125,6 +133,14 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 
 		switch_plugin = new JMenu("Switch plugin");
 		switch_configuration = new JMenu("Switch configuration");
+		plugin_description = new JMenuItem(new AbstractAction("Plugin description") {
+
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+				 showPluginDescription();
+			}
+		});
 		
 		JMenuItem about = new JMenuItem(new AbstractAction("About") {
 			private static final long serialVersionUID = -5519431309736542210L;
@@ -137,6 +153,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		menu.add(wiz);
 		menu.add(switch_plugin);
 		menu.add(switch_configuration);
+		menu.add(plugin_description);
 		menu.add(about);
 		mb.add(menu);
         
@@ -348,12 +365,52 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		return parameters_;
 	}
 
+	
+	private void showPluginDescription() {
+		if(panels_.size() > 0) {
+			JFrame jf = new JFrame("Description");
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("--- "+this.getTitle()+" ---\n\n\n");
+			for(ConfigurablePanel p: panels_) {
+				sb.append("- "+p.getLabel()+"\n");
+				sb.append(p.getDescription());
+				sb.append("\n\n");
+			}
+			
+			JTextArea txtarea = new JTextArea(5, 40);
+			txtarea.setEditable(false);
+			txtarea.setText(sb.toString());
+
+			JPanel jp = new JPanel(new BorderLayout());
+			jp.setBorder(new EmptyBorder(2, 3, 2, 3));
+
+			txtarea.setFont(new Font("Serif", Font.PLAIN, 16));
+			txtarea.setLineWrap(true);
+			txtarea.setWrapStyleWord(true);
+			
+			jp.add(new JScrollPane(txtarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+			
+			jf.add(jp);
+			jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			jf.pack();
+			jf.setVisible(true);
+		} else {
+			JFrame jf = new JFrame("Description");
+			JPanel jp = new JPanel();
+			jp.add(new JLabel("No description available"));
+			jf.add(jp);
+			jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			jf.pack();
+			jf.setVisible(true);
+		}
+	}
+	
 	/**
 	 * Sets-up the frame, in this method the subclasses should instantiate the ConfigurablePanels and add them
 	 * to the ConfigurableMainFrame.
 	 */
 	protected abstract void initComponents();
-
-
 
 }
