@@ -1831,15 +1831,15 @@ public class ConfigurablePanelTest {
 		
 		@Override
 		protected void parameterhasChanged(String parameterName) {}
+
+		@Override
+		protected void propertyhasChanged(String propertyName, String newvalue) {}
 		
 		@Override
 		protected void initializeInternalProperties() {}
 
 		@Override
 		public void internalpropertyhasChanged(String propertyName) {}
-
-		@Override
-		protected void propertyhasChanged(String propertyName, String newvalue) {}
 
 		@Override
 		public void shutDown() {}

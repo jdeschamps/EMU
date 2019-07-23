@@ -6,18 +6,24 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JPanel;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.exceptions.IncorrectInternalPropertyTypeException;
 import de.embl.rieslab.emu.exceptions.UnknownInternalPropertyException;
 import de.embl.rieslab.emu.exceptions.UnknownUIParameterException;
+import de.embl.rieslab.emu.exceptions.UnknownUIPropertyException;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
+import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.utils.utils;
 
 public class ConfigurableMainFrameTest {
 
@@ -333,13 +339,186 @@ public class ConfigurableMainFrameTest {
 	
 
 	
-	// test updateall
-	// test addalllisteners
-	// test shutdownall
-	
-	// test collision between UIProperties
-	// test collision between UIParameters
-	// makes several tests out of the big one...
+	@Test
+	public void testUpdateAll() throws UnknownUIParameterException, IncorrectInternalPropertyTypeException, UnknownInternalPropertyException, AlreadyAssignedUIPropertyException, UnknownUIPropertyException {
+		final String[] panels = {"Pane1", "Pane2"};
+		
+		// no collision between UIProperties name
+		final String props1 = "Pane1-Prop1";
+		final String props2 = "Pane2-Prop1";
+		
+		// since panels[1] and panels[2] have the same name, then params2[1] and params3[0] will collide
+ 		final String params1 = "Pane1-Param1";
+		final String params2 = "Pane2-Param1";
+
+		final AtomicInteger reporter1 = new AtomicInteger(0);
+		final AtomicInteger reporter2 = new AtomicInteger(0);
+		final AtomicInteger reporter3 = new AtomicInteger(0);
+		final AtomicInteger reporter4 = new AtomicInteger(0);
+
+		final int val1 = 15;
+		final int val2 = -65;
+		final int val3 = 645;
+		final int val4 = -874;
+		
+		final ConfigurableTestPanel cp1 = new ConfigurableTestPanel(panels[0]) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				this.addUIProperty(new UIProperty(this, props1, ""));
+			}
+			
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new StringUIParameter(this, params1, "", ""));
+			}
+
+			@Override
+			protected void parameterhasChanged(String parameterName) {
+				if(parameterName.equals(params1)) {
+					reporter1.set(val1);
+				}
+			}
+
+			@Override
+			protected void propertyhasChanged(String propertyName, String newvalue) {
+				if(propertyName.equals(props1) && utils.isInteger(newvalue)) {
+					reporter2.set(Integer.valueOf(newvalue));
+				}
+			}
+		};
+
+		final ConfigurableTestPanel cp2 = new ConfigurableTestPanel(panels[1]) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				this.addUIProperty(new UIProperty(this, props2, ""));
+			}
+			
+			@Override
+			protected void initializeParameters() {
+				this.addUIParameter(new StringUIParameter(this, params2, "", ""));
+			}
+			
+			@Override
+			protected void parameterhasChanged(String parameterName) {
+				if(parameterName.equals(params2)) {
+					reporter3.set(val2);
+				}
+			}
+
+			@Override
+			protected void propertyhasChanged(String propertyName, String newvalue) {
+				if(propertyName.equals(props2) && utils.isInteger(newvalue)) {
+					reporter4.set(Integer.valueOf(newvalue));
+				}
+			}
+		};
+
+		ConfigurableTestFrame cf = new ConfigurableTestFrame("MyFrame") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initComponents() {
+				this.add(cp1);
+				
+				JPanel pane = new JPanel();
+				pane.add(cp2);
+				
+				this.add(pane);
+			}
+		};
+
+		TestableMMProperty mmprop1 = new TestableMMProperty("MyProp1");
+		TestableMMProperty mmprop2 = new TestableMMProperty("MyProp2");
+		
+		mmprop1.setValue(String.valueOf(val3), null);
+		mmprop2.setValue(String.valueOf(val4), null);
+		
+		PropertyPair.pair(cp1.getUIProperty(props1), mmprop1);
+		PropertyPair.pair(cp2.getUIProperty(props2), mmprop2);
+				
+		assertEquals(0, reporter1.intValue());
+		assertEquals(0, reporter2.intValue());
+		assertEquals(0, reporter3.intValue());
+		assertEquals(0, reporter4.intValue());
+		
+		// calls updateAll
+		cf.updateAllConfigurablePanels();
+		
+		// waits to let the other threads finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		assertEquals(val1, reporter1.intValue());
+		assertEquals(val3, reporter2.intValue());
+		assertEquals(val2, reporter3.intValue());
+		assertEquals(val4, reporter4.intValue());
+	}
+
+	@Test
+	public void testAddAllListeners() {
+		final String[] panels = {"Pane1", "Pane2"};
+
+		final AtomicInteger reporter1 = new AtomicInteger(0);
+		final AtomicInteger reporter2 = new AtomicInteger(0);
+		
+		final int val1 = 15;
+		final int val2 = -65;
+		
+		final ConfigurableTestPanel cp1 = new ConfigurableTestPanel(panels[0]) {
+
+			private static final long serialVersionUID = 1L;
+
+
+			@Override
+			protected void addComponentListeners() {
+				reporter1.set(val1);
+			}
+		};
+
+		final ConfigurableTestPanel cp2 = new ConfigurableTestPanel(panels[1]) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void addComponentListeners() {
+				reporter2.set(val2);
+			}
+		};
+
+		ConfigurableTestFrame cf = new ConfigurableTestFrame("MyFrame") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initComponents() {
+				this.add(cp1);
+				
+				JPanel pane = new JPanel();
+				pane.add(cp2);
+				
+				this.add(pane);
+			}
+		};
+				
+		assertEquals(0, reporter1.intValue());
+		assertEquals(0, reporter2.intValue());
+		
+		// calls addAllListeners
+		cf.addAllListeners();
+
+		assertEquals(val1, reporter1.intValue());
+		assertEquals(val2, reporter2.intValue());
+	}
 	
 	private class ConfigurableTestFrame extends ConfigurableMainFrame{
 
@@ -392,4 +571,66 @@ public class ConfigurableMainFrameTest {
 		public String getDescription() {return "";}
 	}
 	
+	public class TestableMMProperty extends MMProperty<String> {
+
+		public static final String DEV = "MyDevice";
+		public static final String DEFVAL = "default";
+		
+		public TestableMMProperty(String propname) {
+			super(null, "String", DEV, propname, false);
+			this.value = DEFVAL;
+		}
+
+		@Override
+		protected String convertToValue(String s) {
+			return s;
+		}
+
+		@Override
+		protected String convertToValue(int i) {
+			return String.valueOf(i);
+		}
+
+		@Override
+		protected String convertToValue(double d) {
+			return String.valueOf(d);
+		}
+
+		@Override
+		protected String[] arrayFromStrings(String[] s) {
+			return s;
+		}
+
+		@Override
+		protected String convertToString(String val) {
+			return val;
+		}
+
+		@Override
+		protected boolean areEquals(String val1, String val2) {
+			return val1.equals(val2);
+		}
+
+		@Override
+		protected boolean isAllowed(String val) {
+			return true;
+		}
+
+		@Override
+		public String getValue() {
+			return this.value;
+		}
+
+		@Override
+		public String getStringValue() {
+			return this.value;
+		}
+
+		@Override
+		public boolean setValue(String stringval, UIProperty source) {
+			value = stringval;
+			notifyListeners(source, stringval);
+			return true;
+		}
+	};
 }

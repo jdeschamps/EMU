@@ -248,6 +248,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param newValue New value
 	 */
 	public void setUIPropertyValue(String propertyName, String newValue){
+		
+		// this should be a protected method, but in order to call it in SwingUIListeners it was set to public...
+		// passing it as lambdas could be a solution
+		
 		if(propertyName == null) {
 			throw new NullPointerException("The UIProperty's label cannot be null.");
 		}
