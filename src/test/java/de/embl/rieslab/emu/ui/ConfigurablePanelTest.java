@@ -52,7 +52,7 @@ public class ConfigurablePanelTest {
 		final String s = "MyPanel";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel(s);
 		
-		assertEquals(s, cp.getLabel());
+		assertEquals(s, cp.getPanelLabel());
 	}
 
 	/**
@@ -92,12 +92,12 @@ public class ConfigurablePanelTest {
 		for(int i=0;i<props.length;i++) {
 			assertTrue(list.containsKey(props[i]));
 			assertNotNull(list.get(props[i]));
-			assertEquals(props[i], list.get(props[i]).getLabel());
+			assertEquals(props[i], list.get(props[i]).getPropertyLabel());
 		}
 
 		for(int i=0;i<props.length;i++) {
 			assertNotNull(cp.getUIProperty(props[i]));
-			assertEquals(props[i], cp.getUIProperty(props[i]).getLabel());
+			assertEquals(props[i], cp.getUIProperty(props[i]).getPropertyLabel());
 		}
 
 		assertEquals(UIPropertyType.UIPROPERTY, cp.getUIPropertyType(props[0]));

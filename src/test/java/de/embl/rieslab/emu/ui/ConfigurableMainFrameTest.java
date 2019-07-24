@@ -255,7 +255,7 @@ public class ConfigurableMainFrameTest {
 		param.setStringValue(newval);
 		
 		for(ConfigurablePanel cp: panelist) {
-			if(cp.getLabel().equals(panels[1])) { // they have the same label anyway
+			if(cp.getPanelLabel().equals(panels[1])) { // they have the same label anyway
 				assertEquals(newval, cp.getUIParameter(params2[1]).getStringValue()); // prop is known with same label as well
 			}
 		}

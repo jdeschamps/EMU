@@ -153,46 +153,7 @@ public class TwoStateUIPropertyTest {
 		b = cp.property.setPropertyValue("2.48");
 		assertFalse(b);
 		assertEquals(offval, cp.property.getPropertyValue());
-	}
-	
-	@Test
-	public void testIsOnValue() throws AlreadyAssignedUIPropertyException {
-		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
-
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
-			@Override
-			public Integer getValue() { // avoids NullPointerException
-				return 0;
-			}
-			
-			@Override
-			public String getStringValue() {
-				return convertToString(value);
-			}
-			
-			@Override
-			public boolean setValue(String stringval, UIProperty source){
-				value = convertToValue(stringval);
-				return true;
-			}
-		};
-		
-		PropertyPair.pair(cp.property, mmprop);
-
-		final String offval = "4";
-		final String onval = "8";
-		cp.property.setOffStateValue(offval);
-		cp.property.setOnStateValue(onval);	
-
-		boolean b  = cp.property.setPropertyValue(onval);
-		assertTrue(b);
-		assertTrue(cp.property.isOnState());
-
-		b = cp.property.setPropertyValue(offval);
-		assertTrue(b);
-		assertFalse(cp.property.isOnState());
-	}
-	
+	}	
 
 	@Test
 	public void testAssigningOnAndOff01Values() throws AlreadyAssignedUIPropertyException {

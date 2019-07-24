@@ -373,7 +373,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			StringBuilder sb = new StringBuilder();
 			sb.append("--- "+this.getTitle()+" ---\n\n\n");
 			for(ConfigurablePanel p: panels_) {
-				sb.append("- "+p.getLabel()+"\n");
+				sb.append("- "+p.getPanelLabel()+"\n");
 				sb.append(p.getDescription());
 				sb.append("\n\n");
 			}

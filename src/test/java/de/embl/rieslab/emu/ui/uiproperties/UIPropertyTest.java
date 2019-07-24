@@ -16,7 +16,7 @@ public class UIPropertyTest {
 	public void testUIProperty() {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 
-		assertEquals(cp.PROP, cp.property.getLabel());
+		assertEquals(cp.PROP, cp.property.getPropertyLabel());
 		assertEquals(cp.DESC, cp.property.getDescription());
 		assertFalse(cp.property.isAssigned());
 	}

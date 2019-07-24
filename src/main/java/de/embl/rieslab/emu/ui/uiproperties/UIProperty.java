@@ -105,7 +105,7 @@ public class UIProperty {
 	 * 
 	 * @return Label of the UIProperty
 	 */
-	public String getLabel(){
+	public String getPropertyLabel(){
 		return label_;
 	}
 	

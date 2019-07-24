@@ -35,7 +35,7 @@ public abstract class UIParameter<T> {
 			throw new NullPointerException("The UIParameter description cannot be null.");
 		}
 		
-		ownername_ = owner.getLabel();
+		ownername_ = owner.getPanelLabel();
 		label_ = label;
 		description_ = description;
 	}
@@ -57,7 +57,7 @@ public abstract class UIParameter<T> {
 	 * @return The UIParameter hash
 	 */
 	public static String getHash(ConfigurablePanel owner, String parameterName) {
-		return owner.getLabel()+" - "+parameterName;
+		return owner.getPanelLabel()+" - "+parameterName;
 	}
 	
 	/**

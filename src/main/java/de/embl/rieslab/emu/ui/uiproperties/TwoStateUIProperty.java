@@ -138,11 +138,11 @@ public class TwoStateUIProperty extends UIProperty{
 	}
 	
 	/**
-	 * Tests if the current MMProperty value is the ON state.
+	 * Tests if {@code value} is the ON state.
 	 * 
 	 * @return True if it is, false otherwise.
 	 */
-	public boolean isOnState() {
-		return this.getPropertyValue().equals(onstate_);
+	public boolean isOnState(String value) {
+		return value.equals(onstate_);
 	}
 }

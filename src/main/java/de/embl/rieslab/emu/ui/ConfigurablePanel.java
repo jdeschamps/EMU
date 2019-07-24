@@ -584,7 +584,7 @@ public abstract class ConfigurablePanel extends JPanel{
 			throw new NullPointerException("Null UIProperties are not allowed.");
 		}
 		
-		properties_.put(uiproperty.getLabel(),uiproperty);
+		properties_.put(uiproperty.getPropertyLabel(),uiproperty);
 	}	
 
 	/**
@@ -642,7 +642,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @return This panel's label.
 	 */
-	public String getLabel(){
+	public String getPanelLabel(){
 		return label_;
 	}
 
