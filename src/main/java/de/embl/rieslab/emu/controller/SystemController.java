@@ -368,6 +368,12 @@ public class SystemController {
 
 
 	private void applyConfiguration() {
+		/*
+		 * This method is called on the EDT, which makes the loading of the UI very slow.
+		 * On the other hand, this prevents the UI to be shown until everything has been
+		 * set-up, preventing user interaction.
+		 */
+		
 		// sanity check
 		boolean sane = config.sanityCheck(mainframe_);
 		
@@ -381,7 +387,7 @@ public class SystemController {
 		readParameters(config.getParametersConfiguration());
 
 		// updates all properties and parameters
-		mainframe_.updateAllConfigurablePanels();
+		mainframe_.updateAllConfigurablePanels(); // this is slow as it calls CMMCore for every UIProperty
 		
 		// adds all action listeners
 		mainframe_.addAllListeners();
@@ -389,7 +395,6 @@ public class SystemController {
 		// updates menu
 		mainframe_.updateMenu();
 	}
-	
 
 	
 	/**
@@ -431,24 +436,6 @@ public class SystemController {
 	public MMConfigurationGroupsRegistry getMMConfigGroupRegistry(){
 		return mmregistry_.getMMConfigurationGroupsRegistry();
 	}	
-	
-
-	/**
-	 * Sets the state of the UIProperties used as keys in propvalues to the corresponding value.
-	 * 
-	 * @param propvalues Map of the UIProperties (keys) and the values they should be set to.
-	 */
-	public void setUpSystem(HashMap<String, String> propvalues){
-		HashMap<String, UIProperty> uiproperties = mainframe_.getUIProperties();
-		Iterator<String> it = propvalues.keySet().iterator();
-		String s;
-		while(it.hasNext()){
-			s = it.next();
-			if(uiproperties.containsKey(s)){
-				uiproperties.get(s).setPropertyValue(propvalues.get(s));
-			}
-		}
-	}
 
 	/**
 	 * Returns the camera exposure. If the exposure failed to be retrieved from Micro-manager, returns 0.
