@@ -1,8 +1,11 @@
 package de.embl.rieslab.emu.ui.uiproperties;
 
+import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
+import de.embl.rieslab.emu.utils.utils;
 
 /**
  * UIProperty that only accepts two states: ON or OFF. The value of these states are not known at compilation time and can be changed in
@@ -143,6 +146,39 @@ public class TwoStateUIProperty extends UIProperty{
 	 * @return True if it is, false otherwise.
 	 */
 	public boolean isOnState(String value) {
-		return value.equals(onstate_);
+		if(isAssigned()) {		
+			if(getMMProperty().getType().equals(MMProperty.TYPE_FLOAT)) { // if float, then "0" decimals will be added and need to be compared. 
+				if(utils.isNumeric(value)) {
+					Float f = Float.parseFloat(value);
+					Float onstate = Float.parseFloat(onstate_);
+					return Math.abs(f-onstate) < SystemConstants.EPSILON;
+				}
+				return false;
+			} else {
+				return value.equals(onstate_);
+			}
+		}
+		return false;
+	}	
+	
+	/**
+	 * Tests if {@code value} is the OFF state.
+	 * 
+	 * @return True if it is, false otherwise.
+	 */
+	public boolean isOffState(String value) {
+		if(isAssigned()) {		
+			if(getMMProperty().getType().equals(MMProperty.TYPE_FLOAT)) { // if float, then "0" decimals will be added and need to be compared. 
+				if(utils.isNumeric(value)) {
+					Float f = Float.parseFloat(value);
+					Float offstate = Float.parseFloat(offstate_);
+					return Math.abs(f-offstate) < SystemConstants.EPSILON;
+				}
+				return false;
+			} else {
+				return value.equals(offstate_);
+			}
+		}
+		return false;
 	}
 }

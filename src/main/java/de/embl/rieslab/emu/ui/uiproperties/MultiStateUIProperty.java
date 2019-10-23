@@ -1,5 +1,7 @@
 package de.embl.rieslab.emu.ui.uiproperties;
 
+import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
@@ -140,7 +142,7 @@ public class MultiStateUIProperty extends UIProperty{
 	 */
 	public int getStatePositionNumber(String val){
 		for(int i=0;i<states_.length;i++){
-			if(states_[i].equals(val)){
+			if(isEqual(states_[i],val)){
 				return i;
 			}
 		}
@@ -191,7 +193,7 @@ public class MultiStateUIProperty extends UIProperty{
 	 */
 	public String getStateNameFromValue(String value){
 		for(int i=0;i<states_.length;i++){
-			if(states_[i].equals(value)){
+			if(isEqual(states_[i],value)){
 				return statenames_[i];
 			}
 		}	
@@ -209,7 +211,7 @@ public class MultiStateUIProperty extends UIProperty{
 		if (isAssigned()) {
 			// checks if it corresponds to a valid state
 			for (int i = 0; i < states_.length; i++) {
-				if (states_[i].equals(val)) {
+				if (isEqual(states_[i],val)) {
 					return getMMProperty().setValue(val, this);
 				}
 			}
@@ -266,6 +268,19 @@ public class MultiStateUIProperty extends UIProperty{
 	 */
 	public UIPropertyType getType() {
 		return UIPropertyType.MULTISTATE;
+	}
+	
+	private boolean isEqual(String stateval, String valToCompare) {
+		if(isAssigned()) {
+			if(getMMProperty().getType().equals(MMProperty.TYPE_FLOAT)) {
+				Float state = Float.parseFloat(stateval);
+				Float val = Float.parseFloat(valToCompare);
+				return Math.abs(state-val) < SystemConstants.EPSILON;
+			} else {
+				return stateval.equals(valToCompare);
+			}
+		}		
+		return false;
 	}
 }
 

@@ -21,4 +21,6 @@ public class SystemConstants {
 	 * Path to the default configuration file.
 	 */
 	public final static String CONFIG_NAME = HOME+"config."+CONFIG_EXT; // path to the configuration file
+	
+	public final static double EPSILON = 0.00001; 
 }
