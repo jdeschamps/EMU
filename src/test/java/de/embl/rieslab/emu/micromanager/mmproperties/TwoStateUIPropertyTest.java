@@ -260,6 +260,8 @@ public class TwoStateUIPropertyTest {
 		// tests precision
 		assertTrue(cp.property.isOnState("-8.777999"));
 		assertTrue(cp.property.isOffState("4.144999"));
+		assertTrue(cp.property.isOnState("-8.778000"));
+		assertTrue(cp.property.isOffState("4.145000"));
 		assertFalse(cp.property.isOnState("-8.7779"));
 		assertFalse(cp.property.isOffState("4.1449"));
 		

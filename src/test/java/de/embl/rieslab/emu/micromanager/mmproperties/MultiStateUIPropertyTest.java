@@ -269,6 +269,7 @@ public class MultiStateUIPropertyTest {
 		final String[] vals = {"54.154", "124.784", "987.548", "1.484"};
 		final String[] vals_prec = {"54.153999", "124.783999", "987.547999", "1.483999"};
 		final String[] vals_prec_wrong = {"54.1539", "124.7839", "987.5479", "1.4839"};
+		final String[] vals_zeros = {"54.154000", "124.784000", "987.548000", "1.484000"};
 		final String[] names = {"Val1", "Val2", "Val3", "Val4"};
 		cp.property.setStateValues(vals);
 		cp.property.setStateNames(names);
@@ -279,9 +280,12 @@ public class MultiStateUIPropertyTest {
 
 			// with precision from SystemConstants
 			assertEquals(names[i],cp.property.getStateNameFromValue(vals_prec[i]));
-			
+
 			// with precision lower than from SystemConstants, it should always give the first state
 			assertEquals(names[0],cp.property.getStateNameFromValue(vals_prec_wrong[i]));
+			
+			// with zeros
+			assertEquals(names[i],cp.property.getStateNameFromValue(vals_zeros[i]));
 		}
 	}
 
