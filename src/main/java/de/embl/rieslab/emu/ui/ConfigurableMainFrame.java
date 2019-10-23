@@ -120,8 +120,18 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		JMenuBar mb=new JMenuBar(); 
         
 		JMenu menu = new JMenu("Menu");
+		
+		JMenuItem refresh = new JMenuItem(new AbstractAction("Refresh UI") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+				updateAllProperties();
+			}
+		});	
+		refresh.setToolTipText("Updates all UIProperties to the current value.");
+		
 		JMenuItem wiz = new JMenuItem(new AbstractAction("Settings Wizard") {
-			private static final long serialVersionUID = -8992610502306964249L;
+			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
 				boolean b = controller_.launchWizard();
@@ -130,6 +140,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 				}
 			}
 		});
+		wiz.setToolTipText("Start the settings wizard, allowing mapping device properties to UIProperties.");
 
 		switch_plugin = new JMenu("Switch plugin");
 		switch_configuration = new JMenu("Switch configuration");
@@ -149,14 +160,15 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 				SystemDialogs.showAboutEMU();
 			}
 		});
-		
+
 		menu.add(wiz);
+		menu.add(refresh);
 		menu.add(switch_plugin);
 		menu.add(switch_configuration);
 		menu.add(plugin_description);
 		menu.add(about);
 		mb.add(menu);
-        
+
         this.setJMenuBar(mb); 
 	}
 
@@ -267,6 +279,19 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 
 			pan.updateAllProperties();
 			pan.updateAllParameters();
+		}
+	}
+	
+	/**
+	 * Updates all properties from each known ConfiguablePanel. The method calls {@link ConfigurablePanel#updateAllProperties()}.
+	 */
+	public void updateAllProperties(){
+		Iterator<ConfigurablePanel> it = panels_.iterator();
+		ConfigurablePanel pan;
+		while(it.hasNext()){
+			pan = it.next();
+
+			pan.updateAllProperties();  
 		}
 	}
 	
