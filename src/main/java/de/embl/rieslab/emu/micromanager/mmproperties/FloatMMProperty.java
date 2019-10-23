@@ -22,7 +22,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
 	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
-		super(core, MMProperty.TYPE_FLOAT, deviceLabel, propertyLabel, readOnly);
+		super(core, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, readOnly);
 	}
 	
 	/**
@@ -35,7 +35,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 * @param lowerLimit Lower limit of the device property value.
 	 */
 	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
-		super(core, MMProperty.TYPE_FLOAT, deviceLabel, propertyLabel, upLimit, downLimit);
+		super(core, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, upLimit, downLimit);
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 * @param allowedValues Array of allowed values.
 	 */
 	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
-		super(core, MMProperty.TYPE_FLOAT, deviceLabel, propertyLabel, allowedValues);
+		super(core, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, allowedValues);
 	}
 
 	/**

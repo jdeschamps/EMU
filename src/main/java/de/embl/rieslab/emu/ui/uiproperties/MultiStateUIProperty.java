@@ -271,11 +271,15 @@ public class MultiStateUIProperty extends UIProperty{
 	}
 	
 	private boolean isEqual(String stateval, String valToCompare) {
-		if(isAssigned()) {
-			if(getMMProperty().getType().equals(MMProperty.TYPE_FLOAT)) {
+		if(valToCompare != null && isAssigned()) {
+			if(utils.isNumeric(valToCompare) && getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT) {
 				Float state = Float.parseFloat(stateval);
 				Float val = Float.parseFloat(valToCompare);
 				return Math.abs(state-val) < SystemConstants.EPSILON;
+			} else if(utils.isNumeric(valToCompare) && getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) {
+				double state = Double.parseDouble(valToCompare);
+				Integer val = Integer.parseInt(stateval);
+				return val.equals((int) state);
 			} else {
 				return stateval.equals(valToCompare);
 			}

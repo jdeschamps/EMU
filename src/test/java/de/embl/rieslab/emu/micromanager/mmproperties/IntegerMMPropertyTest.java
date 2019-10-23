@@ -104,7 +104,7 @@ public class IntegerMMPropertyTest {
 		assertEquals(device, prop.getDeviceLabel());
 		assertEquals(property, prop.getMMPropertyLabel());
 		assertEquals(device+"-"+property, prop.getHash());
-		assertEquals(MMProperty.TYPE_INTEGER, prop.getType());
+		assertEquals(MMProperty.MMPropertyType.INTEGER, prop.getType());
 
 		assertFalse(prop.isReadOnly());
 		

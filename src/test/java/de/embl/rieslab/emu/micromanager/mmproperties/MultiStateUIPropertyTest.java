@@ -226,7 +226,7 @@ public class MultiStateUIPropertyTest {
 	}
 
 	@Test
-	public void testStateValuesAndNames() throws AlreadyAssignedUIPropertyException {
+	public void testStateValuesAndNamesIntegerMMProp() throws AlreadyAssignedUIPropertyException {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -239,13 +239,52 @@ public class MultiStateUIPropertyTest {
 		PropertyPair.pair(cp.property, mmprop);
 
 		final String[] vals = {"54", "124", "987", "1"};
+		final String[] vals_rounding = {"54.1", "124.2", "987.3", "1.4"};
 		final String[] names = {"Val1", "Val2", "Val3", "Val4"};
 		cp.property.setStateValues(vals);
 		cp.property.setStateNames(names);
 		
-		for(int i=0;i<vals.length;i++)
+		for(int i=0;i<vals.length;i++) {
+			// actual vals
 			assertEquals(names[i],cp.property.getStateNameFromValue(vals[i]));
+			
+			// check that rounding works
+			assertEquals(names[i],cp.property.getStateNameFromValue(vals_rounding[i]));
+		}
 	}
+
+	@Test
+	public void testStateValuesAndNamesFloatMMProp() throws AlreadyAssignedUIPropertyException {
+		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
+
+		final FloatMMProperty mmprop = new FloatMMProperty(null, "", "", false) {
+			@Override
+			public Float getValue() { // avoids NullPointerException
+				return (float) 0.;
+			}
+		};
+		
+		PropertyPair.pair(cp.property, mmprop);
+
+		final String[] vals = {"54.154", "124.784", "987.548", "1.484"};
+		final String[] vals_prec = {"54.153999", "124.783999", "987.547999", "1.483999"};
+		final String[] vals_prec_wrong = {"54.1539", "124.7839", "987.5479", "1.4839"};
+		final String[] names = {"Val1", "Val2", "Val3", "Val4"};
+		cp.property.setStateValues(vals);
+		cp.property.setStateNames(names);
+		
+		for(int i=0;i<vals.length;i++) {
+			// with actual vals
+			assertEquals(names[i],cp.property.getStateNameFromValue(vals[i]));
+
+			// with precision from SystemConstants
+			assertEquals(names[i],cp.property.getStateNameFromValue(vals_prec[i]));
+			
+			// with precision lower than from SystemConstants, it should always give the first state
+			assertEquals(names[0],cp.property.getStateNameFromValue(vals_prec_wrong[i]));
+		}
+	}
+
 	
 	@Test
 	public void testStatePositions() throws AlreadyAssignedUIPropertyException {
@@ -458,7 +497,7 @@ public class MultiStateUIPropertyTest {
 		assertFalse(b);
 		assertEquals(vals[0], cp.property.getPropertyValue());
 		
-		b = cp.property.setPropertyValue("2.56");
+		b = cp.property.setPropertyValue("4.56");
 		assertFalse(b);
 		assertEquals(vals[0], cp.property.getPropertyValue());
 		

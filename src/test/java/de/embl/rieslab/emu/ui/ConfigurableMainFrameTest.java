@@ -577,7 +577,7 @@ public class ConfigurableMainFrameTest {
 		public static final String DEFVAL = "default";
 		
 		public TestableMMProperty(String propname) {
-			super(null, "String", DEV, propname, false);
+			super(null, MMProperty.MMPropertyType.STRING, DEV, propname, false);
 			this.value = DEFVAL;
 		}
 

@@ -57,7 +57,7 @@ public class MMPropertyFactory {
 			} 
 			
 			// instantiate using the type and the constructors for read-only, limited or allowed values
-			if(type.equals(MMProperty.TYPE_FLOAT)){
+			if(type.equals(MMProperty.MMPropertyType.FLOAT.toString())){
 				if(hasLimits){
 					p = new FloatMMProperty(core_, deviceLabel, propertyLabel, upLimit, downLimit);
 				} else if(!allowedValuesIsNull){
@@ -65,7 +65,7 @@ public class MMPropertyFactory {
 				} else {
 					p = new FloatMMProperty(core_, deviceLabel, propertyLabel, readOnly);
 				}
-			} else if(type.equals(MMProperty.TYPE_INTEGER)){
+			} else if(type.equals(MMProperty.MMPropertyType.INTEGER.toString())){
 				if(hasLimits){
 					p = new IntegerMMProperty(core_, deviceLabel, propertyLabel, upLimit, downLimit);				
 				} else if(!allowedValuesIsNull){
@@ -73,11 +73,17 @@ public class MMPropertyFactory {
 				} else {
 					p = new IntegerMMProperty(core_, deviceLabel, propertyLabel, readOnly);
 				}
-			} else { // String or Undef	
+			} else if(type.equals(MMProperty.MMPropertyType.STRING.toString())){
 				if(!allowedValuesIsNull){
-					p = new StringMMProperty(core_, type, deviceLabel, propertyLabel, allowedValues);
+					p = new StringMMProperty(core_, MMProperty.MMPropertyType.STRING, deviceLabel, propertyLabel, allowedValues);
 				} else {
-					p = new StringMMProperty(core_, type, deviceLabel, propertyLabel);		
+					p = new StringMMProperty(core_, MMProperty.MMPropertyType.STRING, deviceLabel, propertyLabel);		
+				}
+			} else if(type.equals(MMProperty.MMPropertyType.UNDEF.toString())){
+				if(!allowedValuesIsNull){
+					p = new StringMMProperty(core_, MMProperty.MMPropertyType.UNDEF, deviceLabel, propertyLabel, allowedValues);
+				} else {
+					p = new StringMMProperty(core_, MMProperty.MMPropertyType.UNDEF, deviceLabel, propertyLabel);		
 				}
 			}
 		} catch (Exception e) {

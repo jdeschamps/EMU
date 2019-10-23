@@ -11,7 +11,7 @@ public class StringMMPropertyTest {
 
 	@Test
 	public void testAreEquals() {
-		final StringMMProperty prop = new StringMMProperty(null, "", "", "") {
+		final StringMMProperty prop = new StringMMProperty(null, MMProperty.MMPropertyType.STRING, "", "") {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";
@@ -22,7 +22,7 @@ public class StringMMPropertyTest {
 
 	@Test
 	public void testArrayFromString() {
-		final StringMMProperty prop = new StringMMProperty(null,"","","") {
+		final StringMMProperty prop = new StringMMProperty(null,MMProperty.MMPropertyType.STRING,"","") {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";
@@ -39,7 +39,7 @@ public class StringMMPropertyTest {
 	
 	@Test
 	public void testConvertFloatToString() {
-		final StringMMProperty prop = new StringMMProperty(null,"","","") {
+		final StringMMProperty prop = new StringMMProperty(null,MMProperty.MMPropertyType.STRING,"","") {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";
@@ -52,7 +52,7 @@ public class StringMMPropertyTest {
 
 	@Test
 	public void testConvertStringToValue() {
-		final StringMMProperty prop = new StringMMProperty(null,"","","") {
+		final StringMMProperty prop = new StringMMProperty(null,MMProperty.MMPropertyType.STRING,"","") {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";
@@ -64,7 +64,7 @@ public class StringMMPropertyTest {
 	
 	@Test
 	public void testConvertDoubleToValue() {
-		final StringMMProperty prop = new StringMMProperty(null,"","","") {
+		final StringMMProperty prop = new StringMMProperty(null,MMProperty.MMPropertyType.STRING,"","") {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";
@@ -76,7 +76,7 @@ public class StringMMPropertyTest {
 	
 	@Test
 	public void testConvertIntegerToValue() {
-		final StringMMProperty prop = new StringMMProperty(null,"","","") {
+		final StringMMProperty prop = new StringMMProperty(null,MMProperty.MMPropertyType.STRING,"","") {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";
@@ -90,7 +90,7 @@ public class StringMMPropertyTest {
 	public void testStringProperty() {
 		final String device = "My device";
 		final String property = "My property";
-		final StringMMProperty prop = new StringMMProperty(null, MMProperty.TYPE_STRING, device, property) {
+		final StringMMProperty prop = new StringMMProperty(null, MMProperty.MMPropertyType.STRING, device, property) {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";
@@ -100,7 +100,7 @@ public class StringMMPropertyTest {
 		assertEquals(device, prop.getDeviceLabel());
 		assertEquals(property, prop.getMMPropertyLabel());
 		assertEquals(device+"-"+property, prop.getHash());
-		assertEquals(MMProperty.TYPE_STRING, prop.getType());
+		assertEquals(MMProperty.MMPropertyType.STRING, prop.getType());
 
 		assertTrue(prop.isReadOnly());
 		
@@ -122,7 +122,7 @@ public class StringMMPropertyTest {
 	@Test
 	public void testAllowedValues() {
 		final String[] vals = {"5.68463", "-2.4564dadw", "sdfefs"};
-		final StringMMProperty prop = new StringMMProperty(null, MMProperty.TYPE_STRING, "", "", vals) {
+		final StringMMProperty prop = new StringMMProperty(null, MMProperty.MMPropertyType.STRING, "", "", vals) {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";

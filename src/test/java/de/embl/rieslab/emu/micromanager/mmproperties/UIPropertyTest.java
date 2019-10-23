@@ -20,7 +20,7 @@ public class UIPropertyTest {
 	@Test
 	public void testUIPropertyPairing() throws AlreadyAssignedUIPropertyException {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
-		final StringMMProperty mmprop = new StringMMProperty(null,"","","") {
+		final StringMMProperty mmprop = new StringMMProperty(null,MMProperty.MMPropertyType.STRING,"","") {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";

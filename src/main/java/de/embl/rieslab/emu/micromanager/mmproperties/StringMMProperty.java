@@ -17,8 +17,9 @@ public class StringMMProperty extends MMProperty<String> {
 	 * @param type Micro-manager property type (String or Undef)
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
+	 * @throws UnknownMMPropertyType 
 	 */
-	StringMMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel) {
+	StringMMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel) {
 		super(core, type, deviceLabel, propertyLabel, true);
 	}
 	
@@ -30,8 +31,9 @@ public class StringMMProperty extends MMProperty<String> {
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param allowedValues Array of allowed values.
+	 * @throws UnknownMMPropertyType 
 	 */
-	StringMMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel, String[] allowedValues) {
+	StringMMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel, String[] allowedValues) {
 		super(core, type, deviceLabel, propertyLabel, allowedValues);
 	}
 

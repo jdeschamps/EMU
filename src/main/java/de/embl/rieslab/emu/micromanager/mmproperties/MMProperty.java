@@ -17,18 +17,12 @@ import mmcorej.CMMCore;
  */
 public abstract class MMProperty<T> {
 
-	public final static String TYPE_FLOAT = "Float";
-	public final static String TYPE_INTEGER = "Integer";
-	public final static String TYPE_STRING = "String";
-	public final static String TYPE_UNDEF = "Undef";
-	public final static String TYPE_CONFIG = "Config";
-	
 	private CMMCore core_;
 	
 	private String label_;
 	private String devicelabel_;
 	private String hash_;
-	private String type_;
+	private MMPropertyType type_;
 	
 	private boolean readOnly;							
 	private boolean hasLimits;						
@@ -41,18 +35,20 @@ public abstract class MMProperty<T> {
 	/**
 	 * Builds a MMproperty without limits or allowed values. The property can be set to be read-only. 
 	 * 
-	 * 
 	 * @param core Micro-manager core.
+	 * @param type Micro-Manager device property type.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
+	 * @throws UnknownMMPropertyType 
 	 */
-	protected MMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel, boolean readOnly){
+	protected MMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel, boolean readOnly){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
-		this.type_ = type;
 		
+		this.type_ = type;
+			
 		this.readOnly = readOnly;
 		this.hasLimits = false;
 		this.hasAllowedValues = false;
@@ -68,15 +64,18 @@ public abstract class MMProperty<T> {
 	 * Builds a MMProperty with limits. 
 	 * 
 	 * @param core Micro-manager core.
+	 * @param type Micro-Manager device property type.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param upperLimit Upper limit of the device property value.
 	 * @param lowerLimit Lower limit of the device property value.
+	 * @throws UnknownMMPropertyType 
 	 */
-	protected MMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel, double upperLimit, double lowerLimit){
+	protected MMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel, double upperLimit, double lowerLimit){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
+
 		this.type_ = type;
 		
 		this.readOnly = false;
@@ -103,16 +102,19 @@ public abstract class MMProperty<T> {
 	 * Builds a MMProperty with allowed values.
 	 * 
 	 * @param core Micro-manager core.
+	 * @param type Micro-Manager device property type.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param allowedValues Array of allowed values.
+	 * @throws UnknownMMPropertyType 
 	 */
-	protected MMProperty(CMMCore core, String type, String deviceLabel, String propertyLabel, String[] allowedValues){
+	protected MMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel, String[] allowedValues){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
+
 		this.type_ = type;
-		
+			
 		this.allowedValues = arrayFromStrings(allowedValues);
 		
 		this.readOnly = false;
@@ -450,8 +452,29 @@ public abstract class MMProperty<T> {
 	 * 
 	 * @return property type.
 	 */
-	public String getType() {
+	public MMPropertyType getType() {
 		return type_;
 	}
 	
+	/**
+	 * MMProperty type.
+	 * 
+	 * @author Joran Deschamps
+	 *
+	 */
+	public enum MMPropertyType { 
+		INTEGER("Integer"), STRING("String"), FLOAT("Float"), CONFIG("Config"), UNDEF("Undef"); 
+		
+		private String value; 
+		
+		private MMPropertyType(String value) { 
+			this.value = value; 
+		}
+
+		@Override
+		public String toString() {
+			return value;
+		} 
+	}; 
+
 }

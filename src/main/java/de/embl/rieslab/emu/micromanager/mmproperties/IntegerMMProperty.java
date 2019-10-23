@@ -20,7 +20,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
 	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
-		super(core, MMProperty.TYPE_INTEGER, deviceLabel, propertyLabel, readOnly);
+		super(core, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, readOnly);
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 * @param lowerLimit Lower limit of the device property value.
 	 */
 	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
-		super(core, MMProperty.TYPE_INTEGER, deviceLabel, propertyLabel, upLimit, downLimit);
+		super(core, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, upLimit, downLimit);
 	}
 	
 	/**
@@ -45,7 +45,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 * @param allowedValues Array of allowed values.
 	 */
 	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
-		super(core, MMProperty.TYPE_INTEGER, deviceLabel, propertyLabel, allowedValues);
+		super(core, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, allowedValues);
 	}
 
 	/**

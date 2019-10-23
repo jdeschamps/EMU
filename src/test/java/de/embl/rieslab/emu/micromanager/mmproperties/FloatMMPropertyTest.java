@@ -101,7 +101,7 @@ public class FloatMMPropertyTest {
 		assertEquals(device, prop.getDeviceLabel());
 		assertEquals(property, prop.getMMPropertyLabel());
 		assertEquals(device+"-"+property, prop.getHash());
-		assertEquals(MMProperty.TYPE_FLOAT, prop.getType());
+		assertEquals(MMProperty.MMPropertyType.FLOAT, prop.getType());
 
 		assertFalse(prop.isReadOnly());
 		

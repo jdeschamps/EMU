@@ -146,15 +146,21 @@ public class TwoStateUIProperty extends UIProperty{
 	 * @return True if it is, false otherwise.
 	 */
 	public boolean isOnState(String value) {
-		if(isAssigned()) {		
-			if(getMMProperty().getType().equals(MMProperty.TYPE_FLOAT)) { // if float, then "0" decimals will be added and need to be compared. 
+		if(value != null && isAssigned()) {		
+			if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT) { // if float, then "0" decimals might be added and need to be compared. 
 				if(utils.isNumeric(value)) {
 					Float f = Float.parseFloat(value);
 					Float onstate = Float.parseFloat(onstate_);
 					return Math.abs(f-onstate) < SystemConstants.EPSILON;
 				}
 				return false;
-			} else {
+			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) { 
+				if(utils.isNumeric(value)) {
+					double i = Double.parseDouble(value);
+					Integer onstate = Integer.parseInt(onstate_);
+					return onstate.equals((int) i);
+				}
+			}else {
 				return value.equals(onstate_);
 			}
 		}
@@ -167,14 +173,20 @@ public class TwoStateUIProperty extends UIProperty{
 	 * @return True if it is, false otherwise.
 	 */
 	public boolean isOffState(String value) {
-		if(isAssigned()) {		
-			if(getMMProperty().getType().equals(MMProperty.TYPE_FLOAT)) { // if float, then "0" decimals will be added and need to be compared. 
+		if(value != null && isAssigned()) {		
+			if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT) { // if float, then "0" decimals might be added and need to be compared. 
 				if(utils.isNumeric(value)) {
 					Float f = Float.parseFloat(value);
 					Float offstate = Float.parseFloat(offstate_);
 					return Math.abs(f-offstate) < SystemConstants.EPSILON;
 				}
 				return false;
+			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) { 
+				if(utils.isNumeric(value)) {
+					double i = Double.parseDouble(value);
+					Integer offstate = Integer.parseInt(offstate_);
+					return offstate.equals((int) i);
+				}
 			} else {
 				return value.equals(offstate_);
 			}
