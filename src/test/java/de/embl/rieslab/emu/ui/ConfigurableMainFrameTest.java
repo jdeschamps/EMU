@@ -463,6 +463,95 @@ public class ConfigurableMainFrameTest {
 		assertEquals(val2, reporter3.intValue());
 		assertEquals(val4, reporter4.intValue());
 	}
+	
+	@Test
+	public void testUpdateAllProperties() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException {
+		final String[] panels = {"Pane1", "Pane2"};
+		
+		// no collision between UIProperties name
+		final String props1 = "Pane1-Prop1";
+		final String props2 = "Pane2-Prop1";
+		
+		final AtomicInteger reporter2 = new AtomicInteger(0);
+		final AtomicInteger reporter4 = new AtomicInteger(0);
+
+		final int val3 = 645;
+		final int val4 = -874;
+		
+		final ConfigurableTestPanel cp1 = new ConfigurableTestPanel(panels[0]) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				this.addUIProperty(new UIProperty(this, props1, ""));
+			}
+			
+			@Override
+			protected void propertyhasChanged(String propertyName, String newvalue) {
+				if(propertyName.equals(props1) && utils.isInteger(newvalue)) {
+					reporter2.set(Integer.valueOf(newvalue));
+				}
+			}
+		};
+
+		final ConfigurableTestPanel cp2 = new ConfigurableTestPanel(panels[1]) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initializeProperties() {
+				this.addUIProperty(new UIProperty(this, props2, ""));
+			}
+			
+			@Override
+			protected void propertyhasChanged(String propertyName, String newvalue) {
+				if(propertyName.equals(props2) && utils.isInteger(newvalue)) {
+					reporter4.set(Integer.valueOf(newvalue));
+				}
+			}
+		};
+
+		ConfigurableTestFrame cf = new ConfigurableTestFrame("MyFrame") {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initComponents() {
+				this.add(cp1);
+				
+				JPanel pane = new JPanel();
+				pane.add(cp2);
+				
+				this.add(pane);
+			}
+		};
+
+		TestableMMProperty mmprop1 = new TestableMMProperty("MyProp1");
+		TestableMMProperty mmprop2 = new TestableMMProperty("MyProp2");
+		
+		mmprop1.setValue(String.valueOf(val3), null);
+		mmprop2.setValue(String.valueOf(val4), null);
+		
+		PropertyPair.pair(cp1.getUIProperty(props1), mmprop1);
+		PropertyPair.pair(cp2.getUIProperty(props2), mmprop2);
+				
+		assertEquals(0, reporter2.intValue());
+		assertEquals(0, reporter4.intValue());
+		
+		// calls updateAll
+		cf.updateAllConfigurablePanels();
+		
+		// waits to let the other threads finish
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		assertEquals(val3, reporter2.intValue());
+		assertEquals(val4, reporter4.intValue());
+	}
 
 	@Test
 	public void testAddAllListeners() {
