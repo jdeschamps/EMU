@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.ServiceLoader;
+import java.util.TreeMap;
 
 import de.embl.rieslab.emu.controller.SystemConstants;
 import de.embl.rieslab.emu.controller.SystemController;
@@ -87,10 +88,11 @@ public class UIPluginLoader {
 	 * frame of the plugin {@code pluginName}.
 	 * 
 	 * @param pluginName Name of the plugin to load.
+	 * @param pluginSettings Plugin settings.
 	 * @return Main frame of the plugin
 	 */
-	public ConfigurableMainFrame loadPlugin(String pluginName){
-		return plugins_.get(pluginName).getMainFrame(controller_);
+	public ConfigurableMainFrame loadPlugin(String pluginName, TreeMap<String, String> pluginSettings){
+		return plugins_.get(pluginName).getMainFrame(controller_, pluginSettings);
 	}
 	
 	/**

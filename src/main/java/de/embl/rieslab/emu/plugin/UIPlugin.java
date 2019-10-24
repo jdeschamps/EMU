@@ -1,5 +1,7 @@
 package de.embl.rieslab.emu.plugin;
 
+import java.util.TreeMap;
+
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 
@@ -22,11 +24,11 @@ public interface UIPlugin {
 	
 	
 	/**
-	 * Returns a PropertyMainFrame.
+	 * Returns a PropertyMainFrame. If {@code pluginSettings} is empty, then the default settings are used.
 	 * 
 	 * @param controller EMU system controller.
+	 * @param pluginSettings Plugin settings.
 	 * @return ConfigurableMainFrame of the plugin
 	 */
-	public ConfigurableMainFrame getMainFrame(SystemController controller);
-	
+	public ConfigurableMainFrame getMainFrame(SystemController controller, TreeMap<String, String> pluginSettings);
 }

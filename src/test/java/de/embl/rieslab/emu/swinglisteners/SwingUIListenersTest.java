@@ -8,6 +8,8 @@ import java.awt.Point;
 import java.awt.Robot;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -28,6 +30,7 @@ import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import mmcorej.CMMCore;
+import de.embl.rieslab.emu.configuration.settings.Setting;
 import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.exceptions.IncorrectUIPropertyTypeException;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
@@ -1620,7 +1623,7 @@ public class SwingUIListenersTest {
 		private static final long serialVersionUID = 5515001170950109376L;
 	
 		public TestableConfigurableMainFrame() {
-			super("", null);
+			super("", null, new TreeMap<String, String>());
 		}
 		
 		@Override
@@ -1636,6 +1639,11 @@ public class SwingUIListenersTest {
 		@Override
 		protected void setUpMenu() {
 			// Do nothing
+		}
+	
+		@Override
+		public HashMap<String, Setting> getDefaultPluginSettings() {
+			return new HashMap<String, Setting>();
 		}
 	}
 
@@ -1693,7 +1701,7 @@ public class SwingUIListenersTest {
 		public String getStringValue() {
 			return this.value;
 		}
-
+		
 		@Override
 		public boolean setValue(String stringval, UIProperty source) {
 			value = stringval;

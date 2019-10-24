@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 /**
  * Class representing a plugin configuration. It holds the name of an EMU plugin
- * and maps of the plugin properties and parameters names and values. The Class
+ * and maps of the plugin propertie, parameter and setting names and values. The Class
  * is written and read using jackson ObjectMapper by the ConfigurationIO class.
  * 
  * @author Joran Deschamps
@@ -17,17 +17,19 @@ public class PluginConfiguration implements Comparable<PluginConfiguration>{
 	private String pluginName;
 	private TreeMap<String,String> properties;
 	private TreeMap<String,String> parameters;
+	private TreeMap<String,String> settings;
 	
 	public PluginConfiguration(){
 		// do nothing
 	}
 	
-	public void configure(String configurationName, String pluginName, Map<String,String> props, Map<String,String> params){
+	public void configure(String configurationName, String pluginName, Map<String,String> props, Map<String,String> params, Map<String,String> settgs){
 		this.configurationName = configurationName;
 		this.pluginName = pluginName;
 
 		properties = new TreeMap<String,String>(props);
 		parameters = new TreeMap<String,String>(params);	
+		settings = new TreeMap<String,String>(settgs);	
 	}
 
 	public String getConfigurationName(){
@@ -60,6 +62,14 @@ public class PluginConfiguration implements Comparable<PluginConfiguration>{
 
 	public TreeMap<String,String> getParameters(){
 		return parameters;
+	}
+
+	public void setPluginSettings(Map<String,String> settgs){
+		this.settings = new TreeMap<String,String>(settgs);	
+	}
+
+	public TreeMap<String,String> getPluginSettings(){
+		return settings;
 	}
 	
 	@Override

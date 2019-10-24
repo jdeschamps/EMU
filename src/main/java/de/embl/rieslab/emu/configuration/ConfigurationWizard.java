@@ -16,8 +16,8 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 
-import de.embl.rieslab.emu.configuration.globalsettings.GlobalSetting;
-import de.embl.rieslab.emu.configuration.ui.GlobalSettingsTable;
+import de.embl.rieslab.emu.configuration.settings.Setting;
+import de.embl.rieslab.emu.configuration.ui.SettingsTable;
 import de.embl.rieslab.emu.configuration.ui.HelpWindow;
 import de.embl.rieslab.emu.configuration.ui.ParametersTable;
 import de.embl.rieslab.emu.configuration.ui.PropertiesTable;
@@ -43,9 +43,11 @@ public class ConfigurationWizard {
 	private HashMap<String, String> prop_; // stores the name of the uiproperties and their corresponding mmproperty (or Configuration.KEY_UNALLOCATED)
 	private HashMap<String, String> param_; // stores the name of the uiparameters and their value
 	private HashMap<String, String> globset_; 
+	private HashMap<String, String> plugset_; // stores the names of the plugin settings and their values  
 	private PropertiesTable propertytable_; // panel used by the user to pair ui- and mmproperties
 	private ParametersTable parametertable_; // panel used by the user to set the values of uiparameters
-	private GlobalSettingsTable globsettingstable_; 
+	private SettingsTable globsettingstable_; 
+	private SettingsTable plugsettingstable_; // panel used by the user to set the values of plugin settings 
 	private HelpWindow help_; // help window to display the description of uiproperties and uiparameters
 	private ConfigurationController config_; // configuration class
 	private JFrame frame_; // overall frame for the configuration wizard
@@ -58,11 +60,13 @@ public class ConfigurationWizard {
 		
 		prop_ = new HashMap<String, String>();
 		param_ = new HashMap<String, String>();
+		plugset_ = new HashMap<String, String>();
 		globset_ = new HashMap<String, String>();
 
 		plugin_name_ = "";
 	}
 
+	// creates a new configuration
 	private void newConfiguration(final String plugin_name, final ConfigurableFrame maininterface, final MMPropertiesRegistry mmproperties) {
 		// makes sure it runs on EDT
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
@@ -80,26 +84,22 @@ public class ConfigurationWizard {
 				parametertable_ = new ParametersTable(maininterface.getUIParameters(), maininterface.getUIProperties(), help_);
 				parametertable_.setOpaque(true);
 				
+				// and plugin settings
+				plugsettingstable_ = new SettingsTable(maininterface.getDefaultPluginSettings(), help_);
+				plugsettingstable_.setOpaque(true); 
+				
 				// and global settings
-				HashMap<String, GlobalSetting> glob = new HashMap<String, GlobalSetting>();
+				HashMap<String, Setting> glob = new HashMap<String, Setting>();
 				glob.put(config_.getEnableUnallocatedWarnings().getName(), config_.getEnableUnallocatedWarnings());
-				globsettingstable_ = new GlobalSettingsTable(glob, help_);
+				globsettingstable_ = new SettingsTable(glob, help_);
 				globsettingstable_.setOpaque(true); 
 				
-				frame_ = createFrame(plugin_name, propertytable_, parametertable_, globsettingstable_, help_);
+				frame_ = createFrame(plugin_name, propertytable_, parametertable_, plugsettingstable_, globsettingstable_, help_);
 			}
 		});
 	}
 
-	/**
-	 * Creates a Wizard configuration frame from an existing configuration.
-	 * 
-	 * @param uipropertySet HashMap containing the UI properties.
-	 * @param uiparameterSet HashMap containing the UI parameters.
-	 * @param mmproperties Object holding the device properties from Micro-manager.
-	 * @param configprop HashMap linking MM properties to UI properties from the configuration.
-	 * @param configparam HashMap holding the values of the UI parameters from the configuration.
-	 */
+	//Creates a Wizard configuration frame from an existing configuration.
 	private void existingConfiguration(final ConfigurableFrame maininterface,
 			final MMPropertiesRegistry mmproperties, final GlobalConfiguration configuration) {
 
@@ -118,15 +118,20 @@ public class ConfigurationWizard {
 				// now parameters
 				parametertable_ = new ParametersTable(maininterface.getUIParameters(), 
 						configuration.getCurrentPluginConfiguration().getParameters(), maininterface.getUIProperties(), help_);
-				parametertable_.setOpaque(true);				
+				parametertable_.setOpaque(true);	
+
+				// now plugin settings
+				plugsettingstable_ = new SettingsTable(maininterface.getDefaultPluginSettings(), 
+						configuration.getCurrentPluginConfiguration().getPluginSettings(), help_);
+				plugsettingstable_.setOpaque(true);	
 				
 				// and global settings
-				HashMap<String, GlobalSetting> glob = new HashMap<String, GlobalSetting>();
+				HashMap<String, Setting> glob = new HashMap<String, Setting>();
 				glob.put(config_.getEnableUnallocatedWarnings().getName(), config_.getEnableUnallocatedWarnings());
-				globsettingstable_ = new GlobalSettingsTable(glob, help_);
+				globsettingstable_ = new SettingsTable(glob, help_);
 				globsettingstable_.setOpaque(true); 
 				
-				frame_ = createFrame(configuration.getCurrentConfigurationName(), propertytable_, parametertable_, globsettingstable_, help_);
+				frame_ = createFrame(configuration.getCurrentConfigurationName(), propertytable_, parametertable_, plugsettingstable_, globsettingstable_, help_);
 
 			}
 		});
@@ -134,7 +139,7 @@ public class ConfigurationWizard {
 	
 	
 	// Sets up the frame used for the interactive configuration.
-	private JFrame createFrame(String conf_name, final PropertiesTable propertytable, final ParametersTable parametertable, final GlobalSettingsTable globsettingstable, final HelpWindow help){
+	private JFrame createFrame(String conf_name, final PropertiesTable propertytable, final ParametersTable parametertable, final SettingsTable plugsettingstable, final SettingsTable globsettingstable, final HelpWindow help){
 		JFrame frame = new JFrame("UI properties wizard");
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -154,6 +159,7 @@ public class ConfigurationWizard {
 		JTabbedPane tabbedpane = new JTabbedPane();
 		tabbedpane.addTab("Properties", null, propertytable, null);
 		tabbedpane.addTab("Parameters", null, parametertable, null);
+		tabbedpane.addTab("Plugin Settings", null, plugsettingstable, null);
 		tabbedpane.addTab("Global Settings", null, globsettingstable, null);
 		
 		// content pane
@@ -238,6 +244,16 @@ public class ConfigurationWizard {
 	}
 	
 	/**
+	 * Returns the entries of the plugin settings table as a HashMap with the keys being the setting names and the values
+	 * being the setting values.
+	 * 
+	 * @return HashMap of the setting names as keys and corresponding values.
+	 */
+	public HashMap<String, String> getWizardPluginSettings() {
+		return plugset_;
+	}
+	
+	/**
 	 * Sets the help window visible and displays the description of the currently selected UIProperty or UIParameter.
 	 * 
 	 * @param b True if the help window is to be displayed, false otherwise
@@ -253,9 +269,10 @@ public class ConfigurationWizard {
 	private void saveConfiguration(){
 		prop_ = propertytable_.getSettings();
 		param_ = parametertable_.getSettings();
+		plugset_ = plugsettingstable_.getSettings();
 		globset_ = globsettingstable_.getSettings();
 		
-		config_.applyWizardSettings(config_name_.getText(),plugin_name_,prop_,param_,globset_);
+		config_.applyWizardSettings(config_name_.getText(),plugin_name_,prop_,param_,plugset_,globset_);
 		
 		frame_.dispose();
 		help_.disposeHelp();

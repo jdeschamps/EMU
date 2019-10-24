@@ -2,10 +2,12 @@ package de.embl.rieslab.emu.ui;
 
 import java.awt.Dimension;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import de.embl.rieslab.emu.configuration.settings.Setting;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
@@ -22,7 +24,7 @@ public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 	private static final long serialVersionUID = -1840416249969324418L;
 
 	public EmptyPropertyMainFrame(SystemController controller) {
-		super("No plugin found", controller);
+		super("No plugin found", controller,  new TreeMap<String, String>());
 	}
 
 	@Override
@@ -53,6 +55,12 @@ public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 		JOptionPane.showMessageDialog(null,
 				"No plugin found.",
 				"Information", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public HashMap<String, Setting> getDefaultPluginSettings() {
+		return new HashMap<String, Setting>();
 	}
 	
 }

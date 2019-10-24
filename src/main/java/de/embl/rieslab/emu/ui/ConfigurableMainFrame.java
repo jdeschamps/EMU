@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TreeMap;
 
 import javax.swing.AbstractAction;
 import javax.swing.JFrame;
@@ -24,6 +25,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import de.embl.rieslab.emu.configuration.settings.Setting;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.controller.SystemDialogs;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
@@ -64,18 +66,49 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	private HashMap<String, UIProperty> properties_;
 	@SuppressWarnings("rawtypes")
 	private HashMap<String, UIParameter> parameters_;
+	@SuppressWarnings("rawtypes")
+	private HashMap<String, Setting> pluginSettings_;
 	
 	/**
 	 * Constructor, it sets up the JMenu, calls {@link #initComponents()} from the subclass, then links InternaProperties and
-	 * gather UIPropertiers and UIParameters.
+	 * gather UIPropertiers and UIParameters. The plugin settings will override the default settings.
 	 * 
 	 * @param title Title of the frame
 	 * @param controller EMU system controller
+	 * @param pluginSettings Plugin settings.
 	 */
-	public ConfigurableMainFrame(String title, SystemController controller){
+	public ConfigurableMainFrame(String title, SystemController controller, TreeMap<String, String> pluginSettings){
+		
+		if(pluginSettings == null) {
+			throw new NullPointerException();
+		}
+		
 		controller_ = controller;
 				
-        this.setTitle(title);
+		// updates the default plugin settings with the given ones
+		pluginSettings_ = getDefaultPluginSettings();
+		Iterator<String> it = pluginSettings.keySet().iterator();
+		ArrayList<String> wrongvals = new ArrayList<String>();
+		while(it.hasNext()) {
+			String s  = it.next();
+			
+			// if the setting has the expected type, then replace in the current settings 
+			if(pluginSettings_.containsKey(s)) { 
+				if(pluginSettings_.get(s).isValueCompatible(pluginSettings.get(s))) {
+					pluginSettings_.get(s).setStringValue(pluginSettings.get(s));
+				} else {
+					wrongvals.add(s);
+				}
+			}
+		}
+		if(wrongvals.size() > 0) {
+			SystemDialogs.showWrongPluginSettings(wrongvals);
+		}
+		
+		// sets title if not null
+		if(title != null) {
+			this.setTitle(title);
+		}
 		
     	this.addWindowListener(new WindowAdapter() {
     	    @Override
@@ -84,15 +117,17 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
     	    }
     	});
 
+    	// sets up the UI
         setUpMenu();
 		initComponents();		
 		
+		// positioning
 		GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.setLocation(g.getCenterPoint().x-this.getWidth()/2,g.getCenterPoint().y-this.getHeight()/2);
 		this.setVisible(true);
 		
+		// retrieves all properties, parameters and link internal properties
 		panels_ = listConfigurablePanels(this.getContentPane().getComponents(), new ArrayList<ConfigurablePanel>());
-		
 		linkInternalProperties();
 		retrieveUIPropertiesAndParameters();
 	}
@@ -254,9 +289,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			while(propsit.hasNext()) {
 				allinternalprops.get(propsit.next()).registerListener(pane);
 			}
-		}
-
-		
+		}	
 	}
 	
 	/**
@@ -390,6 +423,11 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		return parameters_;
 	}
 
+	@SuppressWarnings("rawtypes")
+	@Override
+	public HashMap<String, Setting> getCurrentPluginSettings(){
+		return pluginSettings_;
+	}
 	
 	private void showPluginDescription() {
 		if(panels_.size() > 0) {

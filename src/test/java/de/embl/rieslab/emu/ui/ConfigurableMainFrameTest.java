@@ -6,12 +6,14 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.swing.JPanel;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.configuration.settings.Setting;
 import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.exceptions.IncorrectInternalPropertyTypeException;
 import de.embl.rieslab.emu.exceptions.UnknownInternalPropertyException;
@@ -614,7 +616,7 @@ public class ConfigurableMainFrameTest {
 		private static final long serialVersionUID = 1L;
 		
 		public ConfigurableTestFrame(String title) {
-			super(title, null);
+			super(title, null, new TreeMap<String, String>());
 		}
 
 		@Override
@@ -622,6 +624,12 @@ public class ConfigurableMainFrameTest {
 
 		@Override
 		protected void setUpMenu() {}
+
+		@SuppressWarnings("rawtypes")
+		@Override
+		public HashMap<String, Setting> getDefaultPluginSettings() {
+			return new HashMap<String, Setting>();
+		}
 	}
 	
 	private class ConfigurableTestPanel extends ConfigurablePanel{

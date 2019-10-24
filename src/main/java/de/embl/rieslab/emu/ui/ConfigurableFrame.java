@@ -3,6 +3,7 @@ package de.embl.rieslab.emu.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import de.embl.rieslab.emu.configuration.settings.Setting;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 
@@ -20,5 +21,11 @@ public interface ConfigurableFrame {
 	
 	@SuppressWarnings("rawtypes")
 	public HashMap<String, UIParameter> getUIParameters();
+
+	@SuppressWarnings("rawtypes")
+	public HashMap<String, Setting> getDefaultPluginSettings();
+	
+	@SuppressWarnings("rawtypes")
+	public HashMap<String, Setting> getCurrentPluginSettings();
 
 }

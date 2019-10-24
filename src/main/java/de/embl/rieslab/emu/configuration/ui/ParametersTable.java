@@ -99,15 +99,15 @@ public class ParametersTable extends JPanel{
 	/**
 	 * Constructor called when a configuration exists.
 	 * 
-	 * @param uiparameterSet Map of the UI parameters, indexed by their name
-	 * @param paramValues Map of the UIParameter names (keys) and their value (values) from the configuration
+	 * @param uiparameterSet Map of the UI parameters, indexed by their name.
+	 * @param paramValues Map of the UIParameter names (keys) and their value (values) from the configuration.
 	 * @param help Help window
 	 */
 	@SuppressWarnings("rawtypes")
 	public ParametersTable(Map<String, UIParameter> uiparameterSet, Map<String, String> paramValues, Map<String, UIProperty> uipropertySet, HelpWindow help) {		
 		help_ = help;
 		uiparameterSet_ = uiparameterSet; 
-		uipropertySet_ = uipropertySet;
+		uipropertySet_ = uipropertySet; // they are used to deal with UIPropertyParameters
 		
 		// Color combobox
 		Map<String, ColorIcon> icons = new HashMap<String, ColorIcon>();

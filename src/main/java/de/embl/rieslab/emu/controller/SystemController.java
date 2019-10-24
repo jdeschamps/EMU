@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.micromanager.Studio;
 
@@ -46,8 +47,6 @@ public class SystemController {
 	private ConfigurationController config; // Configuration controller, with all known plugin configurations
 	private ConfigurableMainFrame mainframe_; // Main frame of the current plugin
 	private UIPluginLoader pluginloader_; // loader for EMU plugins
-	private ArrayList<String> unallocatedprop_;  // list of unallocated properties
-	private ArrayList<String> forbiddenValuesProp_; // forbidden properties value
 	private String currentPlugin; // reference to the current loaded plugin
 		
 	/**
@@ -57,9 +56,6 @@ public class SystemController {
 	 */
 	public SystemController(Studio studio){
 		studio_ = studio;
-	
-		unallocatedprop_ = new ArrayList<String>();
-		forbiddenValuesProp_ = new ArrayList<String>();
 		
 		currentPlugin = "";
 	}
@@ -93,7 +89,8 @@ public class SystemController {
 					
 					// retrieves the plugin name and initiates UI					
 					currentPlugin = config.getConfiguration().getCurrentPluginName();
-					mainframe_ = pluginloader_.loadPlugin(currentPlugin);
+					mainframe_ = pluginloader_.loadPlugin(currentPlugin, 
+							config.getConfiguration().getCurrentPluginConfiguration().getPluginSettings());
 										
 					applyConfiguration();
 					
@@ -109,23 +106,31 @@ public class SystemController {
 					} 
 					
 					// loads plugin 
-					if(currentPlugin != null){
-						// loads plugin 
-						mainframe_ = pluginloader_.loadPlugin(currentPlugin);
-						
+					if(currentPlugin != null){						
 						// gets list of configurations corresponding to this plugin
 						String[] configs = config.getCompatibleConfigurations(currentPlugin);
 						
 						if(configs.length == 0){ // if there is no compatible configuration
+							// loads plugin with empty settings
+							mainframe_ = pluginloader_.loadPlugin(currentPlugin, new TreeMap<String, String>()); 
+							
 							// launches new wizard
 							config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
 						} else if(configs.length == 1){ // there is one so applies it
 							config.setDefaultConfiguration(configs[0]); // sets as default
+							
+							// loads the plugin using the current configuration settings
+							mainframe_ = pluginloader_.loadPlugin(currentPlugin, config.getConfiguration().getCurrentPluginConfiguration().getPluginSettings()); 
+							
 							applyConfiguration();
 						} else {
 							// if more than one, then lets the user decide
 							String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
-							config.setDefaultConfiguration(configuration); // sets as default and then launch wizard
+							config.setDefaultConfiguration(configuration); // sets as default
+							
+							// loads the plugin using the current configuration settings
+							mainframe_ = pluginloader_.loadPlugin(currentPlugin, config.getConfiguration().getCurrentPluginConfiguration().getPluginSettings()); 
+							
 							applyConfiguration();
 						}		
 					} else {
@@ -148,8 +153,8 @@ public class SystemController {
 				currentPlugin = SystemDialogs.showPluginsChoiceWindow(plugins);
 				
 				if(currentPlugin != null){
-					// loads plugin 
-					mainframe_ = pluginloader_.loadPlugin(currentPlugin);
+					// loads plugin with empty settings
+					mainframe_ = pluginloader_.loadPlugin(currentPlugin, new TreeMap<String, String>());
 					
 					// launches a new wizard			
 					config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
@@ -193,7 +198,8 @@ public class SystemController {
 			// close mainframe
 			mainframe_.shutDownAllConfigurablePanels();
 			
-			mainframe_ = pluginloader_.loadPlugin(newPlugin);
+			// load with empty settings
+			mainframe_ = pluginloader_.loadPlugin(newPlugin, new TreeMap<String, String>());
 			
 			// launch new wizard
 			config.startWizard(newPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
@@ -225,7 +231,6 @@ public class SystemController {
 	}
 	
 	private void reloadSystem(String pluginName, String configName) throws IncompatiblePluginConfigurationException {
-		
 		// if the plugin is not available or the configuration unknown
 		if(!pluginloader_.isPluginAvailable(pluginName) || !config.doesConfigurationExist(configName)){ 
 			throw new IllegalArgumentException();
@@ -255,7 +260,7 @@ public class SystemController {
 		mmregistry_.getMMPropertiesRegistry().clearAllListeners();
 		
 		// reloads plugin 
-		mainframe_ = pluginloader_.loadPlugin(pluginName);
+		mainframe_ = pluginloader_.loadPlugin(pluginName, config.getConfiguration().getCurrentPluginConfiguration().getPluginSettings());
 	}
 
 	
@@ -264,10 +269,10 @@ public class SystemController {
 	 * 
 	 * @param configprop Mapping of the Micro-manager properties to the UI properties.
 	 */
-	public void readProperties(Map<String, String> configprop){
+	private void readProperties(Map<String, String> configprop){
 		String uiprop;
-		unallocatedprop_.clear(); // clear the list of unallocated properties, props with forbidden values
-		forbiddenValuesProp_.clear();
+		ArrayList<String> unallocatedprop = new ArrayList<String>();
+		ArrayList<String> forbiddenValuesProp = new ArrayList<String>();
 		
 		HashMap<String, UIProperty> uiproperties = mainframe_.getUIProperties();
 		
@@ -281,7 +286,7 @@ public class SystemController {
 				// if the ui property is not allocated, add to the list of unallocated properties.  
 				if (configprop.get(uiprop).equals(GlobalConfiguration.KEY_UNALLOCATED)) {
 					// registers missing allocation
-					unallocatedprop_.add(uiprop);
+					unallocatedprop.add(uiprop);
 					
 				} else if (mmregistry_.getMMPropertiesRegistry().isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
 					// links the properties
@@ -299,7 +304,7 @@ public class SystemController {
 						String onval = configprop.get(uiprop+TwoStateUIProperty.getOnStateName());
 						
 						if(!t.setOnStateValue(onval) || !t.setOffStateValue(offval)){
-							forbiddenValuesProp_.add(uiprop);
+							forbiddenValuesProp.add(uiprop);
 						}
 
 					} else if(uiproperties.get(uiprop) instanceof SingleStateUIProperty){ // if single state property
@@ -308,7 +313,7 @@ public class SystemController {
 						String value = configprop.get(uiprop+SingleStateUIProperty.getValueName());
 						
 						if(!t.setStateValue(value)){
-							forbiddenValuesProp_.add(uiprop);
+							forbiddenValuesProp.add(uiprop);
 						}
 						
 					} else if (uiproperties.get(uiprop) instanceof MultiStateUIProperty) {// if it is a multistate property
@@ -320,22 +325,22 @@ public class SystemController {
 						}
 
 						if(!t.setStateValues(val)){
-							forbiddenValuesProp_.add(uiprop);
+							forbiddenValuesProp.add(uiprop);
 						}
 					}
 				} else {
 					// registers missing allocation
-					unallocatedprop_.add(uiprop);
+					unallocatedprop.add(uiprop);
 				}
 			} 
 		}
 
-		if(!forbiddenValuesProp_.isEmpty()){
-			SystemDialogs.showForbiddenValuesMessage(forbiddenValuesProp_);
+		if(!forbiddenValuesProp.isEmpty()){
+			SystemDialogs.showForbiddenValuesMessage(forbiddenValuesProp);
 		}
 		
-		if(config.getEnableUnallocatedWarnings().getValue() && !unallocatedprop_.isEmpty()){
-			SystemDialogs.showUnallocatedMessage(unallocatedprop_);
+		if(config.getEnableUnallocatedWarnings().getValue() && !unallocatedprop.isEmpty()){
+			SystemDialogs.showUnallocatedMessage(unallocatedprop);
 		}
 	}
 	
@@ -345,7 +350,7 @@ public class SystemController {
 	 * @param configparam Values set by the user mapped to their corresponding ui parameter.
 	 */
 	@SuppressWarnings("rawtypes")
-	public void readParameters(Map<String, String> configparam){
+	private void readParameters(Map<String, String> configparam){
 		String uiparam;
 		HashMap<String, UIParameter> uiparameters = mainframe_.getUIParameters();
 		Iterator<String> itstr = configparam.keySet().iterator();

@@ -23,6 +23,7 @@ public class ConfigurationIOTest {
 	public void testWriteReadConfiguration() {
 		HashMap<String, String> properties = new HashMap<String,String>();
 		HashMap<String, String> parameters = new HashMap<String,String>();
+		HashMap<String, String> plugsettings = new HashMap<String,String>();
 
 		final String prop1 = "Prop1";
 		final String prop2 = "Prop2";
@@ -41,11 +42,18 @@ public class ConfigurationIOTest {
 		parameters.put(param1, paramVal1);
 		parameters.put(param2, paramVal2);
 
+		final String sett1 = "Sett1";
+		final String sett2 = "Sett2";
+		final String settVal1 = "Sett Val1";
+		final String settVal2 = "Sett Val2";
+		plugsettings.put(param1, paramVal1);
+		plugsettings.put(param2, paramVal2);
+		
 		final String plugin = "MyPlugin";
 		final String config = "MyConfig";
 		
 		PluginConfiguration mypluginconfig = new PluginConfiguration();
-		mypluginconfig.configure(config, plugin, properties, parameters);
+		mypluginconfig.configure(config, plugin, properties, parameters, plugsettings);
 		
 		final boolean b = true;
 				
@@ -76,7 +84,8 @@ public class ConfigurationIOTest {
 		PluginConfiguration newpluginconfig = newlist.get(0);
 		assertEquals(config, newpluginconfig.getConfigurationName());	
 		assertEquals(plugin, newpluginconfig.getPluginName());
-		
+
+		// properties
 		Map<String,String> mapprop = newpluginconfig.getProperties();	
 		assertEquals(properties.size(), mapprop.size());
 		
@@ -86,15 +95,27 @@ public class ConfigurationIOTest {
 			assertTrue(mapprop.containsKey(s));
 			assertEquals(properties.get(s), mapprop.get(s));
 		}
-		
+
+		// parameters
 		Map<String,String> mapparam = newpluginconfig.getParameters();	
 		assertEquals(parameters.size(), mapparam.size());
-		
+	
 		it = parameters.keySet().iterator();
 		while(it.hasNext()) {
 			String s = it.next();
 			assertTrue(mapparam.containsKey(s));
 			assertEquals(parameters.get(s), mapparam.get(s));
+		}
+		
+		// settings
+		Map<String,String> mapsett = newpluginconfig.getPluginSettings();	
+		assertEquals(plugsettings.size(), mapsett.size());
+	
+		it = parameters.keySet().iterator();
+		while(it.hasNext()) {
+			String s = it.next();
+			assertTrue(mapsett.containsKey(s));
+			assertEquals(plugsettings.get(s), mapsett.get(s));
 		}
 	}
 }

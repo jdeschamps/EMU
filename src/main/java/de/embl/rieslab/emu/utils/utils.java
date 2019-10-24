@@ -106,6 +106,13 @@ public class utils {
 		return null;
 	}
 	
+	public static boolean isBool(String s) {
+		if(s.equals("true") || s.equals("false")){
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean convertStringToBool(String s){
 		if(s.equals("true")){
 			return true;

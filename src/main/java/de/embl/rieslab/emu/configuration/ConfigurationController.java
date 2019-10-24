@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
+import de.embl.rieslab.emu.configuration.settings.BoolSetting;
 import de.embl.rieslab.emu.controller.SystemConstants;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
@@ -145,7 +145,7 @@ public class ConfigurationController {
 		if(configuration_ == null){
 			return false;
 		} else {
-			// just check if some UIProperties or UIParameters are missing from the configuration.
+			// just checks if some UIProperties or UIParameters are missing from the configuration.
 			// When editing the settings, the PropertiesTable only displays the ConfigurableFrame properties, therefore properties
 			// present in the configuration but not in the ConfigurableFrame will be ignored. The same mechanism applies when
 			// the controller pairs the UI and MM properties. As a result the sanity check only makes sense with respect to the 
@@ -164,7 +164,7 @@ public class ConfigurationController {
 			if(uiparamkeys.size() > 0){
 				return false;
 			}
-			
+
 			return true;
 		}
 	}
@@ -215,9 +215,11 @@ public class ConfigurationController {
 	 * @param pluginName Name of the current plugin.
 	 * @param uiproperties Mapping of the UIProperties with MMProperties and their states.
 	 * @param uiparameters Mapping of the UIParameters' states.
+	 * @param plugsettings Mapping of the Settings' states used to configure the ConfigurableMainFrame.
 	 * @param globset_ Mapping of the GlobalSettings' states.
 	 */
-	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, Map<String, String> uiparameters, HashMap<String, String> globset_) {
+	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, 
+			Map<String, String> uiparameters, HashMap<String, String> plugsettings, HashMap<String, String> globset) {
 		if(configuration_ == null){
 			return;
 		}
@@ -225,17 +227,17 @@ public class ConfigurationController {
 		if (configuration_.getCurrentConfigurationName().equals(configName)) {
 			// the configuration has the same name
 			PluginConfiguration plugin = new PluginConfiguration();
-			plugin.configure(configName, pluginName, uiproperties, uiparameters);
+			plugin.configure(configName, pluginName, uiproperties, uiparameters, plugsettings);
 			configuration_.substituteConfiguration(plugin);
 		} else {
 			// new configuration has a different name
 			PluginConfiguration plugin = new PluginConfiguration();
-			plugin.configure(configName, pluginName, uiproperties, uiparameters);
+			plugin.configure(configName, pluginName, uiproperties, uiparameters, plugsettings);
 			configuration_.addConfiguration(plugin);
 		}
 
 		// set global settings
-		configuration_.setGlobalSettings(globset_);
+		configuration_.setGlobalSettings(globset);
 
 		// set current configuration
 		configuration_.setCurrentConfiguration(configName);
@@ -301,6 +303,19 @@ public class ConfigurationController {
 	}
 	
 	/**
+	 * Returns the plugin settings configuration. Null if there is none.
+	 * 
+	 * @return Pairs of UIParameter names (keys) and their value (values)
+	 */
+	public TreeMap<String,String> getPluginSettingsConfiguration(){
+		if(configuration_ == null){
+			return null;
+		}
+		
+		return configuration_.getCurrentPluginConfiguration().getPluginSettings();
+	}
+	
+	/**
 	 * Closes the ConfigurationWizard window (if running). This method is called upon closing the plugin.
 	 * 
 	 */
@@ -315,7 +330,7 @@ public class ConfigurationController {
 	 * 
 	 * @return BoolGlobalSetting
 	 */
-	public BoolGlobalSetting getEnableUnallocatedWarnings(){
+	public BoolSetting getEnableUnallocatedWarnings(){
 		if(configuration_ == null){
 			return null;
 		}

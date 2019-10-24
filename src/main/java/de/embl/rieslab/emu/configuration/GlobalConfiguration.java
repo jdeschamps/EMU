@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting;
+import de.embl.rieslab.emu.configuration.settings.BoolSetting;
 
 /**
  * Class holding the list of known {@link PluginConfiguration}s and the name of
@@ -77,13 +77,13 @@ public class GlobalConfiguration {
 	}
 	
 	/** 
-	 * Generates a {@link de.embl.rieslab.emu.configuration.globalsettings.BoolGlobalSetting} that enables
+	 * Generates a {@link de.embl.rieslab.emu.configuration.settings.BoolSetting} that enables
 	 * the user to disable the "unallocated properties warning" prompt at each start of EMU.   
 	 * 
 	 * @return The GlobalSetting.
 	 */
-	public BoolGlobalSetting getEnableUnallocatedWarningsSetting(){
-		return new BoolGlobalSetting(KEY_ENABLEUNALLOCATEDWARNINGS, 
+	public BoolSetting getEnableUnallocatedWarningsSetting(){
+		return new BoolSetting(KEY_ENABLEUNALLOCATEDWARNINGS, 
 				"When enabled, a message will be prompted to the user if some UI properties are note allocated.",enableUnallocatedWarnings);
 	}
 	
@@ -249,7 +249,7 @@ public class GlobalConfiguration {
 	}
 
 	/**
-	 * Set the values of the {@link de.embl.rieslab.emu.configuration.globalsettings.GlobalSetting}s.
+	 * Set the values of the {@link de.embl.rieslab.emu.configuration.settings.Setting}s.
 	 * 
 	 * @param globalSettings A HashMap containing the String values of the settings indexed by their name. 
 	 */

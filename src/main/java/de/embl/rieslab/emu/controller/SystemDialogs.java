@@ -151,7 +151,34 @@ public class SystemDialogs {
 	}
 	
 	/**
-	 * Displays the list of UIProperties states set to a forbidden value (msimatch with MM property limits).
+	 * Displays the list of plugin settings states set to a wrong value.
+	 * 
+	 * @param wrongvals
+	 */
+	public static void showWrongPluginSettings(ArrayList<String> wrongvals) {
+		String title = "Wrong plugin setting values";
+		
+		String message = "The values of the following plugin settings were ignored due to type mismatch: \n\n";
+		Iterator<String> it = wrongvals.iterator();
+		message = message+it.next();
+		int count = 1;
+		while(it.hasNext()){
+			if(count % 5 == 0){
+				message = message+", \n"+it.next();
+			} else {
+				message = message+", "+it.next();
+			}
+			count ++;
+		}
+		message = message+". \n\n";
+		
+		message = message+"Please check make sure you enter correct values.\n";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
+	 * Displays the list of UIProperties states set to a forbidden value (mismatch with MM property limits).
 	 * 
 	 * @param forbiddenvals
 	 */
