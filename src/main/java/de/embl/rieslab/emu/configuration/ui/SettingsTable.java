@@ -2,6 +2,8 @@ package de.embl.rieslab.emu.configuration.ui;
 
 import java.awt.Component;
 import java.awt.Font;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,6 +23,7 @@ import javax.swing.table.TableModel;
 
 import de.embl.rieslab.emu.configuration.settings.BoolSetting;
 import de.embl.rieslab.emu.configuration.settings.Setting;
+import de.embl.rieslab.emu.controller.SystemDialogs;
 
 /**
  * A JPanel containing a JTable tailored for Settings. The first column contains the names of the settings, 
@@ -40,6 +43,7 @@ public class SettingsTable extends JPanel{
 	private Map<String, Setting> settings_;
 	private String[] namesettings_;
 	private HelpWindow help_;
+	private boolean messageShown_;
 	
 	@SuppressWarnings("rawtypes")
 	public SettingsTable(HashMap<String, Setting> hashMap, HelpWindow help) {
@@ -49,6 +53,7 @@ public class SettingsTable extends JPanel{
 		
 		settings_ = hashMap;
 		help_ = help;
+		messageShown_ = false;
 		
 		// Extract global settings names
 		namesettings_ = settings_.keySet().toArray(new String[0]);
@@ -162,9 +167,15 @@ public class SettingsTable extends JPanel{
 		        int col = table.columnAtPoint(evt.getPoint());
 		        if (col==0) {
 		            updateHelper(row);
+		        } else {
+					if (!messageShown_) {
+						SystemDialogs.showReloadNecessary();
+						messageShown_ = true;
+					}
 		        }
 		    }
 		});
+		
 	}
 	
 

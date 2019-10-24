@@ -55,7 +55,7 @@ public class SystemDialogs {
         
         return selected_conf;
 	}
-	
+
 	/**
 	 * Dialog displayed when the {@link de.embl.rieslab.emu.controller.SystemController} does not find any {@link de.embl.rieslab.emu.plugin.UIPlugin}.
 	 * 
@@ -64,6 +64,20 @@ public class SystemDialogs {
 		String title = "No plugin";
 		
 		String message = "No plugin was found.";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
+	 * Dialog displayed when the Plugin settings are modified in the Configuration wizard.
+	 * 
+	 */
+	public static void showReloadNecessary(){
+		String title = "Important";
+		
+		String message = "After modifying plugin settings, saving and restarting "
+				+ "\nthe configuration wizard might be necessary in order to"
+				+ "\nconfigure new UIProperties and UIParameters.";
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
