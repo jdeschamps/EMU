@@ -108,6 +108,11 @@ public abstract class Setting<T> {
 	public SettingType getType() {
 		return type_;
 	}
+	
+	@Override
+	public String toString() {
+		return getStringValue();
+	}
 		
 	/**
 	 * Setting type.
@@ -124,7 +129,8 @@ public abstract class Setting<T> {
 			this.value = value; 
 		}
 
-		public String getTypeValue() {
+		@Override
+		public String toString() {
 			return value;
 		} 
 	}; 

@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.configuration.settings.IntSetting;
 import de.embl.rieslab.emu.configuration.settings.Setting;
 import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.exceptions.IncorrectInternalPropertyTypeException;
@@ -569,7 +570,6 @@ public class ConfigurableMainFrameTest {
 
 			private static final long serialVersionUID = 1L;
 
-
 			@Override
 			protected void addComponentListeners() {
 				reporter1.set(val1);
@@ -611,12 +611,48 @@ public class ConfigurableMainFrameTest {
 		assertEquals(val2, reporter2.intValue());
 	}
 	
+	@Test
+	public void testPluginSettings() {
+		final AtomicInteger reporter1 = new AtomicInteger(0);
+		final int val1 = 15;
+		final String PLUGIN_SETTING = "MySetting";
+
+		assertEquals(0, reporter1.intValue());
+		
+		TreeMap<String, String> settings = new TreeMap<String, String>();
+		settings.put(PLUGIN_SETTING, String.valueOf(val1));
+		
+		ConfigurableTestFrame cf = new ConfigurableTestFrame("MyFrame", settings) {
+
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			protected void initComponents() {
+				reporter1.set(((IntSetting) this.getCurrentPluginSettings().get(PLUGIN_SETTING)).getValue());
+			}
+			
+			@Override
+			public HashMap<String, Setting> getDefaultPluginSettings() {
+				HashMap<String, Setting> t = new HashMap<String, Setting>();
+				t.put(PLUGIN_SETTING, new IntSetting(PLUGIN_SETTING, "", reporter1.intValue()));
+				return t;
+			}
+		};
+
+		// the value of reporter1 should have changed
+		assertEquals(val1, reporter1.intValue());
+	}
+	
 	private class ConfigurableTestFrame extends ConfigurableMainFrame{
 
 		private static final long serialVersionUID = 1L;
-		
+
 		public ConfigurableTestFrame(String title) {
 			super(title, null, new TreeMap<String, String>());
+		}
+
+		public ConfigurableTestFrame(String title, TreeMap<String, String> pluginSettings) {
+			super(title, null, pluginSettings);
 		}
 
 		@Override
@@ -625,10 +661,10 @@ public class ConfigurableMainFrameTest {
 		@Override
 		protected void setUpMenu() {}
 
-		@SuppressWarnings("rawtypes")
 		@Override
 		public HashMap<String, Setting> getDefaultPluginSettings() {
-			return new HashMap<String, Setting>();
+			// TODO Auto-generated method stub
+			return null;
 		}
 	}
 	

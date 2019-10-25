@@ -107,7 +107,7 @@ public class utils {
 	}
 	
 	public static boolean isBool(String s) {
-		if(s.equals("true") || s.equals("false")){
+		if(s != null && (s.equals("true") || s.equals("false"))){
 			return true;
 		}
 		return false;

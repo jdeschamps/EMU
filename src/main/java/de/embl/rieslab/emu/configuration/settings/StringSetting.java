@@ -32,6 +32,9 @@ public class StringSetting extends Setting<String>{
 	 */
 	@Override
 	public boolean isValueCompatible(String val) {
+		if(val == null) {
+			return false;
+		}
 		return true;
 	}
 
