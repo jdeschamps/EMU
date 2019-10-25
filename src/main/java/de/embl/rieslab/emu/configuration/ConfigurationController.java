@@ -1,16 +1,20 @@
 package de.embl.rieslab.emu.configuration;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
 import de.embl.rieslab.emu.configuration.data.PluginConfiguration;
+import de.embl.rieslab.emu.configuration.data.PluginConfigurationID;
 import de.embl.rieslab.emu.configuration.io.ConfigurationIO;
-import de.embl.rieslab.emu.configuration.ui.ConfigurationWizard;
+import de.embl.rieslab.emu.configuration.ui.ConfigurationManagerUI;
+import de.embl.rieslab.emu.configuration.ui.ConfigurationWizardUI;
 import de.embl.rieslab.emu.controller.SystemConstants;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
@@ -19,7 +23,7 @@ import de.embl.rieslab.emu.utils.settings.BoolSetting;
 
 /**
  * Controller class for the configuration of the current UI. This class bridges the {@link de.embl.rieslab.emu.controller.SystemController}
- * with the {@link ConfigurationWizard}, the {@link GlobalConfiguration}. The ConfigurationController starts the configuration wizard to allow
+ * with the {@link ConfigurationWizardUI}, the {@link GlobalConfiguration}. The ConfigurationController starts the configuration wizard to allow
  * the user to modify the current configuration. It also contains inform the SystemController on the different configurations. Finally, it
  * calls the {@link ConfigurationIO} to read and write the configurations from/to files.
  * 
@@ -29,7 +33,8 @@ import de.embl.rieslab.emu.utils.settings.BoolSetting;
 public class ConfigurationController {
 	
 	private SystemController controller_; // overall controller
-	private ConfigurationWizard wizard_; // graphical interface to create/edit the current configuration
+	private ConfigurationWizardUI wizard_; // graphical interface to create/edit the current configuration
+	private ConfigurationManagerUI manager_; // graphical interface to delete configurations
 	private GlobalConfiguration configuration_; // configurations of the UI
 	
 	/**
@@ -145,7 +150,7 @@ public class ConfigurationController {
 	 * @param maininterface Current plugin' ConfigurableFrame. 
 	 * @return True if the current configuration contains all the properties and parameters defined in the plugin's ConfigurableFrame. 
 	 */
-	public boolean sanityCheck(ConfigurableFrame maininterface) {
+	public boolean configurationSanityCheck(ConfigurableFrame maininterface) {
 		if(configuration_ == null){
 			return false;
 		} else {
@@ -173,85 +178,7 @@ public class ConfigurationController {
 		}
 	}
 	
-	/**
-	 * Starts a new configuration wizard. If a wizard is already running, then does nothing and returns {@code false}.
-	 * 
-	 * @param pluginName Current plugin's name.
-	 * @param maininterface plugin's ConfigurableFrame.
-	 * @param mmproperties Micro-manager properties.
-	 * @return True if a new wizard was started, false if it was already running. 
-	 */
-	public boolean startWizard(String pluginName, ConfigurableFrame maininterface, MMPropertiesRegistry mmproperties){
-		// launch wizard
-		if(!isWizardRunning()){	
-			wizard_ = new ConfigurationWizard(this);
-			
-			if(configuration_ != null){ // start a wizard with the current configuration loaded
-				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
-			} else { // start a fresh wizard
-				configuration_ = new GlobalConfiguration();				
-				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
-			}
-			
-			return true;
-		}
-		return false;
-	}
-	
-	/**
-	 * Returns true if a ConfigurationWizard is running, false otherwise.
-	 * 
-	 * @return true if a ConfigurationWizard is running, false otherwise
-	 */
-	public boolean isWizardRunning(){
-		if(wizard_ == null){
-			return false;
-		}
-		return wizard_.isRunning();
-	}
 
-	/**
-	 * Retrieves the pairs of UIProperty name and MMProperty names (and UIProperty state values), as well as the pairs of UIParameter names and values,
-	 * and writes them to the configuration file. It then calls the {@link de.embl.rieslab.emu.controller.SystemController} to update the system. 
-	 * This method is called by the {@link ConfigurationWizard} upon saving of the configuration by the user.
-	 * 
-	 * @param configName Name of the configuration.
-	 * @param pluginName Name of the current plugin.
-	 * @param uiproperties Mapping of the UIProperties with MMProperties and their states.
-	 * @param uiparameters Mapping of the UIParameters' states.
-	 * @param plugsettings Mapping of the Settings' states used to configure the ConfigurableMainFrame.
-	 * @param globset_ Mapping of the GlobalSettings' states.
-	 */
-	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, 
-			Map<String, String> uiparameters, HashMap<String, String> plugsettings, HashMap<String, String> globset) {
-		if(configuration_ == null){
-			return;
-		}
-		
-		if (configuration_.getCurrentConfigurationName().equals(configName)) {
-			// the configuration has the same name
-			PluginConfiguration plugin = new PluginConfiguration();
-			plugin.configure(configName, pluginName, uiproperties, uiparameters, plugsettings);
-			configuration_.substituteConfiguration(plugin);
-		} else {
-			// new configuration has a different name
-			PluginConfiguration plugin = new PluginConfiguration();
-			plugin.configure(configName, pluginName, uiproperties, uiparameters, plugsettings);
-			configuration_.addConfiguration(plugin);
-		}
-
-		// set global settings
-		configuration_.setGlobalSettings(globset);
-
-		// set current configuration
-		configuration_.setCurrentConfiguration(configName);
-
-		writeConfiguration();
-
-		// update system
-		controller_.loadConfiguration(configName);
-	}
-	
 	/**
 	 * Sets the default configuration to {@code newDefault}.
 	 * 
@@ -330,9 +257,9 @@ public class ConfigurationController {
 	}
 	
 	/**
-	 * Returns the GlobalSetting corresponding to the enabling or disabling of the unallocated properties warning.
+	 * Returns the Setting corresponding to the enabling or disabling of the unallocated properties warning.
 	 * 
-	 * @return BoolGlobalSetting
+	 * @return BoolSetting
 	 */
 	public BoolSetting getEnableUnallocatedWarnings(){
 		if(configuration_ == null){
@@ -340,5 +267,148 @@ public class ConfigurationController {
 		}
 		
 		return configuration_.getEnableUnallocatedWarningsSetting();
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////// Wizard 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	
+	/**
+	 * Starts a new configuration wizard. If a wizard is already running, then does nothing and returns {@code false}.
+	 * 
+	 * @param pluginName Current plugin's name.
+	 * @param maininterface plugin's ConfigurableFrame.
+	 * @param mmproperties Micro-manager properties.
+	 * @return True if a new wizard was started, false if it was already running. 
+	 */
+	public boolean startWizard(String pluginName, ConfigurableFrame maininterface, MMPropertiesRegistry mmproperties){
+		// launch wizard
+		if(!isWizardRunning()){	
+			wizard_ = new ConfigurationWizardUI(this);
+			
+			if(configuration_ != null){ // start a wizard with the current configuration loaded
+				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
+			} else { // start a fresh wizard
+				configuration_ = new GlobalConfiguration();				
+				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
+			}
+			
+			return true;
+		}
+		return false;
+	}
+	
+	/**
+	 * Returns true if a ConfigurationWizard is running, false otherwise.
+	 * 
+	 * @return true if a ConfigurationWizard is running, false otherwise
+	 */
+	public boolean isWizardRunning(){
+		if(wizard_ == null){
+			return false;
+		}
+		return wizard_.isRunning();
+	}
+
+	/**
+	 * Retrieves the pairs of UIProperty name and MMProperty names (and UIProperty state values), as well as the pairs of UIParameter names and values,
+	 * and writes them to the configuration file. It then calls the {@link de.embl.rieslab.emu.controller.SystemController} to update the system. 
+	 * This method is called by the {@link ConfigurationWizardUI} upon saving of the configuration by the user.
+	 * 
+	 * @param configName Name of the configuration.
+	 * @param pluginName Name of the current plugin.
+	 * @param uiproperties Mapping of the UIProperties with MMProperties and their states.
+	 * @param uiparameters Mapping of the UIParameters' states.
+	 * @param plugsettings Mapping of the Settings' states used to configure the ConfigurableMainFrame.
+	 * @param globset_ Mapping of the GlobalSettings' states.
+	 */
+	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, 
+			Map<String, String> uiparameters, HashMap<String, String> plugsettings, HashMap<String, String> globset) {
+		if(configuration_ == null){
+			return;
+		}
+		
+		if (configuration_.getCurrentConfigurationName().equals(configName)) {
+			// the configuration has the same name
+			PluginConfiguration plugin = new PluginConfiguration();
+			plugin.configure(configName, pluginName, uiproperties, uiparameters, plugsettings);
+			configuration_.substituteConfiguration(plugin);
+		} else {
+			// new configuration has a different name
+			PluginConfiguration plugin = new PluginConfiguration();
+			plugin.configure(configName, pluginName, uiproperties, uiparameters, plugsettings);
+			configuration_.addConfiguration(plugin);
+		}
+
+		// set global settings
+		configuration_.setGlobalSettings(globset);
+
+		// set current configuration
+		configuration_.setCurrentConfiguration(configName);
+
+		writeConfiguration();
+
+		// update system
+		controller_.loadConfiguration(configName);
+	}
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////// Manager  
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+	public boolean startManager(){
+		// launch wizard
+		if(!isWizardRunning()){	
+			manager_ = new ConfigurationManagerUI(this);
+			
+			if(configuration_ != null){ // start a wizard with the current configuration loaded
+				manager_.start(configuration_);
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public void applyManagerConfigurations(ArrayList<PluginConfigurationID> confs) {
+		if(configuration_ == null){
+			return;
+		}
+		
+		// Remove all the PluginConfigurations that were deleted in the ConfigurationManager
+		// I don't expect large array list so the brute force O(N^2) should be fine
+		ArrayList<PluginConfiguration> plugconfs = configuration_.getPluginConfigurations();
+		List<PluginConfiguration> toRemove = new ArrayList<PluginConfiguration>();
+		for(PluginConfiguration pc: plugconfs) {
+			boolean found = false;
+			for(PluginConfigurationID pcid: confs) {
+				if(pcid.isCorrespondingPluginConfiguration(pc)) {
+					found = true;
+					break;
+				}
+			}
+			
+			if(!found) {
+				toRemove.add(pc);
+			}
+		}
+		plugconfs.removeAll(toRemove);
+		
+		writeConfiguration();
+		
+		controller_.updateMenu();
+	}
+	
+	/**
+	 * Returns true if a ConfigurationManager is running, false otherwise.
+	 * 
+	 * @return true if a ConfigurationManager is running, false otherwise
+	 */
+	public boolean isManagerRunning(){
+		if(manager_ == null){
+			return false;
+		}
+		return manager_.isRunning();
 	}
 }

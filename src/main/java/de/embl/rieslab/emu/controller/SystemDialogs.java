@@ -219,7 +219,7 @@ public class SystemDialogs {
 	}
 	
 	/**
-	 * About EMU window.
+	 * "About EMU" window.
 	 * 
 	 */
 	public static void showAboutEMU(){
@@ -236,4 +236,30 @@ public class SystemDialogs {
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
 	
+	/**
+	 * Prompted when the Configuration Wizard is already running.
+	 */
+	public static void showWizardRunningMessage() {
+		JOptionPane.showMessageDialog(null,
+				"Configuration wizard already running.",
+				"Information", JOptionPane.INFORMATION_MESSAGE);
+	}
+
+	/**
+	 * Prompted when the Configuration Manager is already running.
+	 */
+	public static void showManagerRunningMessage() {
+		JOptionPane.showMessageDialog(null,
+				"Configuration manager already running or they are no configurations to manage.",
+				"Information", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
+	 * Prompted when the Configuration Manager is asked to delete the current configuration. 
+	 */
+	public static void showCannotDeleteCurrentConfiguration() {
+		JOptionPane.showMessageDialog(null,
+				"The current configuration cannot be deleted.",
+				"Information", JOptionPane.INFORMATION_MESSAGE);
+	}
 }

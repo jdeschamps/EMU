@@ -32,7 +32,7 @@ import de.embl.rieslab.emu.utils.settings.Setting;
  * @author Joran Deschamps
  *
  */
-public class ConfigurationWizard {
+public class ConfigurationWizardUI {
 	
 	/**
 	 * Value given to unallocated UIProperty states and UIParameters values.
@@ -41,10 +41,6 @@ public class ConfigurationWizard {
 	public final static String KEY_UIPROPERTY = "UI Property: ";
 	public final static String KEY_UIPARAMETER = "UI Parameter: ";
 
-	private HashMap<String, String> prop_; // stores the name of the uiproperties and their corresponding mmproperty (or Configuration.KEY_UNALLOCATED)
-	private HashMap<String, String> param_; // stores the name of the uiparameters and their value
-	private HashMap<String, String> globset_; 
-	private HashMap<String, String> plugset_; // stores the names of the plugin settings and their values  
 	private PropertiesTable propertytable_; // panel used by the user to pair ui- and mmproperties
 	private ParametersTable parametertable_; // panel used by the user to set the values of uiparameters
 	private SettingsTable globsettingstable_; 
@@ -56,14 +52,8 @@ public class ConfigurationWizard {
 	private String plugin_name_;
 	private JTextField config_name_;
 	
-	public ConfigurationWizard(ConfigurationController config) {
+	public ConfigurationWizardUI(ConfigurationController config) {
 		config_ = config;
-		
-		prop_ = new HashMap<String, String>();
-		param_ = new HashMap<String, String>();
-		plugset_ = new HashMap<String, String>();
-		globset_ = new HashMap<String, String>();
-
 		plugin_name_ = "";
 	}
 
@@ -111,7 +101,7 @@ public class ConfigurationWizard {
 
 				help_ = new HelpWindow("Click on a row to display the description");
 
-				// Table defining the properties using the  configuration
+				// Table defining the properties using the configuration
 				propertytable_ = new PropertiesTable(maininterface.getUIProperties(), mmproperties, 
 						configuration.getCurrentPluginConfiguration().getProperties(), help_);
 				propertytable_.setOpaque(true);
@@ -141,17 +131,13 @@ public class ConfigurationWizard {
 	
 	// Sets up the frame used for the interactive configuration.
 	private JFrame createFrame(String conf_name, final PropertiesTable propertytable, final ParametersTable parametertable, final SettingsTable plugsettingstable, final SettingsTable globsettingstable, final HelpWindow help){
-		JFrame frame = new JFrame("UI properties wizard");
+		JFrame frame = new JFrame("Configuration wizard");
 		frame.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				// show dialogue  
-				boolean b = true;
-				if(b){
-					help.disposeHelp();
-					running_ = false;
-					e.getWindow().dispose();
-				}
+				help.disposeHelp();
+				running_ = false;
+				e.getWindow().dispose();
 			}
 		});   
 		
@@ -181,10 +167,14 @@ public class ConfigurationWizard {
 				showHelp(selected);
 			}
 		});
+		
+		JPanel helppane = new JPanel();
+		helppane.add(helptoggle);
+		
 		upperpane.add(conf_name_label);
 		upperpane.add(config_name_);
 		upperpane.add(new JLabel(""));
-		upperpane.add(helptoggle);
+		upperpane.add(helppane);
 
 		JPanel lowerpane = new JPanel();
 		lowerpane.setLayout(new GridLayout(0, 3));
@@ -225,36 +215,6 @@ public class ConfigurationWizard {
 	}
 	
 	/**
-	 * Returns the entries of the property table as a HashMap with the keys being the UIProperty names or state names, and the 
-	 * values being the allocated MMProperty names or state values.
-	 * 
-	 * @return HashMap of the UIProperty names or state names as keys and the mapped MMProperty names or state values.
-	 */
-	public HashMap<String, String> getWizardProperties() {
-		return prop_;
-	}
-	
-	/**
-	 * Returns the entries of the parameter table as a HashMap with the keys being the UIParameter names and the values
-	 * being the parameter values.
-	 * 
-	 * @return HashMap of the UIParameter names as keys and corresponding values.
-	 */
-	public HashMap<String, String> getWizardParameters() {
-		return param_;
-	}
-	
-	/**
-	 * Returns the entries of the plugin settings table as a HashMap with the keys being the setting names and the values
-	 * being the setting values.
-	 * 
-	 * @return HashMap of the setting names as keys and corresponding values.
-	 */
-	public HashMap<String, String> getWizardPluginSettings() {
-		return plugset_;
-	}
-	
-	/**
 	 * Sets the help window visible and displays the description of the currently selected UIProperty or UIParameter.
 	 * 
 	 * @param b True if the help window is to be displayed, false otherwise
@@ -268,12 +228,12 @@ public class ConfigurationWizard {
 	//  Retrieves the UIProperty and UIParameter name/value pairs from the tables, updates the Configuration and closes
 	//  all windows. 
 	private void saveConfiguration(){
-		prop_ = propertytable_.getSettings();
-		param_ = parametertable_.getSettings();
-		plugset_ = plugsettingstable_.getSettings();
-		globset_ = globsettingstable_.getSettings();
+		HashMap<String, String> prop = propertytable_.getSettings();
+		HashMap<String, String> param = parametertable_.getSettings();
+		HashMap<String, String> plugset = plugsettingstable_.getSettings();
+		HashMap<String, String> globset = globsettingstable_.getSettings();
 		
-		config_.applyWizardSettings(config_name_.getText(),plugin_name_,prop_,param_,plugset_,globset_);
+		config_.applyWizardSettings(config_name_.getText(),plugin_name_,prop,param,plugset,globset);
 		
 		frame_.dispose();
 		help_.disposeHelp();

@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.TreeMap;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import de.embl.rieslab.emu.controller.SystemController;
@@ -48,13 +47,6 @@ public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 	@Override
 	public HashMap<String, UIParameter> getUIParameters() {
 		return new HashMap<String, UIParameter>();
-	}
-
-	@Override
-	protected void showWizardRunningMessage() {
-		JOptionPane.showMessageDialog(null,
-				"No plugin found.",
-				"Information", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 	@SuppressWarnings("rawtypes")

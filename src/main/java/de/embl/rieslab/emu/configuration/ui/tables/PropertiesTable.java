@@ -20,7 +20,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
-import de.embl.rieslab.emu.configuration.ui.ConfigurationWizard;
+import de.embl.rieslab.emu.configuration.ui.ConfigurationWizardUI;
 import de.embl.rieslab.emu.configuration.ui.HelpWindow;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
@@ -90,18 +90,18 @@ public class PropertiesTable extends JPanel {
 			
 			if (uipropertySet.get(uipropkeys_[i]) instanceof TwoStateUIProperty) {
 				// if property is a toggle property, adds a line for the on and off values respectively.
-				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationWizard.KEY_ENTERVALUE });
-				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOffStateName(),"", ConfigurationWizard.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOffStateName(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
 				
 			} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) {
 				// if property is a single value property, adds a line for the value the property must take
-				model.addRow(new Object[] {uipropkeys_[i] + SingleStateUIProperty.getValueName(),"", ConfigurationWizard.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + SingleStateUIProperty.getValueName(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
 				
 			} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) {
 				// if multiple values property, adds a line for each of the value to be allocated
 				int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 				for(int j=0;j<numpos;j++){
-					model.addRow(new Object[] {uipropkeys_[i] + MultiStateUIProperty.getConfigurationStateName(j),"", ConfigurationWizard.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i] + MultiStateUIProperty.getConfigurationStateName(j),"", ConfigurationWizardUI.KEY_ENTERVALUE });
 				}
 			} 
 		}
@@ -168,10 +168,10 @@ public class PropertiesTable extends JPanel {
 					
 					// if null then sets to default
 					if(uion == null){
-						uion = ConfigurationWizard.KEY_ENTERVALUE;
+						uion = ConfigurationWizardUI.KEY_ENTERVALUE;
 					}
 					if(uioff == null){
-						uioff = ConfigurationWizard.KEY_ENTERVALUE;
+						uioff = ConfigurationWizardUI.KEY_ENTERVALUE;
 					}
 					
 					// adds a row for each with the preset state value
@@ -181,7 +181,7 @@ public class PropertiesTable extends JPanel {
 					// gets the value of the state and adds the corresponding row
 					uisingle = propertymapping.get(uipropkeys_[i]+ SingleStateUIProperty.getValueName());
 					if(uisingle == null){
-						uion = ConfigurationWizard.KEY_ENTERVALUE;
+						uion = ConfigurationWizardUI.KEY_ENTERVALUE;
 					}
 					model.addRow(new Object[] {	uipropkeys_[i] + SingleStateUIProperty.getValueName(), "", uisingle });
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) { // if multiple values property
@@ -191,7 +191,7 @@ public class PropertiesTable extends JPanel {
 						uitemp = propertymapping.get(uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateName(j));
 
 						if(uitemp == null){
-							uitemp = ConfigurationWizard.KEY_ENTERVALUE;
+							uitemp = ConfigurationWizardUI.KEY_ENTERVALUE;
 						}
 						
 						model.addRow(new Object[] {	uipropkeys_[i] +  MultiStateUIProperty.getConfigurationStateName(j), "", uitemp });
@@ -203,14 +203,14 @@ public class PropertiesTable extends JPanel {
 				
 				// if the property is an instance of SingleState, TwoState or MultiState property, creates rows for the states value
 				if (uipropertySet.get(uipropkeys_[i]) instanceof TwoStateUIProperty) {
-					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationWizard.KEY_ENTERVALUE });
-					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "",ConfigurationWizard.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "",ConfigurationWizardUI.KEY_ENTERVALUE });
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) {
-					model.addRow(new Object[] {uipropkeys_[i]+ SingleStateUIProperty.getValueName(), "",ConfigurationWizard.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i]+ SingleStateUIProperty.getValueName(), "",ConfigurationWizardUI.KEY_ENTERVALUE });
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) { // if multiple values property
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
-						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateName(j), "",ConfigurationWizard.KEY_ENTERVALUE });
+						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateName(j), "",ConfigurationWizardUI.KEY_ENTERVALUE });
 					}
 				} 
 			}
@@ -251,7 +251,7 @@ public class PropertiesTable extends JPanel {
 				String s = (String) table.getValueAt(row, 0);
 				if (column == 2 && UIPropertyUtils.isStateValue(s)) { 
 					// if in the last column and corresponds to a field value, returns a textfield cell editor
-					return new DefaultCellEditor(new JTextField(ConfigurationWizard.KEY_ENTERVALUE));
+					return new DefaultCellEditor(new JTextField(ConfigurationWizardUI.KEY_ENTERVALUE));
 				} else {
 					// if not a field value or not in third column
 					switch (column) {
@@ -426,7 +426,7 @@ public class PropertiesTable extends JPanel {
 	        if (column > 0) {
 	            String versionVal = (String) value;
 
-	            if (versionVal.equals(ConfigurationWizard.KEY_ENTERVALUE) || versionVal.equals(GlobalConfiguration.KEY_UNALLOCATED)) {
+	            if (versionVal.equals(ConfigurationWizardUI.KEY_ENTERVALUE) || versionVal.equals(GlobalConfiguration.KEY_UNALLOCATED)) {
 	                c.setForeground(Color.RED);
 	            } else {
 	                c.setForeground(Color.BLACK);

@@ -380,7 +380,7 @@ public class SystemController {
 		 */
 		
 		// sanity check
-		boolean sane = config.sanityCheck(mainframe_);
+		boolean sane = config.configurationSanityCheck(mainframe_);
 		
 		if(!sane){
 			// shows dialog
@@ -398,18 +398,36 @@ public class SystemController {
 		mainframe_.addAllListeners();
 				
 		// updates menu
-		mainframe_.updateMenu();
+		updateMenu();
 	}
-
 	
 	/**
-	 * Launches new property Wizard in order to modify the current configuration. 
+	 * Updates the ConfigurableMainFrame menu.
+	 */
+	public void updateMenu() {
+		mainframe_.updateMenu();
+	}
+	
+	/**
+	 * Launches new configuration Wizard in order to modify the current configuration. 
 	 * 
 	 * @return False if a Wizard is already running.
 	 */
 	public boolean launchWizard() {
 		if(config != null) {
 			return config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
+		}
+		return false;
+	}	
+	
+	/**
+	 * Launches new configuration Manager. 
+	 * 
+	 * @return False if a Manager is already running.
+	 */
+	public boolean launchManager() {
+		if(config != null) {
+			return config.startManager();
 		}
 		return false;
 	}

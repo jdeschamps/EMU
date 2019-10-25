@@ -19,7 +19,6 @@ import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -156,6 +155,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         
 		JMenu menu = new JMenu("Menu");
 		
+		// to refresh the UI state
 		JMenuItem refresh = new JMenuItem(new AbstractAction("Refresh UI") {
 			private static final long serialVersionUID = 1L;
 
@@ -165,22 +165,38 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		});	
 		refresh.setToolTipText("Updates all UIProperties to the current value.");
 		
-		JMenuItem wiz = new JMenuItem(new AbstractAction("Settings Wizard") {
+		// to start the configuration wizard
+		JMenuItem wiz = new JMenuItem(new AbstractAction("Configuration wizard") {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
 				boolean b = controller_.launchWizard();
 				if (!b ) {
-					showWizardRunningMessage();
+					SystemDialogs.showWizardRunningMessage();
 				}
 			}
 		});
 		wiz.setToolTipText("Start the settings wizard, allowing mapping device properties to UIProperties.");
 
+		// configuration manager
+		JMenuItem manageconfig = new JMenuItem(new AbstractAction("Manage configurations") {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+				boolean b = controller_.launchManager();
+				if (!b ) {
+					SystemDialogs.showManagerRunningMessage();
+				}
+			}
+		});	
+		refresh.setToolTipText("Updates all UIProperties to the current value.");
+		
+		// switch plugin or configuration
 		switch_plugin = new JMenu("Switch plugin");
 		switch_configuration = new JMenu("Switch configuration");
+		
+		// description of the plugin
 		plugin_description = new JMenuItem(new AbstractAction("Plugin description") {
-
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -188,6 +204,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			}
 		});
 		
+		// about
 		JMenuItem about = new JMenuItem(new AbstractAction("About") {
 			private static final long serialVersionUID = -5519431309736542210L;
 
@@ -196,8 +213,10 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			}
 		});
 
+		// add all to menu
 		menu.add(wiz);
 		menu.add(refresh);
+		menu.add(manageconfig);
 		menu.add(switch_plugin);
 		menu.add(switch_configuration);
 		menu.add(plugin_description);
@@ -207,11 +226,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
         this.setJMenuBar(mb); 
 	}
 
-	protected void showWizardRunningMessage() {
-		JOptionPane.showMessageDialog(null,
-				"Configuration wizard already running.",
-				"Information", JOptionPane.INFORMATION_MESSAGE);
-	}
 
 	@SuppressWarnings("rawtypes")
 	private void retrieveUIPropertiesAndParameters() {
