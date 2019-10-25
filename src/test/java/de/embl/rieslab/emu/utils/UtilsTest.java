@@ -72,4 +72,17 @@ public class UtilsTest {
 		assertEquals(15.1235, utils.round(v, 4), 1E-20);
 		assertEquals(15.12346, utils.round(v, 5), 1E-20);
 	}
+	
+	@Test
+	public void testIsBool() {
+		assertTrue(utils.isBool("true"));
+		assertTrue(utils.isBool("false"));
+		assertTrue(utils.isBool(String.valueOf(true)));
+		assertTrue(utils.isBool(String.valueOf(false)));
+
+		assertFalse(utils.isBool("0"));
+		assertFalse(utils.isBool("1"));
+		assertFalse(utils.isBool("True"));
+		assertFalse(utils.isBool("False"));
+	}
 }
