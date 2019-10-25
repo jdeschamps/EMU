@@ -2,7 +2,7 @@ package de.embl.rieslab.emu.ui.uiparameters;
 
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.utils.EmuUtils;
 
 /**
  * UIParameter with integer value.
@@ -31,7 +31,7 @@ public class IntegerUIParameter extends UIParameter<Integer>{
 	 */
 	@Override
 	public boolean isSuitable(String val) {
-		if(utils.isInteger(val)){
+		if(EmuUtils.isInteger(val)){
 			return true;
 		}
 		return false;

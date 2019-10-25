@@ -1,6 +1,6 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
-import de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.utils.EmuUtils;
 import mmcorej.CMMCore;
 
 /**
@@ -53,9 +53,9 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 */
 	@Override
 	public Integer convertToValue(String s) {
-		if(utils.isInteger(s)) {
+		if(EmuUtils.isInteger(s)) {
 			return Integer.valueOf(s);
-		} else if(utils.isNumeric(s)) {
+		} else if(EmuUtils.isNumeric(s)) {
 			return Double.valueOf(s).intValue();
 		}
 		return null;

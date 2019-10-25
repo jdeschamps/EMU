@@ -14,12 +14,6 @@ import javax.swing.JToggleButton;
 
 import org.junit.Test;
 
-import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
-import de.embl.rieslab.emu.exceptions.IncorrectInternalPropertyTypeException;
-import de.embl.rieslab.emu.exceptions.IncorrectUIParameterTypeException;
-import de.embl.rieslab.emu.exceptions.UnknownInternalPropertyException;
-import de.embl.rieslab.emu.exceptions.UnknownUIParameterException;
-import de.embl.rieslab.emu.exceptions.UnknownUIPropertyException;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
 import de.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
@@ -41,6 +35,12 @@ import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import de.embl.rieslab.emu.utils.ColorRepository;
+import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncorrectInternalPropertyTypeException;
+import de.embl.rieslab.emu.utils.exceptions.IncorrectUIParameterTypeException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownInternalPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownUIParameterException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownUIPropertyException;
 
 public class ConfigurablePanelTest {
 

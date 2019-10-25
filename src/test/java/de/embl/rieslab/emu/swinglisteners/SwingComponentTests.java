@@ -20,7 +20,7 @@ import javax.swing.JToggleButton;
 
 import org.junit.Test;
 
-import de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.utils.EmuUtils;
 
 /**
  * These are just a bunch of tests to remember whether changing the state of
@@ -170,7 +170,7 @@ public class SwingComponentTests {
 		txt.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				String s = txt.getText();
-				if (utils.isInteger(s)) {
+				if (EmuUtils.isInteger(s)) {
 					i.set(Integer.valueOf(s));
 				}
 			}
@@ -184,7 +184,7 @@ public class SwingComponentTests {
 			@Override
 			public void focusLost(FocusEvent ex) {
 				String s = txt.getText();
-				if (utils.isInteger(s)) {
+				if (EmuUtils.isInteger(s)) {
 					i.set(Integer.valueOf(s));
 				}
 			}

@@ -11,10 +11,10 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import de.embl.rieslab.emu.configuration.ConfigurationIO;
-import de.embl.rieslab.emu.configuration.GlobalConfiguration;
-import de.embl.rieslab.emu.configuration.GlobalConfigurationWrapper;
-import de.embl.rieslab.emu.configuration.PluginConfiguration;
+import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
+import de.embl.rieslab.emu.configuration.data.GlobalConfigurationWrapper;
+import de.embl.rieslab.emu.configuration.data.PluginConfiguration;
+import de.embl.rieslab.emu.configuration.io.ConfigurationIO;
 import de.embl.rieslab.emu.controller.SystemConstants;
 
 public class ConfigurationIOTest {

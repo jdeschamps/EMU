@@ -7,11 +7,11 @@ import java.util.TreeMap;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import de.embl.rieslab.emu.configuration.settings.Setting;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.utils.settings.Setting;
 
 /**
  * Empty ConfigurableMainFrame. Used when no plugin is found.

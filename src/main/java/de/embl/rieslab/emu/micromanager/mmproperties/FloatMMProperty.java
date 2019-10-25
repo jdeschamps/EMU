@@ -2,7 +2,7 @@ package de.embl.rieslab.emu.micromanager.mmproperties;
 
 
 import de.embl.rieslab.emu.controller.SystemConstants;
-import de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.utils.EmuUtils;
 import mmcorej.CMMCore;
 
 /**
@@ -55,7 +55,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 */
 	@Override
 	public Float convertToValue(String s) {
-		if(utils.isNumeric(s)) {
+		if(EmuUtils.isNumeric(s)) {
 			return Float.parseFloat(s);
 
 		}

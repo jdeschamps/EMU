@@ -10,79 +10,79 @@ public class UtilsTest {
 
 	@Test
 	public void testIsNumeric() {
-		assertFalse(utils.isNumeric(null));
-		assertFalse(utils.isNumeric(""));
-		assertFalse(utils.isNumeric("d"));
-		assertFalse(utils.isNumeric("+h485,12"));
-		assertFalse(utils.isNumeric("+485,12d"));
+		assertFalse(EmuUtils.isNumeric(null));
+		assertFalse(EmuUtils.isNumeric(""));
+		assertFalse(EmuUtils.isNumeric("d"));
+		assertFalse(EmuUtils.isNumeric("+h485,12"));
+		assertFalse(EmuUtils.isNumeric("+485,12d"));
 		
-		assertTrue(utils.isNumeric("156"));
-		assertTrue(utils.isNumeric("+156"));
-		assertTrue(utils.isNumeric("-156"));
-		assertTrue(utils.isNumeric("846.1654"));
-		assertTrue(utils.isNumeric("846,1654"));
-		assertTrue(utils.isNumeric("+846.1654"));
-		assertTrue(utils.isNumeric("+846,1654"));
-		assertTrue(utils.isNumeric("-846.1654"));
-		assertTrue(utils.isNumeric("-846,1654"));
+		assertTrue(EmuUtils.isNumeric("156"));
+		assertTrue(EmuUtils.isNumeric("+156"));
+		assertTrue(EmuUtils.isNumeric("-156"));
+		assertTrue(EmuUtils.isNumeric("846.1654"));
+		assertTrue(EmuUtils.isNumeric("846,1654"));
+		assertTrue(EmuUtils.isNumeric("+846.1654"));
+		assertTrue(EmuUtils.isNumeric("+846,1654"));
+		assertTrue(EmuUtils.isNumeric("-846.1654"));
+		assertTrue(EmuUtils.isNumeric("-846,1654"));
 	}
 	
 	@Test 
 	public void testIsInteger() {
-		assertFalse(utils.isInteger(null));
-		assertFalse(utils.isInteger(""));
-		assertFalse(utils.isInteger("d"));
-		assertFalse(utils.isInteger("15.46"));
-		assertFalse(utils.isInteger("-15.46"));
-		assertFalse(utils.isInteger("+15,46"));
-		assertFalse(utils.isInteger("-15,46"));
+		assertFalse(EmuUtils.isInteger(null));
+		assertFalse(EmuUtils.isInteger(""));
+		assertFalse(EmuUtils.isInteger("d"));
+		assertFalse(EmuUtils.isInteger("15.46"));
+		assertFalse(EmuUtils.isInteger("-15.46"));
+		assertFalse(EmuUtils.isInteger("+15,46"));
+		assertFalse(EmuUtils.isInteger("-15,46"));
 
-		assertTrue(utils.isInteger("-6541"));
-		assertTrue(utils.isInteger("+6541"));
-		assertTrue(utils.isInteger("4581"));
+		assertTrue(EmuUtils.isInteger("-6541"));
+		assertTrue(EmuUtils.isInteger("+6541"));
+		assertTrue(EmuUtils.isInteger("4581"));
 	}
 	
 	// here should maybe change the method to accept ","
 	@Test
 	public void testIsFloat() {
-		assertFalse(utils.isFloat(null));
-		assertFalse(utils.isFloat(""));
-		assertFalse(utils.isFloat("d"));
-		assertFalse(utils.isFloat("+h485,12"));
-		assertFalse(utils.isFloat("+485,12d"));
+		assertFalse(EmuUtils.isFloat(null));
+		assertFalse(EmuUtils.isFloat(""));
+		assertFalse(EmuUtils.isFloat("d"));
+		assertFalse(EmuUtils.isFloat("+h485,12"));
+		assertFalse(EmuUtils.isFloat("+485,12d"));
 		
-		assertTrue(utils.isFloat("156"));
-		assertTrue(utils.isFloat("+156"));
-		assertTrue(utils.isFloat("-156"));
-		assertTrue(utils.isFloat("846.1654"));
+		assertTrue(EmuUtils.isFloat("156"));
+		assertTrue(EmuUtils.isFloat("+156"));
+		assertTrue(EmuUtils.isFloat("-156"));
+		assertTrue(EmuUtils.isFloat("846.1654"));
 		//assertTrue(utils.isFloat("846,165")); 
-		assertTrue(utils.isFloat("+846.1654"));
+		assertTrue(EmuUtils.isFloat("+846.1654"));
 		//assertTrue(utils.isFloat("+846,1654"));
-		assertTrue(utils.isFloat("-846.1654"));
+		assertTrue(EmuUtils.isFloat("-846.1654"));
 		//assertTrue(utils.isFloat("-846,1654"));
 	}
 
 	@Test
 	public void testRound() {
 		double v = 15.123456789;
-		assertEquals(15, utils.round(v, 0), 1E-20);
-		assertEquals(15.1, utils.round(v, 1), 1E-20);
-		assertEquals(15.12, utils.round(v, 2), 1E-20);
-		assertEquals(15.123, utils.round(v, 3), 1E-20);
-		assertEquals(15.1235, utils.round(v, 4), 1E-20);
-		assertEquals(15.12346, utils.round(v, 5), 1E-20);
+		assertEquals(15, EmuUtils.round(v, 0), 1E-20);
+		assertEquals(15.1, EmuUtils.round(v, 1), 1E-20);
+		assertEquals(15.12, EmuUtils.round(v, 2), 1E-20);
+		assertEquals(15.123, EmuUtils.round(v, 3), 1E-20);
+		assertEquals(15.1235, EmuUtils.round(v, 4), 1E-20);
+		assertEquals(15.12346, EmuUtils.round(v, 5), 1E-20);
 	}
 	
 	@Test
 	public void testIsBool() {
-		assertTrue(utils.isBool("true"));
-		assertTrue(utils.isBool("false"));
-		assertTrue(utils.isBool(String.valueOf(true)));
-		assertTrue(utils.isBool(String.valueOf(false)));
+		assertTrue(EmuUtils.isBool("true"));
+		assertTrue(EmuUtils.isBool("false"));
+		assertTrue(EmuUtils.isBool(String.valueOf(true)));
+		assertTrue(EmuUtils.isBool(String.valueOf(false)));
 
-		assertFalse(utils.isBool("0"));
-		assertFalse(utils.isBool("1"));
-		assertFalse(utils.isBool("True"));
-		assertFalse(utils.isBool("False"));
+		assertFalse(EmuUtils.isBool("0"));
+		assertFalse(EmuUtils.isBool("1"));
+		assertFalse(EmuUtils.isBool("True"));
+		assertFalse(EmuUtils.isBool("False"));
 	}
 }

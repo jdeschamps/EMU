@@ -1,8 +1,8 @@
 package de.embl.rieslab.emu.ui.uiproperties;
 
-import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
 
 /**
  * Class used to pair a UIproperty with a MMProperty.

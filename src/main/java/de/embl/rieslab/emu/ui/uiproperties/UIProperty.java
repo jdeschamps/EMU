@@ -1,11 +1,11 @@
 package de.embl.rieslab.emu.ui.uiproperties;
 
-import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
+import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
 
 /**
  * A UIProperty object is aimed at linking a user interface action with a {@link de.embl.rieslab.emu.micromanager.mmproperties.MMProperty} from 

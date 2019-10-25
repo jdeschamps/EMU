@@ -9,10 +9,8 @@ import java.util.TreeMap;
 import org.micromanager.Studio;
 
 import de.embl.rieslab.emu.configuration.ConfigurationController;
-import de.embl.rieslab.emu.configuration.GlobalConfiguration;
+import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
 import de.embl.rieslab.emu.controller.SystemDialogs;
-import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
-import de.embl.rieslab.emu.exceptions.IncompatiblePluginConfigurationException;
 import de.embl.rieslab.emu.micromanager.MMRegistry;
 import de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
@@ -25,6 +23,8 @@ import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatiblePluginConfigurationException;
 import mmcorej.CMMCore;
 
 /**

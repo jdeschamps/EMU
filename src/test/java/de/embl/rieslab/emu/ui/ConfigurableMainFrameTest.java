@@ -13,20 +13,20 @@ import javax.swing.JPanel;
 
 import org.junit.Test;
 
-import de.embl.rieslab.emu.configuration.settings.IntSetting;
-import de.embl.rieslab.emu.configuration.settings.Setting;
-import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
-import de.embl.rieslab.emu.exceptions.IncorrectInternalPropertyTypeException;
-import de.embl.rieslab.emu.exceptions.UnknownInternalPropertyException;
-import de.embl.rieslab.emu.exceptions.UnknownUIParameterException;
-import de.embl.rieslab.emu.exceptions.UnknownUIPropertyException;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.utils.EmuUtils;
+import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncorrectInternalPropertyTypeException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownInternalPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownUIParameterException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownUIPropertyException;
+import de.embl.rieslab.emu.utils.settings.IntSetting;
+import de.embl.rieslab.emu.utils.settings.Setting;
 
 public class ConfigurableMainFrameTest {
 
@@ -387,7 +387,7 @@ public class ConfigurableMainFrameTest {
 
 			@Override
 			protected void propertyhasChanged(String propertyName, String newvalue) {
-				if(propertyName.equals(props1) && utils.isInteger(newvalue)) {
+				if(propertyName.equals(props1) && EmuUtils.isInteger(newvalue)) {
 					reporter2.set(Integer.valueOf(newvalue));
 				}
 			}
@@ -416,7 +416,7 @@ public class ConfigurableMainFrameTest {
 
 			@Override
 			protected void propertyhasChanged(String propertyName, String newvalue) {
-				if(propertyName.equals(props2) && utils.isInteger(newvalue)) {
+				if(propertyName.equals(props2) && EmuUtils.isInteger(newvalue)) {
 					reporter4.set(Integer.valueOf(newvalue));
 				}
 			}
@@ -492,7 +492,7 @@ public class ConfigurableMainFrameTest {
 			
 			@Override
 			protected void propertyhasChanged(String propertyName, String newvalue) {
-				if(propertyName.equals(props1) && utils.isInteger(newvalue)) {
+				if(propertyName.equals(props1) && EmuUtils.isInteger(newvalue)) {
 					reporter2.set(Integer.valueOf(newvalue));
 				}
 			}
@@ -509,7 +509,7 @@ public class ConfigurableMainFrameTest {
 			
 			@Override
 			protected void propertyhasChanged(String propertyName, String newvalue) {
-				if(propertyName.equals(props2) && utils.isInteger(newvalue)) {
+				if(propertyName.equals(props2) && EmuUtils.isInteger(newvalue)) {
 					reporter4.set(Integer.valueOf(newvalue));
 				}
 			}

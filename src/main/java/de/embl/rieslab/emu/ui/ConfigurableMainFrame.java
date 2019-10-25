@@ -25,13 +25,13 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import de.embl.rieslab.emu.configuration.settings.Setting;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.controller.SystemDialogs;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.internalproperties.InternalProperty;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.utils.settings.Setting;
 import mmcorej.CMMCore;
 
 /**

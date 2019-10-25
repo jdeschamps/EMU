@@ -37,7 +37,7 @@ public class SystemDialogs {
 	
 	/**
 	 * This dialog pops up when the {@link de.embl.rieslab.emu.controller.SystemController} does not
-	 * know which {@link de.embl.rieslab.emu.configuration.PluginConfiguration} to instantiate. It lets the user decide
+	 * know which {@link de.embl.rieslab.emu.configuration.data.PluginConfiguration} to instantiate. It lets the user decide
 	 * from an array of known configuration names.
 	 *  
 	 * @param configs Array of configuration names.

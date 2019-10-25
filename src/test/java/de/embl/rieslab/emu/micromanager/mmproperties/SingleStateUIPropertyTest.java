@@ -6,12 +6,12 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
+import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
 
 public class SingleStateUIPropertyTest {
 

@@ -24,15 +24,16 @@ import org.junit.Test;
 
 import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
+import de.embl.rieslab.emu.ui.swingslisteners.SwingUIListeners;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
+import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncorrectUIPropertyTypeException;
+import de.embl.rieslab.emu.utils.settings.Setting;
 import mmcorej.CMMCore;
-import de.embl.rieslab.emu.configuration.settings.Setting;
-import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
-import de.embl.rieslab.emu.exceptions.IncorrectUIPropertyTypeException;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 
 public class SwingUIListenersTest {

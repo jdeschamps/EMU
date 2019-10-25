@@ -6,9 +6,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import de.embl.rieslab.emu.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
+import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
 
 public class UIPropertyTest {
 

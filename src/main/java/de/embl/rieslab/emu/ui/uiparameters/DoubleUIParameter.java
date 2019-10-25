@@ -2,7 +2,7 @@ package de.embl.rieslab.emu.ui.uiparameters;
 
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.utils.EmuUtils;
 
 /**
  * UIParameter holding a double value.
@@ -32,7 +32,7 @@ public class DoubleUIParameter extends UIParameter<Double> {
 	 */
 	@Override
 	public boolean isSuitable(String val) {
-		if(utils.isNumeric(val)){
+		if(EmuUtils.isNumeric(val)){
 			return true;
 		}
 		return false;

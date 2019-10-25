@@ -5,7 +5,7 @@ import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
-import de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.utils.EmuUtils;
 
 /**
  * A UIProperty with multiple allowed states, whose values are unknown at compilation time. Upon instantiation
@@ -222,7 +222,7 @@ public class MultiStateUIProperty extends UIProperty{
 				}
 			}
 			// otherwise, accept indices
-			if (utils.isInteger(val)) {
+			if (EmuUtils.isInteger(val)) {
 				int v = Integer.parseInt(val);
 				if (v >= 0 && v < states_.length) {
 					return getMMProperty().setValue(states_[v], this);
@@ -272,11 +272,11 @@ public class MultiStateUIProperty extends UIProperty{
 	
 	private boolean isEqual(String stateval, String valToCompare) {
 		if(valToCompare != null && isAssigned()) {
-			if(utils.isNumeric(valToCompare) && getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT) {
+			if(EmuUtils.isNumeric(valToCompare) && getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT) {
 				Float state = Float.parseFloat(stateval);
 				Float val = Float.parseFloat(valToCompare);
 				return Math.abs(state-val) < SystemConstants.EPSILON;
-			} else if(utils.isNumeric(valToCompare) && getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) {
+			} else if(EmuUtils.isNumeric(valToCompare) && getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) {
 				double state = Double.parseDouble(valToCompare);
 				Integer val = Integer.parseInt(stateval);
 				return val.equals((int) state);

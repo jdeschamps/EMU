@@ -7,11 +7,6 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import de.embl.rieslab.emu.exceptions.IncorrectInternalPropertyTypeException;
-import de.embl.rieslab.emu.exceptions.IncorrectUIParameterTypeException;
-import de.embl.rieslab.emu.exceptions.UnknownInternalPropertyException;
-import de.embl.rieslab.emu.exceptions.UnknownUIParameterException;
-import de.embl.rieslab.emu.exceptions.UnknownUIPropertyException;
 import de.embl.rieslab.emu.ui.internalproperties.BoolInternalProperty;
 import de.embl.rieslab.emu.ui.internalproperties.DoubleInternalProperty;
 import de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
@@ -28,6 +23,11 @@ import de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter.UIParameterType;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
+import de.embl.rieslab.emu.utils.exceptions.IncorrectInternalPropertyTypeException;
+import de.embl.rieslab.emu.utils.exceptions.IncorrectUIParameterTypeException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownInternalPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownUIParameterException;
+import de.embl.rieslab.emu.utils.exceptions.UnknownUIPropertyException;
 
 /**
  * Building block of EMU, this abstract class extends a JPanel. It holds a map of {@link de.embl.rieslab.emu.ui.uiproperties.UIProperty},
@@ -43,7 +43,7 @@ import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
  * UIProperties are aimed at linking the state of a MMProperty with the state of one or multiple JComponenents. InternalProperties are made to allow
  * shared values between ConfigurablePanels, such that a modification to one panel can trigger a change in the other panel. Finally, UIProperties
  * should only be used for user settings, such as changing the colors of JLabels or JButtons (to describe a filter or a laser) or the text of a header. 
- * All UIProperties and UIParameters appear in the {@link de.embl.rieslab.emu.configuration.ConfigurationWizard}. The user can then map the 
+ * All UIProperties and UIParameters appear in the {@link de.embl.rieslab.emu.configuration.ui.ConfigurationWizard}. The user can then map the 
  * UIProperties with a MMProperty and change the value of a UIParameter. 
  * <p>
  * In order to be added to the internal HashMap representation, UIproperties, UIParameters and InternalProperties need to be added using the following methods
@@ -65,7 +65,7 @@ import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
  * pair up the UIProperties with {@link de.embl.rieslab.emu.micromanager.mmproperties.MMProperty} and the latter's values will be propagated 
  * to the ConfigurablePanel via {@link #propertyhasChanged(String, String)}. Later on, changes to a MMProperty (for instance by another ConfigurablePanel)
  * will trigger the same method. The same mechanism is at play for the InternalProperties and the UIParameters. Note that the UIParameters are only changed
- * upon start up and when the user modifies the configuration through the {@link de.embl.rieslab.emu.configuration.ConfigurationWizard}. 
+ * upon start up and when the user modifies the configuration through the {@link de.embl.rieslab.emu.configuration.ui.ConfigurationWizard}. 
  * <p> 
  * 
  * @see de.embl.rieslab.emu.ui.uiproperties.UIProperty
@@ -805,7 +805,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	
 	/**
 	 * In this method, the subclasses can add Swing action listeners to its JComponents. Since the method is called after loading 
-	 * a configuration, the values of the UIproperty states are known and can be used with the static methods of {@link de.embl.rieslab.emu.swinglisteners.SwingUIListeners}.  
+	 * a configuration, the values of the UIproperty states are known and can be used with the static methods of {@link de.embl.rieslab.emu.ui.swingslisteners.SwingUIListeners}.  
 	 */
 	protected abstract void addComponentListeners();
 	

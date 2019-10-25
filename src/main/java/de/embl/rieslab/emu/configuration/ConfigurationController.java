@@ -7,11 +7,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import de.embl.rieslab.emu.configuration.settings.BoolSetting;
+import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
+import de.embl.rieslab.emu.configuration.data.PluginConfiguration;
+import de.embl.rieslab.emu.configuration.io.ConfigurationIO;
+import de.embl.rieslab.emu.configuration.ui.ConfigurationWizard;
 import de.embl.rieslab.emu.controller.SystemConstants;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import de.embl.rieslab.emu.ui.ConfigurableFrame;
+import de.embl.rieslab.emu.utils.settings.BoolSetting;
 
 /**
  * Controller class for the configuration of the current UI. This class bridges the {@link de.embl.rieslab.emu.controller.SystemController}

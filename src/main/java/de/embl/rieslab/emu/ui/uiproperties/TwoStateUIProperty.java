@@ -5,7 +5,7 @@ import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
-import de.embl.rieslab.emu.utils.utils;
+import de.embl.rieslab.emu.utils.EmuUtils;
 
 /**
  * UIProperty that only accepts two states: ON or OFF. The value of these states are not known at compilation time and can be changed in
@@ -148,14 +148,14 @@ public class TwoStateUIProperty extends UIProperty{
 	public boolean isOnState(String value) {
 		if(value != null && isAssigned()) {		
 			if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT) { // if float, then "0" decimals might be added and need to be compared. 
-				if(utils.isNumeric(value)) {
+				if(EmuUtils.isNumeric(value)) {
 					Float f = Float.parseFloat(value);
 					Float onstate = Float.parseFloat(onstate_);
 					return Math.abs(f-onstate) < SystemConstants.EPSILON;
 				}
 				return false;
 			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) { 
-				if(utils.isNumeric(value)) {
+				if(EmuUtils.isNumeric(value)) {
 					double i = Double.parseDouble(value);
 					Integer onstate = Integer.parseInt(onstate_);
 					return onstate.equals((int) i);
@@ -175,14 +175,14 @@ public class TwoStateUIProperty extends UIProperty{
 	public boolean isOffState(String value) {
 		if(value != null && isAssigned()) {		
 			if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT) { // if float, then "0" decimals might be added and need to be compared. 
-				if(utils.isNumeric(value)) {
+				if(EmuUtils.isNumeric(value)) {
 					Float f = Float.parseFloat(value);
 					Float offstate = Float.parseFloat(offstate_);
 					return Math.abs(f-offstate) < SystemConstants.EPSILON;
 				}
 				return false;
 			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) { 
-				if(utils.isNumeric(value)) {
+				if(EmuUtils.isNumeric(value)) {
 					double i = Double.parseDouble(value);
 					Integer offstate = Integer.parseInt(offstate_);
 					return offstate.equals((int) i);
