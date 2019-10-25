@@ -23,7 +23,7 @@ import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
 import de.embl.rieslab.emu.configuration.ui.tables.ParametersTable;
 import de.embl.rieslab.emu.configuration.ui.tables.PropertiesTable;
 import de.embl.rieslab.emu.configuration.ui.tables.SettingsTable;
-import de.embl.rieslab.emu.controller.SystemDialogs;
+import de.embl.rieslab.emu.controller.utils.SystemDialogs;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import de.embl.rieslab.emu.ui.ConfigurableFrame;
 

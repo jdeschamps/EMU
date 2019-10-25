@@ -1,6 +1,6 @@
 package de.embl.rieslab.emu.ui.uiproperties;
 
-import de.embl.rieslab.emu.controller.GlobalSettings;
+import de.embl.rieslab.emu.controller.utils.GlobalSettings;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;

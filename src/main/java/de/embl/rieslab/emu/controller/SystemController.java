@@ -10,7 +10,8 @@ import org.micromanager.Studio;
 
 import de.embl.rieslab.emu.configuration.ConfigurationController;
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
-import de.embl.rieslab.emu.controller.SystemDialogs;
+import de.embl.rieslab.emu.controller.utils.GlobalSettings;
+import de.embl.rieslab.emu.controller.utils.SystemDialogs;
 import de.embl.rieslab.emu.micromanager.MMRegistry;
 import de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;

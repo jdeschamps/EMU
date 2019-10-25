@@ -16,9 +16,9 @@ import de.embl.rieslab.emu.configuration.data.PluginConfigurationID;
 import de.embl.rieslab.emu.configuration.io.ConfigurationIO;
 import de.embl.rieslab.emu.configuration.ui.ConfigurationManagerUI;
 import de.embl.rieslab.emu.configuration.ui.ConfigurationWizardUI;
-import de.embl.rieslab.emu.controller.GlobalSettings;
 import de.embl.rieslab.emu.controller.SystemController;
-import de.embl.rieslab.emu.controller.SystemDialogs;
+import de.embl.rieslab.emu.controller.utils.GlobalSettings;
+import de.embl.rieslab.emu.controller.utils.SystemDialogs;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import de.embl.rieslab.emu.ui.ConfigurableFrame;
 import de.embl.rieslab.emu.utils.settings.Setting;
@@ -52,7 +52,7 @@ public class ConfigurationController {
 	}
 
 	/**
-	 * Returns the default path to the configuration file as defined in {@link de.embl.rieslab.emu.controller.GlobalSettings}.
+	 * Returns the default path to the configuration file as defined in {@link de.embl.rieslab.emu.controller.utils.GlobalSettings}.
 	 * 
 	 * @return Default configuration file.
 	 */

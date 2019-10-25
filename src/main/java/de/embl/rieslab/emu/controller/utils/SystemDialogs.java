@@ -1,10 +1,12 @@
-package de.embl.rieslab.emu.controller;
+package de.embl.rieslab.emu.controller.utils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+
+import de.embl.rieslab.emu.controller.SystemController;
 
 /**
  * Dialogs prompted to the user.

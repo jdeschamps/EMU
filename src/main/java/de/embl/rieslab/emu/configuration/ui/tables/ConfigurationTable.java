@@ -15,7 +15,7 @@ import javax.swing.table.TableModel;
 
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
 import de.embl.rieslab.emu.configuration.data.PluginConfigurationID;
-import de.embl.rieslab.emu.controller.SystemDialogs;
+import de.embl.rieslab.emu.controller.utils.SystemDialogs;
 
 public class ConfigurationTable extends JPanel{
 

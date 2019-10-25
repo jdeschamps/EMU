@@ -16,7 +16,7 @@ import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
 import de.embl.rieslab.emu.configuration.data.GlobalConfigurationWrapper;
 import de.embl.rieslab.emu.configuration.data.PluginConfiguration;
 import de.embl.rieslab.emu.configuration.io.ConfigurationIO;
-import de.embl.rieslab.emu.controller.GlobalSettings;
+import de.embl.rieslab.emu.controller.utils.GlobalSettings;
 
 public class ConfigurationIOTest {
 

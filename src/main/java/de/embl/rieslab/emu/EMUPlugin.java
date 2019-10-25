@@ -9,8 +9,8 @@ import org.micromanager.Studio;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SciJavaPlugin;
 
-import de.embl.rieslab.emu.controller.GlobalSettings;
 import de.embl.rieslab.emu.controller.SystemController;
+import de.embl.rieslab.emu.controller.utils.GlobalSettings;
 
 
 @Plugin(type = MenuPlugin.class)

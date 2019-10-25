@@ -1,4 +1,4 @@
-package de.embl.rieslab.emu.controller;
+package de.embl.rieslab.emu.controller.utils;
 
 import java.util.HashMap;
 

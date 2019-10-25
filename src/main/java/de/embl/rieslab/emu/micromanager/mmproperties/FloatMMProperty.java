@@ -1,7 +1,7 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
 
-import de.embl.rieslab.emu.controller.GlobalSettings;
+import de.embl.rieslab.emu.controller.utils.GlobalSettings;
 import de.embl.rieslab.emu.utils.EmuUtils;
 import mmcorej.CMMCore;
 

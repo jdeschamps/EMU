@@ -20,7 +20,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import de.embl.rieslab.emu.configuration.ui.HelpWindow;
-import de.embl.rieslab.emu.controller.SystemDialogs;
+import de.embl.rieslab.emu.controller.utils.SystemDialogs;
 import de.embl.rieslab.emu.utils.settings.BoolSetting;
 import de.embl.rieslab.emu.utils.settings.Setting;
 
