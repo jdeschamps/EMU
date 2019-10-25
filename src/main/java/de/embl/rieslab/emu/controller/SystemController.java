@@ -10,6 +10,7 @@ import org.micromanager.Studio;
 
 import de.embl.rieslab.emu.configuration.ConfigurationController;
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.controller.utils.GlobalSettings;
 import de.embl.rieslab.emu.controller.utils.SystemDialogs;
 import de.embl.rieslab.emu.micromanager.MMRegistry;
@@ -50,6 +51,7 @@ public class SystemController {
 	private ConfigurableMainFrame mainframe_; // Main frame of the current plugin
 	private UIPluginLoader pluginloader_; // loader for EMU plugins
 	private String currentPlugin; // reference to the current loaded plugin
+	private final Logger logger_;
 		
 	/**
 	 * Constructor, solely instantiates the member variables.
@@ -58,7 +60,7 @@ public class SystemController {
 	 */
 	public SystemController(Studio studio){
 		studio_ = studio;
-		
+		logger_ = new Logger(studio_.getLogManager());
 		currentPlugin = "";
 	}
 	
@@ -183,7 +185,7 @@ public class SystemController {
 			applyConfiguration();
 			
 		} catch (IncompatiblePluginConfigurationException e) {
-			e.printStackTrace();
+			logger_.logError(e);
 		}
 	}
 	
@@ -219,7 +221,7 @@ public class SystemController {
 				reloadSystem(newPlugin, configs[0]);
 				applyConfiguration();
 			} catch (IncompatiblePluginConfigurationException e) {
-				e.printStackTrace();
+				logger_.logError(e);
 			}
 			
 		} else { // more than one configuration
@@ -233,7 +235,7 @@ public class SystemController {
 					reloadSystem(newPlugin, configuration);
 					applyConfiguration();
 				} catch (IncompatiblePluginConfigurationException e) {
-					e.printStackTrace();
+					logger_.logError(e);
 				}
 			}
 		}
@@ -242,7 +244,7 @@ public class SystemController {
 	private void reloadSystem(String pluginName, String configName) throws IncompatiblePluginConfigurationException {
 		// if the plugin is not available or the configuration unknown
 		if(!pluginloader_.isPluginAvailable(pluginName) || !configurationController_.doesConfigurationExist(configName)){ 
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Unavailable plugin or unknown configuration.");
 		}
 		
 		// if the configuration is not compatible to the plugin
@@ -500,6 +502,15 @@ public class SystemController {
 	 */
 	public Studio getStudio(){
 		return studio_;
+	}
+	
+	/**
+	 * Returns the EMU logger.
+	 * 
+	 * @return EMU logger.
+	 */
+	public Logger getLogger() {
+		return logger_;
 	}
 	
 	/**
