@@ -152,8 +152,10 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	 */
 	protected void setUpMenu() {
 		JMenuBar mb=new JMenuBar(); 
-        
-		JMenu menu = new JMenu("Menu");
+
+		JMenu confMenu = new JMenu("Configuration");
+		JMenu pluginMenu = new JMenu("Plugin");
+		JMenu aboutMenu = new JMenu("About");
 		
 		// to refresh the UI state
 		JMenuItem refresh = new JMenuItem(new AbstractAction("Refresh UI") {
@@ -166,7 +168,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		refresh.setToolTipText("Updates all UIProperties to the current value.");
 		
 		// to start the configuration wizard
-		JMenuItem wiz = new JMenuItem(new AbstractAction("Configuration wizard") {
+		JMenuItem wiz = new JMenuItem(new AbstractAction("Modify configuration") {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -176,7 +178,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 				}
 			}
 		});
-		wiz.setToolTipText("Start the settings wizard, allowing mapping device properties to UIProperties.");
+		wiz.setToolTipText("Start the configuration wizard, allowing configurating the UI or creating a new configuration.");
 
 		// configuration manager
 		JMenuItem manageconfig = new JMenuItem(new AbstractAction("Manage configurations") {
@@ -205,7 +207,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		});
 		
 		// about
-		JMenuItem about = new JMenuItem(new AbstractAction("About") {
+		JMenuItem aboutemu = new JMenuItem(new AbstractAction("About EMU") {
 			private static final long serialVersionUID = -5519431309736542210L;
 
 			public void actionPerformed(ActionEvent e) {
@@ -214,14 +216,19 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		});
 
 		// add all to menu
-		menu.add(wiz);
-		menu.add(refresh);
-		menu.add(manageconfig);
-		menu.add(switch_plugin);
-		menu.add(switch_configuration);
-		menu.add(plugin_description);
-		menu.add(about);
-		mb.add(menu);
+		confMenu.add(wiz);
+		confMenu.add(manageconfig);
+		confMenu.add(switch_plugin);
+		confMenu.add(switch_configuration);
+		
+		pluginMenu.add(refresh);
+		pluginMenu.add(plugin_description);
+		
+		aboutMenu.add(aboutemu);
+		
+		mb.add(confMenu);
+		mb.add(pluginMenu);
+		mb.add(aboutMenu);
 
         this.setJMenuBar(mb); 
 	}
