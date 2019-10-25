@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,11 +16,12 @@ import de.embl.rieslab.emu.configuration.data.PluginConfigurationID;
 import de.embl.rieslab.emu.configuration.io.ConfigurationIO;
 import de.embl.rieslab.emu.configuration.ui.ConfigurationManagerUI;
 import de.embl.rieslab.emu.configuration.ui.ConfigurationWizardUI;
-import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.GlobalSettings;
 import de.embl.rieslab.emu.controller.SystemController;
+import de.embl.rieslab.emu.controller.SystemDialogs;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import de.embl.rieslab.emu.ui.ConfigurableFrame;
-import de.embl.rieslab.emu.utils.settings.BoolSetting;
+import de.embl.rieslab.emu.utils.settings.Setting;
 
 /**
  * Controller class for the configuration of the current UI. This class bridges the {@link de.embl.rieslab.emu.controller.SystemController}
@@ -35,7 +37,9 @@ public class ConfigurationController {
 	private SystemController controller_; // overall controller
 	private ConfigurationWizardUI wizard_; // graphical interface to create/edit the current configuration
 	private ConfigurationManagerUI manager_; // graphical interface to delete configurations
-	private GlobalConfiguration configuration_; // configurations of the UI
+	private GlobalConfiguration globalConfiguration_; // configurations of the UI
+	@SuppressWarnings("rawtypes")
+	private HashMap<String, Setting> globalSettings_; // global settings
 	
 	/**
 	 * Constructor.
@@ -44,34 +48,36 @@ public class ConfigurationController {
 	 */
 	public ConfigurationController(SystemController controller){
 		controller_ = controller;
+		globalSettings_ = GlobalSettings.getDefaultGlobalSettings();
 	}
 
 	/**
-	 * Returns the default path to the configuration file as defined in {@link de.embl.rieslab.emu.controller.SystemConstants}.
+	 * Returns the default path to the configuration file as defined in {@link de.embl.rieslab.emu.controller.GlobalSettings}.
 	 * 
 	 * @return Default configuration file.
 	 */
 	public File getDefaultConfigurationFile() {
-		return new File(SystemConstants.CONFIG_NAME);
+		return new File(GlobalSettings.CONFIG_NAME);
 	}
 
 	/**
-	 * Reads the default configuration file.
+	 * Reads the default configuration file. This method is called at the start of EMU.
 	 * 
 	 * @return True if the configuration has been successfully read, false otherwise.
 	 */
 	public boolean readDefaultConfiguration(){
 		if(getDefaultConfigurationFile().exists()){
-			configuration_ = ConfigurationIO.read(getDefaultConfigurationFile());
-			if(configuration_ == null){  
-				configuration_ = new GlobalConfiguration(); // empty one
+			globalConfiguration_ = ConfigurationIO.read(getDefaultConfigurationFile());
+			if(globalConfiguration_ == null){  
+				globalConfiguration_ = new GlobalConfiguration(getGlobalSettingsMap()); // empty one
 				return false;
 			}
+			readGlobalSettings();
 			return true;
 		}
 		return false;
 	}
-	
+
 	/**
 	 * Reads a configuration file {@code f}.
 	 * 
@@ -80,11 +86,12 @@ public class ConfigurationController {
 	 */
 	public boolean readConfiguration(File f){	
 		if(f.exists()){	
-			configuration_ = ConfigurationIO.read(f);
-			if(configuration_ == null){
-				configuration_ = new GlobalConfiguration(); // empty one
+			globalConfiguration_ = ConfigurationIO.read(f);
+			if(globalConfiguration_ == null){
+				globalConfiguration_ = new GlobalConfiguration(getGlobalSettingsMap()); // empty one
 				return false;
 			}
+			readGlobalSettings();
 			return true;
 		}
 		return false;
@@ -115,7 +122,7 @@ public class ConfigurationController {
 	 * @return Global configuration.
 	 */
 	public GlobalConfiguration getConfiguration(){
-		return configuration_;
+		return globalConfiguration_;
 	}
 
 	/**
@@ -125,10 +132,10 @@ public class ConfigurationController {
 	 * @return True if the configuration exists, false otherwise.
 	 */
 	public boolean doesConfigurationExist(String configName){
-		if(configuration_ == null){
+		if(globalConfiguration_ == null){
 			return false;
 		}
-		return configuration_.doesConfigurationExist(configName);
+		return globalConfiguration_.doesConfigurationExist(configName);
 	}
 	
 	/**
@@ -138,8 +145,8 @@ public class ConfigurationController {
 	 * @return Array of compatible configuration names. The array can be of size 0. 
 	 */
 	public String[] getCompatibleConfigurations(String pluginName){
-		if(configuration_ != null){
-			return configuration_.getCompatibleConfigurations(pluginName);
+		if(globalConfiguration_ != null){
+			return globalConfiguration_.getCompatibleConfigurations(pluginName);
 		}
 		return new String[0]; 
 	}
@@ -151,7 +158,7 @@ public class ConfigurationController {
 	 * @return True if the current configuration contains all the properties and parameters defined in the plugin's ConfigurableFrame. 
 	 */
 	public boolean configurationSanityCheck(ConfigurableFrame maininterface) {
-		if(configuration_ == null){
+		if(globalConfiguration_ == null){
 			return false;
 		} else {
 			// just checks if some UIProperties or UIParameters are missing from the configuration.
@@ -162,14 +169,14 @@ public class ConfigurationController {
 			
 			// check if the plugin configuration contains all the UIProperties
 			Set<String> uipropkeys =  new HashSet<String>(maininterface.getUIProperties().keySet());
-			uipropkeys.removeAll(configuration_.getCurrentPluginConfiguration().getProperties().keySet());
+			uipropkeys.removeAll(globalConfiguration_.getCurrentPluginConfiguration().getProperties().keySet());
 			if(uipropkeys.size() > 0){
 				return false;
 			}
 			
 			// check if the plugin configuration contains all the UIParameters
 			Set<String> uiparamkeys =   new HashSet<String>(maininterface.getUIParameters().keySet());
-			uiparamkeys.removeAll(configuration_.getCurrentPluginConfiguration().getParameters().keySet());
+			uiparamkeys.removeAll(globalConfiguration_.getCurrentPluginConfiguration().getParameters().keySet());
 			if(uiparamkeys.size() > 0){
 				return false;
 			}
@@ -186,11 +193,11 @@ public class ConfigurationController {
 	 * @return True if the configuration was changed, false otherwise.
 	 */
 	public boolean setDefaultConfiguration(String newDefault){
-		if(configuration_ == null){
+		if(globalConfiguration_ == null){
 			return false;
 		}
 		
-		return configuration_.setCurrentConfiguration(newDefault);
+		return globalConfiguration_.setCurrentConfiguration(newDefault);
 	}
 	
 	/**
@@ -199,11 +206,11 @@ public class ConfigurationController {
 	 * @return Default configuration's name.
 	 */
 	public String getDefaultConfiguration(){
-		if(configuration_ == null){
+		if(globalConfiguration_ == null){
 			return null;
 		}
 		
-		return configuration_.getCurrentConfigurationName();
+		return globalConfiguration_.getCurrentConfigurationName();
 	}
 	
 	/**
@@ -213,39 +220,86 @@ public class ConfigurationController {
 	 * and UIProperty state values (values)
 	 */
 	public TreeMap<String,String> getPropertiesConfiguration(){
-		if(configuration_ == null){
+		if(globalConfiguration_ == null){
 			return null;
 		}
 		
-		return configuration_.getCurrentPluginConfiguration().getProperties();
+		return globalConfiguration_.getCurrentPluginConfiguration().getProperties();
 	}
 	
 	/**
-	 * Returns the parameters configuration. Null if there is none.
+	 * Returns the parameters configuration. Null if there is no configuration.
 	 * 
 	 * @return Pairs of UIParameter names (keys) and their value (values)
 	 */
 	public TreeMap<String,String> getParametersConfiguration(){
-		if(configuration_ == null){
+		if(globalConfiguration_ == null){
 			return null;
 		}
 		
-		return configuration_.getCurrentPluginConfiguration().getParameters();
+		return globalConfiguration_.getCurrentPluginConfiguration().getParameters();
 	}
 	
 	/**
-	 * Returns the plugin settings configuration. Null if there is none.
+	 * Returns the plugin settings configuration. Null if there is no configuration.
 	 * 
 	 * @return Pairs of UIParameter names (keys) and their value (values)
 	 */
 	public TreeMap<String,String> getPluginSettingsConfiguration(){
-		if(configuration_ == null){
+		if(globalConfiguration_ == null){
 			return null;
 		}
 		
-		return configuration_.getCurrentPluginConfiguration().getPluginSettings();
+		return globalConfiguration_.getCurrentPluginConfiguration().getPluginSettings();
 	}
 	
+	/**
+	 * Returns the global settings from the configuration. Null if there is no configuration.
+	 * 
+	 * @return Pairs of Settings names (keys) and their value (values)
+	 */
+	@SuppressWarnings("rawtypes")
+	public HashMap<String,Setting> getGlobalSettings(){		
+		return globalSettings_;
+	}
+	
+	private TreeMap<String, String> getGlobalSettingsMap() {
+		TreeMap<String, String> globalSettingsMap = new TreeMap<String, String>();
+		
+		for(String s: globalSettings_.keySet()) {
+			globalSettingsMap.put(s, globalSettings_.get(s).getStringValue());
+		}
+		
+		return globalSettingsMap;
+	}
+	
+	/**
+	 * Reads out the global settings from the configuration.
+	 * 
+	 * @param globalSettings Settings to be read.
+	 */
+	private void readGlobalSettings() {
+		TreeMap<String, String> globalSettings = globalConfiguration_.getGlobalSettings();
+		Iterator<String> it = globalSettings.keySet().iterator();
+		ArrayList<String> wrongvals = new ArrayList<String>();
+		while(it.hasNext()) {
+			String s  = it.next();
+			
+			// if the setting has the expected type, then replace in the current settings 
+			if(globalSettings_.containsKey(s)) { 
+				if(globalSettings_.get(s).isValueCompatible(globalSettings.get(s))) {
+					globalSettings_.get(s).setStringValue(globalSettings.get(s));
+				} else {
+					wrongvals.add(s);
+				}
+			}
+		}
+		if(wrongvals.size() > 0) {
+			SystemDialogs.showWrongGlobalSettings(wrongvals);
+		}
+	}
+	
+
 	/**
 	 * Closes the ConfigurationWizard window (if running). This method is called upon closing the plugin.
 	 * 
@@ -254,19 +308,9 @@ public class ConfigurationController {
 		if (wizard_ != null) {
 			wizard_.shutDown();
 		}
-	}
-	
-	/**
-	 * Returns the Setting corresponding to the enabling or disabling of the unallocated properties warning.
-	 * 
-	 * @return BoolSetting
-	 */
-	public BoolSetting getEnableUnallocatedWarnings(){
-		if(configuration_ == null){
-			return null;
+		if (manager_ != null) {
+			manager_.shutDown();
 		}
-		
-		return configuration_.getEnableUnallocatedWarningsSetting();
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -287,11 +331,11 @@ public class ConfigurationController {
 		if(!isWizardRunning()){	
 			wizard_ = new ConfigurationWizardUI(this);
 			
-			if(configuration_ != null){ // start a wizard with the current configuration loaded
-				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
+			if(globalConfiguration_ != null){ // start a wizard with the current configuration loaded
+				wizard_.start(pluginName, globalConfiguration_, maininterface, mmproperties);
 			} else { // start a fresh wizard
-				configuration_ = new GlobalConfiguration();				
-				wizard_.start(pluginName, configuration_, maininterface, mmproperties);
+				globalConfiguration_ = new GlobalConfiguration(getGlobalSettingsMap());				
+				wizard_.start(pluginName, globalConfiguration_, maininterface, mmproperties);
 			}
 			
 			return true;
@@ -321,31 +365,32 @@ public class ConfigurationController {
 	 * @param uiproperties Mapping of the UIProperties with MMProperties and their states.
 	 * @param uiparameters Mapping of the UIParameters' states.
 	 * @param plugsettings Mapping of the Settings' states used to configure the ConfigurableMainFrame.
-	 * @param globset_ Mapping of the GlobalSettings' states.
+	 * @param globset Mapping of the GlobalSettings' states.
 	 */
 	public void applyWizardSettings(String configName, String pluginName, Map<String, String> uiproperties, 
-			Map<String, String> uiparameters, HashMap<String, String> plugsettings, HashMap<String, String> globset) {
-		if(configuration_ == null){
+			Map<String, String> uiparameters, Map<String, String> plugsettings, Map<String, String> globset) {
+		if(globalConfiguration_ == null){
 			return;
 		}
 		
-		if (configuration_.getCurrentConfigurationName().equals(configName)) {
+		if (globalConfiguration_.getCurrentConfigurationName().equals(configName)) {
 			// the configuration has the same name
 			PluginConfiguration plugin = new PluginConfiguration();
 			plugin.configure(configName, pluginName, uiproperties, uiparameters, plugsettings);
-			configuration_.substituteConfiguration(plugin);
+			globalConfiguration_.substituteConfiguration(plugin);
 		} else {
 			// new configuration has a different name
 			PluginConfiguration plugin = new PluginConfiguration();
 			plugin.configure(configName, pluginName, uiproperties, uiparameters, plugsettings);
-			configuration_.addConfiguration(plugin);
+			globalConfiguration_.addConfiguration(plugin);
 		}
 
 		// set global settings
-		configuration_.setGlobalSettings(globset);
+		globalConfiguration_.setGlobalSettings(new TreeMap<String, String>(globset));
+		readGlobalSettings();
 
 		// set current configuration
-		configuration_.setCurrentConfiguration(configName);
+		globalConfiguration_.setCurrentConfiguration(configName);
 
 		writeConfiguration();
 
@@ -363,8 +408,8 @@ public class ConfigurationController {
 		if(!isWizardRunning()){	
 			manager_ = new ConfigurationManagerUI(this);
 			
-			if(configuration_ != null){ // start a wizard with the current configuration loaded
-				manager_.start(configuration_);
+			if(globalConfiguration_ != null){ // start a wizard with the current configuration loaded
+				manager_.start(globalConfiguration_);
 				return true;
 			}
 		}
@@ -372,13 +417,13 @@ public class ConfigurationController {
 	}
 	
 	public void applyManagerConfigurations(ArrayList<PluginConfigurationID> confs) {
-		if(configuration_ == null){
+		if(globalConfiguration_ == null){
 			return;
 		}
 		
 		// Remove all the PluginConfigurations that were deleted in the ConfigurationManager
 		// I don't expect large array list so the brute force O(N^2) should be fine
-		ArrayList<PluginConfiguration> plugconfs = configuration_.getPluginConfigurations();
+		ArrayList<PluginConfiguration> plugconfs = globalConfiguration_.getPluginConfigurations();
 		List<PluginConfiguration> toRemove = new ArrayList<PluginConfiguration>();
 		for(PluginConfiguration pc: plugconfs) {
 			boolean found = false;

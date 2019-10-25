@@ -25,6 +25,7 @@ import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.utils.exceptions.IncompatiblePluginConfigurationException;
+import de.embl.rieslab.emu.utils.settings.BoolSetting;
 import mmcorej.CMMCore;
 
 /**
@@ -44,7 +45,7 @@ public class SystemController {
 
 	private static Studio studio_; // MM studio
 	private MMRegistry mmregistry_; // holds the properties and configuration groups from Micro-manager
-	private ConfigurationController config; // Configuration controller, with all known plugin configurations
+	private ConfigurationController configurationController_; // Configuration controller, with all known plugin configurations
 	private ConfigurableMainFrame mainframe_; // Main frame of the current plugin
 	private UIPluginLoader pluginloader_; // loader for EMU plugins
 	private String currentPlugin; // reference to the current loaded plugin
@@ -81,16 +82,16 @@ public class SystemController {
 			
 		} else { // there are plugins
 			// reads out configuration
-			config = new ConfigurationController(this);
+			configurationController_ = new ConfigurationController(this);
 						
-			if(config.readDefaultConfiguration()){ // if a configuration was read
-				
-				if(pluginloader_.isPluginAvailable(config.getConfiguration().getCurrentPluginName())){ // if plugin available
+			if(configurationController_.readDefaultConfiguration()){ // if a configuration was read
+								
+				if(pluginloader_.isPluginAvailable(configurationController_.getConfiguration().getCurrentPluginName())){ // if plugin available
 					
 					// retrieves the plugin name and initiates UI					
-					currentPlugin = config.getConfiguration().getCurrentPluginName();
+					currentPlugin = configurationController_.getConfiguration().getCurrentPluginName();
 					mainframe_ = pluginloader_.loadPlugin(currentPlugin, 
-							config.getConfiguration().getCurrentPluginConfiguration().getPluginSettings());
+							configurationController_.getConfiguration().getCurrentPluginConfiguration().getPluginSettings());
 										
 					applyConfiguration();
 					
@@ -108,28 +109,30 @@ public class SystemController {
 					// loads plugin 
 					if(currentPlugin != null){						
 						// gets list of configurations corresponding to this plugin
-						String[] configs = config.getCompatibleConfigurations(currentPlugin);
+						String[] configs = configurationController_.getCompatibleConfigurations(currentPlugin);
 						
 						if(configs.length == 0){ // if there is no compatible configuration
 							// loads plugin with empty settings
 							mainframe_ = pluginloader_.loadPlugin(currentPlugin, new TreeMap<String, String>()); 
 							
 							// launches new wizard
-							config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
+							configurationController_.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
 						} else if(configs.length == 1){ // there is one so applies it
-							config.setDefaultConfiguration(configs[0]); // sets as default
+
+							configurationController_.setDefaultConfiguration(configs[0]); // sets as default
 							
 							// loads the plugin using the current configuration settings
-							mainframe_ = pluginloader_.loadPlugin(currentPlugin, config.getConfiguration().getCurrentPluginConfiguration().getPluginSettings()); 
+							mainframe_ = pluginloader_.loadPlugin(currentPlugin, configurationController_.getConfiguration().getCurrentPluginConfiguration().getPluginSettings()); 
 							
 							applyConfiguration();
 						} else {
 							// if more than one, then lets the user decide
 							String configuration = SystemDialogs.showPluginConfigurationsChoiceWindow(configs);
-							config.setDefaultConfiguration(configuration); // sets as default
+							
+							configurationController_.setDefaultConfiguration(configuration); // sets as default
 							
 							// loads the plugin using the current configuration settings
-							mainframe_ = pluginloader_.loadPlugin(currentPlugin, config.getConfiguration().getCurrentPluginConfiguration().getPluginSettings()); 
+							mainframe_ = pluginloader_.loadPlugin(currentPlugin, configurationController_.getConfiguration().getCurrentPluginConfiguration().getPluginSettings()); 
 							
 							applyConfiguration();
 						}		
@@ -142,7 +145,7 @@ public class SystemController {
 			} else { // no configuration was loaded
 				
 				// shows message
-				if(config.getDefaultConfigurationFile().exists()){
+				if(configurationController_.getDefaultConfigurationFile().exists()){
 					SystemDialogs.showConfigurationCouldNotBeParsed();
 				}
 
@@ -157,7 +160,7 @@ public class SystemController {
 					mainframe_ = pluginloader_.loadPlugin(currentPlugin, new TreeMap<String, String>());
 					
 					// launches a new wizard			
-					config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
+					configurationController_.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
 				} else {
 					// loads empty MainFrame
 					mainframe_ = new EmptyPropertyMainFrame(this);
@@ -183,6 +186,11 @@ public class SystemController {
 		}
 	}
 	
+	/**
+	 * Loads a new plugin. This method is called from the ConfigurableMainFrame menu.
+	 * 
+	 * @param newPlugin Name of the plugin to be loaded.
+	 */
 	public void loadPlugin(String newPlugin) {
 
 		if(!pluginloader_.isPluginAvailable(newPlugin)){
@@ -190,7 +198,7 @@ public class SystemController {
 		}
 
 		// get list of configurations corresponding to this plugin
-		String[] configs = config.getCompatibleConfigurations(newPlugin);
+		String[] configs = configurationController_.getCompatibleConfigurations(newPlugin);
 
 		if(configs.length == 0){ // no configuration corresponding to the plugin
 			currentPlugin = newPlugin;
@@ -202,7 +210,7 @@ public class SystemController {
 			mainframe_ = pluginloader_.loadPlugin(newPlugin, new TreeMap<String, String>());
 			
 			// launch new wizard
-			config.startWizard(newPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
+			configurationController_.startWizard(newPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
 			
 		} else if(configs.length == 1){ // a single compatible configuration
 			
@@ -232,12 +240,12 @@ public class SystemController {
 	
 	private void reloadSystem(String pluginName, String configName) throws IncompatiblePluginConfigurationException {
 		// if the plugin is not available or the configuration unknown
-		if(!pluginloader_.isPluginAvailable(pluginName) || !config.doesConfigurationExist(configName)){ 
+		if(!pluginloader_.isPluginAvailable(pluginName) || !configurationController_.doesConfigurationExist(configName)){ 
 			throw new IllegalArgumentException();
 		}
 		
 		// if the configuration is not compatible to the plugin
-		if(!config.getConfiguration().getPluginConfiguration(configName).getPluginName().equals(pluginName)){
+		if(!configurationController_.getConfiguration().getPluginConfiguration(configName).getPluginName().equals(pluginName)){
 			throw new IncompatiblePluginConfigurationException(pluginName, configName);
 		}
 		
@@ -247,11 +255,11 @@ public class SystemController {
 		}
 		
 		// if the current configuration is not the requested configuration, then updates it
-		if(!config.getDefaultConfiguration().equals(configName)){
-			config.setDefaultConfiguration(configName);
+		if(!configurationController_.getDefaultConfiguration().equals(configName)){
+			configurationController_.setDefaultConfiguration(configName);
 		}
 		
-		config.writeConfiguration(); // to set the default configuration in the configuration file.
+		configurationController_.writeConfiguration(); // to set the default configuration in the configuration file.
 					
 		// closes mainframe
 		mainframe_.shutDownAllConfigurablePanels();
@@ -260,10 +268,10 @@ public class SystemController {
 		mmregistry_.getMMPropertiesRegistry().clearAllListeners();
 		
 		// reloads plugin 
-		mainframe_ = pluginloader_.loadPlugin(pluginName, config.getConfiguration().getCurrentPluginConfiguration().getPluginSettings());
+		mainframe_ = pluginloader_.loadPlugin(pluginName, configurationController_.getConfiguration().getCurrentPluginConfiguration().getPluginSettings());
 	}
-
 	
+
 	/**
 	 * Reads out the properties from the configuration and pairs them to ui properties.
 	 * 
@@ -339,7 +347,7 @@ public class SystemController {
 			SystemDialogs.showForbiddenValuesMessage(forbiddenValuesProp);
 		}
 		
-		if(config.getEnableUnallocatedWarnings().getValue() && !unallocatedprop.isEmpty()){
+		if(((BoolSetting) configurationController_.getGlobalSettings().get(GlobalSettings.GLOBALSETTING_ENABLEUNALLOCATEDWARNINGS)).getValue() && !unallocatedprop.isEmpty()){
 			SystemDialogs.showUnallocatedMessage(unallocatedprop);
 		}
 	}
@@ -380,7 +388,7 @@ public class SystemController {
 		 */
 		
 		// sanity check
-		boolean sane = config.configurationSanityCheck(mainframe_);
+		boolean sane = configurationController_.configurationSanityCheck(mainframe_);
 		
 		if(!sane){
 			// shows dialog
@@ -388,8 +396,8 @@ public class SystemController {
 		} 
 		
 		// Allocates UI properties and parameters
-		readProperties(config.getPropertiesConfiguration());
-		readParameters(config.getParametersConfiguration());
+		readProperties(configurationController_.getPropertiesConfiguration());
+		readParameters(configurationController_.getParametersConfiguration());
 
 		// updates all properties and parameters
 		mainframe_.updateAllConfigurablePanels(); // this is slow as it calls CMMCore for every UIProperty
@@ -414,8 +422,8 @@ public class SystemController {
 	 * @return False if a Wizard is already running.
 	 */
 	public boolean launchWizard() {
-		if(config != null) {
-			return config.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
+		if(configurationController_ != null) {
+			return configurationController_.startWizard(currentPlugin, mainframe_, mmregistry_.getMMPropertiesRegistry());
 		}
 		return false;
 	}	
@@ -426,8 +434,8 @@ public class SystemController {
 	 * @return False if a Manager is already running.
 	 */
 	public boolean launchManager() {
-		if(config != null) {
-			return config.startManager();
+		if(configurationController_ != null) {
+			return configurationController_.startManager();
 		}
 		return false;
 	}
@@ -443,8 +451,8 @@ public class SystemController {
 	 * 
 	 */
 	public void shutDown(){
-		if(config != null){
-			config.shutDown();
+		if(configurationController_ != null){
+			configurationController_.shutDown();
 		}
 		if(mainframe_ != null){
 			mainframe_.shutDownAllConfigurablePanels();
@@ -565,11 +573,11 @@ public class SystemController {
 	 * @return Array of compatible configurations name.
 	 */
 	public String[] getOtherCompatibleConfigurationsList() {
-		if(config == null){
+		if(configurationController_ == null){
 			return new String[0];
 		}	
 		
-		String[] list = config.getCompatibleConfigurations(currentPlugin);
+		String[] list = configurationController_.getCompatibleConfigurations(currentPlugin);
 		
 		if(list.length==1){ // if length is 1 then the only configuration is the current one
 			return new String[0];
@@ -577,7 +585,7 @@ public class SystemController {
 			String[] others = new String[list.length-1];
 			int curr = 0;
 			for(int i=0;i<list.length;i++){
-				if(!list[i].equals(config.getConfiguration().getCurrentConfigurationName())){
+				if(!list[i].equals(configurationController_.getConfiguration().getCurrentConfigurationName())){
 					others[curr] = list[i];
 					curr++;
 				}

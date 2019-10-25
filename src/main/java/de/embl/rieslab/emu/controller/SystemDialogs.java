@@ -167,12 +167,39 @@ public class SystemDialogs {
 	/**
 	 * Displays the list of plugin settings states set to a wrong value.
 	 * 
-	 * @param wrongvals
+	 * @param wrongvals List of wrongly set settings.
 	 */
 	public static void showWrongPluginSettings(ArrayList<String> wrongvals) {
 		String title = "Wrong plugin setting values";
 		
 		String message = "The values of the following plugin settings were ignored due to type mismatch: \n\n";
+		Iterator<String> it = wrongvals.iterator();
+		message = message+it.next();
+		int count = 1;
+		while(it.hasNext()){
+			if(count % 5 == 0){
+				message = message+", \n"+it.next();
+			} else {
+				message = message+", "+it.next();
+			}
+			count ++;
+		}
+		message = message+". \n\n";
+		
+		message = message+"Please check make sure you enter correct values.\n";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
+	 * Displays the list of global settings states set to a wrong value.
+	 * 
+	 * @param wrongvals List of wrongly set settings.
+	 */
+	public static void showWrongGlobalSettings(ArrayList<String> wrongvals) {
+		String title = "Wrong global setting values";
+		
+		String message = "The values of the following global settings were ignored due to type mismatch: \n\n";
 		Iterator<String> it = wrongvals.iterator();
 		message = message+it.next();
 		int count = 1;

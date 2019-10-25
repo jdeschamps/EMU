@@ -2,10 +2,8 @@ package de.embl.rieslab.emu.configuration.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Iterator;
-
-import de.embl.rieslab.emu.utils.settings.BoolSetting;
+import java.util.TreeMap;
 
 /**
  * Class holding the list of known {@link PluginConfiguration}s and the name of
@@ -21,20 +19,19 @@ public class GlobalConfiguration {
 	 */
 	public final static String KEY_UNALLOCATED = "Unallocated";
 	private final static String KEY_NONE = "None";
-	private final static String KEY_ENABLEUNALLOCATEDWARNINGS = "Enable unallocated warnings";
 	
 	private String currentConfiguration;
-	private boolean enableUnallocatedWarnings;
+	private TreeMap<String, String> globalSettings;
 	private ArrayList<PluginConfiguration> pluginconfigs;
 
 	/**
 	 * Constructor for an empty GlobalConfiguration.
 	 * 
 	 */
-	public GlobalConfiguration(){
+	public GlobalConfiguration(TreeMap<String, String> globalSettings){
 		this.currentConfiguration = KEY_NONE;		
-		this.enableUnallocatedWarnings = true;
 		this.pluginconfigs = new ArrayList<PluginConfiguration>();
+		this.globalSettings = globalSettings;
 	}	
 	
 	/**
@@ -45,7 +42,7 @@ public class GlobalConfiguration {
 	@SuppressWarnings("unchecked")
 	public GlobalConfiguration(GlobalConfigurationWrapper configuration){
 		this.currentConfiguration = configuration.getDefaultConfigurationName();		
-		this.enableUnallocatedWarnings = configuration.getEnableUnallocatedWarnings();
+		this.globalSettings = configuration.getGlobalSettings();
 		this.pluginconfigs = (ArrayList<PluginConfiguration>) configuration.getPluginConfigurations().clone();
 	}	
 	
@@ -76,17 +73,6 @@ public class GlobalConfiguration {
 		return currentConfiguration;
 	}
 	
-	/** 
-	 * Generates a {@link de.embl.rieslab.emu.utils.settings.BoolSetting} that enables
-	 * the user to disable the "unallocated properties warning" prompt at each start of EMU.   
-	 * 
-	 * @return The GlobalSetting.
-	 */
-	public BoolSetting getEnableUnallocatedWarningsSetting(){
-		return new BoolSetting(KEY_ENABLEUNALLOCATEDWARNINGS, 
-				"When enabled, a message will be prompted to the user if some UI properties are note allocated.",enableUnallocatedWarnings);
-	}
-	
 	/**
 	 * Generates a {@link GlobalConfigurationWrapper} from this GlobalConfiguration in order to write the
 	 * GlobalConfiguration to a file.
@@ -98,7 +84,7 @@ public class GlobalConfiguration {
 	public GlobalConfigurationWrapper getGlobalConfigurationWrapper(){
 		GlobalConfigurationWrapper conf =  new GlobalConfigurationWrapper();
 		conf.setDefaultConfigurationName(currentConfiguration);
-		conf.setEnableUnallocatedWarnings(enableUnallocatedWarnings);
+		conf.setGlobalSettings(globalSettings);
 		conf.setPluginConfigurations(pluginconfigs);
 		return conf;
 	}
@@ -249,14 +235,19 @@ public class GlobalConfiguration {
 	}
 
 	/**
-	 * Set the values of the {@link de.embl.rieslab.emu.utils.settings.Setting}s.
-	 * 
-	 * @param globalSettings A HashMap containing the String values of the settings indexed by their name. 
+	 * Returns the global settings.
+	 * @return Global settings.
 	 */
-	public void setGlobalSettings(HashMap<String, String> globalSettings) {
-		// enable unallocated warnings
-		enableUnallocatedWarnings = Boolean.parseBoolean(globalSettings.get(KEY_ENABLEUNALLOCATEDWARNINGS));
+	public TreeMap<String, String> getGlobalSettings() {
+		return globalSettings;
 	}
 
-	
+	/**
+	 * Sets the global settings.
+	 * 
+	 * @param globset New global settings.
+	 */
+	public void setGlobalSettings(TreeMap<String, String> globset) {
+		globalSettings = globset;
+	}
 }

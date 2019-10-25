@@ -26,7 +26,6 @@ import de.embl.rieslab.emu.configuration.ui.tables.SettingsTable;
 import de.embl.rieslab.emu.controller.SystemDialogs;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import de.embl.rieslab.emu.ui.ConfigurableFrame;
-import de.embl.rieslab.emu.utils.settings.Setting;
 
 /**
  * UI used to configure the system by allocating UI properties to existing device properties in Micro-manager, the 
@@ -61,11 +60,32 @@ public class ConfigurationWizardUI {
 		plugin_name_ = "";
 	}
 
+
+	/**
+	 * Starts a new configuration wizard. If {@code configuration} is not compatible with {@code pluginName} then
+	 * the wizard starts a new configuration, otherwise the wizard will allow editing {@code configuration}.
+	 * 
+	 * @param pluginName Name of the plugin to be configured.
+	 * @param configuration Current configuration loaded in EMU.
+	 * @param maininterface ConfigurableFrame of the plugin. 
+	 * @param mmproperties Device properties from Micro-Manager.
+	 */
+	public void start(String pluginName, GlobalConfiguration configuration,
+			ConfigurableFrame maininterface, MMPropertiesRegistry mmproperties) {
+		
+		plugin_name_ = pluginName;
+		if(configuration.getCurrentPluginName() != null && configuration.getCurrentPluginName().equals(pluginName)){
+			existingConfiguration(maininterface, mmproperties, configuration);
+		} else {
+			newConfiguration(pluginName, maininterface, mmproperties);
+		}
+			
+	}
+	
 	// creates a new configuration
 	private void newConfiguration(final String plugin_name, final ConfigurableFrame maininterface, final MMPropertiesRegistry mmproperties) {
 		// makes sure it runs on EDT
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			@SuppressWarnings("rawtypes")
 			public void run() {
 				running_ = true;
 
@@ -84,9 +104,7 @@ public class ConfigurationWizardUI {
 				plugsettingstable_.setOpaque(true); 
 				
 				// and global settings
-				HashMap<String, Setting> glob = new HashMap<String, Setting>();
-				glob.put(config_.getEnableUnallocatedWarnings().getName(), config_.getEnableUnallocatedWarnings());
-				globsettingstable_ = new SettingsTable(glob, help_);
+				globsettingstable_ = new SettingsTable(config_.getGlobalSettings(), help_);
 				globsettingstable_.setOpaque(true); 
 				
 				frame_ = createFrame(plugin_name, propertytable_, parametertable_, plugsettingstable_, globsettingstable_, help_);
@@ -99,7 +117,6 @@ public class ConfigurationWizardUI {
 			final MMPropertiesRegistry mmproperties, final GlobalConfiguration configuration) {
 
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
-			@SuppressWarnings("rawtypes")
 			public void run() {
 				running_ = true;
 
@@ -120,11 +137,9 @@ public class ConfigurationWizardUI {
 						configuration.getCurrentPluginConfiguration().getPluginSettings(), help_);
 				plugsettingstable_.setOpaque(true);	
 				
-				// and global settings
-				HashMap<String, Setting> glob = new HashMap<String, Setting>();
-				glob.put(config_.getEnableUnallocatedWarnings().getName(), config_.getEnableUnallocatedWarnings());
-				globsettingstable_ = new SettingsTable(glob, help_);
-				globsettingstable_.setOpaque(true); 
+				// and global settings from the system controller
+				globsettingstable_ = new SettingsTable(config_.getGlobalSettings(), help_);
+				globsettingstable_.setOpaque(true);
 				
 				frame_ = createFrame(configuration.getCurrentConfigurationName(), propertytable_, parametertable_, plugsettingstable_, globsettingstable_, help_);
 
@@ -249,6 +264,19 @@ public class ConfigurationWizardUI {
 			help_.showHelp(b);
 		}
 	}
+
+	/**
+	 * Closes open windows (wizard frame and help)
+	 */
+	public void shutDown(){
+		if(help_ != null){
+			help_.disposeHelp();
+		}
+		if(frame_ != null){
+			frame_.dispose();
+		}
+		running_ = false;
+	}
 	
 	//  Retrieves the UIProperty and UIParameter name/value pairs from the tables, updates the Configuration and closes
 	//  all windows. 
@@ -265,37 +293,4 @@ public class ConfigurationWizardUI {
 		running_ = false;
 	}
 
-	/**
-	 * Closes open windows (wizard frame and help)
-	 */
-	public void shutDown(){
-		if(help_ != null){
-			help_.disposeHelp();
-		}
-		if(frame_ != null){
-			frame_.dispose();
-		}
-		running_ = false;
-	}
-
-	/**
-	 * Starts a new configuration wizard. If {@code configuration} is not compatible with {@code pluginName} then
-	 * the wizard starts a new configuration, otherwise the wizard will allow editing {@code configuration}.
-	 * 
-	 * @param pluginName Name of the plugin to be configured.
-	 * @param configuration Current configuration loaded in EMU.
-	 * @param maininterface ConfigurableFrame of the plugin. 
-	 * @param mmproperties Device properties from Micro-Manager.
-	 */
-	public void start(String pluginName, GlobalConfiguration configuration,
-			ConfigurableFrame maininterface, MMPropertiesRegistry mmproperties) {
-		
-		plugin_name_ = pluginName;
-		if(configuration.getCurrentPluginName() != null && configuration.getCurrentPluginName().equals(pluginName)){
-			existingConfiguration(maininterface, mmproperties, configuration);
-		} else {
-			newConfiguration(pluginName, maininterface, mmproperties);
-		}
-			
-	}
 }

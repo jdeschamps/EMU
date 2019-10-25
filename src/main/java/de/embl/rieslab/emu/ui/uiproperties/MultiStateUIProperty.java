@@ -1,6 +1,6 @@
 package de.embl.rieslab.emu.ui.uiproperties;
 
-import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.GlobalSettings;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
@@ -275,7 +275,7 @@ public class MultiStateUIProperty extends UIProperty{
 			if(EmuUtils.isNumeric(valToCompare) && getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT) {
 				Float state = Float.parseFloat(stateval);
 				Float val = Float.parseFloat(valToCompare);
-				return Math.abs(state-val) < SystemConstants.EPSILON;
+				return Math.abs(state-val) < GlobalSettings.EPSILON;
 			} else if(EmuUtils.isNumeric(valToCompare) && getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) {
 				double state = Double.parseDouble(valToCompare);
 				Integer val = Integer.parseInt(stateval);

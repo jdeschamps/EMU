@@ -2,6 +2,7 @@ package de.embl.rieslab.emu.configuration.data;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.TreeMap;
 
 /**
  * Wraps a {@link GlobalConfiguration} in a simple class in order to write and
@@ -13,7 +14,7 @@ import java.util.Collections;
 public class GlobalConfigurationWrapper {
 
 	private String defaultConfigurationName;
-	private boolean enableUnallocatedWarnings;
+	private TreeMap<String, String> globalSettings;
 	private ArrayList<PluginConfiguration> pluginConfigurations;
 	
 	public GlobalConfigurationWrapper(){
@@ -29,8 +30,8 @@ public class GlobalConfigurationWrapper {
 		return defaultConfigurationName;
 	}
 	
-	public boolean getEnableUnallocatedWarnings(){
-		return enableUnallocatedWarnings;
+	public TreeMap<String, String> getGlobalSettings(){
+		return globalSettings;
 	}
 
 	public void setPluginConfigurations(ArrayList<PluginConfiguration> pluginConfigurations){
@@ -42,8 +43,8 @@ public class GlobalConfigurationWrapper {
 		this.defaultConfigurationName = defaultConfigurationName;
 	}
 	
-	public void setEnableUnallocatedWarnings(boolean enableUnallocatedWarnings){
-		this.enableUnallocatedWarnings = enableUnallocatedWarnings;
+	public void setGlobalSettings(TreeMap<String, String> globalSettings){
+		this.globalSettings = globalSettings;
 	}
 
 }

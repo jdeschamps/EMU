@@ -134,10 +134,8 @@ public class SettingsTable extends JPanel{
 	private void createTable(DefaultTableModel model) {
 
 		table = new JTable(model) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -7528102943663023952L;
+
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
@@ -246,7 +244,7 @@ public class SettingsTable extends JPanel{
 	 */
 	class BoldTableCellRenderer extends DefaultTableCellRenderer {
 
-		private static final long serialVersionUID = 7284712630858433079L;
+		private static final long serialVersionUID = 1L;
 
 		public Component getTableCellRendererComponent(JTable table,
                 Object value, boolean isSelected, boolean hasFocus,

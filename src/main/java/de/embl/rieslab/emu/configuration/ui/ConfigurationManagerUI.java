@@ -120,6 +120,16 @@ public class ConfigurationManagerUI {
 		return frame;
 	}
 
+	/**
+	 * Closes open windows (wizard frame and help)
+	 */
+	public void shutDown(){
+		if(frame_ != null){
+			frame_.dispose();
+		}
+		running_ = false;
+	}
+	
 	public boolean isRunning() {
 		return running_;
 	}

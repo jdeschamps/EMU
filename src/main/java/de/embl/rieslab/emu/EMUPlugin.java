@@ -9,7 +9,7 @@ import org.micromanager.Studio;
 import org.scijava.plugin.Plugin;
 import org.scijava.plugin.SciJavaPlugin;
 
-import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.GlobalSettings;
 import de.embl.rieslab.emu.controller.SystemController;
 
 
@@ -55,8 +55,8 @@ public class EMUPlugin implements MenuPlugin, SciJavaPlugin {
 			@Override
 			public void run() {
 				// make sure the directory EMU exist
-				if(!(new File(SystemConstants.HOME)).exists()){
-					new File(SystemConstants.HOME).mkdirs();
+				if(!(new File(GlobalSettings.HOME)).exists()){
+					new File(GlobalSettings.HOME).mkdirs();
 				}
 				
 				controller_ = new SystemController(mmAPI_);

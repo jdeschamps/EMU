@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.ServiceLoader;
 import java.util.TreeMap;
 
-import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.GlobalSettings;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.plugin.UIPlugin;
 import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
@@ -40,7 +40,7 @@ public class UIPluginLoader {
 		
 		plugins_ = new HashMap<String, UIPlugin>();
 
-        File loc = new File(SystemConstants.HOME);
+        File loc = new File(GlobalSettings.HOME);
 
         File[] flist = loc.listFiles(new FileFilter() {
             public boolean accept(File file) {return file.getPath().toLowerCase().endsWith(".jar");}

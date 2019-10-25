@@ -1,6 +1,6 @@
 package de.embl.rieslab.emu.ui.uiproperties;
 
-import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.GlobalSettings;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
@@ -151,7 +151,7 @@ public class TwoStateUIProperty extends UIProperty{
 				if(EmuUtils.isNumeric(value)) {
 					Float f = Float.parseFloat(value);
 					Float onstate = Float.parseFloat(onstate_);
-					return Math.abs(f-onstate) < SystemConstants.EPSILON;
+					return Math.abs(f-onstate) < GlobalSettings.EPSILON;
 				}
 				return false;
 			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) { 
@@ -178,7 +178,7 @@ public class TwoStateUIProperty extends UIProperty{
 				if(EmuUtils.isNumeric(value)) {
 					Float f = Float.parseFloat(value);
 					Float offstate = Float.parseFloat(offstate_);
-					return Math.abs(f-offstate) < SystemConstants.EPSILON;
+					return Math.abs(f-offstate) < GlobalSettings.EPSILON;
 				}
 				return false;
 			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER) { 

@@ -1,7 +1,7 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
 
-import de.embl.rieslab.emu.controller.SystemConstants;
+import de.embl.rieslab.emu.controller.GlobalSettings;
 import de.embl.rieslab.emu.utils.EmuUtils;
 import mmcorej.CMMCore;
 
@@ -134,7 +134,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 */
 	@Override
 	public boolean areEquals(Float val1, Float val2) {
-		return Math.abs(val1-val2) < SystemConstants.EPSILON;
+		return Math.abs(val1-val2) < GlobalSettings.EPSILON;
 	}
 	
 }
