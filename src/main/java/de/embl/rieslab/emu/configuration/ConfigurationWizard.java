@@ -85,7 +85,7 @@ public class ConfigurationWizard {
 				parametertable_.setOpaque(true);
 				
 				// and plugin settings
-				plugsettingstable_ = new SettingsTable(maininterface.getDefaultPluginSettings(), help_);
+				plugsettingstable_ = new SettingsTable(maininterface.getDefaultPluginSettings(), help_, true);
 				plugsettingstable_.setOpaque(true); 
 				
 				// and global settings
