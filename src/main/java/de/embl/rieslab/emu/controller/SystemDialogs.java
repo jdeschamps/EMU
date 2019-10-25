@@ -262,4 +262,13 @@ public class SystemDialogs {
 				"The current configuration cannot be deleted.",
 				"Information", JOptionPane.INFORMATION_MESSAGE);
 	}
+	
+	/**
+	 * Prompted when a new configuration is created in the ConfigurationWizard. 
+	 */
+	public static void showWillCreateNewconfiguration() {
+		JOptionPane.showMessageDialog(null,
+				"Modifying the name of the configuration will create a new configuration (use the configuration manager to delete configurations).",
+				"Information", JOptionPane.INFORMATION_MESSAGE);
+	}
 }

@@ -15,12 +15,15 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import de.embl.rieslab.emu.configuration.ConfigurationController;
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
 import de.embl.rieslab.emu.configuration.ui.tables.ParametersTable;
 import de.embl.rieslab.emu.configuration.ui.tables.PropertiesTable;
 import de.embl.rieslab.emu.configuration.ui.tables.SettingsTable;
+import de.embl.rieslab.emu.controller.SystemDialogs;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import de.embl.rieslab.emu.ui.ConfigurableFrame;
 import de.embl.rieslab.emu.utils.settings.Setting;
@@ -49,6 +52,7 @@ public class ConfigurationWizardUI {
 	private ConfigurationController config_; // configuration class
 	private JFrame frame_; // overall frame for the configuration wizard
 	private boolean running_ = false;
+	private boolean promptedNew_ = false;
 	private String plugin_name_;
 	private JTextField config_name_;
 	
@@ -141,6 +145,7 @@ public class ConfigurationWizardUI {
 			}
 		});   
 		
+		promptedNew_ = false;
 		
 		// Tab containing the tables
 		JTabbedPane tabbedpane = new JTabbedPane();
@@ -158,6 +163,26 @@ public class ConfigurationWizardUI {
 		
 		JLabel conf_name_label = new JLabel("   Configuration's name:");
 		config_name_ = new JTextField(conf_name);
+		config_name_.getDocument().addDocumentListener(new DocumentListener() {
+			public void changedUpdate(DocumentEvent e) {
+				warn();
+			}
+
+			public void removeUpdate(DocumentEvent e) {
+				warn();
+			}
+
+			public void insertUpdate(DocumentEvent e) {
+				warn();
+			}
+
+			public void warn() {
+				if(!promptedNew_) {
+					SystemDialogs.showWillCreateNewconfiguration();
+					promptedNew_ = true;
+				}
+			}
+		});
 
 		JToggleButton helptoggle = new JToggleButton("HELP");
 		helptoggle.addActionListener(new ActionListener() {
