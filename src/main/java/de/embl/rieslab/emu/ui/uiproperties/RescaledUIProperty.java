@@ -118,23 +118,44 @@ public class RescaledUIProperty extends UIProperty{
 	}
 	
 	@Override
+	public String getPropertyValue() {
+		if (isAssigned()) {
+			String value = getMMProperty().getStringValue();
+
+			if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT && EmuUtils.isFloat(value)) {
+				return getScaledDownValue(new Float(value));
+			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER && EmuUtils.isInteger(value)) {
+				return getScaledDownValue(new Integer(value));
+			}
+		}
+		return "";
+	}
+	
+	@Override
 	public void mmPropertyHasChanged(String value){
 		if(limitsSet_) {
 			if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT && EmuUtils.isFloat(value)) {
 				Float val = new Float(value);
-				Float rescaledValue = new Float((val-offset_)/slope_);
-				
-				getOwner().triggerPropertyHasChanged(getPropertyLabel(),rescaledValue.toString());
+				getOwner().triggerPropertyHasChanged(getPropertyLabel(),getScaledDownValue(val));
 			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER && EmuUtils.isInteger(value)){
 				Integer val = new Integer(value);
-				Integer rescaledValue = new Integer((int) ((val-offset_)/slope_));
-				
-				getOwner().triggerPropertyHasChanged(getPropertyLabel(),rescaledValue.toString());
+				getOwner().triggerPropertyHasChanged(getPropertyLabel(),getScaledDownValue(val));
 			}
 		} else {
 			getOwner().triggerPropertyHasChanged(getPropertyLabel(),value);
 		}
 	}
+
+	protected String getScaledDownValue(Float f) {
+		Float rescaledValue = new Float((f-offset_)/slope_);
+		return rescaledValue.toString();
+	}
+	
+	protected String getScaledDownValue(Integer i) {
+		Integer rescaledValue = new Integer((int) ((i-offset_)/slope_));
+		return rescaledValue.toString();
+	}
+	
 	
 	public double getSlope() {
 		return slope_;
