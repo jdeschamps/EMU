@@ -131,10 +131,9 @@ public class TwoStateUIProperty extends UIProperty{
 		return false;
 	}	
 	
+
 	/**
-	 * Returns a String describing the UIPropertyType of the UIProperty.
-	 * 
-	 * @return UIProperty type
+	 * @inheritDoc
 	 */
 	public UIPropertyType getType() {
 		return UIPropertyType.TWOSTATE;

@@ -9,6 +9,7 @@ import org.junit.Test;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 
 public class UIPropertyTest {
 
@@ -22,7 +23,7 @@ public class UIPropertyTest {
 	}
 	
 	@Test (expected = NullPointerException.class)
-	public void testUIPropertyNullPairing() throws AlreadyAssignedUIPropertyException {
+	public void testUIPropertyNullPairing() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 
 		cp.property.assignProperty(null);		

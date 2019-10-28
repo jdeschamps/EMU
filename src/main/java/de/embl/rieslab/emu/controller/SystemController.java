@@ -26,6 +26,7 @@ import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 import de.embl.rieslab.emu.utils.exceptions.IncompatiblePluginConfigurationException;
 import de.embl.rieslab.emu.utils.settings.BoolSetting;
 import mmcorej.CMMCore;
@@ -284,6 +285,7 @@ public class SystemController {
 		String uiprop;
 		ArrayList<String> unallocatedprop = new ArrayList<String>();
 		ArrayList<String> forbiddenValuesProp = new ArrayList<String>();
+		ArrayList<String> incompatibleProp = new ArrayList<String>();
 		
 		HashMap<String, UIProperty> uiproperties = mainframe_.getUIProperties();
 		
@@ -300,44 +302,52 @@ public class SystemController {
 					unallocatedprop.add(uiprop);
 					
 				} else if (mmregistry_.getMMPropertiesRegistry().isProperty(configprop.get(uiprop))) { // if it is allocated to an existing Micro-manager property, link them together
-					// links the properties
-					try {
-						addPair(uiproperties.get(uiprop),mmregistry_.getMMPropertiesRegistry().getProperty(configprop.get(uiprop)));
-					} catch (AlreadyAssignedUIPropertyException e) {
-						e.printStackTrace();
-					}
 					
-					// tests if the property has finite number of states
-					if(uiproperties.get(uiprop) instanceof TwoStateUIProperty){ // if it is a two-state property
-						// extracts the on/off values
-						TwoStateUIProperty t = (TwoStateUIProperty) uiproperties.get(uiprop);
-						String offval = configprop.get(uiprop+TwoStateUIProperty.getOffStateName());
-						String onval = configprop.get(uiprop+TwoStateUIProperty.getOnStateName());
-						
-						if(!t.setOnStateValue(onval) || !t.setOffStateValue(offval)){
-							forbiddenValuesProp.add(uiprop);
-						}
-
-					} else if(uiproperties.get(uiprop) instanceof SingleStateUIProperty){ // if single state property
-						// extracts the state value
-						SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
-						String value = configprop.get(uiprop+SingleStateUIProperty.getValueName());
-						
-						if(!t.setStateValue(value)){
-							forbiddenValuesProp.add(uiprop);
+					if(uiproperties.get(uiprop).isCompatibleMMProperty(mmregistry_.getMMPropertiesRegistry().getProperty(configprop.get(uiprop)))) { // tests of they are compatible
+						// links the properties
+						boolean paired = false;
+						try {
+							paired = addPair(uiproperties.get(uiprop),mmregistry_.getMMPropertiesRegistry().getProperty(configprop.get(uiprop)));
+						} catch (AlreadyAssignedUIPropertyException | IncompatibleMMProperty e) {
+							e.printStackTrace();
 						}
 						
-					} else if (uiproperties.get(uiprop) instanceof MultiStateUIProperty) {// if it is a multistate property
-						MultiStateUIProperty t = (MultiStateUIProperty) uiproperties.get(uiprop);
-						int numpos = t.getNumberOfStates();
-						String[] val = new String[numpos];
-						for(int j=0;j<numpos;j++){								
-							val[j] =  configprop.get(uiprop+MultiStateUIProperty.getConfigurationStateName(j));
+						if(paired) {
+							// tests if the property has finite number of states (in order to set their values)
+							if(uiproperties.get(uiprop) instanceof TwoStateUIProperty){ // if it is a two-state property
+								// extracts the on/off values
+								TwoStateUIProperty t = (TwoStateUIProperty) uiproperties.get(uiprop);
+								String offval = configprop.get(uiprop+TwoStateUIProperty.getOffStateName());
+								String onval = configprop.get(uiprop+TwoStateUIProperty.getOnStateName());
+								
+								if(!t.setOnStateValue(onval) || !t.setOffStateValue(offval)){
+									forbiddenValuesProp.add(uiprop);
+								}
+		
+							} else if(uiproperties.get(uiprop) instanceof SingleStateUIProperty){ // if single state property
+								// extracts the state value
+								SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
+								String value = configprop.get(uiprop+SingleStateUIProperty.getValueName());
+								
+								if(!t.setStateValue(value)){
+									forbiddenValuesProp.add(uiprop);
+								}
+								
+							} else if (uiproperties.get(uiprop) instanceof MultiStateUIProperty) {// if it is a multistate property
+								MultiStateUIProperty t = (MultiStateUIProperty) uiproperties.get(uiprop);
+								int numpos = t.getNumberOfStates();
+								String[] val = new String[numpos];
+								for(int j=0;j<numpos;j++){								
+									val[j] =  configprop.get(uiprop+MultiStateUIProperty.getConfigurationStateName(j));
+								}
+		
+								if(!t.setStateValues(val)){
+									forbiddenValuesProp.add(uiprop);
+								}
+							}
 						}
-
-						if(!t.setStateValues(val)){
-							forbiddenValuesProp.add(uiprop);
-						}
+					} else {
+						incompatibleProp.add(uiprop);
 					}
 				} else {
 					// registers missing allocation
@@ -348,6 +358,10 @@ public class SystemController {
 
 		if(!forbiddenValuesProp.isEmpty()){
 			SystemDialogs.showForbiddenValuesMessage(forbiddenValuesProp);
+		}
+		
+		if(!incompatibleProp.isEmpty()){
+			SystemDialogs.showIncompatiblePropertiesMessage(incompatibleProp);
 		}
 		
 		if(((BoolSetting) configurationController_.getGlobalSettings().get(GlobalSettings.GLOBALSETTING_ENABLEUNALLOCATEDWARNINGS)).getValue() && !unallocatedprop.isEmpty()){
@@ -445,8 +459,8 @@ public class SystemController {
 	
 	// Pairs a ui property and a Micro-manager property together.
 	@SuppressWarnings("rawtypes")
-	private void addPair(UIProperty ui, MMProperty mm) throws AlreadyAssignedUIPropertyException{
-		PropertyPair.pair(ui,mm);
+	private boolean addPair(UIProperty ui, MMProperty mm) throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty{
+		return PropertyPair.pair(ui,mm);
 	}
 	
 	/**

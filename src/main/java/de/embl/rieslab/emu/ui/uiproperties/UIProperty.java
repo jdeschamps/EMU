@@ -6,6 +6,7 @@ import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 
 /**
  * A UIProperty object is aimed at linking a user interface action with a {@link de.embl.rieslab.emu.micromanager.mmproperties.MMProperty} from 
@@ -29,6 +30,7 @@ import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
  * instantiation.
  * - {@link SingleStateUIProperty} accepts a single state, unknown at compilation time.
  * - {@link ImmutableMultiStateUIProperty} accepts multiple states that are fixed at instantiation. 
+ * - {@link RescaledUIProperty} allows rescaling the values of the UIProperty (e.g.: use percentage to change the MMProperty). 
  * 
  * @author Joran Deschamps
  *
@@ -124,20 +126,36 @@ public class UIProperty {
 	 * a single MMProperty. This method will throw an AlreadyAssignedUIPropertyException if
 	 * there is an attempt to assign it to a second MMProperty.
 	 * 
-	 * @param prop MMproperty to assign the UIProperty to
-	 * @throws AlreadyAssignedUIPropertyException Exception thrown when the UIproperty has already been assigned
+	 * @param prop MMproperty to assign the UIProperty to.
+	 * @return True if the property was allocated successfully, false otherwise.
+	 * @throws AlreadyAssignedUIPropertyException Exception thrown when the UIProperty has already been assigned
+	 * @throws IncompatibleMMProperty exception thrown when the MMProperty is not compatible with the UIProperty.
 	 */
-	public void assignProperty(MMProperty prop) throws AlreadyAssignedUIPropertyException{
+	public boolean assignProperty(MMProperty prop) throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty{
 		if(prop == null) {
 			throw new NullPointerException();
-		} else if(!assigned_){
+		} else if(!assigned_ && isCompatibleMMProperty(prop)){
 			mmproperty_ = prop;
 			assigned_ = true;
+			return true;
 		} else if(assigned_){
 			throw new AlreadyAssignedUIPropertyException(label_);
+		} else if(!isCompatibleMMProperty(prop)){
+			throw new IncompatibleMMProperty(prop.getHash(),label_);
 		}
+		return false;
 	}
 	
+	/**
+	 * Checks if the MMProperty is compatible with the UIProperty.
+	 * 
+	 * @param prop MMProperty
+	 * @return True if it is, false otherwise.
+	 */
+	public boolean isCompatibleMMProperty(MMProperty prop) {
+		return true;
+	}
+		
 	/**
 	 * Checks if the UIProperty has been assigned or not.
 	 * 
@@ -170,7 +188,7 @@ public class UIProperty {
 	}
 	
 	/**
-	 * Sets the value of the assigned MMProperty ot {@code newValue}.
+	 * Sets the value of the assigned MMProperty to {@code newValue}.
 	 * 
 	 * @param newValue New value
 	 */
@@ -188,6 +206,14 @@ public class UIProperty {
 	 */
 	protected MMProperty getMMProperty(){
 		return mmproperty_;
+	}
+	
+	/**
+	 * Returns the ConfigurablePanel that owns this UIProperty.
+	 * @return Owner ConfigurablePanel.
+	 */
+	protected ConfigurablePanel getOwner() {
+		return owner_;
 	}
 	
 	/**
@@ -263,6 +289,7 @@ public class UIProperty {
 		}
 		return null;
 	}
+	
 	/**
 	 * Returns the limits of the assigned MMProperty.
 	 * 
@@ -318,4 +345,5 @@ public class UIProperty {
 	public UIPropertyType getType() {
 		return UIPropertyType.UIPROPERTY;
 	}
+	
 }

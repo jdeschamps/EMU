@@ -12,6 +12,7 @@ import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 
 public class TwoStateUIPropertyTest {
 
@@ -24,7 +25,7 @@ public class TwoStateUIPropertyTest {
 	}
 	
 	@Test
-	public void testSettingOnOffValues() throws AlreadyAssignedUIPropertyException {
+	public void testSettingOnOffValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -49,7 +50,7 @@ public class TwoStateUIPropertyTest {
 	}
 
 	@Test
-	public void testSettingWrongOnOffValues() throws AlreadyAssignedUIPropertyException {
+	public void testSettingWrongOnOffValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -78,7 +79,7 @@ public class TwoStateUIPropertyTest {
 	}
 	
 	@Test
-	public void testSettingValue() throws AlreadyAssignedUIPropertyException {
+	public void testSettingValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -168,7 +169,7 @@ public class TwoStateUIPropertyTest {
 	}	
 	
 	@Test
-	public void testIsOnOffValueIntegerMMProperty() throws AlreadyAssignedUIPropertyException {
+	public void testIsOnOffValueIntegerMMProperty() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -222,7 +223,7 @@ public class TwoStateUIPropertyTest {
 
 	
 	@Test
-	public void testIsOnOffValueFloatMMProperty() throws AlreadyAssignedUIPropertyException {
+	public void testIsOnOffValueFloatMMProperty() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final FloatMMProperty mmprop = new FloatMMProperty(null, "", "", false) {
@@ -282,7 +283,7 @@ public class TwoStateUIPropertyTest {
 	
 
 	@Test
-	public void testAssigningOnAndOff01Values() throws AlreadyAssignedUIPropertyException {
+	public void testAssigningOnAndOff01Values() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -321,7 +322,7 @@ public class TwoStateUIPropertyTest {
 	}
 	
 	@Test
-	public void testAssigningOnAndOffBooleanValues() throws AlreadyAssignedUIPropertyException {
+	public void testAssigningOnAndOffBooleanValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		TwoStateUIPropertyTestPanel cp = new TwoStateUIPropertyTestPanel("MyPanel");
 
 		final StringMMProperty mmprop = new StringMMProperty(null, MMProperty.MMPropertyType.STRING, "", "", new String[] {"true", "false"}) {

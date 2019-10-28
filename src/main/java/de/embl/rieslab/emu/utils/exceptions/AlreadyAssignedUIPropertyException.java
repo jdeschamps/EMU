@@ -8,7 +8,7 @@ package de.embl.rieslab.emu.utils.exceptions;
  */
 public class AlreadyAssignedUIPropertyException extends Exception {
 
-	private static final long serialVersionUID = 7899587215294640777L;
+	private static final long serialVersionUID = 1L;
 
 	public AlreadyAssignedUIPropertyException(String property_name){
 		super("The property \""+property_name+"\" has already been assigned.");

@@ -12,6 +12,7 @@ import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 
 public class SingleStateUIPropertyTest {
 
@@ -23,7 +24,7 @@ public class SingleStateUIPropertyTest {
 	}
 	
 	@Test
-	public void testSettingStateValue() throws AlreadyAssignedUIPropertyException {
+	public void testSettingStateValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -43,7 +44,7 @@ public class SingleStateUIPropertyTest {
 	}
 	
 	@Test
-	public void testSettingWrongStateValue() throws AlreadyAssignedUIPropertyException {
+	public void testSettingWrongStateValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -66,7 +67,7 @@ public class SingleStateUIPropertyTest {
 	}
 
 	@Test
-	public void testSettingValue() throws AlreadyAssignedUIPropertyException {
+	public void testSettingValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -121,7 +122,7 @@ public class SingleStateUIPropertyTest {
 	}
 
 	@Test
-	public void testSettingGenericValue() throws AlreadyAssignedUIPropertyException {
+	public void testSettingGenericValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {

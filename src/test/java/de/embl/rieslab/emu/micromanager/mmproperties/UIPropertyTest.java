@@ -14,11 +14,12 @@ import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 
 public class UIPropertyTest {
 
 	@Test
-	public void testUIPropertyPairing() throws AlreadyAssignedUIPropertyException {
+	public void testUIPropertyPairing() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		final StringMMProperty mmprop = new StringMMProperty(null,MMProperty.MMPropertyType.STRING,"","") {
 			@Override
@@ -33,7 +34,7 @@ public class UIPropertyTest {
 	}
 	
 	@Test
-	public void testUIPropertyReadOnly() throws AlreadyAssignedUIPropertyException {
+	public void testUIPropertyReadOnly() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", true) {
@@ -49,7 +50,7 @@ public class UIPropertyTest {
 	}
 
 	@Test
-	public void testUIPropertySetValue() throws AlreadyAssignedUIPropertyException { 
+	public void testUIPropertySetValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty { 
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		
 		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
@@ -80,7 +81,7 @@ public class UIPropertyTest {
 	}
 
 	@Test
-	public void testUIPropertyAllowedValues() throws AlreadyAssignedUIPropertyException { 
+	public void testUIPropertyAllowedValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty { 
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel") {
 
 			private static final long serialVersionUID = 1L;
@@ -117,7 +118,7 @@ public class UIPropertyTest {
 	}
 	
 	@Test
-	public void testUIPropertyBoundedValues() throws AlreadyAssignedUIPropertyException { 
+	public void testUIPropertyBoundedValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty { 
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		
 		final double min = -1.56;
@@ -149,7 +150,7 @@ public class UIPropertyTest {
 	}
 	
 	@Test (expected = AlreadyAssignedUIPropertyException.class)
-	public void testUIPropertyAlreadyAssigned() throws AlreadyAssignedUIPropertyException {
+	public void testUIPropertyAlreadyAssigned() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 
 		final IntegerMMProperty mmprop1 = new IntegerMMProperty(null, "", "", false) {

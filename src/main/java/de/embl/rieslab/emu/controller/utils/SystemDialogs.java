@@ -6,8 +6,6 @@ import java.util.Iterator;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
-import de.embl.rieslab.emu.controller.SystemController;
-
 /**
  * Dialogs prompted to the user.
  * 
@@ -219,7 +217,7 @@ public class SystemDialogs {
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
-	
+
 	/**
 	 * Displays the list of UIProperties states set to a forbidden value (mismatch with MM property limits).
 	 * 
@@ -243,6 +241,31 @@ public class SystemDialogs {
 		message = message+". \n\n";
 		
 		message = message+"Please check the device property browser of Micro-Manager \nto infer allowed values and correct the state values in the Settings Wizard.\n";
+		
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
+	 * Displays the list of UIProperties allocated to incompatible MMProperties.
+	 * 
+	 * @param incompatibleprops
+	 */
+	public static void showIncompatiblePropertiesMessage(ArrayList<String> incompatibleprops) {
+		String title = "Incompatible properties";
+		
+		String message = "The following UIProperties were paired with incompatible MMProperties: \n\n";
+		Iterator<String> it = incompatibleprops.iterator();
+		message = message+it.next();
+		int count = 1;
+		while(it.hasNext()){
+			if(count % 5 == 0){
+				message = message+", \n"+it.next();
+			} else {
+				message = message+", "+it.next();
+			}
+			count ++;
+		}
+		message = message+". \n";
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}

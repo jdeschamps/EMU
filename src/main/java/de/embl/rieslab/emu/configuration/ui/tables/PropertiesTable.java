@@ -3,8 +3,11 @@ package de.embl.rieslab.emu.configuration.ui.tables;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import javax.swing.DefaultCellEditor;
@@ -23,7 +26,9 @@ import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
 import de.embl.rieslab.emu.configuration.ui.ConfigurationWizardUI;
 import de.embl.rieslab.emu.configuration.ui.HelpWindow;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
+import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
+import de.embl.rieslab.emu.ui.uiproperties.RescaledUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
@@ -260,7 +265,7 @@ public class PropertiesTable extends JPanel {
 					case 1: // in the second column return a JComboBox cell editor with the devices name
 						return new DefaultCellEditor(devices);
 					case 2: // in the last column return a JcomboBox cell editor with the properties name corresponding to the selected device
-						return new DefaultCellEditor(getDevicePropertiesComboBox((String) getValueAt(row, 1)));
+						return new DefaultCellEditor(getDevicePropertiesComboBox((String) getValueAt(row, 1), (String) getValueAt(row, 0)));
 					default:
 						return super.getCellEditor(row, column);
 					}
@@ -302,14 +307,40 @@ public class PropertiesTable extends JPanel {
 	
 
 	// Creates a JComboBox containing all the Micro-manager device properties corresponding to the device.
-	private JComboBox<String> getDevicePropertiesComboBox(String device) {
+	private JComboBox<String> getDevicePropertiesComboBox(String device, String uipropName) {
 		JComboBox<String>  cb = new JComboBox<String> ();
 		cb.addItem(GlobalConfiguration.KEY_UNALLOCATED);
 
 		if (!device.equals(GlobalConfiguration.KEY_UNALLOCATED)) {
+			// RescaledUIProperty are only compatible with Integer- and FloatMMProperty with limits, so
+			// we filter them here
+			boolean rescaledUIProp = false;
+			if(uipropertySet_.containsKey(uipropName) && uipropertySet_.get(uipropName) instanceof RescaledUIProperty) {
+				rescaledUIProp = true;
+			}
+			
 			String[] props = mmproperties_.getDevice(device).getPropertyLabels(); // fill with the name of the property itself
-			for (int i = 0; i < props.length; i++) {
-				cb.addItem(props[i]);
+			if(!rescaledUIProp) {
+				for (int i = 0; i < props.length; i++) {
+					cb.addItem(props[i]);
+				}
+			} else {
+				@SuppressWarnings("rawtypes")
+				HashMap<String, MMProperty> mmprops = mmproperties_.getDevice(device).getProperties();
+				ArrayList<String> list = new ArrayList<String>();
+				
+				Iterator<String> it = mmprops.keySet().iterator();
+				while(it.hasNext()) {
+					String s = it.next();
+					if(uipropertySet_.get(uipropName).isCompatibleMMProperty(mmprops.get(s))) {
+						list.add(mmprops.get(s).getMMPropertyLabel());
+					}
+				}
+				Collections.sort(list);
+
+				for(String s: list) {
+					cb.addItem(s);
+				}
 			}
 		}
 		return cb;

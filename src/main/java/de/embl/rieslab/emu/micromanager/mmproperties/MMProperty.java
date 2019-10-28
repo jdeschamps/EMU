@@ -432,6 +432,7 @@ public abstract class MMProperty<T> {
 	 * @return True if allowed, false otherwise.
 	 */
 	protected abstract boolean isAllowed(T val);
+
 	
 	/**
 	 * Checks if the String {@code val} is allowed.

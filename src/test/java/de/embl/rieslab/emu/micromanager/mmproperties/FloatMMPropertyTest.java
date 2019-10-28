@@ -196,6 +196,7 @@ public class FloatMMPropertyTest {
 		assertTrue(prop.isAllowed(max_int));
 		assertTrue(prop.isAllowed(new Float(0.455)));
 		assertTrue(prop.isAllowed(new Float(11.4885456)));
+		assertFalse(prop.isAllowed(Float.NaN));
 		assertTrue(prop.isStringAllowed(min_int.toString()));
 		assertTrue(prop.isStringAllowed(max_int.toString()));
 		assertTrue(prop.isStringAllowed("0.12"));

@@ -31,6 +31,7 @@ import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 import de.embl.rieslab.emu.utils.exceptions.IncorrectUIPropertyTypeException;
 import de.embl.rieslab.emu.utils.settings.Setting;
 import mmcorej.CMMCore;
@@ -44,7 +45,7 @@ public class SwingUIListenersTest {
 	// write tests for null values passed as parameters
 	
 	@Test
-	public void testJComboboxActionListenerOnString() throws AlreadyAssignedUIPropertyException {
+	public void testJComboboxActionListenerOnString() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final String[] vals = {"MyValue1", "MyValue2", "MyValue3"};  
 		final JComboBox<String> combo = new JComboBox<String>(vals);
@@ -106,7 +107,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJComboboxActionListenerOnIndex() throws AlreadyAssignedUIPropertyException {
+	public void testJComboboxActionListenerOnIndex() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final String[] vals = {"MyValue1", "MyValue2", "MyValue3"};  
 		final JComboBox<String> combo = new JComboBox<String>(vals);
@@ -167,7 +168,7 @@ public class SwingUIListenersTest {
 	
 	
 	@Test
-	public void testJComboboxActionListenerOnIndexWithArray() throws AlreadyAssignedUIPropertyException {
+	public void testJComboboxActionListenerOnIndexWithArray() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final String[] combovals = {"MyValue1", "MyValue2", "MyValue3"}; // values shown to the user (maybe set by a UIParameter) 
 		final String[] vals = {"CoolName1", "CoolName2", "CoolName3"}; // friendly names used to trigger the UIProperty 
@@ -230,7 +231,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testJTextFieldActionListenerOnIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJTextFieldActionListenerOnIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
@@ -296,7 +297,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testJTextFieldActionListenerOnStringValue() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJTextFieldActionListenerOnStringValue() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
@@ -362,7 +363,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnIntegerValueWithFeedbackToSlider() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJTextFieldActionListenerOnIntegerValueWithFeedbackToSlider() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		final JSlider slider = new JSlider(); // 0 - 100
@@ -452,7 +453,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnBoundedIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJTextFieldActionListenerOnBoundedIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		final int min = -4;
@@ -558,7 +559,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnDoubleValue() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJTextFieldActionListenerOnDoubleValue() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		
@@ -644,7 +645,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerOnBoundedDoubleValue() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJTextFieldActionListenerOnBoundedDoubleValue() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JTextField textfield = new JTextField();
 		final double min = -4.022;
@@ -994,7 +995,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJSliderActionListenerOnIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJSliderActionListenerOnIntegerValue() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		int value = 21;
 		final JSlider slider = new JSlider(0,100,value);
@@ -1065,7 +1066,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJSliderActionListenerOnIntegerValueWithFeedbackToTextField() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackToTextField() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		int value = 21;
 		final JSlider slider = new JSlider(0,100,value);
@@ -1139,7 +1140,7 @@ public class SwingUIListenersTest {
 	}		
 	
 	@Test
-	public void testJSliderActionListenerOnIntegerValueWithFeedbackToLabel() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackToLabel() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		int value = 21;
 		final JSlider slider = new JSlider(0,100,value);
@@ -1213,7 +1214,7 @@ public class SwingUIListenersTest {
 	}	
 	
 	@Test
-	public void testJSliderActionListenerOnIntegerValueWithFeedbackPreSuffixes() throws AWTException, AlreadyAssignedUIPropertyException {
+	public void testJSliderActionListenerOnIntegerValueWithFeedbackPreSuffixes() throws AWTException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		int value = 21;
 		final JSlider slider = new JSlider(0,100,value);
@@ -1290,7 +1291,7 @@ public class SwingUIListenersTest {
 	}	
 
 	@Test
-	public void testButtonGroupActionListenerOnSelectedIndex() throws AlreadyAssignedUIPropertyException {
+	public void testButtonGroupActionListenerOnSelectedIndex() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JToggleButton button1 = new JToggleButton();
 		final JToggleButton button2 = new JToggleButton();
@@ -1362,7 +1363,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJToggleButtonActionListenerToTwoState() throws AlreadyAssignedUIPropertyException {
+	public void testJToggleButtonActionListenerToTwoState() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JToggleButton button = new JToggleButton();
 		
@@ -1432,7 +1433,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testButtonGroupActionListenerOnSelectedIndexWithArray() throws AlreadyAssignedUIPropertyException {
+	public void testButtonGroupActionListenerOnSelectedIndexWithArray() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JToggleButton button1 = new JToggleButton();
 		final JToggleButton button2 = new JToggleButton();
@@ -1505,7 +1506,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testAbstractButtonActionListenerToSingleState() throws AlreadyAssignedUIPropertyException {
+	public void testAbstractButtonActionListenerToSingleState() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String prop = "My Prop";
 		final JButton btn = new JButton();
 		
@@ -1642,6 +1643,7 @@ public class SwingUIListenersTest {
 			// Do nothing
 		}
 	
+		@SuppressWarnings("rawtypes")
 		@Override
 		public HashMap<String, Setting> getDefaultPluginSettings() {
 			return new HashMap<String, Setting>();

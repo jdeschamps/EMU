@@ -41,6 +41,9 @@ public class EmuUtils {
 	    return true;
 	}
 	
+	/*
+	 * From https://docs.oracle.com/javase/8/docs/api/java/lang/Double.html
+	 */
 	public static boolean isFloat(String val) {
 		if(val == null) {
 			return false;
@@ -118,5 +121,12 @@ public class EmuUtils {
 			return true;
 		}
 		return false;
+	}
+
+	public static int roundToInt(double d) {
+		if(d < 0) {
+			return (int) (d-0.5);
+		}
+		return (int) (d+0.5);
 	}
 }

@@ -36,6 +36,7 @@ import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
 import de.embl.rieslab.emu.utils.ColorRepository;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 import de.embl.rieslab.emu.utils.exceptions.IncorrectInternalPropertyTypeException;
 import de.embl.rieslab.emu.utils.exceptions.IncorrectUIParameterTypeException;
 import de.embl.rieslab.emu.utils.exceptions.UnknownInternalPropertyException;
@@ -106,7 +107,7 @@ public class ConfigurablePanelTest {
 	}
 	
 	@Test 
-	public void testUpdateAllProperties() throws UnknownUIPropertyException, AlreadyAssignedUIPropertyException {
+	public void testUpdateAllProperties() throws UnknownUIPropertyException, AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		final String[] props = {"PROP1", "PROP2", "PROP3"};
 		final String[] mmprops = {"MMPROP1", "MMPROP2", "MMPROP3"};
 		
@@ -239,7 +240,7 @@ public class ConfigurablePanelTest {
 	 * Tests setting and getting a UIProperty value.
 	 */
 	@Test 
-	public void testGetSetPropertyValue() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException {		
+	public void testGetSetPropertyValue() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException, IncompatibleMMProperty {		
 		final String uipropLabel = "MyProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("My") {
 			private static final long serialVersionUID = 1L;
@@ -308,7 +309,7 @@ public class ConfigurablePanelTest {
 	 * Test setting the value of a UIProperty to null. 
 	 */
 	@Test 
-	public void testSetNullPropertyValue() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException {		
+	public void testSetNullPropertyValue() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException, IncompatibleMMProperty {		
 		final String uipropLabel = "MyProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("My") {
 			private static final long serialVersionUID = 1L;
@@ -1698,7 +1699,7 @@ public class ConfigurablePanelTest {
 	 * @throws UnknownUIPropertyException
 	 */
 	@Test
-	public void testComponentTriggerSafeGuard() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException {
+	public void testComponentTriggerSafeGuard() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException, IncompatibleMMProperty {
 		
 		// In the absence of the component trigger on/off (called in the method triggerPropertyHasChanged(String, String) and 
 		// setUIPropertyValue(String, String)), multiple call to the same MMProperty or an infinite loop (when multiple UIProperties

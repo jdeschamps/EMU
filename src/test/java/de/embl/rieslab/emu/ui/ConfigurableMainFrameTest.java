@@ -21,6 +21,7 @@ import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.utils.EmuUtils;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
+import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 import de.embl.rieslab.emu.utils.exceptions.IncorrectInternalPropertyTypeException;
 import de.embl.rieslab.emu.utils.exceptions.UnknownInternalPropertyException;
 import de.embl.rieslab.emu.utils.exceptions.UnknownUIParameterException;
@@ -343,7 +344,7 @@ public class ConfigurableMainFrameTest {
 
 	
 	@Test
-	public void testUpdateAll() throws UnknownUIParameterException, IncorrectInternalPropertyTypeException, UnknownInternalPropertyException, AlreadyAssignedUIPropertyException, UnknownUIPropertyException {
+	public void testUpdateAll() throws UnknownUIParameterException, IncorrectInternalPropertyTypeException, UnknownInternalPropertyException, AlreadyAssignedUIPropertyException, UnknownUIPropertyException, IncompatibleMMProperty {
 		final String[] panels = {"Pane1", "Pane2"};
 		
 		// no collision between UIProperties name
@@ -468,7 +469,7 @@ public class ConfigurableMainFrameTest {
 	}
 	
 	@Test
-	public void testUpdateAllProperties() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException {
+	public void testUpdateAllProperties() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException, IncompatibleMMProperty {
 		final String[] panels = {"Pane1", "Pane2"};
 		
 		// no collision between UIProperties name
