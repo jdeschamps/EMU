@@ -195,7 +195,7 @@ public abstract class MMProperty<T> {
 					e.printStackTrace(); 
 				}
 			} else {
-				System.out.println("VALUE NOT ALLOWED: in ["+getHash()+"], set value ["+val+"] from ["+stringval+"]");
+				System.out.println("VALUE NOT ALLOWED: in ["+getHash()+"]: value ["+val+"]");
 			}
 		}
 		return false;
