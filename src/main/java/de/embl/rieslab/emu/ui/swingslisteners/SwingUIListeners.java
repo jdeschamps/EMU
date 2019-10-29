@@ -28,13 +28,20 @@ import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
 import de.embl.rieslab.emu.utils.EmuUtils;
 import de.embl.rieslab.emu.utils.exceptions.IncorrectUIPropertyTypeException;
 
+/**
+ * This class holds static standard methods to link Swing components with UIProperties. The methods trigger a UIProperty change when
+ * the user interacts with the JComponents.
+ * 
+ * @author Joran Deschamps
+ *
+ */
 public class SwingUIListeners {
 
 	/**
-	 * Adds a Swing action listener to a JComboBox. The action listener cause the property corresponding to {@code propertyKey} in the  
-	 * ConfigurablePanel {@code cp} to be set to the item selected in the JCombobox cbx every time the user interact with it.
+	 * Adds a Swing action listener to a JComboBox, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the JCombobox current value.
 	 * 
-	 * @param cp ConfigurablePanel owning the property.
+	 * @param cp ConfigurablePanel that owns the property.
 	 * @param propertyKey UIProperty to modify when the JComboBox changes.
 	 * @param cbx JCombobox holding the different UIproperty states.
 	 */
@@ -57,6 +64,14 @@ public class SwingUIListeners {
         });
 	}
 	
+	/**
+	 * Adds a Swing action listener to a JTextField value, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the JTextField value upon pressing the enter key.
+	 * 
+	 * @param cp ConfigurablePanel that owns the property.
+	 * @param propertyKey UIProperty to modify when the JTextField changes.
+	 * @param txtf JTextField the user interacts with.
+	 */
 	public static void addActionListenerOnStringValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -75,6 +90,14 @@ public class SwingUIListeners {
         });
 	}
 
+	/**
+	 * Adds a Swing action listener to a JComboBox, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the JCombobox currently selected index.
+	 * 
+	 * @param cp ConfigurablePanel that owns the property.
+	 * @param propertyKey UIProperty to modify when the JComboBox changes.
+	 * @param cbx JCombobox.
+	 */
 	public static void addActionListenerOnSelectedIndex(final ConfigurablePanel cp, final String propertyKey, final JComboBox<?> cbx) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -93,7 +116,15 @@ public class SwingUIListeners {
 	    	}
         });
 	}
-
+	
+	/**
+	 * Adds a Swing action listener to a ButtonGroup, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the ButtonGroup currently selected button index.
+	 * 
+	 * @param cp ConfigurablePanel that owns the property.
+	 * @param propertyKey UIProperty to modify when the ButtonGroup selected button changes.
+	 * @param group ButtonGroup containing the different buttons.
+	 */
 	public static void addActionListenerOnSelectedIndex(final ConfigurablePanel cp, final String propertyKey, final ButtonGroup group) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -121,6 +152,15 @@ public class SwingUIListeners {
 		}
 	}
 	
+	/**
+	 * Adds a Swing action listener to a ButtonGroup, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the entry of {@code values} whose index equals the ButtonGroup currently selected button index.
+	 * 
+	 * @param cp ConfigurablePanel that owns the property.
+	 * @param propertyKey UIProperty to modify when the ButtonGroup selected button changes.
+	 * @param group ButtonGroup containing the different buttons.
+	 * @param values String array containing the values to set the UIProperty to.
+	 */
 	public static void addActionListenerOnSelectedIndex(final ConfigurablePanel cp, final String propertyKey, final ButtonGroup group, String[] values) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -156,6 +196,15 @@ public class SwingUIListeners {
 		}
 	}
 	
+	/**
+	 * Adds a Swing action listener to a JCombobox, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the entry of {@code values} whose index equals the JCombobox currently selected index.
+	 * 
+	 * @param cp ConfigurablePanel that owns the property.
+	 * @param propertyKey UIProperty to modify when the JComboBox changes.
+	 * @param cbx JComboBox.
+	 * @param values String array containing the values to set the UIProperty to.
+	 */
 	public static void addActionListenerOnSelectedIndex(final ConfigurablePanel cp, final String propertyKey, final JComboBox<?> cbx, String[] values) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -186,6 +235,16 @@ public class SwingUIListeners {
         });
 	}
 
+	/**
+	 * Adds a Swing action listener to a JTextField value, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the JTextField (integer) value within an allowed range defined by {@code min} and {@code max}. Non-integer values are ignored.
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param txtf JTextField.
+	 * @param min Minimum accepted value. 
+	 * @param max Maximum accepted value.
+	 */
 	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf, int min, int max) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -226,6 +285,16 @@ public class SwingUIListeners {
 		});
 	}
 
+	/**
+	 * Adds a Swing action listener to a JTextField value, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the JTextField (double) value within an allowed range defined by {@code min} and {@code max}. Non-double values are ignored.
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param txtf JTextField.
+	 * @param min Minimum accepted value. 
+	 * @param max Maximum accepted value.
+	 */
 	public static void addActionListenerOnDoubleValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf, double min, double max) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -266,7 +335,14 @@ public class SwingUIListeners {
 		});
 	}
 
-
+	/**
+	 * Adds a Swing action listener to a JTextField value, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the JTextField (integer) value. Non-integer values are ignored.
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param txtf JTextField.
+	 */
 	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -302,6 +378,15 @@ public class SwingUIListeners {
 		});
 	}
 
+	/**
+	 * Adds a Swing action listener to a JTextField value, causing the UIProperty
+	 * {@code propertyKey} from {@code cp} to be updated with the JTextField
+	 * (double) value. Non-double values are ignored.
+	 * 
+	 * @param cp          ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param txtf        JTextField.
+	 */
 	public static void addActionListenerOnDoubleValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
