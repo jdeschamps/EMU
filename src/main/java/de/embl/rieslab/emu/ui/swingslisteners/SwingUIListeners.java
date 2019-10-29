@@ -20,8 +20,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
-import de.embl.rieslab.emu.ui.swingslisteners.triggers.Trigger;
-import de.embl.rieslab.emu.ui.swingslisteners.triggers.UnparametrizedTrigger;
+import de.embl.rieslab.emu.ui.swingslisteners.triggers.Action;
+import de.embl.rieslab.emu.ui.swingslisteners.triggers.UnparametrizedAction;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
@@ -29,7 +29,7 @@ import de.embl.rieslab.emu.utils.EmuUtils;
 import de.embl.rieslab.emu.utils.exceptions.IncorrectUIPropertyTypeException;
 
 /**
- * This class holds static standard methods to link Swing components with UIProperties. The methods trigger a UIProperty change when
+ * This class holds static standard methods to link Swing components with UIProperties or actions. The methods trigger a UIProperty change or an action when
  * the user interacts with the JComponents.
  * 
  * @author Joran Deschamps
@@ -422,10 +422,17 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addActionListenerToDoubleTrigger(final Trigger<Double> action, final JTextField txtf) {
+	/**
+	 * Adds a Swing action listener to a JTextField with an input of type Double, triggering an Action (lambda expression) when the enter key is pressed.
+	 * Non-double expressions will be ignored.
+	 * 
+	 * @param action Action taking a Double parameter.
+	 * @param txtf JTextField triggering the Action.
+	 */
+	public static void addActionListenerToDoubleTrigger(final Action<Double> action, final JTextField txtf) {
 
 		if(action == null) {
-			throw new NullPointerException("The Trigger cannot be null.");
+			throw new NullPointerException("The Action cannot be null.");
 		}
 		if(txtf == null) {
 			throw new NullPointerException("The JTextField cannot be null.");
@@ -455,9 +462,18 @@ public class SwingUIListeners {
 		});
 	}
 	
-	public static void addActionListenerToDoubleTrigger(final Trigger<Double> action, final JTextField txtf, double min, double max) {
+	/**
+	 * Adds a Swing action listener to a JTextField with an input of type Double between {@code min} and {@code max}, 
+	 * triggering an Action (lambda expression) when the enter key is pressed. Non-double expressions will be ignored.
+	 * 
+	 * @param action Action taking a Double parameter.
+	 * @param txtf JTextField triggering the Action.
+	 * @param min Minimum value of the Double input.
+	 * @param max Maximum value of the Double input.
+	 */
+	public static void addActionListenerToDoubleTrigger(final Action<Double> action, final JTextField txtf, double min, double max) {
 		if(action == null) {
-			throw new NullPointerException("The Trigger cannot be null.");
+			throw new NullPointerException("The Action cannot be null.");
 		}
 		if(txtf == null) {
 			throw new NullPointerException("The JTextField cannot be null.");
@@ -492,10 +508,16 @@ public class SwingUIListeners {
 			}
 		});
 	}
-	
-	public static void addActionListenerToStringTrigger(final Trigger<String> action, final JTextField txtf) {
+	/**
+	 * Adds a Swing action listener to a JTextField, triggering an Action (lambda expression) when the enter 
+	 * key is pressed.
+	 * 
+	 * @param action Action taking a String parameter.
+	 * @param txtf JTextField triggering the Action.
+	 */
+	public static void addActionListenerToStringTrigger(final Action<String> action, final JTextField txtf) {
 		if(action == null) {
-			throw new NullPointerException("The Trigger cannot be null.");
+			throw new NullPointerException("The Action cannot be null.");
 		}
 		if(txtf == null) {
 			throw new NullPointerException("The JTextField cannot be null.");
@@ -519,9 +541,16 @@ public class SwingUIListeners {
 		});
 	}
 	
-	public static void addActionListenerToIntegerTrigger(final Trigger<Integer> action, final JTextField txtf) {
+	/**
+	 * Adds a Swing action listener to a JTextField with an input of type Integer, triggering an Action (lambda expression) 
+	 * when the enter key is pressed. Non-integer expressions will be ignored.
+	 * 
+	 * @param action Action taking an Integer parameter.
+	 * @param txtf JTextField triggering the Action.
+	 */
+	public static void addActionListenerToIntegerTrigger(final Action<Integer> action, final JTextField txtf) {
 		if(action == null) {
-			throw new NullPointerException("The Trigger cannot be null.");
+			throw new NullPointerException("The Action cannot be null.");
 		}
 		if(txtf == null) {
 			throw new NullPointerException("The JTextField cannot be null.");
@@ -551,6 +580,14 @@ public class SwingUIListeners {
 		});
 	}
 
+	/**
+	 * Adds a Swing action listener to a JSlider, causing the UIProperty {@code propertyKey} from {@code cp} to be updated
+	 * with the JSlider (integer) value. 
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param JSlider JTextField.
+	 */
 	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -570,6 +607,15 @@ public class SwingUIListeners {
 		});
 	}
 	
+	/**
+	 * Adds a Swing action listener to a JTextField, causing the UIProperty {@code propertyKey} from {@code cp} and the JSlider {@code sld}
+	 * to be updated with the JTextField (integer) value. Non-integer values will be ignored. 
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param txtf JTextField triggering the update when the enter key is pressed.
+	 * @param sld JSlider updated alongside the UIProperty.
+	 */
 	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JTextField txtf, final JSlider sld) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -614,7 +660,16 @@ public class SwingUIListeners {
 			}
 		});
 	}
-
+	
+	/**
+	 * Adds a Swing action listener to a JSlider, causing the UIProperty {@code propertyKey} from {@code cp} and the JTextField {@code txtf}
+	 * to be updated with the JSlider (integer) value. 
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param sld JSlider triggering the update.
+	 * @param txtf JTextField updated alongside the UIProperty.
+	 */
 	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JTextField txtf) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -638,7 +693,15 @@ public class SwingUIListeners {
 		});
 	}
 
-
+	/**
+	 * Adds a Swing action listener to a JSlider, causing the UIProperty {@code propertyKey} from {@code cp} and the JLabel {@code lbl}
+	 * to be updated with the JSlider (integer) value. 
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param sld JSlider triggering the update.
+	 * @param lbl JLabel updated alongside the UIProperty.
+	 */
 	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JLabel lbl) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -661,7 +724,17 @@ public class SwingUIListeners {
 			}
 		});
 	}
-	
+	/**
+	 * Adds a Swing action listener to a JSlider, causing the UIProperty {@code propertyKey} from {@code cp} and the JLabel {@code lbl}
+	 * to be updated with the JSlider (integer) value. 
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
+	 * @param propertyKey Label of the UIProperty to update.
+	 * @param sld JSlider triggering the update.
+	 * @param lbl JLabel updated alongside the UIProperty.
+	 * @param prefix Prefix added in the JLabel text before the JSlider value.
+	 * @param suffix Suffix added in the JLabel text after the JSlider value.
+	 */
 	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld, final JLabel lbl, final String prefix, final String suffix) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -691,6 +764,15 @@ public class SwingUIListeners {
 		});
 	}
 
+	/**
+	 * Adds a Swing action listener to a JToggleButton causing the TwoStateUIProperty {@code propertyKey} from {@code cp} 
+	 * to be switched to its on or off state depending on {@code tglb} state. 
+	 * 
+	 * @param cp ConfigurablePanel that owns the TwoStateUIProperty {@code propertyKey}.
+	 * @param propertyKey Label of the TwoStateUIProperty.
+	 * @param tglb JToggleButton triggering the TwoStateUIProperty change.
+	 * @throws IncorrectUIPropertyTypeException Exception thrown if {@code propertyKey} does not correspond to a TwoStateUIProperty.
+	 */
 	public static void addActionListenerToTwoState(final ConfigurablePanel cp, final String propertyKey, final JToggleButton tglb) throws IncorrectUIPropertyTypeException {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -718,9 +800,15 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addActionListenerToBooleanTrigger(final Trigger<Boolean> action, final JToggleButton tglb) {
+	/**
+	 *  Adds a Swing action listener to a JToggleButton causing the (boolean) Action to be triggered upon {@code tglb} change.
+	 * 
+	 * @param action Action triggered by a change in {@code tglb} state.
+	 * @param tglb JToggleButton triggering the Action.
+	 */
+	public static void addActionListenerToBooleanTrigger(final Action<Boolean> action, final JToggleButton tglb) {
 		if(action == null) {
-			throw new NullPointerException("The Trigger cannot be null.");
+			throw new NullPointerException("The Action cannot be null.");
 		}
 		if(tglb == null) {
 			throw new NullPointerException("The JToggleButton cannot be null.");
@@ -735,9 +823,9 @@ public class SwingUIListeners {
 		});
 	}
 	
-	public static void addActionListenerToIntegerTrigger(final Trigger<Integer> action, final JSlider sldr) {
+	public static void addActionListenerToIntegerTrigger(final Action<Integer> action, final JSlider sldr) {
 		if(action == null) {
-			throw new NullPointerException("The Trigger cannot be null.");
+			throw new NullPointerException("The Action cannot be null.");
 		}
 		if(sldr == null) {
 			throw new NullPointerException("The JSlider cannot be null.");
@@ -750,9 +838,9 @@ public class SwingUIListeners {
 		});
 	}
 	
-	public static void addActionListenerToUnparametrizedTrigger(final UnparametrizedTrigger action, final AbstractButton btn) {
+	public static void addActionListenerToUnparametrizedTrigger(final UnparametrizedAction action, final AbstractButton btn) {
 		if(action == null) {
-			throw new NullPointerException("The Trigger cannot be null.");
+			throw new NullPointerException("The Action cannot be null.");
 		}
 		if(btn == null) {
 			throw new NullPointerException("The AbstractButton cannot be null.");
