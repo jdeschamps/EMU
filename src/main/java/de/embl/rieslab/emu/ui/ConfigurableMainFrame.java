@@ -78,30 +78,28 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	 */
 	public ConfigurableMainFrame(String title, SystemController controller, TreeMap<String, String> pluginSettings){
 		
-		if(pluginSettings == null) {
-			throw new NullPointerException();
-		}
-		
 		controller_ = controller;
-				
-		// updates the default plugin settings with the given ones
+
 		pluginSettings_ = getDefaultPluginSettings();
-		Iterator<String> it = pluginSettings.keySet().iterator();
-		ArrayList<String> wrongvals = new ArrayList<String>();
-		while(it.hasNext()) {
-			String s  = it.next();
-			
-			// if the setting has the expected type, then replace in the current settings 
-			if(pluginSettings_.containsKey(s)) { 
-				if(pluginSettings_.get(s).isValueCompatible(pluginSettings.get(s))) {
-					pluginSettings_.get(s).setStringValue(pluginSettings.get(s));
-				} else {
-					wrongvals.add(s);
+		if(pluginSettings != null) {
+			// updates the default plugin settings with the given ones
+			Iterator<String> it = pluginSettings.keySet().iterator();
+			ArrayList<String> wrongvals = new ArrayList<String>();
+			while(it.hasNext()) {
+				String s  = it.next();
+				
+				// if the setting has the expected type, then replace in the current settings 
+				if(pluginSettings_.containsKey(s)) { 
+					if(pluginSettings_.get(s).isValueCompatible(pluginSettings.get(s))) {
+						pluginSettings_.get(s).setStringValue(pluginSettings.get(s));
+					} else {
+						wrongvals.add(s);
+					}
 				}
 			}
-		}
-		if(wrongvals.size() > 0) {
-			SystemDialogs.showWrongPluginSettings(wrongvals);
+			if(wrongvals.size() > 0) {
+				SystemDialogs.showWrongPluginSettings(wrongvals);
+			}
 		}
 		
 		// sets title if not null
