@@ -33,8 +33,11 @@ if [ "$exit_required" = false ]; then
 		# finally copy the jar to MM
 		cp -i "target\EMU-1.0-SNAPSHOT.jar" "$MM2_PLUGINS_HOME\EMU-1.0-SNAPSHOT.jar"
 		
+		# test if the EMU folder exist, otherwise create it
+		MM2_EMU="$MM2_HOME\EMU"
+		mkdir -p "$MM2_EMU"
+		
 	else
 		echo "Could not find MMJ_.jar, MMAcqEngine.jar or MMCoreJ.jar. Did you input the correct directory?"
-		exit_required=true
 	fi
 fi

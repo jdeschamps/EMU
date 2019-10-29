@@ -198,7 +198,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		switch_configuration = new JMenu("Switch configuration");
 		
 		// description of the plugin
-		plugin_description = new JMenuItem(new AbstractAction("Plugin description") {
+		plugin_description = new JMenuItem(new AbstractAction("Description") {
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
