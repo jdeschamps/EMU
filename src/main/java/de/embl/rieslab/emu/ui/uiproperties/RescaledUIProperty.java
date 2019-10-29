@@ -100,17 +100,14 @@ public class RescaledUIProperty extends UIProperty{
 			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT && EmuUtils.isFloat(newValue)) {
 				Float val = new Float(newValue);
 				
-				if(val.compareTo((float) rescaledMin_) >= 0 && val.compareTo((float) rescaledMax_) <= 0) {
-					Float rescaledValue = new Float(val*slope_+offset_);
-					
-					return getMMProperty().setValue(rescaledValue.toString(), this);
+				if(val.compareTo((float) rescaledMin_) >= 0 && val.compareTo((float) rescaledMax_) <= 0) {					
+					return getMMProperty().setValue(getScaledUpValue(new Float(val*slope_+offset_)), this);
 				}
 			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER && EmuUtils.isInteger(newValue)){
 				Integer val = new Integer(newValue);
 				
 				if(val.compareTo((int) rescaledMin_) >= 0 && val.compareTo((int) rescaledMax_) <= 0) {
-					Integer rescaledValue = new Integer(EmuUtils.roundToInt(slope_*val+offset_));
-					return getMMProperty().setValue(rescaledValue.toString(), this);
+					return getMMProperty().setValue(getScaledUpValue(new Integer(EmuUtils.roundToInt(slope_*val+offset_))), this);
 				}
 			}
 		}  
@@ -153,6 +150,16 @@ public class RescaledUIProperty extends UIProperty{
 	
 	protected String getScaledDownValue(Integer i) {
 		Integer rescaledValue = new Integer((int) ((i-offset_)/slope_));
+		return rescaledValue.toString();
+	}
+
+	protected String getScaledUpValue(Float f) {
+		Float rescaledValue = new Float((slope_*f-offset_));
+		return rescaledValue.toString();
+	}
+	
+	protected String getScaledUpValue(Integer i) {
+		Integer rescaledValue = new Integer((int) (slope_*i-offset_));
 		return rescaledValue.toString();
 	}
 	
