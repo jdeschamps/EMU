@@ -1,5 +1,6 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.utils.EmuUtils;
 import mmcorej.CMMCore;
 
@@ -15,25 +16,27 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	/**
 	 * Builds an integer MMProperty without limits or allowed values. The property can be read-only.
 	 * @param core Micro-manager core.
+	 * @param logger Log manager.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
-	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
-		super(core, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, readOnly);
+	IntegerMMProperty(CMMCore core, Logger logger, String deviceLabel, String propertyLabel, boolean readOnly) {
+		super(core, logger, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, readOnly);
 	}
 	
 	/**
 	 * Builds an integer MMProperty with limits. 
 	 * 
 	 * @param core Micro-manager core.
+	 * @param logger Log manager.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param upperLimit Upper limit of the device property value.
 	 * @param lowerLimit Lower limit of the device property value.
 	 */
-	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
-		super(core, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, upLimit, downLimit);
+	IntegerMMProperty(CMMCore core, Logger logger, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
+		super(core, logger, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, upLimit, downLimit);
 	}
 	
 	/**
@@ -44,8 +47,8 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param allowedValues Array of allowed values.
 	 */
-	IntegerMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
-		super(core, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, allowedValues);
+	IntegerMMProperty(CMMCore core, Logger logger, String deviceLabel, String propertyLabel, String[] allowedValues) {
+		super(core, logger, MMProperty.MMPropertyType.INTEGER, deviceLabel, propertyLabel, allowedValues);
 	}
 
 	/**

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
@@ -27,7 +28,7 @@ public class SingleStateUIPropertyTest {
 	public void testSettingStateValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -47,7 +48,7 @@ public class SingleStateUIPropertyTest {
 	public void testSettingWrongStateValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -70,7 +71,7 @@ public class SingleStateUIPropertyTest {
 	public void testSettingValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -125,7 +126,7 @@ public class SingleStateUIPropertyTest {
 	public void testSettingGenericValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		SingleStateUIPropertyTestPanel cp = new SingleStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.micromanager.mmproperties.IntegerMMProperty;
 import de.embl.rieslab.emu.micromanager.mmproperties.StringMMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
@@ -21,7 +22,7 @@ public class UIPropertyTest {
 	@Test
 	public void testUIPropertyPairing() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
-		final StringMMProperty mmprop = new StringMMProperty(null,MMProperty.MMPropertyType.STRING,"","") {
+		final StringMMProperty mmprop = new StringMMProperty(null, new Logger(), MMProperty.MMPropertyType.STRING,"","") {
 			@Override
 			public String getValue() { // avoids NullPointerException
 				return "";
@@ -37,7 +38,7 @@ public class UIPropertyTest {
 	public void testUIPropertyReadOnly() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", true) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", true) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -53,7 +54,7 @@ public class UIPropertyTest {
 	public void testUIPropertySetValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty { 
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 		
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -93,7 +94,7 @@ public class UIPropertyTest {
 		};
 		
 		final String[] str = {"1", "2", "3"};
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", str) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", str) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -123,7 +124,7 @@ public class UIPropertyTest {
 		
 		final double min = -1.56;
 		final double max = 5.48;
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", max, min) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", max, min) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -153,14 +154,14 @@ public class UIPropertyTest {
 	public void testUIPropertyAlreadyAssigned() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		UIPropertyTestPanel cp = new UIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop1 = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop1 = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
 			}
 		};
 
-		final IntegerMMProperty mmprop2 = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop2 = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;

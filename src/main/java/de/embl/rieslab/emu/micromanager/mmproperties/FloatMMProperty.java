@@ -1,6 +1,7 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.controller.utils.GlobalSettings;
 import de.embl.rieslab.emu.utils.EmuUtils;
 import mmcorej.CMMCore;
@@ -17,25 +18,27 @@ public class FloatMMProperty extends MMProperty<Float> {
 	/**
 	 * Builds a float MMProperty without limits or allowed values. The property can be read-only.
 	 * @param core Micro-manager core.
+	 * @param logger Log manager.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 */
-	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, boolean readOnly) {
-		super(core, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, readOnly);
+	FloatMMProperty(CMMCore core, Logger logger, String deviceLabel, String propertyLabel, boolean readOnly) {
+		super(core, logger, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, readOnly);
 	}
 	
 	/**
 	 * Builds a float MMProperty with limits. 
 	 * 
 	 * @param core Micro-manager core.
+	 * @param logger Log manager.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param upperLimit Upper limit of the device property value.
 	 * @param lowerLimit Lower limit of the device property value.
 	 */
-	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
-		super(core, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, upLimit, downLimit);
+	FloatMMProperty(CMMCore core, Logger logger, String deviceLabel, String propertyLabel, double upLimit, double downLimit) {
+		super(core, logger, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, upLimit, downLimit);
 	}
 	
 	/**
@@ -46,8 +49,8 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param allowedValues Array of allowed values.
 	 */
-	FloatMMProperty(CMMCore core, String deviceLabel, String propertyLabel, String[] allowedValues) {
-		super(core, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, allowedValues);
+	FloatMMProperty(CMMCore core, Logger logger, String deviceLabel, String propertyLabel, String[] allowedValues) {
+		super(core, logger, MMProperty.MMPropertyType.FLOAT, deviceLabel, propertyLabel, allowedValues);
 	}
 
 	/**

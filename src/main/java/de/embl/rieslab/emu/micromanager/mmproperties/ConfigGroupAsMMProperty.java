@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.micromanager.Application;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
@@ -33,13 +34,14 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	 * 
 	 * @param app Micro-Manager application instance
 	 * @param core Micro-Manager CMMCore
+	 * @param logger Log manager.
 	 * @param groupName Name of the configuration group
 	 * @param groupChannelNames Array of the channel names
 	 * @param affectedMMProps MMproperties affected by the group
 	 */
 	@SuppressWarnings("rawtypes")
-	public ConfigGroupAsMMProperty(Application app, CMMCore core, String groupName, String[] groupChannelNames, ArrayList<MMProperty> affectedMMProps) {
-		super(core, MMProperty.MMPropertyType.CONFIG, KEY_MMCONFDEVICE, groupName, groupChannelNames);
+	public ConfigGroupAsMMProperty(Application app, CMMCore core, Logger logger, String groupName, String[] groupChannelNames, ArrayList<MMProperty> affectedMMProps) {
+		super(core, logger, MMProperty.MMPropertyType.CONFIG, KEY_MMCONFDEVICE, groupName, groupChannelNames);
 		app_ = app;
 		affectedmmprops_ = affectedMMProps;
 	}

@@ -1,5 +1,6 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import mmcorej.CMMCore;
 
 /**
@@ -11,14 +12,17 @@ import mmcorej.CMMCore;
 public class MMPropertyFactory {
 	
 	private CMMCore core_;
+	private Logger logger_;
 	
 	/**
 	 * Constructor.
 	 * 
 	 * @param core Micro-manager CMMCore.
+	 * @param logger EMU logger.
 	 */
-	public MMPropertyFactory(CMMCore core){
+	public MMPropertyFactory(CMMCore core, Logger logger){
 		core_ = core;
+		logger_ = logger;
 	}
 
 	/**
@@ -59,31 +63,31 @@ public class MMPropertyFactory {
 			// instantiate using the type and the constructors for read-only, limited or allowed values
 			if(type.equals(MMProperty.MMPropertyType.FLOAT.toString())){
 				if(hasLimits){
-					p = new FloatMMProperty(core_, deviceLabel, propertyLabel, upLimit, downLimit);
+					p = new FloatMMProperty(core_, logger_, deviceLabel, propertyLabel, upLimit, downLimit);
 				} else if(!allowedValuesIsNull){
-					p = new FloatMMProperty(core_, deviceLabel, propertyLabel, allowedValues);
+					p = new FloatMMProperty(core_, logger_, deviceLabel, propertyLabel, allowedValues);
 				} else {
-					p = new FloatMMProperty(core_, deviceLabel, propertyLabel, readOnly);
+					p = new FloatMMProperty(core_, logger_, deviceLabel, propertyLabel, readOnly);
 				}
 			} else if(type.equals(MMProperty.MMPropertyType.INTEGER.toString())){
 				if(hasLimits){
-					p = new IntegerMMProperty(core_, deviceLabel, propertyLabel, upLimit, downLimit);				
+					p = new IntegerMMProperty(core_, logger_, deviceLabel, propertyLabel, upLimit, downLimit);				
 				} else if(!allowedValuesIsNull){
-					p = new IntegerMMProperty(core_, deviceLabel, propertyLabel, allowedValues);
+					p = new IntegerMMProperty(core_, logger_, deviceLabel, propertyLabel, allowedValues);
 				} else {
-					p = new IntegerMMProperty(core_, deviceLabel, propertyLabel, readOnly);
+					p = new IntegerMMProperty(core_, logger_, deviceLabel, propertyLabel, readOnly);
 				}
 			} else if(type.equals(MMProperty.MMPropertyType.STRING.toString())){
 				if(!allowedValuesIsNull){
-					p = new StringMMProperty(core_, MMProperty.MMPropertyType.STRING, deviceLabel, propertyLabel, allowedValues);
+					p = new StringMMProperty(core_, logger_, MMProperty.MMPropertyType.STRING, deviceLabel, propertyLabel, allowedValues);
 				} else {
-					p = new StringMMProperty(core_, MMProperty.MMPropertyType.STRING, deviceLabel, propertyLabel);		
+					p = new StringMMProperty(core_, logger_, MMProperty.MMPropertyType.STRING, deviceLabel, propertyLabel);		
 				}
 			} else if(type.equals(MMProperty.MMPropertyType.UNDEF.toString())){
 				if(!allowedValuesIsNull){
-					p = new StringMMProperty(core_, MMProperty.MMPropertyType.UNDEF, deviceLabel, propertyLabel, allowedValues);
+					p = new StringMMProperty(core_, logger_, MMProperty.MMPropertyType.UNDEF, deviceLabel, propertyLabel, allowedValues);
 				} else {
-					p = new StringMMProperty(core_, MMProperty.MMPropertyType.UNDEF, deviceLabel, propertyLabel);		
+					p = new StringMMProperty(core_, logger_, MMProperty.MMPropertyType.UNDEF, deviceLabel, propertyLabel);		
 				}
 			}
 		} catch (Exception e) {

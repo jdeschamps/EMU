@@ -35,6 +35,7 @@ import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 import de.embl.rieslab.emu.utils.exceptions.IncorrectUIPropertyTypeException;
 import de.embl.rieslab.emu.utils.settings.Setting;
 import mmcorej.CMMCore;
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 
 public class SwingUIListenersTest {
@@ -1656,7 +1657,7 @@ public class SwingUIListenersTest {
 		public static final String DEFVAL = "default";
 		
 		public TestableMMProperty(String propname) {
-			super(null, MMProperty.MMPropertyType.STRING, DEV, propname, false);
+			super(null, new Logger(), MMProperty.MMPropertyType.STRING, DEV, propname, false);
 			this.value = DEFVAL;
 		}
 

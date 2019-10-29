@@ -6,11 +6,13 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.controller.log.Logger;
+
 public class IntegerMMPropertyTest {
 
 	@Test
 	public void testAreEquals() {
-		final IntegerMMProperty prop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -21,7 +23,7 @@ public class IntegerMMPropertyTest {
 
 	@Test
 	public void testArrayFromString() {
-		final IntegerMMProperty prop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -38,7 +40,7 @@ public class IntegerMMPropertyTest {
 	
 	@Test
 	public void testConvertIntegerToString() {
-		final IntegerMMProperty prop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -51,7 +53,7 @@ public class IntegerMMPropertyTest {
 
 	@Test
 	public void testConvertStringToValue() {
-		final IntegerMMProperty prop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -67,7 +69,7 @@ public class IntegerMMPropertyTest {
 	
 	@Test
 	public void testConvertDoubleToValue() {
-		final IntegerMMProperty prop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -80,7 +82,7 @@ public class IntegerMMPropertyTest {
 	
 	@Test
 	public void testConvertIntegerToValue() {
-		final IntegerMMProperty prop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -94,7 +96,7 @@ public class IntegerMMPropertyTest {
 	public void testIntegerProperty() {
 		final String device = "My device";
 		final String property = "My property";
-		final IntegerMMProperty prop = new IntegerMMProperty(null, device, property, false) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), device, property, false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -123,7 +125,7 @@ public class IntegerMMPropertyTest {
 	public void testIntegerPropertyReadOnly() {
 		final String device = "My device";
 		final String property = "My property";
-		final IntegerMMProperty prop = new IntegerMMProperty(null, device, property, true) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), device, property, true) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -147,7 +149,7 @@ public class IntegerMMPropertyTest {
 	@Test
 	public void testAllowedValues() {
 		final String[] vals = {"1", "2", "3"};
-		final IntegerMMProperty prop = new IntegerMMProperty(null, "", "", vals) {
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), "", "", vals) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -178,7 +180,7 @@ public class IntegerMMPropertyTest {
 		final Integer max_int = 45;
 		final double min = -15.015;
 		final double max = 45.874;
-		final IntegerMMProperty prop = new IntegerMMProperty(null, "", "", min, max) { // inverted min and max on purpose
+		final IntegerMMProperty prop = new IntegerMMProperty(null, new Logger(), "", "", min, max) { // inverted min and max on purpose
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;

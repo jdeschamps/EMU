@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.internalproperties.IntegerInternalProperty;
 import de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
@@ -711,7 +712,7 @@ public class ConfigurableMainFrameTest {
 		public static final String DEFVAL = "default";
 		
 		public TestableMMProperty(String propname) {
-			super(null, MMProperty.MMPropertyType.STRING, DEV, propname, false);
+			super(null, new Logger(), MMProperty.MMPropertyType.STRING, DEV, propname, false);
 			this.value = DEFVAL;
 		}
 

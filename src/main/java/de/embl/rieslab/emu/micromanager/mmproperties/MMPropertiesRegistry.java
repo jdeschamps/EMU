@@ -3,6 +3,7 @@ package de.embl.rieslab.emu.micromanager.mmproperties;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import mmcorej.CMMCore;
 import mmcorej.StrVector;
 
@@ -16,6 +17,7 @@ import mmcorej.StrVector;
 public class MMPropertiesRegistry {
 
 	private CMMCore core_;
+	private Logger logger_;
 	private HashMap<String, MMDevice> devices_;
 	private HashMap<String, MMProperty> properties_;
 	
@@ -23,9 +25,11 @@ public class MMPropertiesRegistry {
 	 * Constructor. Calls a private initialization method to extract the devices and their properties. It ignores "COM" devices.
 	 * 
 	 * @param core Micro-manager core
+	 * @param logger EMU logger
 	 */
-	public MMPropertiesRegistry(CMMCore core){
+	public MMPropertiesRegistry(CMMCore core, Logger logger){
 		core_ = core;
+		logger_ = logger;
 		devices_ = new HashMap<String, MMDevice>();
 		properties_ = new HashMap<String,MMProperty>();
 		
@@ -35,7 +39,7 @@ public class MMPropertiesRegistry {
 	private void initialize() {
 		StrVector deviceList = core_.getLoadedDevices();
 		StrVector propertyList;
-		MMPropertyFactory builder = new MMPropertyFactory(core_);
+		MMPropertyFactory builder = new MMPropertyFactory(core_, logger_);
 
 		for (String device : deviceList) {
 			if(!device.substring(0, 3).equals("COM")){

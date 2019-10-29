@@ -1,5 +1,6 @@
 package de.embl.rieslab.emu.micromanager.mmproperties;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import mmcorej.CMMCore;
 
 /**
@@ -14,27 +15,27 @@ public class StringMMProperty extends MMProperty<String> {
 	/**
 	 * Builds a String MMProperty without limits or allowed values. The property is read-only.
 	 * @param core Micro-manager core.
+	 * @param logger Log manager.
 	 * @param type Micro-manager property type (String or Undef)
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
-	 * @throws UnknownMMPropertyType 
 	 */
-	StringMMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel) {
-		super(core, type, deviceLabel, propertyLabel, true);
+	StringMMProperty(CMMCore core, Logger logger, MMPropertyType type, String deviceLabel, String propertyLabel) {
+		super(core, logger, type, deviceLabel, propertyLabel, true);
 	}
 	
 	/**
 	 * Builds a String MMProperty with allowed values.
 	 * 
 	 * @param core Micro-manager core.
+	 * @param logger Log manager.
 	 * @param type Micro-manager property type ("String" or "Undef")
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param allowedValues Array of allowed values.
-	 * @throws UnknownMMPropertyType 
 	 */
-	StringMMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel, String[] allowedValues) {
-		super(core, type, deviceLabel, propertyLabel, allowedValues);
+	StringMMProperty(CMMCore core, Logger logger, MMPropertyType type, String deviceLabel, String propertyLabel, String[] allowedValues) {
+		super(core, logger, type, deviceLabel, propertyLabel, allowedValues);
 	}
 
 	/**

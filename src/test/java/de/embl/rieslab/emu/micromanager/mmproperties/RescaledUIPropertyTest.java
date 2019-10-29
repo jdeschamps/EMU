@@ -8,6 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
 import de.embl.rieslab.emu.ui.uiproperties.RescaledUIProperty;
@@ -32,7 +33,7 @@ public class RescaledUIPropertyTest {
 	public void testNotIntFloatPairing() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		RescaledUIPropertyTestPanel cp = new RescaledUIPropertyTestPanel("MyPanel");
 
-		final StringMMProperty mmprop = new StringMMProperty(null, MMProperty.MMPropertyType.STRING, "", "") {
+		final StringMMProperty mmprop = new StringMMProperty(null, new Logger(), MMProperty.MMPropertyType.STRING, "", "") {
 			
 			@Override
 			public String getValue() { // avoids NullPointerException
@@ -49,7 +50,7 @@ public class RescaledUIPropertyTest {
 	public void testNoLimitIntPairing() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		RescaledUIPropertyTestPanel cp = new RescaledUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			
 			@Override
 			public Integer getValue() { // avoids NullPointerException
@@ -65,7 +66,7 @@ public class RescaledUIPropertyTest {
 	public void testNoLimitFloatPairing() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		RescaledUIPropertyTestPanel cp = new RescaledUIPropertyTestPanel("MyPanel");
 
-		final FloatMMProperty mmprop = new FloatMMProperty(null, "", "", false) {
+		final FloatMMProperty mmprop = new FloatMMProperty(null, new Logger(), "", "", false) {
 			
 			@Override
 			public Float getValue() { // avoids NullPointerException
@@ -88,7 +89,7 @@ public class RescaledUIPropertyTest {
 		final int min2 = 0;
 		AtomicInteger reporter1 = new AtomicInteger(1);
 		AtomicInteger reporter2 = new AtomicInteger(1);
-		final IntegerMMProperty mmprop1 = new IntegerMMProperty(null, "", "", max1, min1) {
+		final IntegerMMProperty mmprop1 = new IntegerMMProperty(null, new Logger(), "", "", max1, min1) {
 			@Override
 			public boolean setValue(String stringval, UIProperty source){
 				reporter1.set(Integer.valueOf(stringval));
@@ -100,7 +101,7 @@ public class RescaledUIPropertyTest {
 				return reporter1.get();
 			}
 		};
-		final IntegerMMProperty mmprop2 = new IntegerMMProperty(null, "", "", max2, min2) {
+		final IntegerMMProperty mmprop2 = new IntegerMMProperty(null, new Logger(), "", "", max2, min2) {
 			@Override
 			public boolean setValue(String stringval, UIProperty source){
 				reporter2.set(Integer.valueOf(stringval));
@@ -160,7 +161,7 @@ public class RescaledUIPropertyTest {
 		final double max2 = 255.;
 		final double min2 = 0.;
 
-		final FloatMMProperty mmprop1 = new FloatMMProperty(null, "", "", max1, min1) {
+		final FloatMMProperty mmprop1 = new FloatMMProperty(null, new Logger(), "", "", max1, min1) {
 			public Float val;
 			
 			@Override
@@ -174,7 +175,7 @@ public class RescaledUIPropertyTest {
 				return val;
 			}
 		};
-		final FloatMMProperty mmprop2 = new FloatMMProperty(null, "", "", max2, min2) {
+		final FloatMMProperty mmprop2 = new FloatMMProperty(null, new Logger(), "", "", max2, min2) {
 			public Float val;
 			
 			@Override
@@ -233,7 +234,7 @@ public class RescaledUIPropertyTest {
 
 		final int min = -14;
 		final int max = 46;
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", max, min) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", max, min) {
 			@Override
 			public boolean setValue(String stringval, UIProperty source){
 				return true;
@@ -274,7 +275,7 @@ public class RescaledUIPropertyTest {
 
 		final double min = -14.784;
 		final double max = 46.44;
-		final FloatMMProperty mmprop = new FloatMMProperty(null, "", "", max, min) {
+		final FloatMMProperty mmprop = new FloatMMProperty(null, new Logger(), "", "", max, min) {
 			
 			@Override
 			public boolean setValue(String stringval, UIProperty source){
@@ -317,7 +318,7 @@ public class RescaledUIPropertyTest {
 		final double min = -12;
 		final double max = 47;
 		AtomicInteger reporter1 = new AtomicInteger();
-		final IntegerMMProperty mmprop1 = new IntegerMMProperty(null, "", "", max, min) {
+		final IntegerMMProperty mmprop1 = new IntegerMMProperty(null, new Logger(), "", "", max, min) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return reporter1.get();

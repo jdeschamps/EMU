@@ -71,7 +71,7 @@ public class SystemController {
 	 */
 	public void start() {		
 		// extracts MM properties, configuration groups and register configurations groups as properties
-		mmregistry_ = new MMRegistry(studio_);
+		mmregistry_ = new MMRegistry(studio_, logger_);
 		
 		// loads plugin list
 		pluginloader_ = new UIPluginLoader(this);

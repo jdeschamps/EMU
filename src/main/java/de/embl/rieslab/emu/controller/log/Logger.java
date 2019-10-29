@@ -6,23 +6,41 @@ public class Logger {
 
 	LogManager logManager_;
 	
+	public Logger() {}
+
 	public Logger(LogManager logManager) {
 		logManager_ = logManager;
 	}
 	
 	public void logDebugMessage(String message) {
-		logManager_.logDebugMessage("[EMU] "+message);
+		if(logManager_ != null) {
+			logManager_.logDebugMessage("[EMU] -- "+message);
+		} else {
+			System.out.println("[EMU debug] -- "+message);
+		}
 	}
 	
 	public void logError(Exception e) {
-		logManager_.logError(e);
+		if(logManager_ != null) {
+			logManager_.logError(e);
+		} else {
+			e.printStackTrace();
+		}
 	}
 	
 	public void logError(String message) {
-		logManager_.logError("[EMU] "+message);
+		if(logManager_ != null) {
+			logManager_.logError("[EMU] -- "+message);
+		} else {
+			System.out.println("[EMU error] -- "+message);
+		}
 	}
 	
 	public void logMessage(String message) {
-		logManager_.logMessage("[EMU] "+message);
+		if(logManager_ != null) {
+			logManager_.logMessage("[EMU] -- "+message);
+		} else {
+			System.out.println("[EMU message] -- "+message);
+		}
 	}
 }

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
@@ -63,7 +64,7 @@ public class MultiStateUIPropertyTest {
 	public void testSettingStateValueNames() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -89,7 +90,7 @@ public class MultiStateUIPropertyTest {
 	public void testSettingTooManyStateValueNames() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -111,7 +112,7 @@ public class MultiStateUIPropertyTest {
 	public void testSettingTooFewStateValueNames() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -152,7 +153,7 @@ public class MultiStateUIPropertyTest {
 	public void testSettingStateValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -176,7 +177,7 @@ public class MultiStateUIPropertyTest {
 	public void testSettingNullStateValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -194,7 +195,7 @@ public class MultiStateUIPropertyTest {
 	public void testSettingEmptyStateValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -212,7 +213,7 @@ public class MultiStateUIPropertyTest {
 	public void testSettingWrongStateValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -230,7 +231,7 @@ public class MultiStateUIPropertyTest {
 	public void testStateValuesAndNamesIntegerMMProp() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -258,7 +259,7 @@ public class MultiStateUIPropertyTest {
 	public void testStateValuesAndNamesFloatMMProp() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final FloatMMProperty mmprop = new FloatMMProperty(null, "", "", false) {
+		final FloatMMProperty mmprop = new FloatMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return (float) 0.;
@@ -295,7 +296,7 @@ public class MultiStateUIPropertyTest {
 	public void testStatePositions() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -315,7 +316,7 @@ public class MultiStateUIPropertyTest {
 	public void testSetValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -351,7 +352,7 @@ public class MultiStateUIPropertyTest {
 	public void testSetValuesFromName() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -387,7 +388,7 @@ public class MultiStateUIPropertyTest {
 	public void testSetValuesFromPosition() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -421,7 +422,7 @@ public class MultiStateUIPropertyTest {
 	public void testSetValuesPriority() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;
@@ -467,7 +468,7 @@ public class MultiStateUIPropertyTest {
 	public void testWrongValues() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
 		MultiStateUIPropertyTestPanel cp = new MultiStateUIPropertyTestPanel("MyPanel");
 
-		final IntegerMMProperty mmprop = new IntegerMMProperty(null, "", "", false) {
+		final IntegerMMProperty mmprop = new IntegerMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Integer getValue() { // avoids NullPointerException
 				return 0;

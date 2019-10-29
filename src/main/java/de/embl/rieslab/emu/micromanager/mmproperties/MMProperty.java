@@ -2,6 +2,7 @@ package de.embl.rieslab.emu.micromanager.mmproperties;
 
 import java.util.ArrayList;
 
+import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
@@ -23,6 +24,7 @@ public abstract class MMProperty<T> {
 	private String devicelabel_;
 	private String hash_;
 	private MMPropertyType type_;
+	private Logger logger_;
 	
 	private boolean readOnly;							
 	private boolean hasLimits;						
@@ -42,7 +44,7 @@ public abstract class MMProperty<T> {
 	 * @param readOnly True if the device property is read-only, false otherwise.
 	 * @throws UnknownMMPropertyType 
 	 */
-	protected MMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel, boolean readOnly){
+	protected MMProperty(CMMCore core, Logger logger, MMPropertyType type, String deviceLabel, String propertyLabel, boolean readOnly){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
@@ -71,7 +73,7 @@ public abstract class MMProperty<T> {
 	 * @param lowerLimit Lower limit of the device property value.
 	 * @throws UnknownMMPropertyType 
 	 */
-	protected MMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel, double upperLimit, double lowerLimit){
+	protected MMProperty(CMMCore core, Logger logger,  MMPropertyType type, String deviceLabel, String propertyLabel, double upperLimit, double lowerLimit){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
@@ -108,7 +110,7 @@ public abstract class MMProperty<T> {
 	 * @param allowedValues Array of allowed values.
 	 * @throws UnknownMMPropertyType 
 	 */
-	protected MMProperty(CMMCore core, MMPropertyType type, String deviceLabel, String propertyLabel, String[] allowedValues){
+	protected MMProperty(CMMCore core, Logger logger,  MMPropertyType type, String deviceLabel, String propertyLabel, String[] allowedValues){
 		this.core_ = core;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
@@ -143,6 +145,7 @@ public abstract class MMProperty<T> {
 		try {
 			val = convertToValue(core_.getProperty(devicelabel_, label_));
 			value = val;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -160,7 +163,10 @@ public abstract class MMProperty<T> {
 		try {
 			val = core_.getProperty(devicelabel_, label_);
 			value = convertToValue(val);
+			
+			logger_.logDebugMessage("MMproperty ["+hash_+"] value: ["+val+"].");
 		} catch (Exception e) {
+			logger_.logError("Error getting value from the MMProperty ["+hash_+"].");
 			e.printStackTrace();
 		}
 		return val;
@@ -191,11 +197,11 @@ public abstract class MMProperty<T> {
 						return true;
 					}
 				} catch (Exception e){
-					System.out.println("Error in setting property ["+getHash()+"] to ["+val+"] from ["+stringval+"]");
+					logger_.logError("Error setting value of the MMProperty ["+hash_+"].");
 					e.printStackTrace(); 
 				}
 			} else {
-				System.out.println("VALUE NOT ALLOWED: in ["+getHash()+"]: value ["+val+"]");
+				logger_.logDebugMessage("MMproperty ["+hash_+"] value cannot be set to ["+stringval+"], forbidden value.");
 			}
 		}
 		return false;
@@ -344,7 +350,7 @@ public abstract class MMProperty<T> {
 	 */
 	public void addListener(UIProperty listener){
 		if(listener == null) {
-			throw new NullPointerException("MMproperty listeners cannot be null");
+			throw new NullPointerException("MMProperty listeners cannot be null");
 		}
 		listeners_.add(listener);
 	}

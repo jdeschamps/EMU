@@ -6,12 +6,14 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import de.embl.rieslab.emu.controller.log.Logger;
+
 public class FloatMMPropertyTest {
 
 
 	@Test
 	public void testAreEquals() {
-		final FloatMMProperty prop = new FloatMMProperty(null, "", "", false) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -22,7 +24,7 @@ public class FloatMMPropertyTest {
 
 	@Test
 	public void testArrayFromString() {
-		final FloatMMProperty prop = new FloatMMProperty(null, "", "", false) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -39,7 +41,7 @@ public class FloatMMPropertyTest {
 	
 	@Test
 	public void testConvertFloatToString() {
-		final FloatMMProperty prop = new FloatMMProperty(null, "", "", false) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -52,7 +54,7 @@ public class FloatMMPropertyTest {
 
 	@Test
 	public void testConvertStringToValue() {
-		final FloatMMProperty prop = new FloatMMProperty(null, "", "", false) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -64,7 +66,7 @@ public class FloatMMPropertyTest {
 	
 	@Test
 	public void testConvertDoubleToValue() {
-		final FloatMMProperty prop = new FloatMMProperty(null, "", "", false) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -77,7 +79,7 @@ public class FloatMMPropertyTest {
 	
 	@Test
 	public void testConvertIntegerToValue() {
-		final FloatMMProperty prop = new FloatMMProperty(null, "", "", false) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), "", "", false) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -91,7 +93,7 @@ public class FloatMMPropertyTest {
 	public void testFloatProperty() {
 		final String device = "My device";
 		final String property = "My property";
-		final FloatMMProperty prop = new FloatMMProperty(null, device, property, false) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), device, property, false) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -120,7 +122,7 @@ public class FloatMMPropertyTest {
 	public void testFloatPropertyReadOnly() {
 		final String device = "My device";
 		final String property = "My property";
-		final FloatMMProperty prop = new FloatMMProperty(null, device, property, true) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), device, property, true) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -144,7 +146,7 @@ public class FloatMMPropertyTest {
 	@Test
 	public void testAllowedValues() {
 		final String[] vals = {"5.68463", "2.4564", "3.897211"};
-		final FloatMMProperty prop = new FloatMMProperty(null, "", "", vals) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), "", "", vals) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
@@ -175,7 +177,7 @@ public class FloatMMPropertyTest {
 		final double max = 45.874;
 		final Float min_int = (float) min;
 		final Float max_int = (float) max;
-		final FloatMMProperty prop = new FloatMMProperty(null, "", "", max, min) {
+		final FloatMMProperty prop = new FloatMMProperty(null, new Logger(), "", "", max, min) {
 			@Override
 			public Float getValue() { // avoids NullPointerException
 				return new Float(0);
