@@ -47,3 +47,5 @@ You can also check out the [EMU examples](https://github.com/jdeschamps/EMU-exam
   
 
 The Ries lab is using its own EMU plugin to control its automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). This plugin is more advanced than the example ones, and its UI classes can be used to explore more complex behaviours.
+
+For more details, read the [guide]() or the [javadoc]().
