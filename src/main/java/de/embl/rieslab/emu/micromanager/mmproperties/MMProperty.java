@@ -46,6 +46,7 @@ public abstract class MMProperty<T> {
 	 */
 	protected MMProperty(CMMCore core, Logger logger, MMPropertyType type, String deviceLabel, String propertyLabel, boolean readOnly){
 		this.core_ = core;
+		this.logger_ = logger;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
 		
@@ -75,6 +76,7 @@ public abstract class MMProperty<T> {
 	 */
 	protected MMProperty(CMMCore core, Logger logger,  MMPropertyType type, String deviceLabel, String propertyLabel, double upperLimit, double lowerLimit){
 		this.core_ = core;
+		this.logger_ = logger;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
 
@@ -112,6 +114,7 @@ public abstract class MMProperty<T> {
 	 */
 	protected MMProperty(CMMCore core, Logger logger,  MMPropertyType type, String deviceLabel, String propertyLabel, String[] allowedValues){
 		this.core_ = core;
+		this.logger_ = logger;
 		this.devicelabel_ =  deviceLabel;
 		this.label_ =  propertyLabel;
 
@@ -164,7 +167,7 @@ public abstract class MMProperty<T> {
 			val = core_.getProperty(devicelabel_, label_);
 			value = convertToValue(val);
 			
-			logger_.logDebugMessage("MMproperty ["+hash_+"] value: ["+val+"].");
+			logger_.logDebugMessage("MMProperty ["+hash_+"] value: ["+val+"].");
 		} catch (Exception e) {
 			logger_.logError("Error getting value from the MMProperty ["+hash_+"].");
 			e.printStackTrace();
@@ -201,7 +204,7 @@ public abstract class MMProperty<T> {
 					e.printStackTrace(); 
 				}
 			} else {
-				logger_.logDebugMessage("MMproperty ["+hash_+"] value cannot be set to ["+stringval+"], forbidden value.");
+				logger_.logDebugMessage("MMProperty ["+hash_+"] value cannot be set to ["+stringval+"], forbidden value.");
 			}
 		}
 		return false;
