@@ -2,11 +2,11 @@
 
 Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-manager.org/wiki/Micro-Manager) plugin that loads easily reconfigurable user interfaces to control your microscope. Build your UI using EMU classes:
 
-- Compatible with drag and drop Java design.
+- Compatible with **drag and drop Java design**.
 - No need to hard code device property names.
 - Easy and intuitive configuration.
 - No compiling necessary when you exchange devices.
-- One UI to govern them all: easy transfer between your microscopes.
+- One UI to rule them all: easy transfer between your microscopes.
 
 
 
@@ -20,13 +20,13 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 
 4. Download and install [Maven](https://maven.apache.org/install.html).
 
-5. Using the console, go the folder you wish to install EMU in and type:
+5. Using the console, go to the folder you wish to install EMU in and type:
 
    ```bash
    $ git clone https://github.com/jdeschamps/EMU.git
    ```
 
-6. Navigate to the folder and compile using the path to Micro-manager:
+6. Navigate to the EMU folder and compile it using the path to Micro-manager:
 
    ```bash
    $ git cd EMU
@@ -37,12 +37,13 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 
 # Build your own EMU UI
 
-You can easily build a UI using drag and drop software, our [tutorial](tutorial) for Eclipse Windows Builder is a detailed walk through.
+You can easily build a UI using **drag and drop softwares**: for instance, our [tutorial](tutorial) for Eclipse Windows Builder is a detailed walk through on how to build such plugin.
 
-You can also check out the [EMU example](https://github.com/jdeschamps/EMU-examples), among which:
+You can also check out the [EMU examples](https://github.com/jdeschamps/EMU-examples), among which:
 
-- The base plugin is an empty plugin with comments on each of the function to implement.
-- The simple UI is the UI example used in the tutorial.
-- The iBeamSmart UI is aimed at controlling Toptica iBeamSmart lasers.
+- The [base plugin]() is an empty plugin with comments on each of the function to implement.
+- The [simple UI]() is the example used in the tutorial.
+- The [iBeamSmart UI]() is aimed at controlling Toptica iBeamSmart lasers.
+  
 
-The Ries lab is using its own EMU plugin to control its automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). 
+The Ries lab is using its own EMU plugin to control its automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). This plugin is more advanced than the example ones, and its UI classes can be used to explore more complex behaviours.
