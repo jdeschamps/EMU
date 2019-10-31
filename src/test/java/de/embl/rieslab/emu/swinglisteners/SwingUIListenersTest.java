@@ -752,7 +752,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testJTextFieldActionListenerToDoubleTrigger() throws AWTException {
+	public void testJTextFieldActionListenerToDoubleAction() throws AWTException {
 		final JTextField textfield = new JTextField();
 		
 		final double defmyValue = 1.45;
@@ -773,7 +773,7 @@ public class SwingUIListenersTest {
 			
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerToDoubleTrigger(d -> myDoubleValue = d, textfield); 
+				SwingUIListeners.addActionListenerToDoubleAction(d -> myDoubleValue = d, textfield); 
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
@@ -818,7 +818,7 @@ public class SwingUIListenersTest {
 	}
 
 	@Test
-	public void testJToggleButtonActionListenerToBoolTrigger() {
+	public void testJToggleButtonActionListenerToBoolAction() {
 		final JToggleButton btn = new JToggleButton();
 				
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
@@ -837,7 +837,7 @@ public class SwingUIListenersTest {
 			
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerToBooleanTrigger(d -> myBoolValue = d, btn); 
+				SwingUIListeners.addActionListenerToBooleanAction(d -> myBoolValue = d, btn); 
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
@@ -891,7 +891,7 @@ public class SwingUIListenersTest {
 	}
 	
 	@Test
-	public void testJTextFieldActionListenerToDoubleTriggerBounded() throws AWTException {
+	public void testJTextFieldActionListenerToDoubleActionBounded() throws AWTException {
 		final JTextField textfield = new JTextField();
 		
 		final double defmyValue = 1.45;
@@ -914,7 +914,7 @@ public class SwingUIListenersTest {
 			
 			@Override
 			protected void addComponentListeners() {
-				SwingUIListeners.addActionListenerToDoubleTrigger(d -> myDoubleValue = d, textfield, min, max); 
+				SwingUIListeners.addActionListenerToDoubleAction(d -> myDoubleValue = d, textfield, min, max); 
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel

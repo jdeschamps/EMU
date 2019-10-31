@@ -1,4 +1,4 @@
-package de.embl.rieslab.emu.ui.swingslisteners.triggers;
+package de.embl.rieslab.emu.ui.swingslisteners.actions;
 
 public interface Action<T> {
 

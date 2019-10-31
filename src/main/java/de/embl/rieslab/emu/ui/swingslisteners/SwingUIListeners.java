@@ -20,8 +20,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
-import de.embl.rieslab.emu.ui.swingslisteners.triggers.Action;
-import de.embl.rieslab.emu.ui.swingslisteners.triggers.UnparametrizedAction;
+import de.embl.rieslab.emu.ui.swingslisteners.actions.Action;
+import de.embl.rieslab.emu.ui.swingslisteners.actions.UnparametrizedAction;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
@@ -429,7 +429,7 @@ public class SwingUIListeners {
 	 * @param action Action taking a Double parameter.
 	 * @param txtf JTextField triggering the Action.
 	 */
-	public static void addActionListenerToDoubleTrigger(final Action<Double> action, final JTextField txtf) {
+	public static void addActionListenerToDoubleAction(final Action<Double> action, final JTextField txtf) {
 
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
@@ -471,7 +471,7 @@ public class SwingUIListeners {
 	 * @param min Minimum value of the Double input.
 	 * @param max Maximum value of the Double input.
 	 */
-	public static void addActionListenerToDoubleTrigger(final Action<Double> action, final JTextField txtf, double min, double max) {
+	public static void addActionListenerToDoubleAction(final Action<Double> action, final JTextField txtf, double min, double max) {
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
 		}
@@ -515,7 +515,7 @@ public class SwingUIListeners {
 	 * @param action Action taking a String parameter.
 	 * @param txtf JTextField triggering the Action.
 	 */
-	public static void addActionListenerToStringTrigger(final Action<String> action, final JTextField txtf) {
+	public static void addActionListenerToStringAction(final Action<String> action, final JTextField txtf) {
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
 		}
@@ -548,7 +548,7 @@ public class SwingUIListeners {
 	 * @param action Action taking an Integer parameter.
 	 * @param txtf JTextField triggering the Action.
 	 */
-	public static void addActionListenerToIntegerTrigger(final Action<Integer> action, final JTextField txtf) {
+	public static void addActionListenerToIntegerAction(final Action<Integer> action, final JTextField txtf) {
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
 		}
@@ -806,7 +806,7 @@ public class SwingUIListeners {
 	 * @param action Action triggered by a change in {@code tglb} state.
 	 * @param tglb JToggleButton triggering the Action.
 	 */
-	public static void addActionListenerToBooleanTrigger(final Action<Boolean> action, final JToggleButton tglb) {
+	public static void addActionListenerToBooleanAction(final Action<Boolean> action, final JToggleButton tglb) {
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
 		}
@@ -823,7 +823,7 @@ public class SwingUIListeners {
 		});
 	}
 	
-	public static void addActionListenerToIntegerTrigger(final Action<Integer> action, final JSlider sldr) {
+	public static void addActionListenerToIntegerAction(final Action<Integer> action, final JSlider sldr) {
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
 		}
@@ -838,7 +838,7 @@ public class SwingUIListeners {
 		});
 	}
 	
-	public static void addActionListenerToUnparametrizedTrigger(final UnparametrizedAction action, final AbstractButton btn) {
+	public static void addActionListenerToUnparametrizedAction(final UnparametrizedAction action, final AbstractButton btn) {
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
 		}
