@@ -23,14 +23,15 @@ public class FilterWheelPanel extends ConfigurablePanel {
 	private JToggleButton filterButton4;
 	private JToggleButton filterButton5;
 
+
 	//////// Properties
-	public static String FW_POSITION = " position";
+	public static String FW_POSITION = "Filterwheel position";
 	
 	//////// Parameters
 	public final static String PARAM_NAMES = " names";
 	public final static String PARAM_COLORS = " colors";
 	
-	//////// Initial parameters
+	//////// Initial parameter
 	public final static int NUM_POS = 6;
 	
 	/**
