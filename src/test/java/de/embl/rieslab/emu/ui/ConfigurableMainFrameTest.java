@@ -612,7 +612,7 @@ public class ConfigurableMainFrameTest {
 		assertEquals(val1, reporter1.intValue());
 		assertEquals(val2, reporter2.intValue());
 	}
-	
+
 	@Test
 	public void testPluginSettings() {
 		final AtomicInteger reporter1 = new AtomicInteger(0);
@@ -643,6 +643,21 @@ public class ConfigurableMainFrameTest {
 
 		// the value of reporter1 should have changed
 		assertEquals(val1, reporter1.intValue());
+	}
+	
+	@Test
+	public void testNullPluginSettings() {
+		ConfigurableTestFrame cf = new ConfigurableTestFrame("MyFrame",null) {
+
+			private static final long serialVersionUID = 1L;
+			
+			@Override
+			public HashMap<String, Setting> getDefaultPluginSettings() {
+				return null;
+			}
+		};
+		
+		assertEquals(0,cf.getCurrentPluginSettings().size());
 	}
 	
 	private class ConfigurableTestFrame extends ConfigurableMainFrame{

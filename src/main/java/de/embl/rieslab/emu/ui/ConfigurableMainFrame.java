@@ -81,6 +81,10 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		controller_ = controller;
 
 		pluginSettings_ = getDefaultPluginSettings();
+		if(pluginSettings_ == null) {
+			pluginSettings_ = new HashMap<String, Setting>();
+		}
+		
 		if(pluginSettings != null) {
 			// updates the default plugin settings with the given ones
 			Iterator<String> it = pluginSettings.keySet().iterator();
@@ -456,7 +460,11 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			sb.append("--- "+this.getTitle()+" ---\n\n\n");
 			for(ConfigurablePanel p: panels_) {
 				sb.append("- "+p.getPanelLabel()+"\n");
-				sb.append(p.getDescription());
+				if(p.getDescription() != null) {	
+					sb.append(p.getDescription());
+				} else {
+					sb.append("Description not available.");
+				}
 				sb.append("\n\n");
 			}
 			
