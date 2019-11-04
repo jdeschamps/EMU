@@ -1724,10 +1724,8 @@ public class ConfigurablePanelTest {
 				tgl1.addItemListener(new ItemListener() {
 					public void itemStateChanged(ItemEvent ev) {
 						if (ev.getStateChange() == ItemEvent.SELECTED) {
-							System.out.println("cp1: set value 0");
 							setUIPropertyValue(uipropLabel, vals[0]);
 						} else if (ev.getStateChange() == ItemEvent.DESELECTED) {
-							System.out.println("cp1: set value 1");
 							setUIPropertyValue(uipropLabel, vals[1]);
 						}
 					}
@@ -1743,10 +1741,8 @@ public class ConfigurablePanelTest {
 			protected void propertyhasChanged(String propertyName, String newvalue) {
 				if(propertyName.equals(uipropLabel)) {
 					if(newvalue.equals(vals[1])) {
-						System.out.println("cp1: set selected");
 						tgl1.setSelected(true);
 					} else {
-						System.out.println("cp1: set unselected");
 						tgl1.setSelected(false);
 					}
 				}
