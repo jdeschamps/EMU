@@ -37,12 +37,12 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 
 # Build your own EMU UI
 
-You can easily build a UI using **drag and drop softwares**: for instance, our [tutorial](tutorial) for Eclipse Windows Builder is a detailed walk through on how to build such plugin.
+You can easily build a UI using **drag and drop softwares**: for instance, our [tutorial]( https://github.com/jdeschamps/EMU-tutorial ) for Eclipse Windows Builder is a detailed walk through on how to build such plugin.
 
 You can also check out the [EMU examples](https://github.com/jdeschamps/EMU-examples), among which:
 
 - The [base plugin]() is an empty plugin with comments on each of the function to implement.
-- The [simple UI]() is the example used in the tutorial.
+- The [simple UI]() is the example used in the [tutorial]( https://github.com/jdeschamps/EMU-tutorial ).
 - The [iBeamSmart UI]() is aimed at controlling Toptica iBeamSmart lasers.
   
 
