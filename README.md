@@ -20,7 +20,7 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 
 4. Download and install [Maven](https://maven.apache.org/install.html).
 
-5. Using the console, go to the folder you wish to install EMU in and type:
+5. Using the git console, go to the folder you wish to install EMU in and type:
 
    ```bash
    $ git clone https://github.com/jdeschamps/EMU.git
@@ -29,18 +29,28 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 6. Navigate to the EMU folder and compile it using the path to Micro-manager:
 
    ```bash
-   $ git cd EMU
+   $ cd emu
    $ ./compileAndDeploy.sh "C:\Path\to\MicroManager2gamma"
    ```
 
+   > Note: the script requires bash, which is shipped with the git console on Windows.
+   
    
 
 # Build your own EMU UI
 
-You can easily build a UI using **drag and drop softwares**: for instance, our [tutorial]( https://github.com/jdeschamps/EMU-tutorial ) for Eclipse Windows Builder is a detailed walk through on how to build such plugin.
+#### Tutorial
 
-You can also check out the [EMU examples](https://github.com/jdeschamps/EMU-examples).
+[Tutorial for Eclipse Windows Builder]( https://github.com/jdeschamps/EMU-tutorial ): a detailed walk through on how to easily assemble an EMU user interface using drag and drop software.
 
-The Ries lab is using its own EMU plugin to control its automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). This plugin is more advanced than the example ones, and its UI classes can be used to explore more complex behaviours.
+#### Examples
+
+[EMU examples](https://github.com/jdeschamps/EMU-examples): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
+
+#### htSMLM
+
+The Ries lab is using its own EMU plugin to control its automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). This plugin is more advanced than the examples and can be used to explore more complex behaviours.
+
+#### Going further
 
 For more details, read the [guide]() or the [javadoc]().
