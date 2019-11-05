@@ -586,7 +586,7 @@ public class SwingUIListeners {
 	 * 
 	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}
 	 * @param propertyKey Label of the UIProperty to update.
-	 * @param JSlider JTextField.
+	 * @param sld JSlider.
 	 */
 	public static void addActionListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSlider sld) {
 		if(cp == null) {

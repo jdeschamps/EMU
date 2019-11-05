@@ -11,7 +11,7 @@ public class IntegerInternalProperty extends InternalProperty<AtomicInteger, Int
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public InternalPropertyType getType() {
@@ -19,7 +19,7 @@ public class IntegerInternalProperty extends InternalProperty<AtomicInteger, Int
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected Integer convertValue(AtomicInteger val) {
@@ -27,7 +27,7 @@ public class IntegerInternalProperty extends InternalProperty<AtomicInteger, Int
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void setAtomicValue(Integer val) {
@@ -35,7 +35,7 @@ public class IntegerInternalProperty extends InternalProperty<AtomicInteger, Int
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected AtomicInteger initializeDefault(Integer defaultval) {

@@ -170,7 +170,7 @@ public class RescaledUIProperty extends UIProperty{
 	
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	public UIPropertyType getType() {
 		return UIPropertyType.RESCALED;

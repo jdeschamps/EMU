@@ -46,7 +46,7 @@ import de.embl.rieslab.emu.utils.exceptions.UnknownUIPropertyException;
 
 public class ConfigurablePanelTest {
 
-	/**
+	/*
 	 * Tests that the ConfigurablePanel has the right label.
 	 */
 	@Test
@@ -57,7 +57,7 @@ public class ConfigurablePanelTest {
 		assertEquals(s, cp.getPanelLabel());
 	}
 
-	/**
+	/*
 	 * Tests that a NullPointerException is thrown when instantiating a ConfigurablePanel with a null label.
 	 */
 	@Test (expected = NullPointerException.class)
@@ -69,8 +69,7 @@ public class ConfigurablePanelTest {
 	//////////// UIProperties ////////////
 	//////////////////////////////////////
 
-	// add UIProperty
-	/**
+	/*
 	 * Tests adding UIProperties.
 	 */
 	@Test 
@@ -169,7 +168,7 @@ public class ConfigurablePanelTest {
 		assertEquals(newval[2], cp.val3);
 	}
 
-	/**
+	/*
 	 * Tests adding a null UIProperty.
 	 */
 	@Test (expected = NullPointerException.class)
@@ -184,7 +183,7 @@ public class ConfigurablePanelTest {
 		};
 	}
 
-	/**
+	/*
 	 * Tests getting an unknown UIProperty
 	 */
 	@Test(expected = UnknownUIPropertyException.class)
@@ -202,7 +201,7 @@ public class ConfigurablePanelTest {
 	}
 
 	// get UIProperty
-	/**
+	/*
 	 * Tests getting a null UIProperty.
 	 */
 	@Test(expected = NullPointerException.class)
@@ -219,7 +218,7 @@ public class ConfigurablePanelTest {
 		cp.getUIProperty(null);
 	}
 	
-	/**
+	/*
 	 * Tests getting the type a null UIProperty.
 	 */
 	@Test(expected = NullPointerException.class)
@@ -237,7 +236,7 @@ public class ConfigurablePanelTest {
 	}
 
 	// get and set UIProperty value
-	/**
+	/*
 	 * Tests setting and getting a UIProperty value.
 	 */
 	@Test 
@@ -270,7 +269,7 @@ public class ConfigurablePanelTest {
 		assertEquals(s, cp.getUIPropertyValue(uipropLabel));
 	}
 	
-	/**
+	/*
 	 * Tests getting the value of a null UIProperty.
 	 */
 	@Test (expected = NullPointerException.class)
@@ -288,7 +287,7 @@ public class ConfigurablePanelTest {
 		cp.getUIPropertyValue(null);
 	}
 	
-	/**
+	/*
 	 * Tests getting the value of an unknown UIProperty.
 	 */
 	@Test (expected = UnknownUIPropertyException.class)
@@ -306,7 +305,7 @@ public class ConfigurablePanelTest {
 		cp.getUIPropertyValue("I am not quite dead");
 	}
 
-	/**
+	/*
 	 * Test setting the value of a UIProperty to null. 
 	 */
 	@Test 
@@ -334,9 +333,9 @@ public class ConfigurablePanelTest {
 	}
 	
 	// UIProperty friendly name
-	/**
+	/*
 	 * Tests setting a UIProperty friendly name.
-	 * @throws UnknownUIPropertyException
+	 * @throws UnknownUIPropertyException Exception
 	 */
 	@Test 
 	public void testSetFriendlyName() throws UnknownUIPropertyException {		
@@ -1320,10 +1319,8 @@ public class ConfigurablePanelTest {
 		cp.setInternalPropertyValue(null, val);
 	}
 
-	/**
+	/*
 	 * Sets the value of a DoubleInternalProperty calling setInternalProperty(String, int).
-	 * @throws IncorrectInternalPropertyTypeException
-	 * @throws UnknownInternalPropertyException 
 	 */
 	@Test(expected = IncorrectInternalPropertyTypeException.class) 
 	public void testSetIntegerInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
@@ -1364,7 +1361,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test(expected = NullPointerException.class) 
-	public void testGetIntegerNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testGetIntegerNullInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final int defval = 1;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1404,7 +1401,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test(expected = NullPointerException.class) 
-	public void testSetDoubleNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testSetDoubleNullInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final double defval = 1.59;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1421,12 +1418,11 @@ public class ConfigurablePanelTest {
 		cp.setInternalPropertyValue(null, val);
 	}
 
-	/**
+	/*
 	 * Sets the value of an IntegerInternalProperty using a call to setInternalProperty(String, double)
-	 * @throws IncorrectInternalPropertyTypeException
 	 */
 	@Test(expected = IncorrectInternalPropertyTypeException.class) 
-	public void testSetDoubleInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException {
+	public void testSetDoubleInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final int defval = 1;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1444,7 +1440,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test
-	public void testGetDoubleInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testGetDoubleInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final double defval = 1.59;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1464,7 +1460,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test(expected = NullPointerException.class) 
-	public void testGetDoubleNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testGetDoubleNullInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final double defval = 1.59;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1504,7 +1500,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test(expected = NullPointerException.class) 
-	public void testSetBoolNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testSetBoolNullInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final boolean defval = false;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1521,12 +1517,11 @@ public class ConfigurablePanelTest {
 		cp.setInternalPropertyValue(null, val);
 	}
 
-	/**
+	/*
 	 * Sets the value of an IntegerInternalProperty using a call to setInternalProperty(String, boolean)
-	 * @throws IncorrectInternalPropertyTypeException
 	 */
 	@Test(expected = IncorrectInternalPropertyTypeException.class) 
-	public void testSetBoolInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException {
+	public void testSetBoolInternalPropertyWrongType() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final int defval = 1;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1544,7 +1539,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test
-	public void testGetBoolInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testGetBoolInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final boolean defval = false;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1565,7 +1560,7 @@ public class ConfigurablePanelTest {
 	}
 
 	@Test(expected = NullPointerException.class) 
-	public void testGetBoolNullInternalProperty() throws IncorrectInternalPropertyTypeException {
+	public void testGetBoolNullInternalProperty() throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		final boolean defval = false;
 		final String intprop = "InternalProp";
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -1693,11 +1688,8 @@ public class ConfigurablePanelTest {
 	////////////////////////////////////////
 	//////////// Trigger on/off ////////////
 	////////////////////////////////////////
-	/**
+	/*
 	 * Only tests that the safeguard mechanism preventing a UIProperty update to originate from ConfigurablePanel.propertyhasChanged(String, String).
-	 * 
-	 * @throws AlreadyAssignedUIPropertyException
-	 * @throws UnknownUIPropertyException
 	 */
 	@Test
 	public void testComponentTriggerSafeGuard() throws AlreadyAssignedUIPropertyException, UnknownUIPropertyException, IncompatibleMMProperty {

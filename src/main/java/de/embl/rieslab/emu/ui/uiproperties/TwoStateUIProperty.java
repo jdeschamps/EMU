@@ -133,7 +133,7 @@ public class TwoStateUIProperty extends UIProperty{
 	
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	public UIPropertyType getType() {
 		return UIPropertyType.TWOSTATE;
@@ -142,6 +142,7 @@ public class TwoStateUIProperty extends UIProperty{
 	/**
 	 * Tests if {@code value} is the ON state.
 	 * 
+	 * @param value Value to be compared with the ON state.
 	 * @return True if it is, false otherwise.
 	 */
 	public boolean isOnState(String value) {
@@ -159,7 +160,7 @@ public class TwoStateUIProperty extends UIProperty{
 					Integer onstate = Integer.parseInt(onstate_);
 					return onstate.equals((int) i);
 				}
-			}else {
+			} else {
 				return value.equals(onstate_);
 			}
 		}
@@ -169,6 +170,7 @@ public class TwoStateUIProperty extends UIProperty{
 	/**
 	 * Tests if {@code value} is the OFF state.
 	 * 
+	 * @param value Value to be compared with the OFF state.
 	 * @return True if it is, false otherwise.
 	 */
 	public boolean isOffState(String value) {

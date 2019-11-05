@@ -30,20 +30,19 @@ import de.embl.rieslab.emu.utils.exceptions.UnknownUIParameterException;
 import de.embl.rieslab.emu.utils.exceptions.UnknownUIPropertyException;
 
 /**
- * Building block of EMU, this abstract class extends a JPanel. It holds a map of {@link de.embl.rieslab.emu.ui.uiproperties.UIProperty},
- * {@link de.embl.rieslab.emu.ui.uiparameters.UIParameter} and {@link de.embl.rieslab.emu.ui.internalproperties.InternalProperty}.
- * ConfigurablePanel subclasses should be instantiated within a {@link ConfigurableMainFrame}. The latter will collect their UIProperties, 
- * UIParameters and InternalProperties, and pass them on to the SystemController. 
+ * Building block of EMU, this abstract class extends a Swing JPanel. It holds a map of {@link de.embl.rieslab.emu.ui.uiproperties.UIProperty UIProperty},
+ * {@link de.embl.rieslab.emu.ui.uiparameters.UIParameter UIParameter} and {@link de.embl.rieslab.emu.ui.internalproperties.InternalProperty InternalProperty}.
+ * ConfigurablePanel subclasses should be instantiated and added to a {@link ConfigurableMainFrame}.
  * <p> 
- * Subclasses of ConfigurablePanel must implements few methods called in the ConfigurablePanel constructor in order to instantiate the
- * UIProperties ({@link #initializeProperties()}), UIParameters ({@link #initializeParameters()}) and InternalProperties ({@link #initializeInternalProperties()}), 
- * as well as setting up the JComponents in the JPanel (itself). All JComponent instantiations should happen in the constructor. Action listeners can be
- * added to the JComponents in {@link #addComponentListeners()}, in case the states or values of the UIProperty are necessary.  
+ * Subclasses of ConfigurablePanel must implements few methods called in order to instantiate the
+ * UIProperties ({@link #initializeProperties()}), UIParameters ({@link #initializeParameters()}) and InternalProperties ({@link #initializeInternalProperties()}). 
+ * All JComponent instantiations should happen in the constructor. Action listeners can be added to the JComponents in {@link #addComponentListeners()}, in case the 
+ * states or values of the UIProperty are necessary.  
  * <p> 
  * UIProperties are aimed at linking the state of a MMProperty with the state of one or multiple JComponenents. InternalProperties are made to allow
  * shared values between ConfigurablePanels, such that a modification to one panel can trigger a change in the other panel. Finally, UIProperties
  * should only be used for user settings, such as changing the colors of JLabels or JButtons (to describe a filter or a laser) or the text of a header. 
- * All UIProperties and UIParameters appear in the {@link de.embl.rieslab.emu.configuration.ui.ConfigurationWizardUI}. The user can then map the 
+ * All UIProperties and UIParameters appear in the configuration wizard. The user can then map the 
  * UIProperties with a MMProperty and change the value of a UIParameter. 
  * <p>
  * In order to be added to the internal HashMap representation, UIproperties, UIParameters and InternalProperties need to be added using the following methods
@@ -53,7 +52,7 @@ import de.embl.rieslab.emu.utils.exceptions.UnknownUIPropertyException;
  * abstraction methods: {@link #setUIPropertyValue(String, String)} and setInternalPropertyValue(String, ?). UIParameters should not be modified within the subclasses. 
  * Modifications of the JComponents based on UIProperties, UIParameters and InternalProperties changes take place in the subclasses 
  * implementation of {@link #propertyhasChanged(String, String)}, {@link #parameterhasChanged(String)} and {@link #internalpropertyhasChanged(String)} respectively.
- * To query the value of a UIParameter or an InternalProperty, use respectively the methods {@code getUIParamterValue()} and
+ * To query the value of a UIParameter or an InternalProperty, use the methods {@code getUIParamterValue()} and
  * {@code getInternalPropertyValue()}.
  *  <p> 
  * For instance, a JToggleButton can be designed to turn on and off a laser. After declaration of the JToggleButton and addition to the panel in the constructor, 
@@ -134,7 +133,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	}
 	
 	/**
-	 * Returns a hash map of the panel's UI parameters indexed by their hash (({panel's name}-{parameter's name})).
+	 * Returns a hash map of the panel's {@link de.embl.rieslab.emu.ui.uiparameters.UIParameter UIParameters} indexed by their hash (({panel's name}-{parameter's name})).
 	 *
 	 * @see de.embl.rieslab.emu.ui.uiparameters.UIParameter
 	 * 
@@ -145,12 +144,12 @@ public abstract class ConfigurablePanel extends JPanel{
 	}	
 	
 	/**
-	 * Returns the {@link de.embl.rieslab.emu.ui.uiproperties.UIParameter}
+	 * Returns the {@link de.embl.rieslab.emu.ui.uiparameters.UIParameter UIParameter}
 	 * named {@code propertyName}.
 	 * 
-	 * @param propertyName Name of the UIParameter
+	 * @param parameterName Name of the UIParameter
 	 * @return Corresponding UIParameter, null if it doesn't exist.
-	 * @throws UnknownUIParameterException 
+	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
 	protected UIParameter getUIParameter(String parameterName) throws UnknownUIParameterException {
 		if(parameterName == null) {
@@ -165,12 +164,12 @@ public abstract class ConfigurablePanel extends JPanel{
 	}
 
 	/**
-	 * Returns the {@link de.embl.rieslab.emu.ui.uiproperties.UIProperty}
+	 * Returns the {@link de.embl.rieslab.emu.ui.uiproperties.UIProperty UIProperty}
 	 * named {@code propertyName}.
 	 * 
 	 * @param propertyName Name of the UIProperty
 	 * @return Corresponding UIProperty, null if it doesn't exist.
-	 * @throws UnknownUIPropertyException 
+	 * @throws UnknownUIPropertyException Thrown if propertyName does not correspond to a known UIProperty.
 	 */
 	protected UIProperty getUIProperty(String propertyName) throws UnknownUIPropertyException {
 		if(propertyName == null) {
@@ -184,12 +183,12 @@ public abstract class ConfigurablePanel extends JPanel{
 	}
 
 	/**
-	 * Returns the {@link de.embl.rieslab.emu.ui.internalproperties.InternalProperty}
+	 * Returns the {@link de.embl.rieslab.emu.ui.internalproperties.InternalProperty InternalProperty}
 	 * named {@code propertyName}.
 	 * 
 	 * @param propertyName Name of the InternalProperty
 	 * @return Corresponding InternalProperty.
-	 * @throws UnknownInternalPropertyException 
+	 * @throws UnknownInternalPropertyException Thrown if propertyName does not correspond to a known InternalProperty.
 	 */
 	protected InternalProperty getInternalProperty(String propertyName) throws UnknownInternalPropertyException {
 		if(propertyName == null) {
@@ -223,7 +222,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @param propertyName Name of the property
 	 * @return String value of the property, null if the property doesn't exist.
-	 * @throws UnknownUIPropertyException 
+	 * @throws UnknownUIPropertyException Thrown if propertyName does not correspond to a known UIProperty.
 	 */
 	protected String getUIPropertyValue(String propertyName) throws UnknownUIPropertyException{
 		if(propertyName == null) {
@@ -275,8 +274,8 @@ public abstract class ConfigurablePanel extends JPanel{
 	 *  
 	 * @param propertyName Name of the InternalProperty
 	 * @param newValue New value
-	 * @throws IncorrectInternalPropertyTypeException 
-	 * @throws UnknownInternalPropertyException 
+	 * @throws IncorrectInternalPropertyTypeException Thrown if propertyName does not correspond to an IntegerInternalProperty.
+	 * @throws UnknownInternalPropertyException Thrown if propertyName does not correspond to a known InternalProperty.
 	 */
 	protected void setInternalPropertyValue(String propertyName, int newValue) throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException{
 		if(propertyName == null) {
@@ -301,9 +300,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 *  
 	 * @param propertyName Name of the InternalProperty
 	 * @param newValue New value
-	 * @throws IncorrectInternalPropertyTypeException 
+	 * @throws IncorrectInternalPropertyTypeException Thrown if propertyName does not correspond to an BoolInternalProperty.
+	 * @throws UnknownInternalPropertyException Thrown if propertyName does not correspond to a known InternalProperty.
 	 */
-	protected void setInternalPropertyValue(String propertyName, boolean newValue) throws IncorrectInternalPropertyTypeException{
+	protected void setInternalPropertyValue(String propertyName, boolean newValue) throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException{
 		if(propertyName == null) {
 			throw new NullPointerException("An InternalProperty's label cannot be null.");
 		}
@@ -315,6 +315,8 @@ public abstract class ConfigurablePanel extends JPanel{
 			} else {
 				throw new IncorrectInternalPropertyTypeException(InternalPropertyType.BOOLEAN.getTypeValue(), internalprops_.get(propertyName).getType().getTypeValue());
 			}
+		} else {
+			throw new UnknownInternalPropertyException(propertyName);
 		}
 	}
 	
@@ -324,9 +326,10 @@ public abstract class ConfigurablePanel extends JPanel{
 	 *  
 	 * @param propertyName name of the InternalProperty
 	 * @param newValue New value
-	 * @throws IncorrectInternalPropertyTypeException 
+	 * @throws IncorrectInternalPropertyTypeException Thrown if propertyName does not correspond to an DoubleInternalProperty.
+	 * @throws UnknownInternalPropertyException Thrown if propertyName does not correspond to a known InternalProperty.
 	 */
-	protected void setInternalPropertyValue(String propertyName, double newValue) throws IncorrectInternalPropertyTypeException{
+	protected void setInternalPropertyValue(String propertyName, double newValue) throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException{
 		if(propertyName == null) {
 			throw new NullPointerException("An InternalProperty's label cannot be null.");
 		}
@@ -338,71 +341,88 @@ public abstract class ConfigurablePanel extends JPanel{
 			} else {
 				throw new IncorrectInternalPropertyTypeException(InternalPropertyType.DOUBLE.getTypeValue(), internalprops_.get(propertyName).getType().getTypeValue());
 			}
+		} else {
+			throw new UnknownInternalPropertyException(propertyName);
 		}
 	}
 
 	/**
 	 * Returns the value of the IntegerInternalProperty called {@code propertyName}.
-	 * If {@code propertyName} doesn't exist or is not an IntegerInternalProperty, returns 0.
 	 * 
 	 * @param propertyName Name of the property
-	 * @return Value of the InternalProperty, or 0 if it doesn't exists.
+	 * @return Value of the InternalProperty.
+	 * @throws IncorrectInternalPropertyTypeException Thrown if propertyName does not correspond to an IntegerInternalProperty.
+	 * @throws UnknownInternalPropertyException Thrown if propertyName does not correspond to a known InternalProperty
 	 */
-	protected int getIntegerInternalPropertyValue(String propertyName) {
+	protected int getIntegerInternalPropertyValue(String propertyName) throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		if(propertyName == null) {
 			throw new NullPointerException("An InternalProperty's label cannot be null.");
 		}
 		
-		if(internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.INTEGER)) {
-			return ((IntegerInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+		if(internalprops_.containsKey(propertyName)){
+			if(internalprops_.get(propertyName).getType().equals(InternalPropertyType.INTEGER)) {
+				return ((IntegerInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+			} else {
+				throw new IncorrectInternalPropertyTypeException(InternalPropertyType.INTEGER.getTypeValue(), internalprops_.get(propertyName).getType().getTypeValue());
+			}
+		} else {
+			throw new UnknownInternalPropertyException(propertyName);
 		}
-		return 0;
 	}
 	
 	/**
 	 * Returns the value of the BoolInternalProperty called {@code propertyName}.
-	 * If {@code propertyName} doesn't exist or is not an BoolInternalProperty, returns false.
 	 * 
-	 * @param propertyName Name of the property
-	 * @return Value of the InternalProperty, or false if it doesn't exists.
+	 * @param propertyName Name of the property.
+	 * @return InternalPropery value.
+	 * @throws IncorrectInternalPropertyTypeException Thrown if propertyName does not correspond to an BoolInternalProperty.
+	 * @throws UnknownInternalPropertyException Thrown if propertyName does not correspond to a known InternalProperty.
 	 */
-	protected boolean getBoolInternalPropertyValue(String propertyName) {
+	protected boolean getBoolInternalPropertyValue(String propertyName) throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		if(propertyName == null) {
 			throw new NullPointerException("An InternalProperty's label cannot be null.");
 		}
-		if(internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.BOOLEAN)) {
-			return ((BoolInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+		if(internalprops_.containsKey(propertyName)) {
+			if(internalprops_.get(propertyName).getType().equals(InternalPropertyType.BOOLEAN)) {
+				return ((BoolInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+			} else {
+				throw new IncorrectInternalPropertyTypeException(InternalPropertyType.BOOLEAN.getTypeValue(), internalprops_.get(propertyName).getType().getTypeValue());
+			}
+		} else {
+			throw new UnknownInternalPropertyException(propertyName);
 		}
-		return false;
 	}
 	
 	/**
 	 * Returns the value of the DoubleInternalProperty called {@code propertyName}.
-	 * If {@code propertyName} doesn't exist or is not an DoubleInternalProperty, returns 0.
 	 * 
 	 * @param propertyName Name of the property
-	 * @return Value of the InternalProperty, or 0 if it doesn't exists.
+	 * @return Value of the InternalProperty.
+	 * @throws IncorrectInternalPropertyTypeException Thrown if propertyName does not correspond to an DoubleInternalProperty.
+	 * @throws UnknownInternalPropertyException Thrown if propertyName does not correspond to a known InternalProperty.
 	 */
-	protected double getDoubleInternalPropertyValue(String propertyName) {
+	protected double getDoubleInternalPropertyValue(String propertyName) throws IncorrectInternalPropertyTypeException, UnknownInternalPropertyException {
 		if(propertyName == null) {
 			throw new NullPointerException("An InternalProperty's label cannot be null.");
 		}
-		if(internalprops_.containsKey(propertyName)
-				&& internalprops_.get(propertyName).getType().equals(InternalPropertyType.DOUBLE)) {
-			return ((DoubleInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+		if(internalprops_.containsKey(propertyName)) {
+			if(internalprops_.get(propertyName).getType().equals(InternalPropertyType.DOUBLE)) {
+				return ((DoubleInternalProperty) internalprops_.get(propertyName)).getInternalPropertyValue();
+			} else {
+				throw new IncorrectInternalPropertyTypeException(InternalPropertyType.DOUBLE.getTypeValue(), internalprops_.get(propertyName).getType().getTypeValue());
+			}
+		} else {
+			throw new UnknownInternalPropertyException(propertyName);
 		}
-		return 0.;
 	}
 	
 	/**
 	 * Returns the value of the DoubleUIParameter called {@code parameterName}.
 	 * 
 	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParameter, or 0 if it doesn't exist.
-	 * @throws IncorrectUIParameterTypeException 
-	 * @throws UnknownUIParameterException 
+	 * @return Value of the UIParameter.
+	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a DoubleUIParameter.
+	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
 	protected double getDoubleUIParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
@@ -426,9 +446,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * Returns the value of the BoolUIParameter called {@code parameterName}.
 	 * 
 	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParameter, or false if it doesn't exist.
-	 * @throws IncorrectUIParameterTypeException 
-	 * @throws UnknownUIParameterException 
+	 * @return Value of the UIParameter.
+	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a BoolUIParameter.
+	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
 	protected boolean getBoolUIParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
@@ -451,9 +471,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * Returns the value of the ColorUIParameter called {@code parameterName}. 
 	 * 
 	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParameter, or black if it doesn't exist.
-	 * @throws IncorrectUIParameterTypeException 
-	 * @throws UnknownUIParameterException 
+	 * @return Value of the UIParameter.
+	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a ColorUIParameter.
+	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
 	protected Color getColorUIParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
@@ -476,9 +496,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * Returns the value of the ComboUIParameter called {@code parameterName}. 
 	 * 
 	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
-	 * @throws IncorrectUIParameterTypeException 
-	 * @throws UnknownUIParameterException 
+	 * @return Value of the UIParameter.
+	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a ComboUIParameter.
+	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
 	protected String getComboUIParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
@@ -501,9 +521,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * Returns the value of the IntegerUIParameter called {@code parameterName}. 
 	 * 
 	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParameter, or 0 if it doesn't exist.
-	 * @throws IncorrectUIParameterTypeException 
-	 * @throws UnknownUIParameterException 
+	 * @return Value of the UIParameter.
+	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a IntegerUIParameter.
+	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
 	protected int getIntegerUIParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
@@ -526,9 +546,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * Returns the value of the StringUIParameter called {@code parameterName}. 
 	 * 
 	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParameter, or an empty String if it doesn't exist.
-	 * @throws IncorrectUIParameterTypeException 
-	 * @throws UnknownUIParameterException 
+	 * @return Value of the UIParameter.
+	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a StringUIParameter.
+	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
 	protected String getStringUIParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
@@ -551,9 +571,9 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * Returns the value of the UIPropertyParameter called {@code parameterName}.
 	 * 
 	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParameter, or 0 if it doesn't exist.
-	 * @throws IncorrectUIParameterTypeException 
-	 * @throws UnknownUIParameterException 
+	 * @return Value of the UIParamete.
+	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a UIPropertyParameter.
+	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
 	protected String getUIPropertyParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		if(parameterName == null) {
@@ -650,8 +670,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * Substitute the parameter indexed by {@code paramHash} with {@code uiParameter}. This is used to resolve collisions
 	 * between two parameters with same hash: their respective ConfigurablePanel owners then share the same UIParameter.
 	 * 
-	 * @param paramHash
-	 * @param uiParameter
+	 * @param uiParameter UIParameter to substitute.
 	 */
 	public void substituteParameter(UIParameter uiParameter) {
 		final String hash = uiParameter.getHash();

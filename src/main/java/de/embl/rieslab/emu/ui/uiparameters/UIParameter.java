@@ -126,7 +126,7 @@ public abstract class UIParameter<T> {
 	 * Converts the String {@code val} to the UIParameter's type.
 	 * 
 	 * @param val String to convert
-	 * @return {@code} in the type of the UIParameter
+	 * @return {@code val} in the type of the UIParameter
 	 */
 	protected abstract T convertValue(String val);
 	

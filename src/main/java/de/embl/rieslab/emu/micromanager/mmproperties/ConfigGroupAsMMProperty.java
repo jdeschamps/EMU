@@ -47,7 +47,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getValue() {
@@ -63,7 +63,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getStringValue() {
@@ -71,7 +71,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean setValue(String stringval, UIProperty source){
@@ -111,7 +111,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToValue(String s) {
@@ -119,7 +119,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToValue(int s) {
@@ -127,7 +127,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToValue(double s) {
@@ -135,7 +135,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] arrayFromStrings(String[] s) {
@@ -143,7 +143,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToString(String val) {
@@ -151,7 +151,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isAllowed(String val) { // always has allowed values, so no "hasAllowedValues" to prevent null object
@@ -164,7 +164,7 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean areEquals(String val1, String val2) {

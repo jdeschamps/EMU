@@ -8,14 +8,12 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 
 /**
- * Renders {@link ColorIcon} without text within a list. Adapted from <a href="http://helpdesk.objects.com.au"http://helpdesk.objects.com.au</a>. 
+ * Renders {@link ColorIcon} without text within a list. Adapted from http://helpdesk.objects.com.au/tag/defaultlistcellrenderer. 
  */
 public class IconListRenderer extends DefaultListCellRenderer {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -4250151427157236056L;
+
+	private static final long serialVersionUID = 1L;
 	private Map<String, ColorIcon> icons = null;
 
 	public IconListRenderer(Map<String, ColorIcon> icons) {

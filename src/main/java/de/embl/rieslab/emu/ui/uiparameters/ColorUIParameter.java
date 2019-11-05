@@ -35,7 +35,7 @@ public class ColorUIParameter extends UIParameter<Color>{
 	
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public UIParameterType getType() {
@@ -43,7 +43,7 @@ public class ColorUIParameter extends UIParameter<Color>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isSuitable(String val) {
@@ -54,7 +54,7 @@ public class ColorUIParameter extends UIParameter<Color>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected Color convertValue(String val) {
@@ -62,7 +62,7 @@ public class ColorUIParameter extends UIParameter<Color>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getStringValue() {

@@ -55,6 +55,7 @@ public class ParametersTable extends JPanel{
 	 * Constructor called when no configuration exists. All the parameter values are set to default values.
 	 * 
 	 * @param uiparameterSet Map of the UIParameters, indexed by their name
+	 * @param uipropertySet Map of the UIProperties, indexed by their name
 	 * @param help Help window
 	 */
 	@SuppressWarnings("rawtypes")
@@ -102,6 +103,7 @@ public class ParametersTable extends JPanel{
 	 * 
 	 * @param uiparameterSet Map of the UI parameters, indexed by their name.
 	 * @param paramValues Map of the UIParameter names (keys) and their value (values) from the configuration.
+	 * @param uipropertySet Map of the UIProperties, indexed by their name.
 	 * @param help Help window
 	 */
 	@SuppressWarnings("rawtypes")
@@ -226,7 +228,7 @@ public class ParametersTable extends JPanel{
 		});
 	}
 	
-	protected String[] getAvailableProperties(UIPropertyParameter param) {
+	private String[] getAvailableProperties(UIPropertyParameter param) {
 		ArrayList<String> props = new ArrayList<String>();
 		
 		Iterator<String> it = uipropertySet_.keySet().iterator();

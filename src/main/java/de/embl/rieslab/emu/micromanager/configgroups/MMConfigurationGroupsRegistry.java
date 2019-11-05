@@ -24,16 +24,17 @@ public class MMConfigurationGroupsRegistry {
 	
 	/**
 	 * The constructor receives the current Micro-manager core instance and extracts all the
-	 * configuration groups, building a HashMap<group name, ConfigurationGroup>.
+	 * configuration groups, building a HashMap of the ConfigurationGroup indexed by the group name.
 	 * 
 	 * @param core Micro-manager CMMCore instance.
+	 * @param mmpropReg Micro-manager properties registry.
 	 */
-	public MMConfigurationGroupsRegistry(CMMCore core, MMPropertiesRegistry mmproperties){
+	public MMConfigurationGroupsRegistry(CMMCore core, MMPropertiesRegistry mmpropReg){
 		core_ = core;
 		
 		groups_ = new HashMap<String, MMConfigurationGroup>();
 		
-		retrieveConfigurationGroups(mmproperties);
+		retrieveConfigurationGroups(mmpropReg);
 	}
 
 	private void retrieveConfigurationGroups(MMPropertiesRegistry mmproperties) {

@@ -11,7 +11,7 @@ public class DoubleInternalProperty extends InternalProperty<AtomicLong, Double>
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public InternalPropertyType getType() {
@@ -19,7 +19,7 @@ public class DoubleInternalProperty extends InternalProperty<AtomicLong, Double>
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected Double convertValue(AtomicLong val) {
@@ -27,7 +27,7 @@ public class DoubleInternalProperty extends InternalProperty<AtomicLong, Double>
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void setAtomicValue(Double val) {
@@ -35,7 +35,7 @@ public class DoubleInternalProperty extends InternalProperty<AtomicLong, Double>
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected AtomicLong initializeDefault(Double defaultval) {

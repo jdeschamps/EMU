@@ -24,7 +24,7 @@ import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
  * UIProperties can be labeled with a PropertyFlag to allow categorizing them. This mechanism is not used within EMU, but can be used by its plugins.
  * <p> 
  * Several extensions of UIProperty exist and have additional properties:
- * <pre>
+ * <p>
  * - {@link TwoStateUIProperty} accepts only two states, ON and OFF, whose values are not known at compilation time and can be set in the configuration wizard.
  * - {@link MultiStateUIProperty} accepts multiple states. While the values of the states are also not know at compilation time, the number of states is fixed during
  * instantiation.
@@ -191,6 +191,7 @@ public class UIProperty {
 	 * Sets the value of the assigned MMProperty to {@code newValue}.
 	 * 
 	 * @param newValue New value
+	 * @return True if the value was set, false otherwise.
 	 */
 	public boolean setPropertyValue(String newValue){
 		if(assigned_){

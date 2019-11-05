@@ -52,7 +52,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Integer convertToValue(String s) {
@@ -65,7 +65,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Integer convertToValue(int s) {
@@ -73,7 +73,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Integer convertToValue(double s) {
@@ -82,7 +82,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Integer[] arrayFromStrings(String[] s) {
@@ -94,7 +94,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToString(Integer val) {
@@ -102,7 +102,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	private boolean isInRange(Integer val) {
 		if(hasLimits()){
@@ -115,7 +115,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isAllowed(Integer val) {
@@ -139,7 +139,7 @@ public class IntegerMMProperty extends MMProperty<Integer> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean areEquals(Integer val1, Integer val2) {

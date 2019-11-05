@@ -221,13 +221,13 @@ public class SystemDialogs {
 	/**
 	 * Displays the list of UIProperties states set to a forbidden value (mismatch with MM property limits).
 	 * 
-	 * @param forbiddenvals
+	 * @param forbiddenvalProps List of UIProperties set to forbidden values. 
 	 */
-	public static void showForbiddenValuesMessage(ArrayList<String> forbiddenvals) {
+	public static void showForbiddenValuesMessage(ArrayList<String> forbiddenvalProps) {
 		String title = "Forbidden values";
 		
 		String message = "The state values of the following UIProperties are forbidden: \n\n";
-		Iterator<String> it = forbiddenvals.iterator();
+		Iterator<String> it = forbiddenvalProps.iterator();
 		message = message+it.next();
 		int count = 1;
 		while(it.hasNext()){
@@ -248,13 +248,13 @@ public class SystemDialogs {
 	/**
 	 * Displays the list of UIProperties allocated to incompatible MMProperties.
 	 * 
-	 * @param incompatibleprops
+	 * @param incompatibleProps List of incompatible UIProperties.
 	 */
-	public static void showIncompatiblePropertiesMessage(ArrayList<String> incompatibleprops) {
+	public static void showIncompatiblePropertiesMessage(ArrayList<String> incompatibleProps) {
 		String title = "Incompatible properties";
 		
 		String message = "The following UIProperties were paired with incompatible MMProperties: \n\n";
-		Iterator<String> it = incompatibleprops.iterator();
+		Iterator<String> it = incompatibleProps.iterator();
 		message = message+it.next();
 		int count = 1;
 		while(it.hasNext()){

@@ -220,7 +220,7 @@ public class SettingsTable extends JPanel{
 	/**
 	 * Returns the map of the GlobalSettings names (keys) and their values (values).
 	 * 
-	 * @return HashMap<String,String> containing the values of the GlobalSettings indexed by their name.
+	 * @return HashMap containing the values of the GlobalSettings indexed by their name.
 	 */
 	public HashMap<String,String> getSettings(){
 		HashMap<String,String> settings = new HashMap<String,String>();
@@ -239,10 +239,12 @@ public class SettingsTable extends JPanel{
 		return settings;
 	}
 	
-	/**
-	 * Renders cells' text with a bold font. Adapted from: <a href="https://stackoverflow.com/questions/22325138/cellrenderer-making-text-bold"stackoverflow</a>
+	
+	/*
+	 * Renders cells' text with a bold font. 
+	 * Adapted from https://stackoverflow.com/questions/22325138/cellrenderer-making-text-bold.
 	 */
-	class BoldTableCellRenderer extends DefaultTableCellRenderer {
+	private class BoldTableCellRenderer extends DefaultTableCellRenderer {
 
 		private static final long serialVersionUID = 1L;
 

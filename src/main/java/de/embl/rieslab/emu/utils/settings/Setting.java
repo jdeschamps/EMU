@@ -19,6 +19,7 @@ public abstract class Setting<T> {
 	 * 
 	 * @param name Short name of the setting.
 	 * @param description Description as it will appear in the help.
+	 * @param type Type of the Setting.
 	 * @param default_val Default value for the setting.
 	 */
 	public Setting(String name, String description, SettingType type, T default_val){
@@ -41,7 +42,7 @@ public abstract class Setting<T> {
 	/**
 	 * Sets the value of the setting to {@code val}. If the value is not compatible, then nothing happens.
 	 * 
-	 * @param val
+	 * @param val Value
 	 */
 	public void setStringValue(String val){
 		if(isValueCompatible(val)) {
@@ -109,13 +110,16 @@ public abstract class Setting<T> {
 		return type_;
 	}
 	
+	/**
+	 * Returns the value of the Setting as a String.
+	 */
 	@Override
 	public String toString() {
 		return getStringValue();
 	}
 		
 	/**
-	 * Setting type.
+	 * Setting type: INTEGER, STRING or BOOL.
 	 * 
 	 * @author Joran Deschamps
 	 *

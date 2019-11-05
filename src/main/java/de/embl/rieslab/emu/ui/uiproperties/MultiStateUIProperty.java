@@ -68,6 +68,7 @@ public class MultiStateUIProperty extends UIProperty{
 	 * If the array is too short, then the corresponding states are modified while the other ones are left unchanged.
 	 * 
 	 * @param vals Array of values.
+	 * @return True if some values were set, false otherwise.
 	 */
 	public boolean setStateValues(String[] vals){
 		if(vals == null){
@@ -95,9 +96,12 @@ public class MultiStateUIProperty extends UIProperty{
 	}
 	
 	/**
-	 * Gives names to the states.
+	 * Gives names to the states. If stateNames has less entries than the number of states, then only
+	 * the corresponding states will be updated. If it has more entries, then the supernumerary entries
+	 * will be ignored.
 	 * 
 	 * @param stateNames State names
+	 * @return True if some names were set, false otherwise.
 	 */
 	public boolean setStateNames(String[] stateNames){
 		for(String s: stateNames) {

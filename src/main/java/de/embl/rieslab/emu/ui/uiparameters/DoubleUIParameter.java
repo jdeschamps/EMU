@@ -20,7 +20,7 @@ public class DoubleUIParameter extends UIParameter<Double> {
 
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public UIParameterType getType() {
@@ -28,7 +28,7 @@ public class DoubleUIParameter extends UIParameter<Double> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isSuitable(String val) {
@@ -39,7 +39,7 @@ public class DoubleUIParameter extends UIParameter<Double> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected Double convertValue(String val) {
@@ -47,7 +47,7 @@ public class DoubleUIParameter extends UIParameter<Double> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getStringValue() {

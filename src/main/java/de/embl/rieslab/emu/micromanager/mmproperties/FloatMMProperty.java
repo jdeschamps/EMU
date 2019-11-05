@@ -54,7 +54,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Float convertToValue(String s) {
@@ -66,7 +66,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Float convertToValue(int s) {
@@ -74,7 +74,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Float convertToValue(double s) {
@@ -82,7 +82,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public Float[] arrayFromStrings(String[] s) {
@@ -94,7 +94,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToString(Float val) {
@@ -109,7 +109,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isAllowed(Float val) {
@@ -133,7 +133,7 @@ public class FloatMMProperty extends MMProperty<Float> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean areEquals(Float val1, Float val2) {

@@ -33,7 +33,7 @@ public class MMDevice {
 	 * Adds the property {@code p} to the properties map. If a property with the same hash already exists,
 	 * then nothing happens.
 	 * 
-	 * @param p
+	 * @param p MMproperty to register
 	 */
 	public void registerProperty(@SuppressWarnings("rawtypes") MMProperty p){
 		if(!hasHashProperty(p.getMMPropertyLabel())){

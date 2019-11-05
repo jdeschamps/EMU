@@ -19,7 +19,7 @@ public class IntegerUIParameter extends UIParameter<Integer>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public UIParameterType getType() {
@@ -27,7 +27,7 @@ public class IntegerUIParameter extends UIParameter<Integer>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isSuitable(String val) {
@@ -38,7 +38,7 @@ public class IntegerUIParameter extends UIParameter<Integer>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected Integer convertValue(String val) {
@@ -46,7 +46,7 @@ public class IntegerUIParameter extends UIParameter<Integer>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getStringValue() {

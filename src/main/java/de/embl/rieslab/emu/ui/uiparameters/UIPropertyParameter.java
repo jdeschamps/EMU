@@ -13,7 +13,7 @@ import de.embl.rieslab.emu.ui.uiproperties.flag.PropertyFlag;
  * particular when the UIProperty is to be used in a SwingWorker or a another Thread
  * without explicit interactions between the ConfigurablePanel's JComponents and the
  * UIProperty.
- * <pre>
+ * <p>
  * A PropertyFlag can be given to select the relevant UIProperties from the list
  * of possible values in the configuration wizard.
  * 
@@ -47,7 +47,7 @@ public class UIPropertyParameter extends UIParameter<String>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public UIParameterType getType() {
@@ -55,7 +55,7 @@ public class UIPropertyParameter extends UIParameter<String>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isSuitable(String val) {
@@ -66,7 +66,7 @@ public class UIPropertyParameter extends UIParameter<String>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected String convertValue(String val) {
@@ -74,7 +74,7 @@ public class UIPropertyParameter extends UIParameter<String>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getStringValue() {

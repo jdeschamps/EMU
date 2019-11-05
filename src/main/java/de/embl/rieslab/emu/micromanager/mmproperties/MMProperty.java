@@ -38,11 +38,11 @@ public abstract class MMProperty<T> {
 	 * Builds a MMproperty without limits or allowed values. The property can be set to be read-only. 
 	 * 
 	 * @param core Micro-manager core.
+	 * @param logger EMU logger.
 	 * @param type Micro-Manager device property type.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param readOnly True if the device property is read-only, false otherwise.
-	 * @throws UnknownMMPropertyType 
 	 */
 	protected MMProperty(CMMCore core, Logger logger, MMPropertyType type, String deviceLabel, String propertyLabel, boolean readOnly){
 		this.core_ = core;
@@ -67,12 +67,12 @@ public abstract class MMProperty<T> {
 	 * Builds a MMProperty with limits. 
 	 * 
 	 * @param core Micro-manager core.
+	 * @param logger EMU logger.
 	 * @param type Micro-Manager device property type.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param upperLimit Upper limit of the device property value.
 	 * @param lowerLimit Lower limit of the device property value.
-	 * @throws UnknownMMPropertyType 
 	 */
 	protected MMProperty(CMMCore core, Logger logger,  MMPropertyType type, String deviceLabel, String propertyLabel, double upperLimit, double lowerLimit){
 		this.core_ = core;
@@ -106,11 +106,11 @@ public abstract class MMProperty<T> {
 	 * Builds a MMProperty with allowed values.
 	 * 
 	 * @param core Micro-manager core.
+	 * @param logger EMU logger.
 	 * @param type Micro-Manager device property type.
 	 * @param deviceLabel Label of the parent device as defined in Micro-manager.
 	 * @param propertyLabel Label of the device property as defined in Micro-manager.
 	 * @param allowedValues Array of allowed values.
-	 * @throws UnknownMMPropertyType 
 	 */
 	protected MMProperty(CMMCore core, Logger logger,  MMPropertyType type, String deviceLabel, String propertyLabel, String[] allowedValues){
 		this.core_ = core;
@@ -181,6 +181,7 @@ public abstract class MMProperty<T> {
 	 * 
 	 * @param stringval New value.
 	 * @param source UIProperty at the origin of the update.
+	 * @return True if the value was set, false otherwise. 
 	 */
 	public boolean setValue(String stringval, UIProperty source){
 		if(!isReadOnly()){

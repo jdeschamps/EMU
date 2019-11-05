@@ -26,10 +26,7 @@ import de.embl.rieslab.emu.utils.EmuUtils;
  * These are just a bunch of tests to remember whether changing the state of
  * a Swing JComponent fires the action listeners used in SwingUIListeners. This
  * is important to know in the UIPlugin in order to avoid repeated calls to the
- * MMProperty from ConfigurablePanel.propertyHashChanged(String, String):
- * 
- * MMProperty values changes -> updates ConfigurablePanel -> changes JComponent -> fires action listener -> change MMProperty value 
- * ...etc...
+ * MMProperty from ConfigurablePanel.propertyHashChanged(String, String).
  * 
  * @author Joran Deschamps
  *

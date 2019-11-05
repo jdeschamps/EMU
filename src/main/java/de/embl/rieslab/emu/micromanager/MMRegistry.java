@@ -30,7 +30,8 @@ public class MMRegistry {
 	 * Constructor. Instantiate the {@link MMPropertiesRegistry} and {@link MMConfigurationGroupsRegistry} and register
 	 * the configuration groups as MMProperties.
 	 * 
-	 * @param studio Micro-Manager studio
+	 * @param studio Micro-Manager studio.
+	 * @param logger EMU logger.
 	 */
 	public MMRegistry(Studio studio, Logger logger) {
 		

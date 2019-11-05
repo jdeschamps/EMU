@@ -23,7 +23,7 @@ public class StringUIParameter extends UIParameter<String>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public UIParameterType getType() {
@@ -31,7 +31,7 @@ public class StringUIParameter extends UIParameter<String>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isSuitable(String val) {
@@ -42,7 +42,7 @@ public class StringUIParameter extends UIParameter<String>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertValue(String val) {
@@ -50,7 +50,7 @@ public class StringUIParameter extends UIParameter<String>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getStringValue() {

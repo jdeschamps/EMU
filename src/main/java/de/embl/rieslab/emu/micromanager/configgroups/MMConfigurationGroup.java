@@ -20,8 +20,9 @@ public class MMConfigurationGroup {
 	/**
 	 * Constructor
 	 * 
-	 * @param name Name of the configuration group
-	 * @param config StrVector returned by Micro-manager and representing the different channels in the configuration group.
+	 * @param name Name of the configuration group.
+	 * @param config StrVector of the configuration group entries returned by Micro-manager.
+	 * @param affectedmmprops List of the MMproperties affected by the configuration group.
 	 */
 	public MMConfigurationGroup(String name, StrVector config, ArrayList<MMProperty> affectedmmprops){
 		name_ = name;

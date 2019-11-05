@@ -7,7 +7,7 @@ import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
  * UIParameter represented by a String value that can only take a finite number of values.
  * The possible values are passed to the constructor and only values contained in the array 
  * will be accepted, otherwise the first value will be chosen.
- * <pre>
+ * <p>
  * This UIParameter can be used to define a set of possible values.
  * 
  * @author Joran Deschamps
@@ -49,7 +49,7 @@ public class ComboUIParameter extends UIParameter<String> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public UIParameterType getType() {
@@ -57,7 +57,7 @@ public class ComboUIParameter extends UIParameter<String> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isSuitable(String val) {
@@ -74,7 +74,7 @@ public class ComboUIParameter extends UIParameter<String> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertValue(String val) {
@@ -82,7 +82,7 @@ public class ComboUIParameter extends UIParameter<String> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getStringValue() {
@@ -90,7 +90,7 @@ public class ComboUIParameter extends UIParameter<String> {
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	public String[] getComboValues(){
 		return combovalues_;

@@ -27,6 +27,7 @@ public class GlobalConfiguration {
 	/**
 	 * Constructor for an empty GlobalConfiguration.
 	 * 
+	 * @param globalSettings Default global settings (can be empty).
 	 */
 	public GlobalConfiguration(TreeMap<String, String> globalSettings){
 		this.currentConfiguration = KEY_NONE;		
@@ -179,7 +180,7 @@ public class GlobalConfiguration {
 	 * than {@code pluginConfiguration}, then {@code pluginConfiguration} is substituted for the 
 	 * former configuration in the list. If no such configuration exist, nothing happens.
 	 * 
-	 * @param pluginConfiguration 
+	 * @param pluginConfiguration New plugin configuration to substitute.
 	 */
 	public void substituteConfiguration(PluginConfiguration pluginConfiguration) {
 		for(int i=0; i<pluginconfigs.size();i++){

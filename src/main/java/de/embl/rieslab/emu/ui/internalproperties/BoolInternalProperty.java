@@ -11,7 +11,7 @@ public class BoolInternalProperty extends InternalProperty<AtomicBoolean, Boolea
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public InternalPropertyType getType() {
@@ -19,7 +19,7 @@ public class BoolInternalProperty extends InternalProperty<AtomicBoolean, Boolea
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected Boolean convertValue(AtomicBoolean val) {
@@ -27,7 +27,7 @@ public class BoolInternalProperty extends InternalProperty<AtomicBoolean, Boolea
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected void setAtomicValue(Boolean val) {
@@ -35,7 +35,7 @@ public class BoolInternalProperty extends InternalProperty<AtomicBoolean, Boolea
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected AtomicBoolean initializeDefault(Boolean defaultval) {

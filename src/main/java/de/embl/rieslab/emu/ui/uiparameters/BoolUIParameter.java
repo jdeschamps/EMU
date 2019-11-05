@@ -19,7 +19,7 @@ public class BoolUIParameter extends UIParameter<Boolean>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public UIParameterType getType() {
@@ -27,7 +27,7 @@ public class BoolUIParameter extends UIParameter<Boolean>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isSuitable(String val) {
@@ -42,7 +42,7 @@ public class BoolUIParameter extends UIParameter<Boolean>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	protected Boolean convertValue(String val) {
@@ -53,7 +53,7 @@ public class BoolUIParameter extends UIParameter<Boolean>{
 	}
 	
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getStringValue() {

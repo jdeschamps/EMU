@@ -39,7 +39,7 @@ public class StringMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToValue(String s) {
@@ -47,7 +47,7 @@ public class StringMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToValue(int s) {
@@ -55,7 +55,7 @@ public class StringMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToValue(double s) {
@@ -63,7 +63,7 @@ public class StringMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String[] arrayFromStrings(String[] s) {
@@ -71,7 +71,7 @@ public class StringMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String convertToString(String val) {
@@ -79,7 +79,7 @@ public class StringMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean isAllowed(String val) {
@@ -101,7 +101,7 @@ public class StringMMProperty extends MMProperty<String> {
 	}
 
 	/**
-	 * @inheritDoc
+	 * {@inheritDoc}
 	 */
 	@Override
 	public boolean areEquals(String val1, String val2) {

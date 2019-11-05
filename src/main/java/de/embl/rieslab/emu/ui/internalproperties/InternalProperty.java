@@ -9,7 +9,7 @@ import de.embl.rieslab.emu.ui.ConfigurablePanel;
  * using an atomic variable of type T. In the ConfigurablePanel, the value can then be retrieved as a wrapper for one of
  * the corresponding primitive type. An InternalProperty is instantiated with a {@code name}. InternalProperties with the
  * same name will be shared between the different ConfigurablePanels that created them, as long as they are of the same InternalPropertyType.
- * <pre>
+ * <p>
  * Upon modification of its value, through a call to {@link #setInternalPropertyValue(Object, ConfigurablePanel)}, the
  * value of the atomic variable is updated and a call to all other listeners (ConfigurablePanel) except the source of the call notifies them
  * of the change.
