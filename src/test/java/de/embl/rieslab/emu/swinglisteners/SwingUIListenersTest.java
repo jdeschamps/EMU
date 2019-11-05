@@ -16,8 +16,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingUtilities;
 
 import org.junit.Test;
@@ -41,9 +43,6 @@ import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 public class SwingUIListenersTest {
 
 	public final static int waitTime = 50;
-	
-	// TODO
-	// write tests for null values passed as parameters
 	
 	@Test
 	public void testJComboboxActionListenerOnString() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty {
@@ -1303,9 +1302,7 @@ public class SwingUIListenersTest {
 		bg.add(button3);
 		
 		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
-			/**
-			 * 
-			 */
+
 			private static final long serialVersionUID = 1L;
 			@Override
 			public void setUpComponent() {
@@ -1325,9 +1322,7 @@ public class SwingUIListenersTest {
 		};
 		
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
-			/**
-			 * 
-			 */
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -1576,12 +1571,72 @@ public class SwingUIListenersTest {
 		/// Test 2: value of the MMProperty has changed
 		assertEquals(myValue, mmprop.getStringValue());		
 	}
+
+	@Test
+	public void testJSpinnerActionListenerOnNumericalValue() throws AlreadyAssignedUIPropertyException, IncompatibleMMProperty{
+		final String prop = "My Prop";
+		final SpinnerNumberModel model = new SpinnerNumberModel(0,-5,5,1);
+		final JSpinner spnr = new JSpinner(model);
+		
+		final ComponentTestPanel cp = new ComponentTestPanel("My panel") {
+
+			private static final long serialVersionUID = 1L;
+			
+			
+			@Override
+			public void setUpComponent() {
+				this.add(spnr);
+			}
+			@Override
+			protected void initializeProperties() {
+				this.property = new UIProperty(this, prop, "", new NoFlag());
+				this.addUIProperty(this.property);
+			}
+			@Override
+			protected void addComponentListeners() {
+				SwingUIListeners.addChangeListenerOnNumericalValue(this, prop, spnr);
+			}
+		};
+		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void initComponents() {
+				this.add(cp);
+			}
+		};
+		cmf.pack();
+		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		
+		// creates a dummy MMProperty
+		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
+		
+		// pairs the two
+		PropertyPair.pair(cp.property, mmprop);
+		
+		////////////////////////////////////////////
+		/// Test 1: default value of the MMproperty
+		assertEquals(TestableMMProperty.DEFVAL, mmprop.getStringValue());
+		
+		spnr.setValue(-1);
+		
+		// waits to let the other thread finish
+		try {
+			Thread.sleep(waitTime);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+		////////////////////////////////////////////////
+		/// Test 2: value of the MMProperty has changed
+		assertEquals(String.valueOf(-1), mmprop.getStringValue());	
+	}
+	
+	
 	
 	private abstract class ComponentTestPanel extends ConfigurablePanel{
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 		public UIProperty property;
 		public double myDoubleValue;
@@ -1619,10 +1674,7 @@ public class SwingUIListenersTest {
 	}
 
 	private abstract class TestableConfigurableMainFrame extends ConfigurableMainFrame{
-	
-		/**
-		 * 
-		 */
+
 		private static final long serialVersionUID = 5515001170950109376L;
 	
 		public TestableConfigurableMainFrame() {

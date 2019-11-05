@@ -33,7 +33,7 @@ import de.embl.rieslab.emu.utils.EmuUtils;
  */
 public class SwingComponentTests {
 
-	/**
+	/*
 	 * Tests that calling jtogglebutton.setSelected(boolean) doesn't trigger the action listener.
 	 */
 	@Test
@@ -73,7 +73,7 @@ public class SwingComponentTests {
 		assertEquals(vals[0], i.intValue());
 	}
 	
-	/**
+	/*
 	 * ItemListener are triggered by jtogglebutton.setSelected(boolean) 
 	 */
 	@Test
@@ -101,7 +101,7 @@ public class SwingComponentTests {
 		assertEquals(vals[0], i.intValue());
 	}
 	
-	/**
+	/*
 	 * Verifies that calling jcombobox.setSelectedIndex(int) fires the actionListener.
 	 */
 	@Test
@@ -130,7 +130,7 @@ public class SwingComponentTests {
 		assertEquals(1, i.intValue());
 	}
 	
-	/**
+	/*
 	 * Tests that calling jslider.setValue(int) does not trigger (as expected) the mouse listener.
 	 */
 	@Test
@@ -155,7 +155,7 @@ public class SwingComponentTests {
 	
 	}
 
-	/**
+	/*
 	 * Checks that setting the text of jtextfield does not trigger the action listener
 	 * and the focus listener.
 	 */

@@ -16,6 +16,7 @@ import javax.swing.JSlider;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -823,6 +824,12 @@ public class SwingUIListeners {
 		});
 	}
 	
+	/**
+	 * Adds a Swing mouse listener to a JSlider causing the (Integer) Action to be triggered upon value change.
+	 * 
+	 * @param action Action triggered by a change of {@code sldr}.
+	 * @param sldr Jslider triggering the Action.
+	 */
 	public static void addActionListenerToIntegerAction(final Action<Integer> action, final JSlider sldr) {
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
@@ -838,6 +845,12 @@ public class SwingUIListeners {
 		});
 	}
 	
+	/**
+	 * Adds a Swing action listener to an AbstractButton causing the UnparametrizedAction to be triggered upon clicking on the button.
+	 * 
+	 * @param action Action triggered by {@code btn} being pressed.
+	 * @param btn Button triggering the action.
+	 */
 	public static void addActionListenerToUnparametrizedAction(final UnparametrizedAction action, final AbstractButton btn) {
 		if(action == null) {
 			throw new NullPointerException("The Action cannot be null.");
@@ -853,6 +866,14 @@ public class SwingUIListeners {
 		});
 	}
 
+	/**
+	 * Adds a Swing action listener to an AbstractButton causing the SingleStateUIProperty to be set to its single-state upon pressing the button.
+	 * 
+	 * @param cp ConfigurablePanel that owns the SingleStateUIProperty {@code propertyKey}.
+	 * @param propertyKey Label of the SingleStateUIProperty.
+	 * @param btn AbstractButton triggering the call.
+	 * @throws IncorrectUIPropertyTypeException Thrown if {@code propertyKey} does not correspond to a SingleStateUIProperty.
+	 */
 	public static void addActionListenerToSingleState(final ConfigurablePanel cp, final String propertyKey, final AbstractButton btn) throws IncorrectUIPropertyTypeException {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
@@ -874,7 +895,14 @@ public class SwingUIListeners {
 		});
 	}
 
-	public static void addChangeListenerOnIntegerValue(final ConfigurablePanel cp, final String propertyKey, final JSpinner spnr) {
+	/**
+	 * Adds a Swing change listener to a JSpinner, causing the UIProperty {@code propertyKey} to be updated upon {@code spnr} state change.
+	 * 
+	 * @param cp ConfigurablePanel that owns the UIProperty {@code propertyKey}.
+	 * @param propertyKey Label of the UIProperty.
+	 * @param spnr JSpinner with SpinnerNumberModel value triggering the UIProperty change.
+	 */
+	public static void addChangeListenerOnNumericalValue(final ConfigurablePanel cp, final String propertyKey, final JSpinner spnr) {
 		if(cp == null) {
 			throw new NullPointerException("The ConfigurablePanel cannot be null.");
 		}
@@ -885,29 +913,19 @@ public class SwingUIListeners {
 			throw new NullPointerException("The JSpinner cannot be null.");
 		}
 		
-		spnr.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent e) {
-				cp.setUIPropertyValue(propertyKey, String.valueOf((int) spnr.getValue()));
-			}
-		});
-	}
-
-	public static void addChangeListenerOnDoubleValue(final ConfigurablePanel cp, final String propertyKey, final JSpinner spnr) {
-		if(cp == null) {
-			throw new NullPointerException("The ConfigurablePanel cannot be null.");
-		}
-		if(propertyKey == null) {
-			throw new NullPointerException("The UIProperty's label cannot be null.");
-		}
-		if(spnr == null) {
-			throw new NullPointerException("The JSpinner cannot be null.");
+		if(!(spnr.getModel() instanceof SpinnerNumberModel)) {
+			throw new IllegalArgumentException("The JSpinner should have a SpinnerNumberModel.");
 		}
 		
 		spnr.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				cp.setUIPropertyValue(propertyKey, String.valueOf((double) spnr.getValue()));
+				Object val = spnr.getValue();
+				if(val instanceof Integer) {
+					cp.setUIPropertyValue(propertyKey, String.valueOf((int) spnr.getValue()));
+				} else {
+					cp.setUIPropertyValue(propertyKey, String.valueOf((double) spnr.getValue()));
+				}
 			}
 		});
 	}
