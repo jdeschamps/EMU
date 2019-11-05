@@ -20,7 +20,7 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 
 4. Download and install [Maven](https://maven.apache.org/install.html).
 
-5. Using the git console, go to the folder you wish to install EMU in and type:
+5. Using the git console, go to the folder you wish to install EMU in and type (omitting the $):
 
    ```bash
    $ git clone https://github.com/jdeschamps/EMU.git
