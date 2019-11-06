@@ -2,7 +2,10 @@
 
 Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-manager.org/wiki/Micro-Manager) plugin that loads easily reconfigurable user interfaces to control your microscope. Build your UI using EMU classes:
 
+<img align="right" src="img/emu-logo.png">
+
 - Compatible with **drag and drop Java design**.
+
 - No need to hard code device property names.
 - Easy and intuitive configuration of the UI.
 - No compiling necessary when you exchange devices.
