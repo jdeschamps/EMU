@@ -5,15 +5,21 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -131,6 +137,23 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		panels_ = listConfigurablePanels(this.getContentPane().getComponents(), new ArrayList<ConfigurablePanel>());
 		linkInternalProperties();
 		retrieveUIPropertiesAndParameters();
+		
+		// set icon
+		ArrayList<BufferedImage> lst = new ArrayList<BufferedImage>();
+		BufferedImage im;
+		try {
+			im = ImageIO.read(getClass().getResource("/images/logo16.png"));
+			lst.add(im);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			im = ImageIO.read(getClass().getResource("/images/logo32.png"));
+			lst.add(im);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		this.setIconImages(lst);
 	}
 
 	private ArrayList<ConfigurablePanel> listConfigurablePanels(Component[] c, ArrayList<ConfigurablePanel> list) {
@@ -168,6 +191,9 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			}
 		});	
 		refresh.setToolTipText("Updates all UIProperties to the current value.");
+		URL iconURL = getClass().getResource("/images/refresh16.png");
+		ImageIcon icon = new ImageIcon(iconURL);
+		refresh.setIcon(icon);
 		
 		// to start the configuration wizard
 		JMenuItem wiz = new JMenuItem(new AbstractAction("Modify configuration") {
@@ -181,6 +207,9 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			}
 		});
 		wiz.setToolTipText("Start the configuration wizard, allowing configurating the UI or creating a new configuration.");
+		iconURL = getClass().getResource("/images/gear16.png");
+		icon = new ImageIcon(iconURL);
+		wiz.setIcon(icon);
 
 		// configuration manager
 		JMenuItem manageconfig = new JMenuItem(new AbstractAction("Manage configurations") {
@@ -193,11 +222,21 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 				}
 			}
 		});	
-		refresh.setToolTipText("Updates all UIProperties to the current value.");
+		manageconfig.setToolTipText("Delete the configurations of your choice.");
+		iconURL = getClass().getResource("/images/manage16.png");
+		icon = new ImageIcon(iconURL);
+		manageconfig.setIcon(icon);
 		
-		// switch plugin or configuration
+		// switch plugin and configuration
 		switch_plugin = new JMenu("Switch plugin");
+		iconURL = getClass().getResource("/images/switchplugin16.png");
+		icon = new ImageIcon(iconURL);
+		switch_plugin.setIcon(icon);
+		
 		switch_configuration = new JMenu("Switch configuration");
+		iconURL = getClass().getResource("/images/switchconf16.png");
+		icon = new ImageIcon(iconURL);
+		switch_configuration.setIcon(icon);
 		
 		// description of the plugin
 		plugin_description = new JMenuItem(new AbstractAction("Description") {
@@ -207,6 +246,9 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 				 showPluginDescription();
 			}
 		});
+		iconURL = getClass().getResource("/images/info16.png");
+		icon = new ImageIcon(iconURL);
+		plugin_description.setIcon(icon);
 		
 		// about
 		JMenuItem aboutemu = new JMenuItem(new AbstractAction("About EMU") {
@@ -216,6 +258,9 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 				SystemDialogs.showAboutEMU();
 			}
 		});
+		iconURL = getClass().getResource("/images/about16.png");
+		icon = new ImageIcon(iconURL);
+		aboutemu.setIcon(icon);
 
 		// add all to menu
 		confMenu.add(wiz);
