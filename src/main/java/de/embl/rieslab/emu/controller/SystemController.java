@@ -484,21 +484,6 @@ public class SystemController {
 	public MMConfigurationGroupsRegistry getMMConfigGroupRegistry(){
 		return mmregistry_.getMMConfigurationGroupsRegistry();
 	}	
-
-	/**
-	 * Returns the camera exposure. If the exposure failed to be retrieved from Micro-manager, returns 0.
-	 * 
-	 * @return Camera exposure in ms, or 0 if failed to retrieve it from Micro-manager.
-	 */
-	public double getExposure(){
-		double i = 0;
-		try {
-			i = studio_.getCMMCore().getExposure();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return i;
-	}
 	
 	/** 
 	 * Returns Micro-manager CMMCore.
