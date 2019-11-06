@@ -4,7 +4,7 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 
 <img align="right" src="img/emu-logo.png">
 
-\
+<br>
 
 - Compatible with **drag and drop Java design**.
 
@@ -13,7 +13,7 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 - No compiling necessary when you exchange devices.
 - One UI to rule them all: easy transfer between your microscopes.
 
-\
+<br>
 
 # How to install EMU?
 
