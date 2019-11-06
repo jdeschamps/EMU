@@ -9,14 +9,13 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 - Compatible with **drag and drop Java design**.
 
 - No need to hard code device property names.
-
 - Easy and intuitive configuration of the UI.
-
 - No compiling necessary when you exchange devices.
-
 - One UI to rule them all: easy transfer between your microscopes.
 
-  
+
+
+
 
 
 
