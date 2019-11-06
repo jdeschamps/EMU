@@ -1,4 +1,4 @@
-package de.embl.rieslab.emu.ui.swingslisteners.actions;
+package de.embl.rieslab.emu.ui.swinglisteners.actions;
 
 public interface UnparametrizedAction {
 

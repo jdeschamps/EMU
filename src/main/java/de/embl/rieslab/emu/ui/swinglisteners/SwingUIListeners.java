@@ -1,4 +1,4 @@
-package de.embl.rieslab.emu.ui.swingslisteners;
+package de.embl.rieslab.emu.ui.swinglisteners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,8 +21,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
-import de.embl.rieslab.emu.ui.swingslisteners.actions.Action;
-import de.embl.rieslab.emu.ui.swingslisteners.actions.UnparametrizedAction;
+import de.embl.rieslab.emu.ui.swinglisteners.actions.Action;
+import de.embl.rieslab.emu.ui.swinglisteners.actions.UnparametrizedAction;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
