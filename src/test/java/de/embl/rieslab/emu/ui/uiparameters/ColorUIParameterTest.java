@@ -95,9 +95,9 @@ public class ColorUIParameterTest {
 
 		assertEquals(ColorRepository.strblack, cp.parameter.getStringValue());		
 
-		cp.parameter.setStringValue(ColorRepository.strdarkorange);
-		assertEquals(ColorRepository.strdarkorange, cp.parameter.getStringValue());	
-		assertEquals(ColorRepository.darkorange, cp.parameter.getValue());		
+		cp.parameter.setStringValue(ColorRepository.strbrown);
+		assertEquals(ColorRepository.strbrown, cp.parameter.getStringValue());	
+		assertEquals(ColorRepository.brown, cp.parameter.getValue());		
 
 		cp.parameter.setValue(ColorRepository.violet);
 		assertEquals(ColorRepository.strviolet, cp.parameter.getStringValue());	
