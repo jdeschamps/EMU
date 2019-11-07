@@ -5,8 +5,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -160,6 +164,23 @@ public class ConfigurationWizardUI {
 			}
 		});   
 		
+		// sets icon
+		ArrayList<BufferedImage> lst = new ArrayList<BufferedImage>();
+		BufferedImage im;
+		try {
+			im = ImageIO.read(getClass().getResource("/images/gear16.png"));
+			lst.add(im);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			im = ImageIO.read(getClass().getResource("/images/gear32.png"));
+			lst.add(im);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		frame.setIconImages(lst);
+
 		promptedNew_ = false;
 		
 		// Tab containing the tables

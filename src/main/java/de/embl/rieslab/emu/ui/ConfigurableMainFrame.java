@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.List;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -138,7 +137,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		linkInternalProperties();
 		retrieveUIPropertiesAndParameters();
 		
-		// set icon
+		// sets icon
 		ArrayList<BufferedImage> lst = new ArrayList<BufferedImage>();
 		BufferedImage im;
 		try {
@@ -498,8 +497,10 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	}
 	
 	private void showPluginDescription() {
+		JFrame jf; 
+		JPanel jp;
 		if(panels_.size() > 0) {
-			JFrame jf = new JFrame("Description");
+			jf = new JFrame("Description");
 			
 			StringBuilder sb = new StringBuilder();
 			sb.append("--- "+this.getTitle()+" ---\n\n\n");
@@ -517,7 +518,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			txtarea.setEditable(false);
 			txtarea.setText(sb.toString());
 
-			JPanel jp = new JPanel(new BorderLayout());
+			jp = new JPanel(new BorderLayout());
 			jp.setBorder(new EmptyBorder(2, 3, 2, 3));
 
 			txtarea.setFont(new Font("Serif", Font.PLAIN, 16));
@@ -527,19 +528,34 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			jp.add(new JScrollPane(txtarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 			
-			jf.add(jp);
-			jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			jf.pack();
-			jf.setVisible(true);
 		} else {
-			JFrame jf = new JFrame("Description");
-			JPanel jp = new JPanel();
+			jf = new JFrame("Description");
+			jp = new JPanel();
 			jp.add(new JLabel("No description available"));
-			jf.add(jp);
-			jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			jf.pack();
-			jf.setVisible(true);
 		}
+		jf.add(jp);
+		
+		// sets icon
+		ArrayList<BufferedImage> lst = new ArrayList<BufferedImage>();
+		BufferedImage im;
+		try {
+			im = ImageIO.read(getClass().getResource("/images/info16.png"));
+			lst.add(im);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			im = ImageIO.read(getClass().getResource("/images/info32.png"));
+			lst.add(im);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		jf.setIconImages(lst);
+		
+		
+		jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		jf.pack();
+		jf.setVisible(true);
 	}
 	
 	/**
