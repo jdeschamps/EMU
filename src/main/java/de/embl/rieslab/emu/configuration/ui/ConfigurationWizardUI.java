@@ -197,7 +197,7 @@ public class ConfigurationWizardUI {
 		JPanel upperpane = new JPanel();
 		upperpane.setLayout(new GridLayout(0,4));
 		
-		JLabel conf_name_label = new JLabel("   Configuration's name:");
+		JLabel conf_name_label = new JLabel("   Configuration name:");
 		config_name_ = new JTextField(conf_name);
 		config_name_.getDocument().addDocumentListener(new DocumentListener() {
 			public void changedUpdate(DocumentEvent e) {
