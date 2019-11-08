@@ -856,16 +856,15 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected abstract void parameterhasChanged(String parameterName);
 	
 	/**
-	 * Allows the ConfigurablePanel subclass to shut down all processes, e.g. SwingWorkers. This method is called 
-	 * when EMU is closing.
-	 */
-	public abstract void shutDown();
-	
-	/**
 	 * Returns the description of the ConfigurablePanel. 
 	 * 
 	 * @return Description of the ConfigurablePanel.
 	 */
 	public abstract String getDescription();
 	
+	/**
+	 * Allows the ConfigurablePanel subclass to shut down all processes, e.g. SwingWorkers. This method is called 
+	 * when EMU is closing.
+	 */
+	public abstract void shutDown();
 }
