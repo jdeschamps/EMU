@@ -1,6 +1,6 @@
 package de.embl.rieslab.emu.ui.uiproperties;
 
-import de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
+import de.embl.rieslab.emu.micromanager.mmproperties.PresetGroupAsMMProperty;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.uiproperties.flag.NoFlag;
@@ -333,7 +333,7 @@ public class UIProperty {
 	 */
 	public boolean isConfigGroupMMProperty() {
 		if(assigned_) {
-			return (mmproperty_ instanceof ConfigGroupAsMMProperty);
+			return (mmproperty_ instanceof PresetGroupAsMMProperty);
 		}
 		return false;
 	}

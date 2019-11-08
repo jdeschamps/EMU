@@ -14,8 +14,8 @@ import de.embl.rieslab.emu.controller.log.Logger;
 import de.embl.rieslab.emu.controller.utils.GlobalSettings;
 import de.embl.rieslab.emu.controller.utils.SystemDialogs;
 import de.embl.rieslab.emu.micromanager.MMRegistry;
-import de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.micromanager.presetgroups.MMPresetGroupRegistry;
 import de.embl.rieslab.emu.plugin.UIPluginLoader;
 import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import de.embl.rieslab.emu.ui.EmptyPropertyMainFrame;
@@ -479,9 +479,9 @@ public class SystemController {
 	/**
 	 * Returns the Micro-manager configuration groups.
 	 * 
-	 * @return {@link de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry}
+	 * @return {@link de.embl.rieslab.emu.micromanager.presetgroups.MMPresetGroupRegistry}
 	 */
-	public MMConfigurationGroupsRegistry getMMConfigGroupRegistry(){
+	public MMPresetGroupRegistry getMMConfigGroupRegistry(){
 		return mmregistry_.getMMConfigurationGroupsRegistry();
 	}	
 	

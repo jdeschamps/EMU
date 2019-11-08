@@ -288,8 +288,8 @@ public class PropertiesTable extends JPanel {
 		table.setAutoCreateRowSorter(false);
 
 		table.setRowHeight(23);
-		table.getColumnModel().getColumn(0).setMinWidth(90);
-		table.getColumnModel().getColumn(1).setMinWidth(70);
+		table.getColumnModel().getColumn(0).setMinWidth(120);
+		table.getColumnModel().getColumn(1).setMinWidth(80);
 		table.getColumnModel().getColumn(2).setMinWidth(100);
 
 		// adds mouse listener to update the helper window

@@ -6,14 +6,14 @@ import java.util.Iterator;
 import org.micromanager.Studio;
 
 import de.embl.rieslab.emu.controller.log.Logger;
-import de.embl.rieslab.emu.micromanager.configgroups.MMConfigurationGroupsRegistry;
-import de.embl.rieslab.emu.micromanager.mmproperties.ConfigGroupAsMMProperty;
+import de.embl.rieslab.emu.micromanager.mmproperties.PresetGroupAsMMProperty;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMDevice;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMPropertiesRegistry;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
+import de.embl.rieslab.emu.micromanager.presetgroups.MMPresetGroupRegistry;
 
 /**
- * Class instantiating the {@link MMPropertiesRegistry} and {@link MMConfigurationGroupsRegistry}. In addition, it
+ * Class instantiating the {@link MMPropertiesRegistry} and {@link MMPresetGroupRegistry}. In addition, it
  * registers the configuration groups as MMProperties and add them to the MMPropertiesRegistry.
  * 
  * @author Joran Deschamps
@@ -22,12 +22,12 @@ import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 public class MMRegistry {
 
 	private MMPropertiesRegistry mmPropRegistry_; // holds the Micro-Manager device properties
-	private MMConfigurationGroupsRegistry mmConfigGroupsRegistry_; // holds the configuration groups from Micro-manager
+	private MMPresetGroupRegistry mmConfigGroupsRegistry_; // holds the configuration groups from Micro-manager
 	private Studio studio_;
 	private Logger logger_;
 	
 	/**
-	 * Constructor. Instantiate the {@link MMPropertiesRegistry} and {@link MMConfigurationGroupsRegistry} and register
+	 * Constructor. Instantiate the {@link MMPropertiesRegistry} and {@link MMPresetGroupRegistry} and register
 	 * the configuration groups as MMProperties.
 	 * 
 	 * @param studio Micro-Manager studio.
@@ -40,7 +40,7 @@ public class MMRegistry {
 		
 		// extracts MM properties
 		mmPropRegistry_ = new MMPropertiesRegistry(studio_.getCMMCore(), logger_);
-		mmConfigGroupsRegistry_ = new MMConfigurationGroupsRegistry(studio_.getCMMCore(), mmPropRegistry_);
+		mmConfigGroupsRegistry_ = new MMPresetGroupRegistry(studio_.getCMMCore(), mmPropRegistry_);
 		
 		// registers mmconfigs as mmproperties (so that they can be linked to UIProperties)
 		registerMMConfAsDevice();
@@ -56,11 +56,11 @@ public class MMRegistry {
 	}
 	
 	/**
-	 * Returns the {@link MMConfigurationGroupsRegistry}.
+	 * Returns the {@link MMPresetGroupRegistry}.
 	 * 
-	 * @return Instance of {@link MMConfigurationGroupsRegistry}
+	 * @return Instance of {@link MMPresetGroupRegistry}
 	 */
-	public MMConfigurationGroupsRegistry getMMConfigurationGroupsRegistry() {
+	public MMPresetGroupRegistry getMMConfigurationGroupsRegistry() {
 		return mmConfigGroupsRegistry_;
 	}
 	
@@ -70,15 +70,15 @@ public class MMRegistry {
 	 */
 	@SuppressWarnings("rawtypes")
 	private void registerMMConfAsDevice(){
-		MMDevice dev = new MMDevice(ConfigGroupAsMMProperty.KEY_MMCONFDEVICE);
+		MMDevice dev = new MMDevice(PresetGroupAsMMProperty.KEY_MMCONFDEVICE);
 
-		Iterator<String> it = mmConfigGroupsRegistry_.getMMConfigurationGroups().keySet().iterator();
+		Iterator<String> it = mmConfigGroupsRegistry_.getMMPresetGroups().keySet().iterator();
 		while(it.hasNext()){
 			String group = it.next();
-			String[] values = mmConfigGroupsRegistry_.getMMConfigurationGroups().get(group).getConfigurations().toArray();
-			ArrayList<MMProperty> affectedmmprops = mmConfigGroupsRegistry_.getMMConfigurationGroups().get(group).getAffectedProperties();
+			String[] values = mmConfigGroupsRegistry_.getMMPresetGroups().get(group).getPresets().toArray();
+			ArrayList<MMProperty> affectedmmprops = mmConfigGroupsRegistry_.getMMPresetGroups().get(group).getAffectedProperties();
 			
-			dev.registerProperty(new ConfigGroupAsMMProperty(studio_.app(), studio_.core(), logger_, group, values, affectedmmprops));
+			dev.registerProperty(new PresetGroupAsMMProperty(studio_.app(), studio_.core(), logger_, group, values, affectedmmprops));
 		}
 		
 		mmPropRegistry_.addMMDevice(dev);

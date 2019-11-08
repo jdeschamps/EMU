@@ -9,20 +9,20 @@ import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import mmcorej.CMMCore;
 
 /**
- * Instantiates a MMProperty that wraps a configuration group from Mico-manager. This is useful to 
+ * Instantiates a MMProperty that wraps a preset group from Mico-manager. This is useful to 
  * map a UIProperty to multiple MMProperties as defined in Micro-Manager by the user (e.g. channels).
- * All configuration groups are assigned to the same fictitious device. The groups are then considered 
+ * All preset groups are assigned to the same fictitious device. The groups are then considered 
  * as a property with allowed values being the channels.
  * 
  * @author Joran Deschamps
  *
  */
-public class ConfigGroupAsMMProperty extends MMProperty<String> {
+public class PresetGroupAsMMProperty extends MMProperty<String> {
 
 	/**
-	 * Fictitious device label all configuration groups are assigned to.
+	 * Fictitious device label all preset groups are assigned to.
 	 */
-	public final static String KEY_MMCONFDEVICE = "Configurations";
+	public final static String KEY_MMCONFDEVICE = "Preset groups";
 	
 	@SuppressWarnings("rawtypes")
 	private ArrayList<MMProperty> affectedmmprops_;
@@ -35,12 +35,12 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 	 * @param app Micro-Manager application instance
 	 * @param core Micro-Manager CMMCore
 	 * @param logger Log manager.
-	 * @param groupName Name of the configuration group
+	 * @param groupName Name of the preset group
 	 * @param groupChannelNames Array of the channel names
-	 * @param affectedMMProps MMproperties affected by the group
+	 * @param affectedMMProps MMProperties affected by the group
 	 */
 	@SuppressWarnings("rawtypes")
-	public ConfigGroupAsMMProperty(Application app, CMMCore core, Logger logger, String groupName, String[] groupChannelNames, ArrayList<MMProperty> affectedMMProps) {
+	public PresetGroupAsMMProperty(Application app, CMMCore core, Logger logger, String groupName, String[] groupChannelNames, ArrayList<MMProperty> affectedMMProps) {
 		super(core, logger, MMProperty.MMPropertyType.CONFIG, KEY_MMCONFDEVICE, groupName, groupChannelNames);
 		app_ = app;
 		affectedmmprops_ = affectedMMProps;
@@ -89,12 +89,11 @@ public class ConfigGroupAsMMProperty extends MMProperty<String> {
 					return true;
 					
 				} catch (Exception e){
-					System.out.println("Error in setting configuration ["+getHash()+"] to ["+stringval+"] from ["+value+"]");
-
+					logger_.logError("Error setting preset ["+getHash()+"] to ["+stringval+"].");
 					e.printStackTrace(); 
 				}
 			} else {
-				System.out.println("VALUE NOT ALLOWED: in ["+getHash()+"], set value ["+stringval+"] from ["+value+"]");
+				logger_.logDebugMessage("PresetGroupAsMMProperty ["+getHash()+"] cannot be set to ["+stringval+"], forbidden value.");
 			}
 		}
 		return false;

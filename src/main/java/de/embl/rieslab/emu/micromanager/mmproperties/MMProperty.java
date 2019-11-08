@@ -24,7 +24,7 @@ public abstract class MMProperty<T> {
 	private String devicelabel_;
 	private String hash_;
 	private MMPropertyType type_;
-	private Logger logger_;
+	protected Logger logger_;
 	
 	private boolean readOnly;							
 	private boolean hasLimits;						
