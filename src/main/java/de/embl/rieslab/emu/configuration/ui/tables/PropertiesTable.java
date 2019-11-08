@@ -288,7 +288,7 @@ public class PropertiesTable extends JPanel {
 		table.setAutoCreateRowSorter(false);
 
 		table.setRowHeight(23);
-		table.getColumnModel().getColumn(0).setMinWidth(120);
+		table.getColumnModel().getColumn(0).setMinWidth(160);
 		table.getColumnModel().getColumn(1).setMinWidth(80);
 		table.getColumnModel().getColumn(2).setMinWidth(100);
 
