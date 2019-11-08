@@ -20,7 +20,7 @@ import de.embl.rieslab.emu.utils.settings.Setting;
  */
 public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 
-	private static final long serialVersionUID = -1840416249969324418L;
+	private static final long serialVersionUID = 1L;
 
 	public EmptyPropertyMainFrame(SystemController controller) {
 		super("No plugin found", controller,  new TreeMap<String, String>());
@@ -53,6 +53,11 @@ public class EmptyPropertyMainFrame extends ConfigurableMainFrame{
 	@Override
 	public HashMap<String, Setting> getDefaultPluginSettings() {
 		return new HashMap<String, Setting>();
+	}
+
+	@Override
+	protected String getPluginInfo() {
+		return "";
 	}
 	
 }

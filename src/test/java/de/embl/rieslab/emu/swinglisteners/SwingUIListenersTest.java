@@ -1701,6 +1701,11 @@ public class SwingUIListenersTest {
 		public HashMap<String, Setting> getDefaultPluginSettings() {
 			return new HashMap<String, Setting>();
 		}
+		
+		@Override
+		protected String getPluginInfo() {
+			return "";
+		}
 	}
 
 	private class TestableMMProperty extends MMProperty<String> {

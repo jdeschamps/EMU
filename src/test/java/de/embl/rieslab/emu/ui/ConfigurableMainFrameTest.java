@@ -680,8 +680,12 @@ public class ConfigurableMainFrameTest {
 
 		@Override
 		public HashMap<String, Setting> getDefaultPluginSettings() {
-			// TODO Auto-generated method stub
-			return null;
+			return new HashMap<String, Setting>();
+		}
+
+		@Override
+		protected String getPluginInfo() {
+			return "";
 		}
 	}
 	

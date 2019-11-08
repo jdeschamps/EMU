@@ -61,8 +61,8 @@ import mmcorej.CMMCore;
  */
 public abstract class ConfigurableMainFrame extends JFrame implements ConfigurableFrame{
 
-	private static final long serialVersionUID = -6852560487523093601L;
 
+	private static final long serialVersionUID = 1L;
 	private ArrayList<ConfigurablePanel> panels_;
 	private SystemController controller_;
     private JMenu switch_plugin, switch_configuration;
@@ -503,7 +503,10 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			jf = new JFrame("Description");
 			
 			StringBuilder sb = new StringBuilder();
-			sb.append("--- "+this.getTitle()+" ---\n\n\n");
+			sb.append("--- "+this.getTitle()+" ---\n\n");
+			sb.append(getPluginInfo());
+
+			sb.append("--- Panels ---\n\n");
 			for(ConfigurablePanel p: panels_) {
 				sb.append("- "+p.getPanelLabel()+"\n");
 				if(p.getDescription() != null) {	
@@ -564,4 +567,11 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	 */
 	protected abstract void initComponents();
 
+	/**
+	 * Returns the plugin information (description and author information). This is used in the plugin
+	 * description window prompted from the menu bar.
+	 * 
+	 * @return Plugin information.
+	 */
+	protected abstract String getPluginInfo();
 }
