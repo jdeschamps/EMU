@@ -809,34 +809,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * {@link #addUIProperty(UIProperty)}. The method is called in the constructor of a ConfigurablePanel.  
 	 */
 	protected abstract void initializeProperties();
-	
-	/**
-	 * In this method, the subclasses must create their InternalProperties and add them to the map of internal properties 
-	 * using {@link #addInternalProperty(InternalProperty)}. The method is called in the constructor of a ConfigurablePanel.  
-	 */
-	protected abstract void initializeInternalProperties();
-	
-	/**
-	 * In this method, the subclasses must create their UIparameter and add them to the map of properties using 
-	 * {@link #addUIParameter(UIParameter)}. The method is called in the constructor of a ConfigurablePanel.  
-	 */
-	protected abstract void initializeParameters();
-	
-	/**
-	 * In this method, the subclasses can add Swing action listeners to its JComponents. Since the method is called after loading 
-	 * a configuration, the values of the UIProperty and UIParameters are known and can be used with the static methods of 
-	 * {@link de.embl.rieslab.emu.ui.swinglisteners.SwingUIListeners}.  
-	 */
-	protected abstract void addComponentListeners();
-	
-	/**
-	 * Method called when an internal property's value has been changed. This allows the ConfigurablePanel
-	 * subclasses to react to the change of vale.
-	 * 
-	 * @param propertyName Name of the internal property
-	 */
-	public abstract void internalpropertyhasChanged(String propertyName);
-	
+		
 	/**
 	 * Notifies the ConfigurablePanel subclass that the MMProperty linked to its UIProperty {@code propertyName}
 	 * has changed in value. This function is called on the EDT and allows the subclass to change the states of
@@ -848,12 +821,39 @@ public abstract class ConfigurablePanel extends JPanel{
 	protected abstract void propertyhasChanged(String propertyName, String newvalue);
 	
 	/**
+	 * In this method, the subclasses must create their InternalProperties and add them to the map of internal properties 
+	 * using {@link #addInternalProperty(InternalProperty)}. The method is called in the constructor of a ConfigurablePanel.  
+	 */
+	protected abstract void initializeInternalProperties();
+		
+	/**
+	 * Method called when an internal property's value has been changed. This allows the ConfigurablePanel
+	 * subclasses to react to the change of vale.
+	 * 
+	 * @param propertyName Name of the internal property
+	 */
+	public abstract void internalpropertyhasChanged(String propertyName);
+	
+	/**
+	 * In this method, the subclasses must create their UIparameter and add them to the map of properties using 
+	 * {@link #addUIParameter(UIParameter)}. The method is called in the constructor of a ConfigurablePanel.  
+	 */
+	protected abstract void initializeParameters();
+	
+	/**
 	 * Notifies the ConfigurablePanel subclass that the UIParameter {@code parameterName} value has changed.
 	 * This method is called upon loading of the UI and whenever the user changes the configuration.
 	 * 
 	 * @param parameterName Name of the UIParameter
 	 */
 	protected abstract void parameterhasChanged(String parameterName);
+	
+	/**
+	 * In this method, the subclasses can add Swing action listeners to its JComponents. Since the method is called after loading 
+	 * a configuration, the values of the UIProperty and UIParameters are known and can be used with the static methods of 
+	 * {@link de.embl.rieslab.emu.ui.swinglisteners.SwingUIListeners}.  
+	 */
+	protected abstract void addComponentListeners();
 	
 	/**
 	 * Returns the description of the ConfigurablePanel. 

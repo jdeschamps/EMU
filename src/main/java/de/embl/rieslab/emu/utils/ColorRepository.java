@@ -6,6 +6,7 @@ public class ColorRepository {
 
 	public static String strblack = "black";
 	public static String strgray = "gray";
+	public static String strgrey = "grey";
 	public static String strwhite = "white";
 	
 
@@ -72,7 +73,7 @@ public class ColorRepository {
 			return green;
 		} else if(colorname.equals(strdarkgreen)){
 			return darkgreen;
-		} else if(colorname.equals(strgray)){
+		} else if(colorname.equals(strgray) || colorname.equals(strgrey)){ // let's be diplomatic
 			return Color.gray;
 		} else if(colorname.equals(strdarkred)){
 			return darkred;

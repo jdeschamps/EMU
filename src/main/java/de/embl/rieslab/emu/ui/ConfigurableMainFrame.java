@@ -449,7 +449,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		for (int i = 0; i < plugins.length; i++) {
 			final int index = i;
 			JMenuItem item = new JMenuItem(new AbstractAction(plugins[index]) {
-				private static final long serialVersionUID = -4996932088885254278L;
 
 				public void actionPerformed(ActionEvent e) {
 					controller_.loadPlugin(plugins[index]);
@@ -463,7 +462,6 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		for (int i = 0; i < confs.length; i++) {
 			final int index = i;
 			JMenuItem item = new JMenuItem(new AbstractAction(confs[index]) {
-				private static final long serialVersionUID = -4996932088885254278L;
 
 				public void actionPerformed(ActionEvent e) {
 					controller_.loadConfiguration(confs[index]);
