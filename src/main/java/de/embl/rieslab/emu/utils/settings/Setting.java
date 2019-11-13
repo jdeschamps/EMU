@@ -119,13 +119,13 @@ public abstract class Setting<T> {
 	}
 		
 	/**
-	 * Setting type: INTEGER, STRING or BOOL.
+	 * Setting type: INTEGER, DOUBLE, STRING or BOOL.
 	 * 
 	 * @author Joran Deschamps
 	 *
 	 */
 	public enum SettingType { 
-		INTEGER("Integer"), STRING("String"), BOOL("Boolean"); 
+		INTEGER("Integer"), DOUBLE("Double"), STRING("String"), BOOL("Boolean"); 
 		
 		private String value; 
 		
