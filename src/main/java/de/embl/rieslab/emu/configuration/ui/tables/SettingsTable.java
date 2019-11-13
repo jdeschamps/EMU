@@ -35,8 +35,8 @@ import de.embl.rieslab.emu.utils.settings.Setting;
  */
 public class SettingsTable extends JPanel{
 
-	private static final long serialVersionUID = -4373947956592815819L;
-
+	private static final long serialVersionUID = 1L;
+	
 	private JTable table;
 	@SuppressWarnings("rawtypes")
 	private Map<String, Setting> settings_;

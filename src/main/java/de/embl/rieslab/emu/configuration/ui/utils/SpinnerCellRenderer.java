@@ -15,7 +15,7 @@ import javax.swing.table.TableCellRenderer;
  */
 public class SpinnerCellRenderer extends JSpinner implements TableCellRenderer {
 
-	private static final long serialVersionUID = 4236114754335086999L;
+	private static final long serialVersionUID = 1L;
 
 	public SpinnerCellRenderer() {
 		setOpaque(true);

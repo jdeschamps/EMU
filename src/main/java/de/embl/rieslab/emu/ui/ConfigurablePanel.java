@@ -78,7 +78,7 @@ import de.embl.rieslab.emu.utils.exceptions.UnknownUIPropertyException;
 @SuppressWarnings("rawtypes")
 public abstract class ConfigurablePanel extends JPanel{
 
-	private static final long serialVersionUID = 7664471329228929184L;
+	private static final long serialVersionUID = 1L;
 
 	private HashMap<String, UIProperty> properties_; 
 	private HashMap<String, UIParameter> parameters_;

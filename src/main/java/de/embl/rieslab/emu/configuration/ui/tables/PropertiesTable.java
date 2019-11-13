@@ -43,10 +43,7 @@ import de.embl.rieslab.emu.ui.uiproperties.utils.UIPropertyUtils;
  */
 public class PropertiesTable extends JPanel {
 
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 4663110661135902728L;
+	private static final long serialVersionUID = 1L;
 	
 	private JComboBox<String> devices;
 	private JTable table;
@@ -235,7 +232,7 @@ public class PropertiesTable extends JPanel {
 	private void createTable(DefaultTableModel model){
 		// Creates table
 		table = new JTable(model) {
-			private static final long serialVersionUID = -7528102943663023952L;
+			private static final long serialVersionUID = 1L;
 
 			@Override
 			public TableCellRenderer getCellRenderer(int row, int column) {
@@ -422,10 +419,7 @@ public class PropertiesTable extends JPanel {
 	 */
 	class BoldTableCellRenderer extends DefaultTableCellRenderer {
 
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 7284712630858433079L;
+		private static final long serialVersionUID = 1L;
 
 		public Component getTableCellRendererComponent(JTable table,
                 Object value, boolean isSelected, boolean hasFocus,
@@ -445,7 +439,7 @@ public class PropertiesTable extends JPanel {
 	
 	public static class ColoredUneditedTableRenderer extends DefaultTableCellRenderer {
 
-		private static final long serialVersionUID = -8629607160286367931L;
+		private static final long serialVersionUID = 1L;
 
 		@Override
 	    public Component getTableCellRendererComponent(JTable table, Object value,
