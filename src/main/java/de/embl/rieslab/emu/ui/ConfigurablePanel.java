@@ -819,6 +819,13 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param newvalue New value of the UIProperty
 	 */
 	protected abstract void propertyhasChanged(String propertyName, String newvalue);
+		
+	/**
+	 * In this method, the subclasses can add Swing action listeners to its JComponents. Since the method is called after loading 
+	 * a configuration, the values of the UIProperty and UIParameters are known and can be used with the static methods of 
+	 * {@link de.embl.rieslab.emu.ui.swinglisteners.SwingUIListeners}.  
+	 */
+	protected abstract void addComponentListeners();
 	
 	/**
 	 * In this method, the subclasses must create their InternalProperties and add them to the map of internal properties 
@@ -847,14 +854,7 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @param parameterName Name of the UIParameter
 	 */
 	protected abstract void parameterhasChanged(String parameterName);
-	
-	/**
-	 * In this method, the subclasses can add Swing action listeners to its JComponents. Since the method is called after loading 
-	 * a configuration, the values of the UIProperty and UIParameters are known and can be used with the static methods of 
-	 * {@link de.embl.rieslab.emu.ui.swinglisteners.SwingUIListeners}.  
-	 */
-	protected abstract void addComponentListeners();
-	
+
 	/**
 	 * Returns the description of the ConfigurablePanel. 
 	 * 

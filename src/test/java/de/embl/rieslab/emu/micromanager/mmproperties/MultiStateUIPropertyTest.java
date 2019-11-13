@@ -309,7 +309,7 @@ public class MultiStateUIPropertyTest {
 		cp.property.setStateValues(vals);
 		
 		for(int i=0;i<vals.length;i++)
-			assertEquals(i,cp.property.getStatePositionNumber(vals[i]));
+			assertEquals(i,cp.property.getStateIndex(vals[i]));
 	}
 
 	@Test

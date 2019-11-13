@@ -37,7 +37,7 @@ public class MultiStateUIProperty extends UIProperty{
 		statenames_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
-			statenames_[i] = STATE+i;
+			statenames_[i] = getConfigurationStateName(i);
 		}
 	}	
 	/**
@@ -59,7 +59,7 @@ public class MultiStateUIProperty extends UIProperty{
 		statenames_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
-			statenames_[i] = STATE+i;
+			statenames_[i] = getConfigurationStateName(i);
 		}
 	}
 
@@ -138,13 +138,13 @@ public class MultiStateUIProperty extends UIProperty{
 	}
 	
 	/**
-	 * Returns the position of the states corresponding to the value val. If the value is not amongst 
+	 * Returns the index of the state corresponding to the value val. If the value is not amongst 
 	 * the states, returns 0.
 	 * 
 	 * @param val The state value.
-	 * @return The position of value among the states, or 0 if not found.
+	 * @return The index corresponding to the value.
 	 */
-	public int getStatePositionNumber(String val){
+	public int getStateIndex(String val){
 		for(int i=0;i<states_.length;i++){
 			if(isEqual(states_[i],val)){
 				return i;
