@@ -779,7 +779,7 @@ public class ConfigurablePanelTest {
 	
 	// get ComboUIParameter value
 	@Test 
-	public void testGetComboUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
+	public void testgetStringUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final int defval = 2;
 		final String[] vals = {"SuperVal", "MediocreVal", "UnitTesting is tough", "SomeVal"};
 		final String param = "Param";
@@ -793,11 +793,11 @@ public class ConfigurablePanelTest {
 			}
 		};
 
-		assertEquals(vals[defval], cp.getComboUIParameterValue(param));
+		assertEquals(vals[defval], cp.getStringUIParameterValue(param));
 		
 		cp.getUIParameter(param).setStringValue(vals[0]);
 		
-		assertEquals(vals[0], String.valueOf(cp.getComboUIParameterValue(param)));
+		assertEquals(vals[0], String.valueOf(cp.getStringUIParameterValue(param)));
 	}
 	
 	
@@ -816,7 +816,7 @@ public class ConfigurablePanelTest {
 			}
 		};
 
-		cp.getComboUIParameterValue(null);
+		cp.getStringUIParameterValue(null);
 	}
 
 	@Test(expected = UnknownUIParameterException.class) 
@@ -834,7 +834,7 @@ public class ConfigurablePanelTest {
 			}
 		};
 
-		cp.getComboUIParameterValue("Rosebud");
+		cp.getStringUIParameterValue("Rosebud");
 	}
 
 	@Test(expected = IncorrectUIParameterTypeException.class) 
@@ -851,7 +851,7 @@ public class ConfigurablePanelTest {
 			}
 		};
 
-		cp.getComboUIParameterValue(param);
+		cp.getStringUIParameterValue(param);
 	}
 	
 	
@@ -929,7 +929,7 @@ public class ConfigurablePanelTest {
 	
 	// get UIPropertyParameter value
 	@Test 
-	public void testGetUIPropertyParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
+	public void testUIPropertyUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
 		final String param = "Param";
 		
 		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
@@ -941,12 +941,12 @@ public class ConfigurablePanelTest {
 			}
 		};
 
-		assertEquals(NoFlag.NONE_FLAG, cp.getUIPropertyParameterValue(param));
+		assertEquals(NoFlag.NONE_FLAG, cp.getStringUIParameterValue(param));
 		
 		final String val = "A legitimate property";
 		cp.getUIParameter(param).setStringValue(val);
 		
-		assertEquals(val, cp.getUIPropertyParameterValue(param));
+		assertEquals(val, cp.getStringUIParameterValue(param));
 	}
 	
 	
@@ -963,7 +963,7 @@ public class ConfigurablePanelTest {
 			}
 		};
 		
-		cp.getUIPropertyParameterValue(null);
+		cp.getStringUIParameterValue(null);
 	}
 
 	@Test(expected = UnknownUIParameterException.class) 
@@ -979,7 +979,7 @@ public class ConfigurablePanelTest {
 			}
 		};
 
-		cp.getUIPropertyParameterValue("Rosebud");
+		cp.getStringUIParameterValue("Rosebud");
 	}
 
 	@Test(expected = IncorrectUIParameterTypeException.class) 
@@ -996,7 +996,7 @@ public class ConfigurablePanelTest {
 			}
 		};
 
-		cp.getUIPropertyParameterValue(param);
+		cp.getStringUIParameterValue(param);
 	}
 	
 	// update all parameters

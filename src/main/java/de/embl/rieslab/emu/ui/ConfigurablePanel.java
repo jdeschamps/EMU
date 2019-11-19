@@ -14,12 +14,9 @@ import de.embl.rieslab.emu.ui.internalproperties.InternalProperty;
 import de.embl.rieslab.emu.ui.internalproperties.InternalProperty.InternalPropertyType;
 import de.embl.rieslab.emu.ui.uiparameters.BoolUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
-import de.embl.rieslab.emu.ui.uiparameters.ComboUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.DoubleUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.IntegerUIParameter;
-import de.embl.rieslab.emu.ui.uiparameters.StringUIParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
-import de.embl.rieslab.emu.ui.uiparameters.UIPropertyParameter;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter.UIParameterType;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIPropertyType;
@@ -492,30 +489,6 @@ public abstract class ConfigurablePanel extends JPanel{
 		}
 	}
 
-	/**
-	 * Returns the value of the ComboUIParameter called {@code parameterName}. 
-	 * 
-	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParameter.
-	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a ComboUIParameter.
-	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
-	 */
-	protected String getComboUIParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
-		if(parameterName == null) {
-			throw new NullPointerException("UIParameter's name cannot be null.");
-		}
-		
-		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
-			if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.COMBO)) {
-				return ((ComboUIParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
-			} else {
-				throw new IncorrectUIParameterTypeException(parameterName, UIParameter.UIParameterType.COMBO.toString(),
-						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
-			}
-		} else {
-			throw new UnknownUIParameterException(parameterName);
-		}
-	}
 
 	/**
 	 * Returns the value of the IntegerUIParameter called {@code parameterName}. 
@@ -550,48 +523,26 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a StringUIParameter.
 	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
-	protected String getStringUIParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
-		if(parameterName == null) {
+	protected String getStringUIParameterValue(String parameterName)
+			throws IncorrectUIParameterTypeException, UnknownUIParameterException {
+		if (parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
-		
-		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
-				if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.STRING)) {
-					return ((StringUIParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
-				} else {
-					throw new IncorrectUIParameterTypeException(parameterName, UIParameter.UIParameterType.STRING.toString(),
-							parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
-				}
+
+		if (parameters_.containsKey(UIParameter.getHash(this, parameterName))) {
+			UIParameterType t = parameters_.get(UIParameter.getHash(this,parameterName)).getType();
+			if (t.equals(UIParameterType.STRING) || t.equals(UIParameterType.COMBO) || t.equals(UIParameterType.UIPROPERTY)) {
+				return parameters_.get(UIParameter.getHash(this, parameterName)).getStringValue();
+			} else {
+				throw new IncorrectUIParameterTypeException(parameterName,
+						UIParameterType.STRING.toString() + "," + UIParameterType.COMBO.toString() + " or "
+								+ UIParameterType.UIPROPERTY.toString(),
+						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
+			}
 		} else {
 			throw new UnknownUIParameterException(parameterName);
 		}
 	}
-
-	/**
-	 * Returns the value of the UIPropertyParameter called {@code parameterName}.
-	 * 
-	 * @param parameterName Name of the parameter
-	 * @return Value of the UIParamete.
-	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a UIPropertyParameter.
-	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
-	 */
-	protected String getUIPropertyParameterValue(String parameterName) throws IncorrectUIParameterTypeException, UnknownUIParameterException {
-		if(parameterName == null) {
-			throw new NullPointerException("UIParameter's name cannot be null.");
-		}
-		
-		if(parameters_.containsKey(UIParameter.getHash(this,parameterName))){
-			if(parameters_.get(UIParameter.getHash(this,parameterName)).getType().equals(UIParameterType.UIPROPERTY)) {
-				return ((UIPropertyParameter) parameters_.get(UIParameter.getHash(this,parameterName))).getValue();					
-			} else {
-				throw new IncorrectUIParameterTypeException(parameterName, UIParameter.UIParameterType.UIPROPERTY.toString(),
-						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
-			}
-	} else {
-		throw new UnknownUIParameterException(parameterName);
-	}
-}
-	
 
 	/**
 	 * Adds a {@link de.embl.rieslab.emu.ui.uiproperties.UIProperty} to the internal HashMap
