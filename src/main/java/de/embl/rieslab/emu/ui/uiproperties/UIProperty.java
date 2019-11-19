@@ -29,7 +29,6 @@ import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
  * - {@link MultiStateUIProperty} accepts multiple states. While the values of the states are also not know at compilation time, the number of states is fixed during
  * instantiation.
  * - {@link SingleStateUIProperty} accepts a single state, unknown at compilation time.
- * - {@link ImmutableMultiStateUIProperty} accepts multiple states that are fixed at instantiation. 
  * - {@link RescaledUIProperty} allows rescaling the values of the UIProperty (e.g.: use percentage to change the MMProperty). 
  * 
  * @author Joran Deschamps

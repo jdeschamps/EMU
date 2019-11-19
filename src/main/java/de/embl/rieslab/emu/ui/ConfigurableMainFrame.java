@@ -372,13 +372,15 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	 * on each panel.
 	 */
 	public void updateAllConfigurablePanels(){
+		// this is called on the EDT 
+
 		Iterator<ConfigurablePanel> it = panels_.iterator();
 		ConfigurablePanel pan;
 		while(it.hasNext()){
 			pan = it.next();
 
+			pan.updateAllParameters(); // so that parameters values can be used for UIProperties (RescaledUIProperty)
 			pan.updateAllProperties();
-			pan.updateAllParameters();
 		}
 	}
 	

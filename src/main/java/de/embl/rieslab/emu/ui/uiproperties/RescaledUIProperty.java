@@ -17,7 +17,7 @@ import de.embl.rieslab.emu.utils.EmuUtils;
  */
 public class RescaledUIProperty extends UIProperty{
 
-	private double slope_, offset_, rescaledMin_, rescaledMax_;
+	private double slope_ = 1., offset_ = 0., rescaledMin_, rescaledMax_;
 	private boolean limitsSet_ = false;
 	
 	public RescaledUIProperty(ConfigurablePanel owner, String label, String description) {
@@ -122,7 +122,9 @@ public class RescaledUIProperty extends UIProperty{
 		if (isAssigned()) {
 			String value = getMMProperty().getStringValue();
 
-			if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT && EmuUtils.isFloat(value)) {
+			if(!limitsSet_) {
+				return value;
+			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.FLOAT && EmuUtils.isFloat(value)) {
 				return getScaledDownValue(new Float(value));
 			} else if(getMMProperty().getType() == MMProperty.MMPropertyType.INTEGER && EmuUtils.isInteger(value)) {
 				return getScaledDownValue(new Integer(value));

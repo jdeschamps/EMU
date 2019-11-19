@@ -542,7 +542,7 @@ public class SystemController {
 	}
 
 	/**
-	 * Returnsan array of known plugins.
+	 * Returns an array of known plugins.
 	 * 
 	 * @return Array of plugins name.
 	 */

@@ -148,8 +148,8 @@ public abstract class MMProperty<T> {
 		try {
 			val = convertToValue(core_.getProperty(devicelabel_, label_));
 			value = val;
-			
-		} catch (Exception e) {
+		} catch (Exception e) {			
+			logger_.logError("Error getting value from the MMProperty ["+hash_+"].");
 			e.printStackTrace();
 		}
 		return value;
@@ -167,7 +167,7 @@ public abstract class MMProperty<T> {
 			val = core_.getProperty(devicelabel_, label_);
 			value = convertToValue(val);
 			
-			logger_.logDebugMessage("MMProperty ["+hash_+"] value: ["+val+"].");
+			logger_.logDebugMessage("Retrieved MMProperty ["+hash_+"] value: ["+val+"].");
 		} catch (Exception e) {
 			logger_.logError("Error getting value from the MMProperty ["+hash_+"].");
 			e.printStackTrace();
@@ -198,6 +198,7 @@ public abstract class MMProperty<T> {
 					if(core_.hasProperty(devicelabel_, label_)){
 						core_.setProperty(devicelabel_,label_,stringval);
 						notifyListeners(source, stringval);
+						logger_.logDebugMessage("Set MMProperty ["+hash_+"] value: ["+stringval+"].");
 						return true;
 					}
 				} catch (Exception e){

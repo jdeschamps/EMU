@@ -780,13 +780,19 @@ public abstract class ConfigurablePanel extends JPanel{
 	 */
 	public void triggerPropertyHasChanged(final String propertyName, final String newValue){
 		// Makes sure that the updating runs on EDT
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				turnOffComponentTriggering();
-				propertyhasChanged(propertyName, newValue);
-				turnOnComponentTriggering();
-			}
-		});
+		if (SwingUtilities.isEventDispatchThread()) {
+			turnOffComponentTriggering();
+			propertyhasChanged(propertyName, newValue);
+			turnOnComponentTriggering();
+		} else {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					turnOffComponentTriggering();
+					propertyhasChanged(propertyName, newValue);
+					turnOnComponentTriggering();
+				}
+			});
+		}
 	}
 	
 	/**
@@ -797,11 +803,15 @@ public abstract class ConfigurablePanel extends JPanel{
 	 */
 	public void triggerParameterHasChanged(final String parameterName){
 		// Makes sure that the updating runs on EDT
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				parameterhasChanged(parameterName);
-			}
-		});
+		if (SwingUtilities.isEventDispatchThread()) {
+			parameterhasChanged(parameterName);
+		} else {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					parameterhasChanged(parameterName);
+				}
+			});
+		}
 	}
 
 	/**
