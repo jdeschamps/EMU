@@ -32,7 +32,6 @@ import de.embl.rieslab.emu.ui.uiproperties.RescaledUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
-import de.embl.rieslab.emu.ui.uiproperties.utils.UIPropertyUtils;
 
 /**
  * JPanel displaying a table allowing the user to allocate device properties from Micro-Manager with
@@ -92,19 +91,26 @@ public class PropertiesTable extends JPanel {
 			
 			if (uipropertySet.get(uipropkeys_[i]) instanceof TwoStateUIProperty) {
 				// if property is a toggle property, adds a line for the on and off values respectively.
-				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
-				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOffStateName(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateLabel(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOffStateLabel(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
 				
 			} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) {
 				// if property is a single value property, adds a line for the value the property must take
-				model.addRow(new Object[] {uipropkeys_[i] + SingleStateUIProperty.getValueName(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
+				model.addRow(new Object[] {uipropkeys_[i] + SingleStateUIProperty.getStateLabel(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
 				
 			} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) {
 				// if multiple values property, adds a line for each of the value to be allocated
 				int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 				for(int j=0;j<numpos;j++){
-					model.addRow(new Object[] {uipropkeys_[i] + MultiStateUIProperty.getConfigurationStateName(j),"", ConfigurationWizardUI.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i] + MultiStateUIProperty.getConfigurationStateLabel(j),"", ConfigurationWizardUI.KEY_ENTERVALUE });
 				}
+			}  else if (uipropertySet.get(uipropkeys_[i]) instanceof RescaledUIProperty) {
+				// if rescaled property, adds two lines for slope and offset
+				double slope = ((RescaledUIProperty) uipropertySet.get(uipropkeys_[i])).getSlope();
+				double offset = ((RescaledUIProperty) uipropertySet.get(uipropkeys_[i])).getOffset();
+
+				model.addRow(new Object[] {uipropkeys_[i] + RescaledUIProperty.getSlopeLabel(),"", String.valueOf(slope) });
+				model.addRow(new Object[] {uipropkeys_[i] + RescaledUIProperty.getOffsetLabel(),"", String.valueOf(offset) });
 			} 
 		}
 
@@ -165,8 +171,8 @@ public class PropertiesTable extends JPanel {
 				// if the property is an instance of SingleState, TwoState or MultiState property, then looks for the assigned values
 				if (uipropertySet.get(uipropkeys_[i]) instanceof TwoStateUIProperty) { // if two state
 					// gets values corresponding to the on and off states
-					uion = propertymapping.get(uipropkeys_[i]+ TwoStateUIProperty.getOnStateName());
-					uioff = propertymapping.get(uipropkeys_[i]+ TwoStateUIProperty.getOffStateName());
+					uion = propertymapping.get(uipropkeys_[i]+ TwoStateUIProperty.getOnStateLabel());
+					uioff = propertymapping.get(uipropkeys_[i]+ TwoStateUIProperty.getOffStateLabel());
 					
 					// if null then sets to default
 					if(uion == null){
@@ -177,27 +183,43 @@ public class PropertiesTable extends JPanel {
 					}
 					
 					// adds a row for each with the preset state value
-					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", uion });
-					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "", uioff });
+					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateLabel(),"", uion });
+					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateLabel(), "", uioff });
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) { // if single value property
 					// gets the value of the state and adds the corresponding row
-					uisingle = propertymapping.get(uipropkeys_[i]+ SingleStateUIProperty.getValueName());
+					uisingle = propertymapping.get(uipropkeys_[i]+ SingleStateUIProperty.getStateLabel());
 					if(uisingle == null){
 						uion = ConfigurationWizardUI.KEY_ENTERVALUE;
 					}
-					model.addRow(new Object[] {	uipropkeys_[i] + SingleStateUIProperty.getValueName(), "", uisingle });
+					model.addRow(new Object[] {	uipropkeys_[i] + SingleStateUIProperty.getStateLabel(), "", uisingle });
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) { // if multiple values property
 					// gets the number of positions and extracts all position values. If null then sets to default. Finally creates the corresponding row.
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
-						uitemp = propertymapping.get(uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateName(j));
+						uitemp = propertymapping.get(uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateLabel(j));
 
 						if(uitemp == null){
 							uitemp = ConfigurationWizardUI.KEY_ENTERVALUE;
 						}
 						
-						model.addRow(new Object[] {	uipropkeys_[i] +  MultiStateUIProperty.getConfigurationStateName(j), "", uitemp });
+						model.addRow(new Object[] {	uipropkeys_[i] +  MultiStateUIProperty.getConfigurationStateLabel(j), "", uitemp });
 					}
+				} else if (uipropertySet.get(uipropkeys_[i]) instanceof RescaledUIProperty) { 
+					// slope
+					uitemp = propertymapping.get(uipropkeys_[i]+ RescaledUIProperty.getSlopeLabel());
+					if(uitemp == null) { // get the default one
+						uitemp = String.valueOf(((RescaledUIProperty) uipropertySet.get(uipropkeys_[i])).getSlope());
+					}
+					model.addRow(new Object[] {	uipropkeys_[i] +  RescaledUIProperty.getSlopeLabel(), "", uitemp });
+					
+					
+					// offset
+					uitemp = propertymapping.get(uipropkeys_[i]+ RescaledUIProperty.getOffsetLabel());
+					if(uitemp == null) { // get the default one
+						uitemp = String.valueOf(((RescaledUIProperty) uipropertySet.get(uipropkeys_[i])).getOffset());
+					}
+					model.addRow(new Object[] {	uipropkeys_[i] +  RescaledUIProperty.getOffsetLabel(), "", uitemp });
+					
 				} 
 			} else {
 				// if it is not found in the configuration
@@ -205,15 +227,22 @@ public class PropertiesTable extends JPanel {
 				
 				// if the property is an instance of SingleState, TwoState or MultiState property, creates rows for the states value
 				if (uipropertySet.get(uipropkeys_[i]) instanceof TwoStateUIProperty) {
-					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateName(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
-					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateName(), "",ConfigurationWizardUI.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i] + TwoStateUIProperty.getOnStateLabel(),"", ConfigurationWizardUI.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i]+ TwoStateUIProperty.getOffStateLabel(), "",ConfigurationWizardUI.KEY_ENTERVALUE });
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof SingleStateUIProperty) {
-					model.addRow(new Object[] {uipropkeys_[i]+ SingleStateUIProperty.getValueName(), "",ConfigurationWizardUI.KEY_ENTERVALUE });
+					model.addRow(new Object[] {uipropkeys_[i]+ SingleStateUIProperty.getStateLabel(), "",ConfigurationWizardUI.KEY_ENTERVALUE });
 				} else if (uipropertySet.get(uipropkeys_[i]) instanceof MultiStateUIProperty) { // if multiple values property
 					int numpos = ((MultiStateUIProperty) uipropertySet.get(uipropkeys_[i])).getNumberOfStates();
 					for(int j=0;j<numpos;j++){
-						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateName(j), "",ConfigurationWizardUI.KEY_ENTERVALUE });
+						model.addRow(new Object[] {uipropkeys_[i]+ MultiStateUIProperty.getConfigurationStateLabel(j), "",ConfigurationWizardUI.KEY_ENTERVALUE });
 					}
+				} else if (uipropertySet.get(uipropkeys_[i]) instanceof RescaledUIProperty) {
+					// if rescaled property, adds two lines for slope and offset
+					double slope = ((RescaledUIProperty) uipropertySet.get(uipropkeys_[i])).getSlope();
+					double offset = ((RescaledUIProperty) uipropertySet.get(uipropkeys_[i])).getOffset();
+
+					model.addRow(new Object[] {uipropkeys_[i] + RescaledUIProperty.getSlopeLabel(),"", String.valueOf(slope) });
+					model.addRow(new Object[] {uipropkeys_[i] + RescaledUIProperty.getOffsetLabel(),"", String.valueOf(offset) });
 				} 
 			}
 		}
@@ -223,7 +252,7 @@ public class PropertiesTable extends JPanel {
 
 		JScrollPane sc = new JScrollPane(table);
 		this.add(sc);
-	}
+	}	
 	
 	private DefaultTableModel getDefaultModel(){
 		return new DefaultTableModel(new Object[] {"UI property", "Device", "Property" }, 0);
@@ -251,7 +280,7 @@ public class PropertiesTable extends JPanel {
 			@Override
 			public TableCellEditor getCellEditor(int row, int column) {
 				String s = (String) table.getValueAt(row, 0);
-				if (column == 2 && UIPropertyUtils.isStateValue(s)) { 
+				if (column == 2 && isStateValue(s)) { 
 					// if in the last column and corresponds to a field value, returns a textfield cell editor
 					return new DefaultCellEditor(new JTextField(ConfigurationWizardUI.KEY_ENTERVALUE));
 				} else {
@@ -274,7 +303,7 @@ public class PropertiesTable extends JPanel {
 				String s = (String) table.getValueAt(row, 0);
 				if (col < 1) {
 					return false;
-				} else if (col == 1 && UIPropertyUtils.isStateValue(s)) {
+				} else if (col == 1 && isStateValue(s)) {
 					return false;
 				} else {
 					return true;
@@ -368,16 +397,22 @@ public class PropertiesTable extends JPanel {
 			}
 			s = (String) table.getValueAt(nmb, 0);
 			help_.update("Enter the value for this specific state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
-		} else if (s.contains(TwoStateUIProperty.getOnStateName())){
+		} else if (s.contains(TwoStateUIProperty.getOnStateLabel())){
 			s = (String) table.getValueAt(row-1, 0);
 			help_.update("Enter the value sent to the device when set to ON state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
-		} else if (s.contains(TwoStateUIProperty.getOffStateName())){
+		} else if (s.contains(TwoStateUIProperty.getOffStateLabel())){
 			s = (String) table.getValueAt(row-2, 0);
 			help_.update("Enter the value sent to the device when set to OFF state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
-		} else if (s.contains(SingleStateUIProperty.getValueName())){
+		}  else if (s.contains(RescaledUIProperty.getSlopeLabel())){
+			s = (String) table.getValueAt(row-1, 0);
+			help_.update("Enter the value of the slope to scale values from the UI to the actual device property.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+		}  else if (s.contains(RescaledUIProperty.getOffsetLabel())){
+			s = (String) table.getValueAt(row-2, 0);
+			help_.update("Enter the value of the offset to scale values from the UI to the actual device property.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+		} else if (s.contains(SingleStateUIProperty.getStateLabel())){
 			s = (String) table.getValueAt(row-1, 0);
 			help_.update("Enter the constant value sent to the device.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
-		} else if (s.contains(SingleStateUIProperty.getValueName())){
+		} else if (s.contains(SingleStateUIProperty.getStateLabel())){
 			s = (String) table.getValueAt(row-1, 0);
 			help_.update("Enter the constant value sent to the device.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
 		} else if(uipropertySet_.containsKey(s)){
@@ -391,33 +426,52 @@ public class PropertiesTable extends JPanel {
 	 * @return HashMap of the UI properties and the corresponding MM properties and states value.
 	 */
 	public HashMap<String,String> getSettings(){
-		HashMap<String,String> settings = new HashMap<String,String>();
+		HashMap<String,String> map = new HashMap<String,String>();
 		
 		TableModel model = table.getModel();
 		int nrow = model.getRowCount();
 		
 		for(int i=0;i<nrow;i++){
 			// if device column is not empty (from state property, e.g. single state value or multistates) and is not unallocated
-			if (!UIPropertyUtils.isStateValue((String) model.getValueAt(i, 0)) && !((String) model.getValueAt(i, 1)).equals(GlobalConfiguration.KEY_UNALLOCATED)) { 
+			if (!isStateValue((String) model.getValueAt(i, 0)) && !((String) model.getValueAt(i, 1)).equals(GlobalConfiguration.KEY_UNALLOCATED)) { 
 				String propertyname = (String) model.getValueAt(i, 2);
 				if( mmproperties_.getDevice((String) model.getValueAt(i, 1)).hasLabelProperty(propertyname)){
 					String hash = mmproperties_.getDevice((String) model.getValueAt(i, 1)).getHashFromLabel(propertyname);
-					settings.put((String) model.getValueAt(i, 0), hash); // put with the property hash
+					map.put((String) model.getValueAt(i, 0), hash); // put with the property hash
 				} else {
-					settings.put((String) model.getValueAt(i, 0), GlobalConfiguration.KEY_UNALLOCATED); // set to unallocated
+					map.put((String) model.getValueAt(i, 0), GlobalConfiguration.KEY_UNALLOCATED); // set to unallocated
 				}
 			} else {
-				settings.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 2)); // keep the unallocated as is
+				map.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 2)); // keep the unallocated as is
 			}
 		}
 		
-		return settings;
+		return map;
+	}
+	
+	
+	/**
+	 * Tests if the string has been generated by a SingelStateUIProperty, a TwoStateUIProperty, a MultiStateUIProperty or a RescaledUIProperty.
+	 * 
+	 * @param s String to test, value in the first column of the table
+	 * @return True if corresponds to a field value.
+	 */
+	public boolean isStateValue(String s){
+		if (s.contains(SingleStateUIProperty.getStateLabel())
+				|| s.contains(TwoStateUIProperty.getOnStateLabel()) 
+				|| s.contains(TwoStateUIProperty.getOffStateLabel())
+				|| s.contains(RescaledUIProperty.getSlopeLabel())
+				|| s.contains(RescaledUIProperty.getOffsetLabel())
+				|| s.matches(".*"+MultiStateUIProperty.getGenericStateName()+".*")){
+			return true;
+		}
+		return false;
 	}
 	
 	/**
 	 * Renders cell text with a bold font. Adapted from: https://stackoverflow.com/questions/22325138/cellrenderer-making-text-bold
 	 */
-	class BoldTableCellRenderer extends DefaultTableCellRenderer {
+	public class BoldTableCellRenderer extends DefaultTableCellRenderer {
 
 		private static final long serialVersionUID = 1L;
 

@@ -70,7 +70,7 @@ public class SingleStateUIProperty extends UIProperty{
 	 */
 	@Override
 	public boolean setPropertyValue(String val) {
-		if (val != null && isAssigned() && (val.equals(state_) || val.equals(SingleStateUIProperty.getValueName()))) {
+		if (val != null && isAssigned() && (val.equals(state_) || val.equals(SingleStateUIProperty.getStateLabel()))) {
 			return getMMProperty().setValue(state_, this);
 		}
 		return false;
@@ -81,7 +81,7 @@ public class SingleStateUIProperty extends UIProperty{
 	 * 
 	 * @return State name
 	 */
-	public static String getValueName(){
+	public static String getStateLabel(){
 		return " "+STATE;
 	}
 	

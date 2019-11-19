@@ -49,7 +49,7 @@ public class TwoStateUIProperty extends UIProperty{
 	 * 
 	 * @return ON state's name
 	 */
-	public static String getOnStateName(){
+	public static String getOnStateLabel(){
 		return ON;
 	}
 	
@@ -58,7 +58,7 @@ public class TwoStateUIProperty extends UIProperty{
 	 * 
 	 * @return OFF state's name
 	 */
-	public static String getOffStateName(){
+	public static String getOffStateLabel(){
 		return OFF;
 	}
 
@@ -116,9 +116,9 @@ public class TwoStateUIProperty extends UIProperty{
 	@Override
 	public boolean setPropertyValue(String newValue) {
 		if(newValue != null && isAssigned()) {
-			if (newValue.equals(getOnStateValue()) || newValue.equals(getOnStateName())) {
+			if (newValue.equals(getOnStateValue()) || newValue.equals(getOnStateLabel())) {
 				return getMMProperty().setValue(getOnStateValue(), this);
-			} else if(newValue.equals(getOffStateValue()) || newValue.equals(getOffStateName())) {
+			} else if(newValue.equals(getOffStateValue()) || newValue.equals(getOffStateLabel())) {
 				return getMMProperty().setValue(getOffStateValue(), this);
 			} else {
 				if(newValue.equals("1") || newValue.equals("true")) {

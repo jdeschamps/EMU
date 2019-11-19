@@ -37,7 +37,7 @@ public class MultiStateUIProperty extends UIProperty{
 		statenames_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
-			statenames_[i] = getConfigurationStateName(i);
+			statenames_[i] = getConfigurationStateLabel(i);
 		}
 	}	
 	/**
@@ -59,7 +59,7 @@ public class MultiStateUIProperty extends UIProperty{
 		statenames_ = new String[size];
 		for(int i=0;i<size;i++){
 			states_[i] = "";
-			statenames_[i] = getConfigurationStateName(i);
+			statenames_[i] = getConfigurationStateLabel(i);
 		}
 	}
 
@@ -243,7 +243,7 @@ public class MultiStateUIProperty extends UIProperty{
 	 * @param i State number
 	 * @return Generic name
 	 */
-	public static String getConfigurationStateName(int i){
+	public static String getConfigurationStateLabel(int i){
 		return STATE+i;
 	}
 	

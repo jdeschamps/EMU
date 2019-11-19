@@ -130,7 +130,7 @@ public class MultiStateUIPropertyTest {
 			assertEquals(names[i], names_b[i]);
 		
 		for(int i=names.length;i<cp.property.getNumberOfStates();i++)
-			assertEquals(MultiStateUIProperty.getConfigurationStateName(i), names_b[i]);
+			assertEquals(MultiStateUIProperty.getConfigurationStateLabel(i), names_b[i]);
 	}
 	
 	@Test (expected = IllegalArgumentException.class)

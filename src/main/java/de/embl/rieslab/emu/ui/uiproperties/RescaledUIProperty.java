@@ -16,16 +16,30 @@ import de.embl.rieslab.emu.utils.EmuUtils;
  *
  */
 public class RescaledUIProperty extends UIProperty{
-
+	
 	private double slope_ = 1., offset_ = 0., rescaledMin_, rescaledMax_;
 	private boolean limitsSet_ = false;
 	
 	public RescaledUIProperty(ConfigurablePanel owner, String label, String description) {
 		super(owner, label, description);
 	}
-	
+
 	public RescaledUIProperty(ConfigurablePanel owner, String label, String description, PropertyFlag flag) {
 		super(owner, label, description, flag);
+	}
+	
+	public RescaledUIProperty(ConfigurablePanel owner, String label, String description, double defaultSlope, double defaultOffset) {
+		super(owner, label, description);
+		
+		slope_ = defaultSlope;
+		offset_ = defaultOffset;
+	}
+	
+	public RescaledUIProperty(ConfigurablePanel owner, String label, String description, double defaultSlope, double defaultOffset, PropertyFlag flag) {
+		super(owner, label, description, flag);
+		
+		slope_ = defaultSlope;
+		offset_ = defaultOffset;
 	}
 
 	@Override
@@ -44,7 +58,7 @@ public class RescaledUIProperty extends UIProperty{
 	 * If the slope or the offset are not finite, the values will be refused. The slope cannot be zero.
 	 * 
 	 * @param slope Slope
-	 * @param offset Offset
+	 * @param offsetg Offset
 	 * @return True if the slope and offset were set, false otherwise.
 	 */
 	public boolean setScalingFactors(double slope, double offset) {
@@ -176,5 +190,13 @@ public class RescaledUIProperty extends UIProperty{
 	 */
 	public UIPropertyType getType() {
 		return UIPropertyType.RESCALED;
+	}
+
+	public static String getOffsetLabel() {
+		return " offset";
+	}
+	
+	public static String getSlopeLabel() {
+		return " slope";
 	}
 }

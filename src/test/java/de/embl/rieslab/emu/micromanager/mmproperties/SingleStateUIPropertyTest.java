@@ -148,7 +148,7 @@ public class SingleStateUIPropertyTest {
 		final String val = "4";
 		cp.property.setStateValue(val);
 		
-		boolean b = cp.property.setPropertyValue(SingleStateUIProperty.getValueName());
+		boolean b = cp.property.setPropertyValue(SingleStateUIProperty.getStateLabel());
 		assertTrue(b);
 		assertEquals(val, cp.property.getPropertyValue());
 	}

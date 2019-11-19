@@ -22,9 +22,11 @@ import de.embl.rieslab.emu.ui.EmptyPropertyMainFrame;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
 import de.embl.rieslab.emu.ui.uiproperties.MultiStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.PropertyPair;
+import de.embl.rieslab.emu.ui.uiproperties.RescaledUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.SingleStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.TwoStateUIProperty;
 import de.embl.rieslab.emu.ui.uiproperties.UIProperty;
+import de.embl.rieslab.emu.utils.EmuUtils;
 import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 import de.embl.rieslab.emu.utils.exceptions.IncompatiblePluginConfigurationException;
@@ -313,12 +315,12 @@ public class SystemController {
 						}
 						
 						if(paired) {
-							// tests if the property has finite number of states (in order to set their values)
+							// tests if the property has finite number of states or parameters (in order to set their values)
 							if(uiproperties.get(uiprop) instanceof TwoStateUIProperty){ // if it is a two-state property
 								// extracts the on/off values
 								TwoStateUIProperty t = (TwoStateUIProperty) uiproperties.get(uiprop);
-								String offval = configprop.get(uiprop+TwoStateUIProperty.getOffStateName());
-								String onval = configprop.get(uiprop+TwoStateUIProperty.getOnStateName());
+								String offval = configprop.get(uiprop+TwoStateUIProperty.getOffStateLabel());
+								String onval = configprop.get(uiprop+TwoStateUIProperty.getOnStateLabel());
 								
 								if(!t.setOnStateValue(onval) || !t.setOffStateValue(offval)){
 									forbiddenValuesProp.add(uiprop);
@@ -327,9 +329,26 @@ public class SystemController {
 							} else if(uiproperties.get(uiprop) instanceof SingleStateUIProperty){ // if single state property
 								// extracts the state value
 								SingleStateUIProperty t = (SingleStateUIProperty) uiproperties.get(uiprop);
-								String value = configprop.get(uiprop+SingleStateUIProperty.getValueName());
+								String value = configprop.get(uiprop+SingleStateUIProperty.getStateLabel());
 								
 								if(!t.setStateValue(value)){
+									forbiddenValuesProp.add(uiprop);
+								}
+								
+							} else if(uiproperties.get(uiprop) instanceof RescaledUIProperty){ // if single state property
+								// extracts the state value
+								RescaledUIProperty t = (RescaledUIProperty) uiproperties.get(uiprop);
+								String slope = configprop.get(uiprop+RescaledUIProperty.getSlopeLabel());
+								String offset = configprop.get(uiprop+RescaledUIProperty.getOffsetLabel());
+								
+								if(EmuUtils.isNumeric(slope) && EmuUtils.isNumeric(offset)) {
+									double dslope = Double.valueOf(slope);
+									double doffset = Double.valueOf(offset);
+									
+									if(!t.setScalingFactors(dslope, doffset)){
+										forbiddenValuesProp.add(uiprop);
+									}
+								} else {
 									forbiddenValuesProp.add(uiprop);
 								}
 								
@@ -338,7 +357,7 @@ public class SystemController {
 								int numpos = t.getNumberOfStates();
 								String[] val = new String[numpos];
 								for(int j=0;j<numpos;j++){								
-									val[j] =  configprop.get(uiprop+MultiStateUIProperty.getConfigurationStateName(j));
+									val[j] =  configprop.get(uiprop+MultiStateUIProperty.getConfigurationStateLabel(j));
 								}
 		
 								if(!t.setStateValues(val)){

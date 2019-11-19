@@ -120,12 +120,12 @@ public class TwoStateUIPropertyTest {
 		assertEquals(offval, cp.property.getPropertyValue());
 
 		// sets value to the OnState using the generic name
-		b = cp.property.setPropertyValue(TwoStateUIProperty.getOnStateName());
+		b = cp.property.setPropertyValue(TwoStateUIProperty.getOnStateLabel());
 		assertTrue(b);
 		assertEquals(onval, cp.property.getPropertyValue());
 
 		// sets value to the OffState using the generic name
-		b = cp.property.setPropertyValue(TwoStateUIProperty.getOffStateName());
+		b = cp.property.setPropertyValue(TwoStateUIProperty.getOffStateLabel());
 		assertTrue(b);
 		assertEquals(offval, cp.property.getPropertyValue());
 

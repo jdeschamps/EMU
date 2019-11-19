@@ -793,9 +793,9 @@ public class SwingUIListeners {
 				AbstractButton abstractButton = (AbstractButton) actionEvent.getSource();
 				boolean selected = abstractButton.getModel().isSelected();
 				if (selected) {
-					cp.setUIPropertyValue(propertyKey, TwoStateUIProperty.getOnStateName());
+					cp.setUIPropertyValue(propertyKey, TwoStateUIProperty.getOnStateLabel());
 				} else {
-					cp.setUIPropertyValue(propertyKey, TwoStateUIProperty.getOffStateName());
+					cp.setUIPropertyValue(propertyKey, TwoStateUIProperty.getOffStateLabel());
 				}
 			}
 		});
@@ -890,7 +890,7 @@ public class SwingUIListeners {
 		
 		btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				cp.setUIPropertyValue(propertyKey, SingleStateUIProperty.getValueName());
+				cp.setUIPropertyValue(propertyKey, SingleStateUIProperty.getStateLabel());
 			}
 		});
 	}
