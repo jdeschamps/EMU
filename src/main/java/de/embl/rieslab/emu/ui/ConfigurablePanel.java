@@ -520,25 +520,15 @@ public abstract class ConfigurablePanel extends JPanel{
 	 * 
 	 * @param parameterName Name of the parameter
 	 * @return Value of the UIParameter.
-	 * @throws IncorrectUIParameterTypeException Thrown if parameterName does not correspond to a StringUIParameter.
 	 * @throws UnknownUIParameterException Thrown if parameterName does not correspond to a known UIParameter.
 	 */
-	protected String getStringUIParameterValue(String parameterName)
-			throws IncorrectUIParameterTypeException, UnknownUIParameterException {
+	protected String getStringUIParameterValue(String parameterName) throws UnknownUIParameterException {
 		if (parameterName == null) {
 			throw new NullPointerException("UIParameter's name cannot be null.");
 		}
 
 		if (parameters_.containsKey(UIParameter.getHash(this, parameterName))) {
-			UIParameterType t = parameters_.get(UIParameter.getHash(this,parameterName)).getType();
-			if (t.equals(UIParameterType.STRING) || t.equals(UIParameterType.COMBO) || t.equals(UIParameterType.UIPROPERTY)) {
-				return parameters_.get(UIParameter.getHash(this, parameterName)).getStringValue();
-			} else {
-				throw new IncorrectUIParameterTypeException(parameterName,
-						UIParameterType.STRING.toString() + "," + UIParameterType.COMBO.toString() + " or "
-								+ UIParameterType.UIPROPERTY.toString(),
-						parameters_.get(UIParameter.getHash(this, parameterName)).getType().toString());
-			}
+			return parameters_.get(UIParameter.getHash(this, parameterName)).getStringValue();			
 		} else {
 			throw new UnknownUIParameterException(parameterName);
 		}

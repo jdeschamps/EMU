@@ -536,22 +536,6 @@ public class ConfigurablePanelTest {
 		cp.getStringUIParameterValue("Rosebud");
 	}
 	
-	@Test(expected = IncorrectUIParameterTypeException.class) 
-	public void testGetStringUIParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
-		final String param = "Param";
-		
-		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void initializeParameters() {
-				this.addUIParameter(new BoolUIParameter(this, param, "", true));
-			}
-		};
-
-		cp.getStringUIParameterValue(param);
-	}
-
 	// get BoolUIParameter value
 	@Test 
 	public void testGetBoolUIParameterValue() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
@@ -837,23 +821,6 @@ public class ConfigurablePanelTest {
 		cp.getStringUIParameterValue("Rosebud");
 	}
 
-	@Test(expected = IncorrectUIParameterTypeException.class) 
-	public void testGetComboUIParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
-		final boolean defval = false;
-		final String param = "Param";
-		
-		ConfigurableTestPanel cp = new ConfigurableTestPanel("My") {
-			private static final long serialVersionUID = 1L;
-
-			@Override
-			protected void initializeParameters() {
-				this.addUIParameter(new BoolUIParameter(this, param, "", defval));
-			}
-		};
-
-		cp.getStringUIParameterValue(param);
-	}
-	
 	
 	// get ColorUIParameter value
 	@Test 
@@ -982,21 +949,48 @@ public class ConfigurablePanelTest {
 		cp.getStringUIParameterValue("Rosebud");
 	}
 
-	@Test(expected = IncorrectUIParameterTypeException.class) 
-	public void testGetUIPropertyParameterWrongType() throws IncorrectUIParameterTypeException, UnknownUIParameterException {
-		final boolean defval = false;
-		final String param = "Param";
+
+	public void testGetStringUIParameterWithAllTypes() throws UnknownUIParameterException {
+		final String parambool = "Param";
+		final String paramcombo = "Param";
+		final String paramuiprop = "Param";
+		final String paramstring = "Param";
+		final String paramcolor = "Param";
+		final String paramdouble = "Param";
+		final String paramint = "Param";
+		final boolean defbool = false;
+		final String defstring = "Papouasie";
+		final String defstring2 = "New Guinea";
+		final double defdouble = 42.5;
+		final int defval = 2;
+		final String[] vals = {"SuperVal", "MediocreVal", "UnitTesting is tough", "SomeVal"};
 		
-		ConfigurableTestPanel cp = new ConfigurableTestPanel("My") {
+		ConfigurableTestPanel cp = new ConfigurableTestPanel("MyPanel") {
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void initializeParameters() {
-				this.addUIParameter(new BoolUIParameter(this, param, "", defval));
+				this.addUIParameter(new ComboUIParameter(this, paramcombo, "", vals, defval));
+				this.addUIParameter(new BoolUIParameter(this, parambool, "", defbool));
+				
+				UIPropertyParameter p = new UIPropertyParameter(this, paramuiprop, "", new NoFlag());
+				this.addUIParameter(p);
+				p.setStringValue(defstring2);
+				
+				this.addUIParameter(new StringUIParameter(this, paramstring, "", defstring));
+				this.addUIParameter(new ColorUIParameter(this, paramcolor, "", Color.BLACK));
+				this.addUIParameter(new DoubleUIParameter(this, paramdouble, "", defdouble));
+				this.addUIParameter(new IntegerUIParameter(this, paramint, "", defval));
 			}
 		};
 
-		cp.getStringUIParameterValue(param);
+		assertEquals(String.valueOf(defbool),cp.getStringUIParameterValue(parambool));
+		assertEquals(vals[defval],cp.getStringUIParameterValue(paramcombo));
+		assertEquals(defstring2,cp.getStringUIParameterValue(paramuiprop));
+		assertEquals(defstring,cp.getStringUIParameterValue(paramstring));
+		assertEquals("black",cp.getStringUIParameterValue(paramcolor));
+		assertEquals(String.valueOf(defdouble),cp.getStringUIParameterValue(paramdouble));
+		assertEquals(String.valueOf(defval),cp.getStringUIParameterValue(paramint));
 	}
 	
 	// update all parameters
@@ -1020,24 +1014,18 @@ public class ConfigurablePanelTest {
 				if(parameterName.equals(params[0])) {
 					try {
 						val1 = this.getStringUIParameterValue(parameterName);
-					} catch (IncorrectUIParameterTypeException e) {
-						e.printStackTrace();
 					} catch (UnknownUIParameterException e) {
 						e.printStackTrace();
 					}
 				} else if(parameterName.equals(params[1])) {
 					try {
 						val2 = this.getStringUIParameterValue(parameterName);
-					} catch (IncorrectUIParameterTypeException e) {
-						e.printStackTrace();
 					} catch (UnknownUIParameterException e) {
 						e.printStackTrace();
 					}
 				} else if(parameterName.equals(params[2])) {
 					try {
 						val3 = this.getStringUIParameterValue(parameterName);
-					} catch (IncorrectUIParameterTypeException e) {
-						e.printStackTrace();
 					} catch (UnknownUIParameterException e) {
 						e.printStackTrace();
 					}
