@@ -31,7 +31,7 @@ if [ "$exit_required" = false ]; then
 		mvn install:install-file -Dfile="target\EMU-1.0-SNAPSHOT.jar" -DgroupId=de.embl.rieslab  -DartifactId=EMU -Dversion=1.0-SNAPSHOT -Dpackaging=jar
 		
 		# finally copy the jar to MM
-		cp -i "target\EMU-1.0-SNAPSHOT.jar" "$MM2_PLUGINS_HOME\EMU-1.0.jar"
+		cp "target\EMU-1.0-SNAPSHOT.jar" "$MM2_PLUGINS_HOME\EMU-1.0.jar"
 		
 		# test if the EMU folder exist, otherwise create it
 		MM2_EMU="$MM2_HOME\EMU"
