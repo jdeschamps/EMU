@@ -1,10 +1,13 @@
 package de.embl.rieslab.emu.ui;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -18,6 +21,8 @@ import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,7 +32,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.controller.utils.SystemDialogs;
@@ -497,46 +502,66 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	}
 	
 	private void showPluginDescription() {
-		JFrame jf; 
-		JPanel jp;
+		JFrame jf = new JFrame("Description"); 
+		JPanel pane = new JPanel();
+		pane.setLayout(new BoxLayout(pane, BoxLayout.PAGE_AXIS));
+		
+		//////////// plugin description
+		JPanel pluginDescription =  new JPanel();
+		TitledBorder border = BorderFactory.createTitledBorder(null, this.getTitle(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black);		
+		border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD, 12));
+		pluginDescription.setBorder(border);
+		
+		JTextArea txtPlugin = new JTextArea(5, 40);
+		txtPlugin.setEditable(false);
+		txtPlugin.setText(getPluginInfo());
+		txtPlugin.setFont(new Font("Serif", Font.PLAIN, 16));
+		txtPlugin.setLineWrap(true);
+		txtPlugin.setWrapStyleWord(true);
+		pluginDescription.add(txtPlugin);
+		
+		pane.add(pluginDescription);
+		
+		//////////// Panels description   		
+		JPanel panelsDrescription;
 		if(panels_.size() > 0) {
-			jf = new JFrame("Description");
+			panelsDrescription = new JPanel();
+			panelsDrescription.setLayout(new GridLayout(panels_.size(),1));
+			TitledBorder border2 = BorderFactory.createTitledBorder(null, "Panels", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black);		
+			border.setTitleFont(border2.getTitleFont().deriveFont(Font.BOLD, 11));
+			panelsDrescription.setBorder(border2);
 			
-			StringBuilder sb = new StringBuilder();
-			sb.append("--- "+this.getTitle()+" ---\n\n");
-			sb.append(getPluginInfo());
-
-			sb.append("--- Panels ---\n\n");
 			for(ConfigurablePanel p: panels_) {
-				sb.append("- "+p.getPanelLabel()+"\n");
-				if(p.getDescription() != null) {	
-					sb.append(p.getDescription());
+				JPanel panel = new JPanel();
+				panel.setBorder(BorderFactory.createTitledBorder(null, p.getPanelLabel(), TitledBorder.DEFAULT_JUSTIFICATION,
+						TitledBorder.DEFAULT_POSITION, null, Color.black));
+				
+				if(p.getDescription() != null) {
+					JTextArea txtarea = new JTextArea(1, 40);
+					txtarea.setText(p.getDescription());
+					txtarea.setFont(new Font("Serif", Font.PLAIN, 16));
+					txtarea.setLineWrap(true);
+					txtarea.setWrapStyleWord(true);
+					panel.add(txtarea);
 				} else {
-					sb.append("Description not available.");
+					panel.add(new JLabel("Description not available."));
 				}
-				sb.append("\n\n");
+				panelsDrescription.add(panel);
 			}
-			
-			JTextArea txtarea = new JTextArea(5, 40);
-			txtarea.setEditable(false);
-			txtarea.setText(sb.toString());
 
-			jp = new JPanel(new BorderLayout());
-			jp.setBorder(new EmptyBorder(2, 3, 2, 3));
-
-			txtarea.setFont(new Font("Serif", Font.PLAIN, 16));
-			txtarea.setLineWrap(true);
-			txtarea.setWrapStyleWord(true);
 			
-			jp.add(new JScrollPane(txtarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
+			JScrollPane scrllpane = new JScrollPane(panelsDrescription, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			scrllpane.getVerticalScrollBar().setUnitIncrement(16);
+
+			pane.add(scrllpane);
 			
 		} else {
-			jf = new JFrame("Description");
-			jp = new JPanel();
-			jp.add(new JLabel("No description available"));
+			panelsDrescription = new JPanel();
+			panelsDrescription.add(new JLabel("No description available"));
+
+			pane.add(panelsDrescription);
 		}
-		jf.add(jp);
 		
 		// sets icon
 		ArrayList<BufferedImage> lst = new ArrayList<BufferedImage>();
@@ -555,7 +580,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		}
 		jf.setIconImages(lst);
 		
-		
+		jf.setContentPane(pane);
 		jf.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		jf.pack();
 		jf.setVisible(true);

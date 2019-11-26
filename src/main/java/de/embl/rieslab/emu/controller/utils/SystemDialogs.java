@@ -272,18 +272,17 @@ public class SystemDialogs {
 	
 	/**
 	 * "About EMU" window.
-	 * 
 	 */
 	public static void showAboutEMU(){
 		String title = "Easier Micro-manager User interfaces";
 		
-		String message = "Easier Micro-manager User interfaces (EMU).\nThis Micro-manager plugin provides a way to quickly interface a GUI with "
-				     + "\nthe device properties of Micro-manager. Build you own GUI using drag'n drop "
-				     + "\nsoftwares, follow the tutorials on how to implement properly EMU classes "
-				     + "\nand, finally, load your GUI in this plugin. You will then be able to intuitively "
-				     + "\nmap your devices properties with the actions of your UI. \n\n"
-				     + "Find the tutorials and the wiki on GitHub (jdeschamps/EMU).\n\n"
-				     + "This plugin was developped by Joran Deschamps, EMBL (2019).";
+		String message = "Easier Micro-manager User interfaces (EMU).\n"
+						+ "EMU is a Micro-Manager plugin that provides an easy and intuitive way to interface a user \n"
+						+ "interface (UI) with the device properties of Micro-manager. Build you own UI using drag and\n"
+						+ "drop softwares using EMU classes and load your UI in EMU. Finally, configure your UI by mapping\n"
+						+ "device properties to your UI properties and set the parameters.\n"
+						+ "Find the EMU guide and tutorials on GitHub (jdeschamps/EMU).\n\n"
+						+ "This plugin was developped by Joran Deschamps, EMBL (2019).";
 		
         JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
 	}
