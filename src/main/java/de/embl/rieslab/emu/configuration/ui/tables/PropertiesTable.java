@@ -392,7 +392,8 @@ public class PropertiesTable extends JPanel {
 			for(int i=row;i>=1;i--){
 				String str = (String) table.getValueAt(i-1, 0);
 				if(!str.matches(MultiStateUIProperty.getGenericStateName())){
-					nmb = i;
+					nmb = i-1;
+					break;
 				}
 			}
 			s = (String) table.getValueAt(nmb, 0);
