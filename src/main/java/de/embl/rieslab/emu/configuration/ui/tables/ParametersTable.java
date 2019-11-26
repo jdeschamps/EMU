@@ -262,7 +262,7 @@ public class ParametersTable extends JPanel{
 
 	private void updateHelper(int row){
 		String s = (String) table.getValueAt(row, 0);
-		help_.update(s+":\n\n"+uiparameterSet_.get(s).getDescription());
+		help_.update(s,uiparameterSet_.get(s).getDescription());
 	}
 	
 	/**

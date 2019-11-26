@@ -396,28 +396,26 @@ public class PropertiesTable extends JPanel {
 					break;
 				}
 			}
+			int diff = row-nmb-1;
 			s = (String) table.getValueAt(nmb, 0);
-			help_.update("Enter the value for this specific state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+			help_.update(s,"Set the device property value corresponding to the state number "+diff+". The allowed values can be read out from the device property browser.");
 		} else if (s.contains(TwoStateUIProperty.getOnStateLabel())){
 			s = (String) table.getValueAt(row-1, 0);
-			help_.update("Enter the value sent to the device when set to ON state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+			help_.update(s,"Enter the device property value corresponding to the ON state. The allowed values can be read out from the device property browser.");
 		} else if (s.contains(TwoStateUIProperty.getOffStateLabel())){
 			s = (String) table.getValueAt(row-2, 0);
-			help_.update("Enter the value sent to the device when set to OFF state.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+			help_.update(s,"Enter the device property value corresponding to the OFF state. The allowed values can be read out from the device property browser.");
 		}  else if (s.contains(RescaledUIProperty.getSlopeLabel())){
 			s = (String) table.getValueAt(row-1, 0);
-			help_.update("Enter the value of the slope to scale values from the UI to the actual device property.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+			help_.update(s,"The values set in the UI will be rescaled to slope*value+offset before setting the device property state. Enter here a value for the slope.");
 		}  else if (s.contains(RescaledUIProperty.getOffsetLabel())){
 			s = (String) table.getValueAt(row-2, 0);
-			help_.update("Enter the value of the offset to scale values from the UI to the actual device property.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+			help_.update(s,"The values set in the UI will be rescaled to slope*value+offset before setting the device property state. Enter here a value for the offset.");
 		} else if (s.contains(SingleStateUIProperty.getStateLabel())){
 			s = (String) table.getValueAt(row-1, 0);
-			help_.update("Enter the constant value sent to the device.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
-		} else if (s.contains(SingleStateUIProperty.getStateLabel())){
-			s = (String) table.getValueAt(row-1, 0);
-			help_.update("Enter the constant value sent to the device.\n\n"+s+":\n"+uipropertySet_.get(s).getDescription());
+			help_.update(s,"Enter the device property value corresponding to the single state.");
 		} else if(uipropertySet_.containsKey(s)){
-			help_.update(s+":\n\n"+uipropertySet_.get(s).getDescription());
+			help_.update(s,uipropertySet_.get(s).getDescription());
 		}
 	}
 	

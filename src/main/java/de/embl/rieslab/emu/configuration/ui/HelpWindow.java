@@ -1,13 +1,16 @@
 package de.embl.rieslab.emu.configuration.ui;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Font;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.border.EmptyBorder;
+import javax.swing.border.TitledBorder;
 
 /**
  * This class hides or displays a JFrame containing a String.
@@ -21,6 +24,7 @@ public class HelpWindow {
 	private JFrame frame;
 	private JPanel pan;
 	private String defaulttext;
+	private TitledBorder border;
 
 	public HelpWindow(String def) {
 		defaulttext = def;
@@ -28,13 +32,16 @@ public class HelpWindow {
 		txtarea.setEditable(false);
 		txtarea.setText(defaulttext);
 
-		pan = new JPanel(new BorderLayout());
-		pan.setBorder(new EmptyBorder(2, 3, 2, 3));
-
+		pan = new JPanel();
+		pan.setLayout(new BoxLayout(pan, BoxLayout.PAGE_AXIS));
+		border = BorderFactory.createTitledBorder(null, "Click on a table row", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black);
+		border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD, 12));
+		pan.setBorder(border);
+			
 		txtarea.setFont(new Font("Serif", Font.PLAIN, 16));
 		txtarea.setLineWrap(true);
 		txtarea.setWrapStyleWord(true);
-		
+		pan.add(new JLabel(" "));
 		pan.add(new JScrollPane(txtarea, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER));
 
@@ -75,7 +82,15 @@ public class HelpWindow {
 	 * Updates the JFrame with a new text.
 	 * @param newtext Text to be displayed.
 	 */
-	public void update(String newtext){
+	public void update(String title, String newtext){
+		if(title != null) {
+			border.setTitle(title);
+			frame.repaint();
+		} else {
+			border.setTitle("?");
+			frame.repaint();
+		}
+		
 		if(newtext != null) {
 			txtarea.setText(newtext);
 		} else {
