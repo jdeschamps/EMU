@@ -509,7 +509,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		//////////// plugin description
 		JPanel pluginDescription =  new JPanel();
 		TitledBorder border = BorderFactory.createTitledBorder(null, this.getTitle(), TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black);		
-		border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD, 12));
+		border.setTitleFont(border.getTitleFont().deriveFont(Font.BOLD, 20));
 		pluginDescription.setBorder(border);
 		
 		JTextArea txtPlugin = new JTextArea(5, 40);
@@ -526,16 +526,24 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		JPanel panelsDrescription;
 		if(panels_.size() > 0) {
 			panelsDrescription = new JPanel();
-			panelsDrescription.setLayout(new GridLayout(panels_.size(),1));
+			panelsDrescription.setLayout(new GridBagLayout());
+			
 			TitledBorder border2 = BorderFactory.createTitledBorder(null, "Panels", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, Color.black);		
-			border.setTitleFont(border2.getTitleFont().deriveFont(Font.BOLD, 11));
+			border2.setTitleFont(new Font("Serif", Font.BOLD, 18));
 			panelsDrescription.setBorder(border2);
 			
+			GridBagConstraints c = new GridBagConstraints();
+			c.fill = GridBagConstraints.VERTICAL;
+			c.gridx = 0;
+			int i = 0;
 			for(ConfigurablePanel p: panels_) {
-				JPanel panel = new JPanel();
-				panel.setBorder(BorderFactory.createTitledBorder(null, p.getPanelLabel(), TitledBorder.DEFAULT_JUSTIFICATION,
-						TitledBorder.DEFAULT_POSITION, null, Color.black));
+				c.gridy = i++;
 				
+				JPanel panel = new JPanel();
+				TitledBorder border3 = BorderFactory.createTitledBorder(null, p.getPanelLabel(), TitledBorder.DEFAULT_JUSTIFICATION,
+						TitledBorder.DEFAULT_POSITION, null, Color.black);
+				border3.setTitleFont(new Font("Serif", Font.BOLD, 16));
+				panel.setBorder(border3);
 				if(p.getDescription() != null) {
 					JTextArea txtarea = new JTextArea(1, 40);
 					txtarea.setText(p.getDescription());
@@ -546,7 +554,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 				} else {
 					panel.add(new JLabel("Description not available."));
 				}
-				panelsDrescription.add(panel);
+				panelsDrescription.add(panel,c);
 			}
 
 			
