@@ -41,18 +41,19 @@ Easier Micro-manager User interface (EMU) is a [Micro-Manager](https://micro-man
 
 # Build your own EMU UI
 
+#### Guide
+
+[The EMU guide](https://github.com/jdeschamps/EMU-guide) offers both a description of EMU menus for users and a programming guide for implementing your own EMU plugin.
+
 #### Tutorial
 
-[Tutorial for Eclipse Windows Builder]( https://github.com/jdeschamps/EMU-tutorial ): a detailed walk through on how to easily assemble an EMU user interface using drag and drop software.
+[Tutorial for Eclipse Windows Builder]( https://github.com/jdeschamps/EMU-guide/tutorial): a detailed walk through on how to easily assemble an EMU user interface using drag and drop software.
 
 #### Examples
 
-[EMU examples](https://github.com/jdeschamps/EMU-examples): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
+[EMU examples](https://github.com/jdeschamps/EMU-guide/examples): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
 
 #### htSMLM
 
 The Ries lab is using its own EMU plugin to control its automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). This plugin is more advanced than the examples and can be used to explore more complex behaviours.
 
-#### Going further
-
-For more details, read the [guide]() or the [javadoc]().
