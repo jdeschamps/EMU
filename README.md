@@ -47,7 +47,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 #### Guide
 
-[The EMU guide](https://github.com/jdeschamps/EMU-guide) offers both a description of EMU menus for users and a programming guide for implementing your own EMU plugin.
+[The EMU guide](https://jdeschamps.github.io/EMU-guide/) offers both a description of EMU menus for users and a programming guide for implementing your own EMU plugin.
 
 #### Tutorial
 
