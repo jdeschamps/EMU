@@ -34,10 +34,10 @@ public class MMPresetGroupRegistry {
 		
 		groups_ = new HashMap<String, MMPresetGroup>();
 		
-		retrievePresetnGroups(mmpropReg);
+		retrievePresetGroups(mmpropReg);
 	}
 
-	private void retrievePresetnGroups(MMPropertiesRegistry mmproperties) {
+	private void retrievePresetGroups(MMPropertiesRegistry mmproperties) {
 		StrVector groups = core_.getAvailableConfigGroups();
 		
 		if(groups != null){

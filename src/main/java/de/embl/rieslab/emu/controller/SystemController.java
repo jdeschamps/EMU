@@ -496,12 +496,12 @@ public class SystemController {
 	}
 	
 	/**
-	 * Returns the Micro-manager configuration groups.
+	 * Returns the Micro-manager configuration preset groups.
 	 * 
 	 * @return {@link de.embl.rieslab.emu.micromanager.presetgroups.MMPresetGroupRegistry}
 	 */
-	public MMPresetGroupRegistry getMMConfigGroupRegistry(){
-		return mmregistry_.getMMConfigurationGroupsRegistry();
+	public MMPresetGroupRegistry getMMPresetGroupRegistry(){
+		return mmregistry_.getMMPresetGroupRegistry();
 	}	
 	
 	/** 

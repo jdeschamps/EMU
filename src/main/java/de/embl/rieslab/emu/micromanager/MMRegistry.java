@@ -22,7 +22,7 @@ import de.embl.rieslab.emu.micromanager.presetgroups.MMPresetGroupRegistry;
 public class MMRegistry {
 
 	private MMPropertiesRegistry mmPropRegistry_; // holds the Micro-Manager device properties
-	private MMPresetGroupRegistry mmConfigGroupsRegistry_; // holds the configuration groups from Micro-manager
+	private MMPresetGroupRegistry mmPresetGroupsRegistry_; // holds the configuration groups from Micro-manager
 	private Studio studio_;
 	private Logger logger_;
 	
@@ -40,7 +40,7 @@ public class MMRegistry {
 		
 		// extracts MM properties
 		mmPropRegistry_ = new MMPropertiesRegistry(studio_.getCMMCore(), logger_);
-		mmConfigGroupsRegistry_ = new MMPresetGroupRegistry(studio_.getCMMCore(), mmPropRegistry_);
+		mmPresetGroupsRegistry_ = new MMPresetGroupRegistry(studio_.getCMMCore(), mmPropRegistry_);
 		
 		// registers mmconfigs as mmproperties (so that they can be linked to UIProperties)
 		registerMMConfAsDevice();
@@ -60,8 +60,8 @@ public class MMRegistry {
 	 * 
 	 * @return Instance of {@link MMPresetGroupRegistry}
 	 */
-	public MMPresetGroupRegistry getMMConfigurationGroupsRegistry() {
-		return mmConfigGroupsRegistry_;
+	public MMPresetGroupRegistry getMMPresetGroupRegistry() {
+		return mmPresetGroupsRegistry_;
 	}
 	
 	/**
@@ -72,11 +72,11 @@ public class MMRegistry {
 	private void registerMMConfAsDevice(){
 		MMDevice dev = new MMDevice(PresetGroupAsMMProperty.KEY_MMCONFDEVICE);
 
-		Iterator<String> it = mmConfigGroupsRegistry_.getMMPresetGroups().keySet().iterator();
+		Iterator<String> it = mmPresetGroupsRegistry_.getMMPresetGroups().keySet().iterator();
 		while(it.hasNext()){
 			String group = it.next();
-			String[] values = mmConfigGroupsRegistry_.getMMPresetGroups().get(group).getPresets().toArray();
-			ArrayList<MMProperty> affectedmmprops = mmConfigGroupsRegistry_.getMMPresetGroups().get(group).getAffectedProperties();
+			String[] values = mmPresetGroupsRegistry_.getMMPresetGroups().get(group).getPresets().toArray();
+			ArrayList<MMProperty> affectedmmprops = mmPresetGroupsRegistry_.getMMPresetGroups().get(group).getAffectedProperties();
 			
 			dev.registerProperty(new PresetGroupAsMMProperty(studio_.app(), studio_.core(), logger_, group, values, affectedmmprops));
 		}
