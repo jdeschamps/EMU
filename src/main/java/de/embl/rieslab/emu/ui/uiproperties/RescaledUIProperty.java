@@ -58,7 +58,7 @@ public class RescaledUIProperty extends UIProperty{
 	 * If the slope or the offset are not finite, the values will be refused. The slope cannot be zero.
 	 * 
 	 * @param slope Slope
-	 * @param offsetg Offset
+	 * @param offset Offset
 	 * @return True if the slope and offset were set, false otherwise.
 	 */
 	public boolean setScalingFactors(double slope, double offset) {

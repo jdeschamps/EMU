@@ -80,6 +80,7 @@ public class HelpWindow {
 
 	/**
 	 * Updates the JFrame with a new text.
+	 * @param title Name of the property/parameter/setting.
 	 * @param newtext Text to be displayed.
 	 */
 	public void update(String title, String newtext){

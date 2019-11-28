@@ -97,14 +97,14 @@ public class MMPresetGroupRegistry {
 	}
 	
 	/**
-	 * Returns the current preset of the MM preset group {@code mmPresetGroup}.
+	 * Returns the current channel of the MM preset group {@code mmPresetGroup}.
 	 * 
 	 * @param mmPresetGroup MM preset group
 	 * @return The state of mmPresetGroup.
 	 */
 	public String getCurrentMMPresetGroupChannel(String mmPresetGroup){
 		if(hasMMPresetGroup(mmPresetGroup)){
-			try {
+			try {		
 				return core_.getCurrentConfig(mmPresetGroup);
 			} catch (Exception e) {
 				e.printStackTrace();
