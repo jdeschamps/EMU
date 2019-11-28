@@ -218,10 +218,7 @@ public class ParametersTable extends JPanel{
 		    @Override
 		    public void mouseClicked(java.awt.event.MouseEvent evt) {
 		        int row = table.rowAtPoint(evt.getPoint());
-		        int col = table.columnAtPoint(evt.getPoint());
-		        if (col==0) {
-		            updateHelper(row);
-		        }
+		        updateHelper(row);
 		    }
 		});
 	}
