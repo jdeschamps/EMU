@@ -51,11 +51,11 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 #### Tutorial
 
-[Tutorial for Eclipse Windows Builder]( https://github.com/jdeschamps/EMU-guide/tutorial): a detailed walk through on how to easily assemble an EMU user interface using drag and drop software.
+[Tutorial for Eclipse Windows Builder](  https://github.com/jdeschamps/EMU-guide/tree/master/tutorial ): a detailed walk through on how to easily assemble an EMU user interface using drag and drop software.
 
 #### Examples
 
-[EMU examples](https://github.com/jdeschamps/EMU-guide/examples): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
+[EMU examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
 
 #### htSMLM
 
