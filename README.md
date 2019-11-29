@@ -18,7 +18,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 # How to install EMU?
 
-1. Download and install [Micro-Manager 2-gamma](https://micro-manager.org/wiki/Download Micro-Manager_Latest Release).
+1. Download and install [Micro-Manager 2-gamma](https://micro-manager.org/wiki/Download%20Micro-Manager%20Latest Release).
 
 2. Install git (for windows users: [git bash](https://gitforwindows.org/))
 
