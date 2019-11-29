@@ -254,9 +254,27 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		icon = new ImageIcon(iconURL);
 		plugin_description.setIcon(icon);
 		
-		// about
+		// guide and about
+		JMenuItem guide = new JMenuItem(new AbstractAction("EMU guide") {
+
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e) {
+				String url = "https://jdeschamps.github.io/EMU-guide/userguide.html";
+				try {
+					java.awt.Desktop.getDesktop().browse(java.net.URI.create(url));
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+		iconURL = getClass().getResource("/images/logo16.png");
+		icon = new ImageIcon(iconURL);
+		guide.setIcon(icon);
+		
 		JMenuItem aboutemu = new JMenuItem(new AbstractAction("About EMU") {
-			private static final long serialVersionUID = -5519431309736542210L;
+
+			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
 				SystemDialogs.showAboutEMU();
@@ -274,7 +292,8 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 		
 		pluginMenu.add(refresh);
 		pluginMenu.add(plugin_description);
-		
+
+		aboutMenu.add(guide);
 		aboutMenu.add(aboutemu);
 		
 		mb.add(confMenu);
