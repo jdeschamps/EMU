@@ -58,9 +58,8 @@ public class FloatMMProperty extends MMProperty<Float> {
 	 */
 	@Override
 	public Float convertToValue(String s) {
-		if(EmuUtils.isNumeric(s)) {
+		if(EmuUtils.isNumeric(s) && !s.contains(",")) {
 			return Float.parseFloat(s);
-
 		}
 		return null;
 	}
