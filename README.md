@@ -1,6 +1,6 @@
 # What is EMU?
 
-[Micro-Manager](https://micro-manager.org/wiki/Micro-Manager) controls the devices on your microscope using device properties (e.g. laser on/off). All device properties can be access through the device property browser. However, controlling the microscope through a long list of properties is cumbersome, slow and rather aimed at the microscope engineer than at the user. While interactions with device properties can be facilitated by using configuration preset groups or the quick access plugin, these cannot replace a user interface (UI) tailored to the microscope. 
+[Micro-Manager](https://micro-manager.org/wiki/Micro-Manager) controls the devices on your microscope using device properties (e.g. laser on/off). All device properties can be accessed through the device property browser. However, controlling the microscope through a long list of properties is cumbersome, slow and rather aimed at the microscope engineer than at the user. While interactions with device properties can be facilitated by using configuration preset groups or the quick access plugin, these cannot replace a user interface (UI) tailored to the microscope. 
 
 Tailored interfaces have the advantage of rendering the control of the microscope intuitive. However, tailoring the UI often means hard-coded references to the specific device properties of the microscope and a need to recompile it every time something changes on the microscope.
 
@@ -22,7 +22,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 2. Install git (for windows users: [git bash](https://gitforwindows.org/))
 
-3. Download the [Java SE Development Kit 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html).
+3. Download the [Java SE Development Kit 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). Set the environment variable [JAVA_HOME to the JDK 1.8 folder path](https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html).
 
 4. Download and install [Maven](https://maven.apache.org/install.html).
 
