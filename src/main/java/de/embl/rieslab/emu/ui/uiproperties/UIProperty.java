@@ -9,30 +9,31 @@ import de.embl.rieslab.emu.utils.exceptions.AlreadyAssignedUIPropertyException;
 import de.embl.rieslab.emu.utils.exceptions.IncompatibleMMProperty;
 
 /**
- * A UIProperty object is aimed at linking a user interface action with a {@link de.embl.rieslab.emu.micromanager.mmproperties.MMProperty} from 
- * Micro-Manager. It should be instantiated in the initializeProperties() implementation of a ConfigurablePanel subclass and add using the addUIProperty()
- * method of ConfigurablePanels.
+ * A UIProperty acts as a link between a JComponent and a Micro-Manager device
+ * property ( {@link de.embl.rieslab.emu.micromanager.mmproperties.MMProperty
+ * MMProperty}). It should be instantiated in the initializeProperties() method
+ * of a ConfigurablePanel and added with the addUIProperty(). The UIProperty
+ * will appear in the configuration wizard of EMU. The user can then assign a
+ * Micro-Manager device property to the UIProperty. While several UIProperties
+ * can be allocated to a single MMProperty, each UIPropoerty can only be
+ * assigned to a single MMproperty.
  * <p>
- * If correctly instantiated and added to the ConfigurablePanel, the UIProperty will appear in the configuration wizard of EMU. The user can then assign 
- * a MMproperty to this UIProperty. While several UIProperties can listen to a single MMProperty, each UIPropoerty can only be assigned to a single MMproperty.
- * In the configuration wizard, the label of the UIProperty will appear as well as the description in the help window if the help is enabled.
+ * A user interaction with a JComponent should trigger a corresponding
+ * UIProperty. The ConfigurablePanel calls {@link #setPropertyValue(String)}. In
+ * turns, this will change the value of the MMProperty. All other UIProperty
+ * allocated to the MMProperty will be updated. Finally, updated UIProperty will
+ * call the owner ConfigurablePanel (triggerPropertyHasChanged()) to change the
+ * relevant JComponents.
  * <p>
- * If a UI action should change the value of UIProperty (meaning the value of its MMProperty), then the ConfigurablePanel calls {@link #setPropertyValue(String)}.
- * In turns, this will change the value of the MMProperty and trigger a call to {@link #mmPropertyHasChanged(String)} in the other UIProperties listening to the
- * same MMProperty. Finally, updated UIProperty will call the owner ConfigurablePanel (triggerPropertyHasChanged()) to change the relevant JComponents.
+ * UIProperties can be labeled with a PropertyFlag to allow categorizing them.
+ * This mechanism is not used within EMU, but can be exploited in the plugins.
  * <p>
- * UIProperties can be labeled with a PropertyFlag to allow categorizing them. This mechanism is not used within EMU, but can be used by its plugins.
- * <p> 
- * Several extensions of UIProperty exist and have additional properties:
- * <p>
- * - {@link TwoStateUIProperty} accepts only two states, ON and OFF, whose values are not known at compilation time and can be set in the configuration wizard.
- * - {@link MultiStateUIProperty} accepts multiple states. While the values of the states are also not know at compilation time, the number of states is fixed during
- * instantiation.
- * - {@link SingleStateUIProperty} accepts a single state, unknown at compilation time.
- * - {@link RescaledUIProperty} allows rescaling the values of the UIProperty (e.g.: use percentage to change the MMProperty). 
  * 
  * @author Joran Deschamps
- *
+ * @see SingleStateUIProperty
+ * @see TwoStateUIProperty
+ * @see MultiStateUIProperty
+ * @see RescaledUIProperty
  */
 @SuppressWarnings("rawtypes")
 public class UIProperty {
