@@ -49,7 +49,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 #### Examples
 
-[EMU examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
+[EMU plugin examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
 
 #### Guide
 
