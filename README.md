@@ -41,9 +41,15 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
    > Note: the script requires bash, which is shipped with the git console on Windows.
    
-   
+7. Install an EMU plugin by placing the plugin compiled .jar file in "C:\Path\to\MicroManager2gamma\EMU\".
 
-# Build your own EMU UI
+
+
+# EMU plugins and resources
+
+#### Examples
+
+[EMU examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
 
 #### Guide
 
@@ -53,11 +59,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 [Tutorial for Eclipse Windows Builder](  https://github.com/jdeschamps/EMU-guide/tree/master/tutorial ): a detailed walk through on how to easily assemble an EMU user interface using drag and drop software.
 
-#### Examples
-
-[EMU examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
-
 #### htSMLM
 
-The Ries lab is using its own EMU plugin to control its automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). This plugin is more advanced than the examples and can be used to explore more complex behaviours.
+The Ries lab is using its own advanced EMU plugin to control automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). 
 
