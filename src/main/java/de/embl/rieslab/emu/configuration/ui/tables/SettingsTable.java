@@ -20,7 +20,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
 import de.embl.rieslab.emu.configuration.ui.HelpWindow;
-import de.embl.rieslab.emu.controller.utils.SystemDialogs;
 import de.embl.rieslab.emu.utils.settings.BoolSetting;
 import de.embl.rieslab.emu.utils.settings.Setting;
 
@@ -42,7 +41,7 @@ public class SettingsTable extends JPanel{
 	private Map<String, Setting> settings_;
 	private String[] namesettings_;
 	private HelpWindow help_;
-	private boolean messageShown_;
+	private boolean valuesChanged_; // used to signal a necessary update of property and parameter tabs
 
 	@SuppressWarnings("rawtypes")
 	public SettingsTable(HashMap<String, Setting> hashMap, HelpWindow help) {
@@ -52,33 +51,7 @@ public class SettingsTable extends JPanel{
 		
 		settings_ = hashMap;
 		help_ = help;
-		messageShown_ = true;
-		
-		// Extract global settings names
-		namesettings_ = settings_.keySet().toArray(new String[0]);
-		Arrays.sort(namesettings_);
-		
-		// Define table
-		DefaultTableModel model = new DefaultTableModel(new Object[] {"Setting", "Value" }, 0);
-		for(int i=0;i<namesettings_.length;i++){
-			model.addRow(new Object[] {namesettings_[i], settings_.get(namesettings_[i]).getValue()});
-		}
-
-		createTable(model);
-
-		JScrollPane sc = new JScrollPane(table);
-		this.add(sc);
-	}	
-
-	@SuppressWarnings("rawtypes")
-	public SettingsTable(HashMap<String, Setting> hashMap, HelpWindow help, boolean useWarning) {
-		if(hashMap == null || help == null) {
-			throw new NullPointerException();
-		}
-		
-		settings_ = hashMap;
-		help_ = help;
-		messageShown_ = !useWarning;
+		valuesChanged_ = false;
 		
 		// Extract global settings names
 		namesettings_ = settings_.keySet().toArray(new String[0]);
@@ -191,9 +164,8 @@ public class SettingsTable extends JPanel{
 		        if (col==0) {
 		            updateHelper(row);
 		        } else {
-					if (!messageShown_) {
-						SystemDialogs.showReloadNecessary();
-						messageShown_ = true;
+					if (!valuesChanged_) {
+						valuesChanged_ = true;
 					}
 		        }
 		    }
@@ -239,6 +211,20 @@ public class SettingsTable extends JPanel{
 		return settings;
 	}
 	
+	/**
+	 * Returns true if the table has changed.
+	 * @return True if they have, false otherwise.
+	 */
+	public boolean hasChanged() {
+		return valuesChanged_;
+	}
+	
+	/**
+	 * Sets the current table state to unchanged.
+	 */
+	public void registerChange() {
+		valuesChanged_ = false;
+	}
 	
 	/*
 	 * Renders cells' text with a bold font. 

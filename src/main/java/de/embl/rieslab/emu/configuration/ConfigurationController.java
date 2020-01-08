@@ -398,6 +398,15 @@ public class ConfigurationController {
 		controller_.loadConfiguration(configName);
 	}
 	
+	/**
+	 * Returns the current plugin's ConfigurableFrame configured with {@code plugsettings} as plugin settings. 
+	 * @param plugsettings Plugin settings to configure the ConfigurableFrame
+	 * @return Configured ConfigurableFrame
+	 */
+	public ConfigurableFrame getConfigurableFrame(TreeMap<String, String> plugsettings) {
+		return controller_.loadConfigurableFrame(plugsettings);
+	}
+	
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////// Manager  

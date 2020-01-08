@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.TreeMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
@@ -19,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -46,7 +49,7 @@ public class ConfigurationWizardUI {
 	public final static String KEY_ENTERVALUE = "Enter value";
 	public final static String KEY_UIPROPERTY = "UI Property: ";
 	public final static String KEY_UIPARAMETER = "UI Parameter: ";
-
+	
 	private PropertiesTable propertytable_; // panel used by the user to pair ui- and mmproperties
 	private ParametersTable parametertable_; // panel used by the user to set the values of uiparameters
 	private SettingsTable globsettingstable_; 
@@ -56,14 +59,15 @@ public class ConfigurationWizardUI {
 	private JFrame frame_; // overall frame for the configuration wizard
 	private boolean running_ = false;
 	private boolean promptedNew_ = false;
+	private boolean updating_ = false; // prevent infinite loop while updating a tab
 	private String plugin_name_;
 	private JTextField config_name_;
+	private MMPropertiesRegistry mmproperties_;
 	
 	public ConfigurationWizardUI(ConfigurationController config) {
 		config_ = config;
 		plugin_name_ = "";
 	}
-
 
 	/**
 	 * Starts a new configuration wizard. If {@code configuration} is not compatible with {@code pluginName} then
@@ -76,7 +80,7 @@ public class ConfigurationWizardUI {
 	 */
 	public void start(String pluginName, GlobalConfiguration configuration,
 			ConfigurableFrame maininterface, MMPropertiesRegistry mmproperties) {
-		
+		mmproperties_ = mmproperties;
 		plugin_name_ = pluginName;
 		if(configuration.getCurrentPluginName() != null && configuration.getCurrentPluginName().equals(pluginName)){
 			existingConfiguration(maininterface, mmproperties, configuration);
@@ -104,7 +108,7 @@ public class ConfigurationWizardUI {
 				parametertable_.setOpaque(true);
 				
 				// and plugin settings
-				plugsettingstable_ = new SettingsTable(maininterface.getDefaultPluginSettings(), help_, true);
+				plugsettingstable_ = new SettingsTable(maininterface.getDefaultPluginSettings(), help_);
 				plugsettingstable_.setOpaque(true); 
 				
 				// and global settings
@@ -185,10 +189,15 @@ public class ConfigurationWizardUI {
 		
 		// Tab containing the tables
 		JTabbedPane tabbedpane = new JTabbedPane();
+		tabbedpane.addTab("Plugin Settings", null, plugsettingstable, null);
 		tabbedpane.addTab("Properties", null, propertytable, null);
 		tabbedpane.addTab("Parameters", null, parametertable, null);
-		tabbedpane.addTab("Plugin Settings", null, plugsettingstable, null);
 		tabbedpane.addTab("Global Settings", null, globsettingstable, null);
+		tabbedpane.addChangeListener(new ChangeListener() {
+	        public void stateChanged(ChangeEvent e) {
+	            updateTabs(tabbedpane, tabbedpane.getSelectedIndex()); // updates property and parameter tab when the settings have changed
+	        }
+	    });
 		
 		// content pane
 		JPanel contentpane = new JPanel();
@@ -266,6 +275,53 @@ public class ConfigurationWizardUI {
 		return frame;
 	}
 	
+	/*
+	 * Updates property (index 1) and parameter (index 2) tabs if the settings have changed.
+	 */
+	private void updateTabs(JTabbedPane tabbedpane, int selectedIndex) {
+		// if not currently updating
+		if(!updating_) {	
+			/*
+			 * if an updated is needed (settings have changed) and selected tab is
+			 * properties or parameters.
+			 */
+			if(plugsettingstable_.hasChanged() && (selectedIndex == 1 || selectedIndex == 2)) {	
+				updating_ = true; // signals updating
+	
+				// extracts settings 
+				TreeMap<String, String> plugset = new TreeMap<String, String>(plugsettingstable_.getSettings());
+				
+				// recovers ConfigurableFrame: the settings have been used to generate the property and parameter lists 
+				ConfigurableFrame mf = config_.getConfigurableFrame(plugset);
+	
+				// extracts properties from the table and updates it with the current ConfigurableFrame property list
+				HashMap<String, String> prop = propertytable_.getSettings();
+				propertytable_ = new PropertiesTable(mf.getUIProperties(), mmproperties_, prop, help_);
+				propertytable_.setOpaque(true);
+				propertytable_.setName("Properties");
+	
+				// same for the parameters
+				HashMap<String, String> param = parametertable_.getSettings();
+				parametertable_ = new ParametersTable(mf.getUIParameters(), param, mf.getUIProperties(), help_);
+				parametertable_.setOpaque(true);
+				parametertable_.setName("Parameters");
+	
+				// substitutes the tabs in the JTabbedPane
+				tabbedpane.remove(1);
+				tabbedpane.add(propertytable_, 1);
+				tabbedpane.remove(2);
+				tabbedpane.add(parametertable_, 2);
+	
+				// sets the selected tab to the one the user clicked on
+				tabbedpane.setSelectedIndex(selectedIndex);
+	
+				plugsettingstable_.registerChange(); // updating no longer needed
+				updating_ = false; // stops updating
+			}
+		}
+	}
+
+
 	/**
 	 * Checks if the wizard is already running by returning an internal member variable.
 	 * 

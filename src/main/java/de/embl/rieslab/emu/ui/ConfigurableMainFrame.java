@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -78,6 +77,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 	@SuppressWarnings("rawtypes")
 	private HashMap<String, Setting> pluginSettings_;
 	
+	
 	/**
 	 * Constructor, it sets up the JMenu, calls {@link #initComponents()} from the subclass, then links InternaProperties and
 	 * gather UIPropertiers and UIParameters. The plugin settings will override the default settings.
@@ -129,13 +129,14 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
     	});
 
     	// sets up the UI
-        setUpMenu();
-		initComponents();		
+        this.setUpMenu();
+        this.initComponents();	
+        this.setVisible(false);
 		
 		// positioning
 		GraphicsEnvironment g = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		this.setLocation(g.getCenterPoint().x-this.getWidth()/2,g.getCenterPoint().y-this.getHeight()/2);
-		this.setVisible(true);
+		//this.setVisible(true);
 		
 		// retrieves all properties, parameters and link internal properties
 		panels_ = listConfigurablePanels(this.getContentPane().getComponents(), new ArrayList<ConfigurablePanel>());

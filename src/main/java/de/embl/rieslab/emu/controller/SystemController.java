@@ -17,6 +17,7 @@ import de.embl.rieslab.emu.micromanager.MMRegistry;
 import de.embl.rieslab.emu.micromanager.mmproperties.MMProperty;
 import de.embl.rieslab.emu.micromanager.presetgroups.MMPresetGroupRegistry;
 import de.embl.rieslab.emu.plugin.UIPluginLoader;
+import de.embl.rieslab.emu.ui.ConfigurableFrame;
 import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 import de.embl.rieslab.emu.ui.EmptyPropertyMainFrame;
 import de.embl.rieslab.emu.ui.uiparameters.UIParameter;
@@ -173,6 +174,7 @@ public class SystemController {
 				}
 			}
 		}
+		mainframe_.setVisible(true);
 	}
 
 	/**
@@ -190,6 +192,17 @@ public class SystemController {
 		} catch (IncompatiblePluginConfigurationException e) {
 			logger_.logError(e);
 		}
+	}
+	
+	/**
+	 * Returns the current plugin's ConfigurableFrame configured with {@code plugsettings} as plugin settings. 
+	 * @param plugsettings Plugin settings to configure the ConfigurableFrame
+	 * @return Configured ConfigurableFrame
+	 */
+	public ConfigurableFrame loadConfigurableFrame(TreeMap<String, String> plugsettings) {
+		ConfigurableMainFrame cmf = pluginloader_.loadPlugin(currentPlugin, plugsettings);
+		cmf.setVisible(false);
+		return cmf;
 	}
 	
 	/**
@@ -242,6 +255,7 @@ public class SystemController {
 				}
 			}
 		}
+		mainframe_.setVisible(true);
 	}
 	
 	private void reloadSystem(String pluginName, String configName) throws IncompatiblePluginConfigurationException {
@@ -275,6 +289,7 @@ public class SystemController {
 		
 		// reloads plugin 
 		mainframe_ = pluginloader_.loadPlugin(pluginName, configurationController_.getConfiguration().getCurrentPluginConfiguration().getPluginSettings());
+		mainframe_.setVisible(true);
 	}
 	
 
