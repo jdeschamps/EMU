@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
+import de.embl.rieslab.emu.controller.SystemController;
+
 /**
  * Dialogs prompted to the user.
  * 
@@ -282,6 +284,7 @@ public class SystemDialogs {
 	    style.append("font-size:" + font.getSize() + "pt;");
 		
 		String message = "Easier Micro-manager User interfaces (EMU).<br />"
+						+ "version "+SystemController.EMU_VERSION+" <br />"
 						+ "EMU is a Micro-Manager plugin that provides an easy and intuitive way to interface a user <br />"
 						+ "interface (UI) with the device properties of Micro-manager. Build you own UI using drag and<br />"
 						+ "drop softwares and EMU classes and load your UI in EMU. Finally, configure it by mapping <br />"
