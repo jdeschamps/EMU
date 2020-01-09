@@ -169,7 +169,7 @@ public class GlobalConfiguration {
 			}
 		} 
 		
-		String[] confs = (String[]) configs.toArray(new String[0]);
+		String[] confs = configs.toArray(new String[0]);
 		Arrays.sort(confs);
 		
 		return confs;

@@ -88,7 +88,7 @@ public class IBeamSmartPanel extends ConfigurablePanel{
 		textfieldUserPower_.setPreferredSize(new Dimension(35,20));
 		
 		// slider channel 1
-		sliderPower_ = new JSlider(JSlider.HORIZONTAL, 0, (int) max_power, 0);
+		sliderPower_ = new JSlider(JSlider.HORIZONTAL, 0, max_power, 0);
 		
 		// slider fine a
 		sliderFinea_ = new JSlider(JSlider.HORIZONTAL, 0, 100, 0);

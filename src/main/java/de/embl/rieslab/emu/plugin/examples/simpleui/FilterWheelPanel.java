@@ -212,6 +212,8 @@ public class FilterWheelPanel extends ConfigurablePanel {
 					tglbtnFilter_4.setSelected(true);
 				case 5:
 					tglbtnFilter_5.setSelected(true);
+				default:
+					// do nothing
 				}
 			} catch (UnknownUIPropertyException e) { // necessary in case FW_POSITION is not a known UIProperty
 				e.printStackTrace();
