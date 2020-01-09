@@ -284,15 +284,15 @@ public class SystemDialogs {
 	    style.append("font-size:" + font.getSize() + "pt;");
 		
 		String message = "Easier Micro-manager User interfaces (EMU).<br />"
-						+ "version "+SystemController.EMU_VERSION+" <br />"
-						+ "EMU is a Micro-Manager plugin that provides an easy and intuitive way to interface a user <br />"
-						+ "interface (UI) with the device properties of Micro-manager. Build you own UI using drag and<br />"
-						+ "drop softwares and EMU classes and load your UI in EMU. Finally, configure it by mapping <br />"
-						+ "device properties to the UI properties and set the UI parameter values using the configuration <br />"
+						+ "version "+SystemController.EMU_VERSION+" <br /><br />"
+						+ "EMU is a Micro-Manager plugin that provides an easy and intuitive way to link a user interface<br />"
+						+ "(UI) with the device properties of Micro-manager. Build you own UI using drag and drop<br />"
+						+ "softwares and EMU classes and load your UI in EMU. Finally, configure it by mapping device<br />"
+						+ "properties to the UI properties and set the UI parameter values using the configuration <br />"
 						+ "wizard.<br /><br />"
 						+ "<a href=\"https://jdeschamps.github.io/EMU-guide/\">The EMU guide</a> is available online.<br />"
-						+ "<a href=\"https://github.com/jdeschamps/EMU\">Find the source code on Github</a>.<br /><br />"
-						+ "This plugin was developped by Joran Deschamps, EMBL (2019).";
+						+ "Find <a href=\"https://github.com/jdeschamps/EMU\"> the source code</a> on Github.<br /><br />"
+						+ "EMU was developped by Joran Deschamps, EMBL (2019).";
 	   
 		// html content
 	    JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">" //

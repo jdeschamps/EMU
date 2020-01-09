@@ -49,7 +49,7 @@ import mmcorej.CMMCore;
  */
 public class SystemController {
 	
-	public static final String EMU_VERSION = "1.4"; // manual version; 
+	public static final String EMU_VERSION = "1.1"; // manual version; 
 
 	private static Studio studio_; // MM studio
 	private MMRegistry mmregistry_; // holds the properties and configuration groups from Micro-manager
