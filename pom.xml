@@ -5,7 +5,7 @@
 	
 	<groupId>de.embl.rieslab</groupId>
 	<artifactId>emu</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.1</version>
 
 	<name>Easier Micro-manager User interface</name>
 	<description>A plugin for Micro-manager that loads UIs and interface them with device properties.</description>
