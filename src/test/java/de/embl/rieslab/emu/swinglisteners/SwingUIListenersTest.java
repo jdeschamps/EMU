@@ -265,6 +265,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -331,6 +332,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -401,6 +403,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -491,6 +494,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -583,9 +587,7 @@ public class SwingUIListenersTest {
 			}
 		};
 		final TestableConfigurableMainFrame cmf = new TestableConfigurableMainFrame() { // need a ConfigurableMainFrame to call functions in the ConfigurablePanel
-			/**
-			 * 
-			 */
+
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -595,6 +597,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -683,6 +686,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -791,6 +795,7 @@ public class SwingUIListenersTest {
 
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		////////////////////////////////////////////
 		/// Test 1: default value
@@ -932,6 +937,7 @@ public class SwingUIListenersTest {
 
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		////////////////////////////////////////////
 		/// Test 1: default value
@@ -1032,6 +1038,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -1105,6 +1112,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -1179,6 +1187,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");
@@ -1256,6 +1265,7 @@ public class SwingUIListenersTest {
 		};
 		cmf.pack();
 		cmf.addAllListeners(); // this calls "addComponentListeners()", which otherwise is called when loading a configuration
+		cmf.setVisible(true);
 		
 		// creates a dummy MMProperty
 		TestableMMProperty mmprop = new TestableMMProperty("Prop1");

@@ -43,7 +43,7 @@ public class ConfigurationIO {
 		
 		return null;
 	}
-
+	
 	/**
 	 * Writes a {@link GlobalConfigurationWrapper} object to the file {@code fileToWriteTo}.
 	 * 
