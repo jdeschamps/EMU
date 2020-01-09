@@ -1,16 +1,13 @@
 package de.embl.rieslab.emu.configuration.io;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
 import de.embl.rieslab.emu.configuration.data.GlobalConfigurationWrapper;
@@ -34,22 +31,15 @@ public class ConfigurationIO {
 	 */
 	public static GlobalConfiguration read(File fileToReadFrom) {
 		
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
-		
+		Gson gson = new GsonBuilder().serializeNulls().create();
+
 		try {
-			GlobalConfiguration config = new GlobalConfiguration(objectMapper.readValue(new FileInputStream(fileToReadFrom), GlobalConfigurationWrapper.class));
-			return config;
-			
-		} catch (JsonParseException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			String json = new String(Files.readAllBytes(fileToReadFrom.toPath()));
+			GlobalConfigurationWrapper data = gson.fromJson(json, GlobalConfigurationWrapper.class);
+			return new GlobalConfiguration(data);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}	
+		}
 		
 		return null;
 	}
@@ -62,24 +52,20 @@ public class ConfigurationIO {
 	 * @return True if the save was successful, false otherwise.
 	 */
 	public static boolean write(File fileToWriteTo, GlobalConfiguration configuration) {
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
 		
+		Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
+		String json = gson.toJson(configuration.getGlobalConfigurationWrapper());
+		
+		BufferedWriter writer;
 		try {
-			// should write a GlobalConfigurationWrapper, not a GlobalConfiguration
-			objectMapper.writeValue(new FileOutputStream(fileToWriteTo), configuration.getGlobalConfigurationWrapper()); 
+			writer = new BufferedWriter(new FileWriter(fileToWriteTo));
+			writer.write(json);
+			writer.close();
 			return true;
-			
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
 		return false;
 	}
 
