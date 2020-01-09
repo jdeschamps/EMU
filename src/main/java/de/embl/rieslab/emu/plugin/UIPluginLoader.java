@@ -13,6 +13,8 @@ import java.util.TreeMap;
 import de.embl.rieslab.emu.controller.SystemController;
 import de.embl.rieslab.emu.controller.utils.GlobalSettings;
 import de.embl.rieslab.emu.plugin.UIPlugin;
+import de.embl.rieslab.emu.plugin.examples.ibeamsmart.IBeamSmartPlugin;
+import de.embl.rieslab.emu.plugin.examples.simpleui.SimpleUIPlugin;
 import de.embl.rieslab.emu.ui.ConfigurableMainFrame;
 
 /**
@@ -39,7 +41,14 @@ public class UIPluginLoader {
 		controller_ = controller;
 		
 		plugins_ = new HashMap<String, UIPlugin>();
-
+		
+		//////////// Adds known plugins
+		UIPlugin ibeamsmart = new IBeamSmartPlugin();
+		UIPlugin simpleui = new SimpleUIPlugin();
+		plugins_.put(ibeamsmart.getName(), ibeamsmart);
+		plugins_.put(simpleui.getName(), simpleui);
+		
+		//////////// Discovers additional plugins
         File loc = new File(GlobalSettings.HOME);
 
         File[] flist = loc.listFiles(new FileFilter() {

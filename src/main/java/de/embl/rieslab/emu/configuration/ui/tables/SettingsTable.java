@@ -203,6 +203,10 @@ public class SettingsTable extends JPanel{
 		for(int i=0;i<nrow;i++){
 			if(model.getValueAt(i, 1) instanceof Boolean){		
 				settings.put((String) model.getValueAt(i, 0), Boolean.toString((Boolean) model.getValueAt(i, 1)));
+			} else if(model.getValueAt(i, 1) instanceof Integer){		
+				settings.put((String) model.getValueAt(i, 0), Integer.toString((Integer) model.getValueAt(i, 1)));
+			} else if(model.getValueAt(i, 1) instanceof Double){		
+				settings.put((String) model.getValueAt(i, 0), Double.toString((Double) model.getValueAt(i, 1)));
 			} else {
 				settings.put((String) model.getValueAt(i, 0), (String) model.getValueAt(i, 1));
 			}
