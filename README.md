@@ -18,6 +18,8 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 # How to install EMU?
 
+EMU is now distributed with Micro-Manager 2-gamma. If you wish to install it from the source code, then follow the next steps:
+
 1. Download and install [Micro-Manager 2-gamma](https://micro-manager.org/wiki/Download_Micro-Manager_Latest_Release).
 
 2. Install git (for windows users: [git bash](https://gitforwindows.org/))
@@ -40,7 +42,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
    ```
 
    > Note: the script requires bash, which is shipped with the git console on Windows.
-   
+
 7. Install an EMU plugin by placing the plugin compiled .jar file in "C:\Path\to\MicroManager2gamma\EMU\".
 
 
@@ -49,7 +51,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 #### Examples
 
-[EMU plugin examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser.
+[EMU plugin examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser. The latter two are shipped with EMU in Micro-Manager 2-gamma.
 
 #### Guide
 
