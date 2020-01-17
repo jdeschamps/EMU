@@ -280,7 +280,7 @@ public class SystemDialogs {
 
 	    // create some css from the label's font
 	    StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
-	    style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
+	    style.append("font-weight:" + "normal;");
 	    style.append("font-size:" + font.getSize() + "pt;");
 		
 		String message = "Easier Micro-manager User interfaces (EMU).<br />"
@@ -371,13 +371,12 @@ public class SystemDialogs {
 		String title = "Welcome to EMU";
 		
 		// From: https://stackoverflow.com/questions/8348063/clickable-links-in-joptionpane
-		// for copying style
+		// for html style
 	    JLabel label = new JLabel();
 	    Font font = label.getFont();
 
-	    // create some css from the label's font
 	    StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
-	    style.append("font-weight:" + (font.isBold() ? "bold" : "normal") + ";");
+	    style.append("font-weight:" + "normal;");
 	    style.append("font-size:" + font.getSize() + "pt;");
 		
 		String message = "Welcome to EMU.<br />"
