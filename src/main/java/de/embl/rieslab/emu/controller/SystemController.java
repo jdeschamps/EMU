@@ -156,6 +156,8 @@ public class SystemController {
 				// shows message
 				if(configurationController_.getDefaultConfigurationFile().exists()){
 					SystemDialogs.showConfigurationCouldNotBeParsed();
+				} else {
+					SystemDialogs.showWelcomeMessage();
 				}
 
 				// gets list of available plugins
