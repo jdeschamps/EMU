@@ -1,4 +1,4 @@
-package de.embl.rieslab.emu.plugin.examples.ibeamsmart.components;
+package de.embl.rieslab.emu.plugin.examples.components;
 
 import java.awt.Dimension;
 

@@ -9,6 +9,7 @@ import javax.swing.JToggleButton;
 import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 
+import de.embl.rieslab.emu.plugin.examples.components.TogglePower;
 import de.embl.rieslab.emu.ui.ConfigurablePanel;
 import de.embl.rieslab.emu.ui.swinglisteners.SwingUIListeners;
 import de.embl.rieslab.emu.ui.uiparameters.ColorUIParameter;
@@ -68,7 +69,7 @@ public class LaserPanel extends ConfigurablePanel {
 		slider.setOrientation(SwingConstants.VERTICAL);
 		add(slider);
 		
-		tglbtnNewToggleButton = new JToggleButton("On/Off");
+		tglbtnNewToggleButton = new TogglePower();
 		tglbtnNewToggleButton.setBounds(10, 231, 100, 33);
 		tglbtnNewToggleButton.setFont(new Font("Tahoma", Font.BOLD, 12));
 		add(tglbtnNewToggleButton);
