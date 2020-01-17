@@ -6,7 +6,10 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.micromanager.ApplicationSkin;
 import org.micromanager.Studio;
+import org.micromanager.internal.utils.DaytimeNighttime;
+import org.micromanager.propertymap.MutablePropertyMapView;
 
 import de.embl.rieslab.emu.configuration.ConfigurationController;
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
@@ -68,6 +71,8 @@ public class SystemController {
 		studio_ = studio;
 		logger_ = new Logger(studio_.getLogManager());
 		currentPlugin = "";
+		
+		isDaySkin();
 	}
 	
 	/**
@@ -642,6 +647,19 @@ public class SystemController {
 			
 			return others;
 		}
+	}
+	
+	/**
+	 * Returns true if the current day/night mode is set to day.
+	 * @return True if day, false if night.
+	 */
+	public boolean isDaySkin() {		
+		String key = "current window style (as per ApplicationSkin.SkinMode)";
+		String value = studio_.profile().getSettings(DaytimeNighttime.class).getString(key, ApplicationSkin.SkinMode.NIGHT.getDesc());
+		if(ApplicationSkin.SkinMode.DAY.getDesc().contentEquals(value)) {
+			return true;
+		}
+		return false;
 	}
 
 }
