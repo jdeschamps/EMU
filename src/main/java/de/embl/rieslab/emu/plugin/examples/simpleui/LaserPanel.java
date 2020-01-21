@@ -37,9 +37,6 @@ public class LaserPanel extends ConfigurablePanel {
 	public final String PARAM_TITLE = "Name";
 	public final String PARAM_COLOR = "Color";	
 
-	/**
-	 * Create the panel.
-	 */
 	public LaserPanel(String title) {
 		super(title);
 
