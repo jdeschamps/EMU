@@ -248,6 +248,9 @@ public class LaserPanel extends ConfigurablePanel {
 		 * this description is used to help the user understand how the 
 		 * panel works.
 		 */
-		return "The "+getPanelLabel()+" panel controls a single laser and allows for rapid on/off and power percentage changes.";
+		return "Laser panels control each a single laser and allow for rapid on/off and power percentage changes. "
+				+ "If the laser does not have a power percentage property, the UI property parameters SLOPE and OFFSET can be used "
+				+ "to rescale the power property to a percentage. The name and color of the laser can also be modified using the "
+				+ "corresponding parameters.";
 	}
 }
