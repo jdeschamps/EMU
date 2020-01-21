@@ -2,10 +2,10 @@ package de.embl.rieslab.emu.controller.utils;
 
 import java.awt.Font;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
+
 
 import de.embl.rieslab.emu.controller.SystemController;
 
@@ -268,70 +269,6 @@ public class SystemDialogs {
 	}
 	
 	/**
-	 * "About EMU" window.
-	 */
-	public static void showAboutEMU(){
-		String title = "Easier Micro-manager User interfaces";
-		
-		// From: https://stackoverflow.com/questions/8348063/clickable-links-in-joptionpane
-		// for copying style
-	    JLabel label = new JLabel();
-	    Font font = label.getFont();
-
-	    // create some css from the label's font
-	    StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
-	    style.append("font-weight:" + "normal;");
-	    style.append("font-size:" + font.getSize() + "pt;");
-		
-		String message = "Easier Micro-manager User interfaces (EMU).<br />"
-						+ "<i>version "+SystemController.EMU_VERSION+"</i> <br /><br />"
-						+ "EMU is a Micro-Manager plugin that provides an easy and intuitive way to link a user interface<br />"
-						+ "(UI) with the device properties of Micro-manager. Build you own UI using drag and drop<br />"
-						+ "softwares and EMU classes and load your UI in EMU. Finally, configure it by mapping device<br />"
-						+ "properties to the UI properties and set the UI parameter values using the configuration <br />"
-						+ "wizard.<br /><br />"
-						+ "&bull <a href=\"https://jdeschamps.github.io/EMU-guide/\">The EMU guide</a> is available online.<br />"
-						+ "&bull Find <a href=\"https://github.com/jdeschamps/EMU\">the source code</a> on Github.<br />"
-						+ "&bull Report bugs <a href=\"https://github.com/jdeschamps/EMU/issues\">as Github issues</a>.<br /><br />"
-						+ "<i>EMU was developped by Joran Deschamps, EMBL (2019).</i>";
-	   
-		// html content
-	    JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">" //
-	            + message //
-	            + "</body></html>");
-
-	    // handle link events
-	    ep.addHyperlinkListener(new HyperlinkListener()
-	    {
-	        @Override
-	        public void hyperlinkUpdate(HyperlinkEvent e)
-	        {
-	            if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
-					try {
-						java.awt.Desktop.getDesktop().browse(java.net.URI.create(e.getURL().toString()));
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					}
-	            }
-	        }
-	    });
-	    ep.setEditable(false);
-	    ep.setBackground(label.getBackground());
-		
-	    // icon		
-	    ImageIcon ic;
-		try {
-			ic = new ImageIcon(ImageIO.read(label.getClass().getResource( "/images/logo64.png" )));
-	        JOptionPane.showMessageDialog(null, ep, title, JOptionPane.INFORMATION_MESSAGE, ic);
-
-		} catch (IOException e1) {
-	        JOptionPane.showMessageDialog(null, ep, title, JOptionPane.INFORMATION_MESSAGE);
-
-			e1.printStackTrace();
-		}
-	}
-	
-	/**
 	 * Prompted when the Configuration Wizard is already running.
 	 */
 	public static void showWizardRunningMessage() {
@@ -367,17 +304,36 @@ public class SystemDialogs {
 				"Information", JOptionPane.INFORMATION_MESSAGE);
 	}
 
-	public static void showWelcomeMessage() {
+	/**
+	 * About EMU window.
+	 *  
+	 * @param contextObject Object providing context to load resources.
+	 */
+	public static void showAboutEMU(Object contextObject){
+		String title = "Easier Micro-manager User interfaces";
+				
+		String message = "Easier Micro-manager User interfaces (EMU).<br />"
+						+ "<i>version "+SystemController.EMU_VERSION+"</i> <br /><br />"
+						+ "EMU is a Micro-Manager plugin that provides an easy and intuitive way to link a user interface<br />"
+						+ "(UI) with the device properties of Micro-manager. Build you own UI using drag and drop<br />"
+						+ "softwares and EMU classes and load your UI in EMU. Finally, configure it by mapping device<br />"
+						+ "properties to the UI properties and set the UI parameter values using the configuration <br />"
+						+ "wizard.<br /><br />"
+						+ "&bull <a href=\"https://jdeschamps.github.io/EMU-guide/\">The EMU guide</a> is available online.<br />"
+						+ "&bull Find <a href=\"https://github.com/jdeschamps/EMU\">the source code</a> on Github.<br />"
+						+ "&bull Report bugs <a href=\"https://github.com/jdeschamps/EMU/issues\">as Github issues</a>.<br /><br />"
+						+ "<i>EMU was developed by Joran Deschamps, EMBL (2019).</i>";
+	   
+		showEMUOptionPane(contextObject, title, message);
+	}
+	
+	/**
+	 * Welcome message shown when no configuration exists.
+	 * 
+	 * @param contextObject Object used to retrieve context.
+	 */
+	public static void showWelcomeMessage(Object contextObject) {
 		String title = "Welcome to EMU";
-		
-		// From: https://stackoverflow.com/questions/8348063/clickable-links-in-joptionpane
-		// for html style
-	    JLabel label = new JLabel();
-	    Font font = label.getFont();
-
-	    StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
-	    style.append("font-weight:" + "normal;");
-	    style.append("font-size:" + font.getSize() + "pt;");
 		
 		String message = "Welcome to EMU.<br />"
 						+ "<i>version "+SystemController.EMU_VERSION+"</i> <br /><br />"
@@ -388,46 +344,53 @@ public class SystemDialogs {
 						+ "&bull Choose a UI from the list of available UIs.<br />"
 						+ "&bull Configure the chosen UI using the configuration wizard. This includes plugin settings,<br />"
 						+ "mapping Micro-manager device property to the UI properties, and UI parameters. <br />"
-						+ "&bull Use the UI to control your devices.<br /><br />"
-						+ "For more details:<br />"
-						+ "&bull <a href=\"https://jdeschamps.github.io/EMU-guide/\">The EMU guide</a> is available online.<br />"
-						+ "&bull Find <a href=\"https://github.com/jdeschamps/EMU\">the source code</a> on Github.<br />"
-						+ "&bull Report bugs <a href=\"https://github.com/jdeschamps/EMU/issues\">as Github issues</a>.<br /><br />"
-						+ "<i>EMU was developped by Joran Deschamps, EMBL (2019).</i>";
-	   
-		// html content
-	    JEditorPane ep = new JEditorPane("text/html", "<html><body style=\"" + style + "\">" //
-	            + message //
-	            + "</body></html>");
+						+ "&bull Use the UI to control your devices.";
 
-	    // handle link events
-	    ep.addHyperlinkListener(new HyperlinkListener()
-	    {
-	        @Override
-	        public void hyperlinkUpdate(HyperlinkEvent e)
-	        {
-	            if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
+		showEMUOptionPane(contextObject, title, message);
+	}
+
+
+	private static void showEMUOptionPane(Object contextObject, String title, String message) {
+		JEditorPane ep = getHTMLJEditor(message);
+		
+		URL url = contextObject.getClass().getResource("/images/logo64.png");
+		if(url != null) {
+			ImageIcon ic = new ImageIcon(url);
+			JOptionPane.showMessageDialog(null, ep, title, JOptionPane.INFORMATION_MESSAGE, ic);
+		} else {
+			JOptionPane.showMessageDialog(null, ep, title, JOptionPane.INFORMATION_MESSAGE);
+		}
+	}
+	
+	private static JEditorPane getHTMLJEditor(String message) {
+		// From:
+		// https://stackoverflow.com/questions/8348063/clickable-links-in-joptionpane
+		// for html style
+		JLabel label = new JLabel(); // use the jlabel to extract font, color
+		Font font = label.getFont();
+		StringBuffer style = new StringBuffer("font-family:" + font.getFamily() + ";");
+		style.append("font-weight:" + "normal;");
+		style.append("font-size:" + font.getSize() + "pt;");
+
+		// html content
+		JEditorPane ep = new JEditorPane("text/html",
+				"<html><body style=\"" + style + "\">" + message + "</body></html>");
+
+		// handle link events
+		ep.addHyperlinkListener(new HyperlinkListener() {
+			@Override
+			public void hyperlinkUpdate(HyperlinkEvent e) {
+				if (e.getEventType().equals(HyperlinkEvent.EventType.ACTIVATED)) {
 					try {
 						java.awt.Desktop.getDesktop().browse(java.net.URI.create(e.getURL().toString()));
 					} catch (IOException e1) {
 						e1.printStackTrace();
 					}
-	            }
-	        }
-	    });
-	    ep.setEditable(false);
-	    ep.setBackground(label.getBackground());
-		
-	    // icon		
-	    ImageIcon ic;
-		try {
-			ic = new ImageIcon(ImageIO.read(label.getClass().getResource( "/images/logo64.png" )));
-	        JOptionPane.showMessageDialog(null, ep, title, JOptionPane.INFORMATION_MESSAGE, ic);
-
-		} catch (IOException e1) {
-	        JOptionPane.showMessageDialog(null, ep, title, JOptionPane.INFORMATION_MESSAGE);
-
-			e1.printStackTrace();
-		}
+				}
+			}
+		});
+		ep.setEditable(false);
+		ep.setBackground(label.getBackground());
+		return ep;
 	}
 }

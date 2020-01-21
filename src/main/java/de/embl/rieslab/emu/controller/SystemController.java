@@ -9,7 +9,6 @@ import java.util.TreeMap;
 import org.micromanager.ApplicationSkin;
 import org.micromanager.Studio;
 import org.micromanager.internal.utils.DaytimeNighttime;
-import org.micromanager.propertymap.MutablePropertyMapView;
 
 import de.embl.rieslab.emu.configuration.ConfigurationController;
 import de.embl.rieslab.emu.configuration.data.GlobalConfiguration;
@@ -162,7 +161,7 @@ public class SystemController {
 				if(configurationController_.getDefaultConfigurationFile().exists()){
 					SystemDialogs.showConfigurationCouldNotBeParsed();
 				} else {
-					SystemDialogs.showWelcomeMessage();
+					SystemDialogs.showWelcomeMessage(this);
 				}
 
 				// gets list of available plugins

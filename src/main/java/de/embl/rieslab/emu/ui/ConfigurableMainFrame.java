@@ -279,7 +279,7 @@ public abstract class ConfigurableMainFrame extends JFrame implements Configurab
 			private static final long serialVersionUID = 1L;
 
 			public void actionPerformed(ActionEvent e) {
-				SystemDialogs.showAboutEMU();
+				SystemDialogs.showAboutEMU(this);
 			}
 		});
 		iconURL = getClass().getResource("/images/about16.png");
