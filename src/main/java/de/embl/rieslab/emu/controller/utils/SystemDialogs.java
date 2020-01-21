@@ -316,12 +316,12 @@ public class SystemDialogs {
 						+ "<i>version "+SystemController.EMU_VERSION+"</i> <br /><br />"
 						+ "EMU is a Micro-Manager plugin that provides an easy and intuitive way to link a user interface<br />"
 						+ "(UI) with the device properties of Micro-manager. Build you own UI using drag and drop<br />"
-						+ "softwares and EMU classes and load your UI in EMU. Finally, configure it by mapping device<br />"
-						+ "properties to the UI properties and set the UI parameter values using the configuration <br />"
-						+ "wizard.<br /><br />"
+						+ "softwares and EMU classes. Finally, load your UI in EMU and configure it using the configuration<br />"
+						+ "wizard. Your plugin is ready to be used!<br /><br />"
 						+ "&bull <a href=\"https://jdeschamps.github.io/EMU-guide/\">The EMU guide</a> is available online.<br />"
 						+ "&bull Find <a href=\"https://github.com/jdeschamps/EMU\">the source code</a> on Github.<br />"
 						+ "&bull Report bugs <a href=\"https://github.com/jdeschamps/EMU/issues\">as Github issues</a>.<br /><br />"
+						+ "Contribute your UI to Micro-Manager by doing a Github pull request or by getting in touch with us.<br /><br />"
 						+ "<i>EMU was developed by Joran Deschamps, EMBL (2019).</i>";
 	   
 		showEMUOptionPane(contextObject, title, message);
@@ -342,8 +342,8 @@ public class SystemDialogs {
 						+ "included in EMU. <br /><br />"
 						+ "After this message:<br />"
 						+ "&bull Choose a UI from the list of available UIs.<br />"
-						+ "&bull Configure the chosen UI using the configuration wizard. This includes plugin settings,<br />"
-						+ "mapping Micro-manager device property to the UI properties, and UI parameters. <br />"
+						+ "&bull Configure the chosen UI using the configuration wizard. In particular, map your device<br />"
+						+ "properties to the UI properties. <br />"
 						+ "&bull Use the UI to control your devices.";
 
 		showEMUOptionPane(contextObject, title, message);
