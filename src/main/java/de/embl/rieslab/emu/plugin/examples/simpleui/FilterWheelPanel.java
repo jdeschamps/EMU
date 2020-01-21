@@ -127,7 +127,8 @@ public class FilterWheelPanel extends ConfigurablePanel {
 
 		// Descriptions of the parameters
 		String helpNames = "Comma separated filter names, e.g.: \"name1,name2,name3,name4,None,None\".";
-		String helpColors = "Comma separated filter colors, e.g: \"blue,dark red, dark green,orange,gray,gray\".";
+		String helpColors = "Comma separated filter colors, e.g: \"blue,dark red,dark green,orange,gray,gray\".\n"
+				+ "The available colors are: "+ColorRepository.getCommaSeparatedColors();
 				
 		// Finally, we create two StringUIParametesr
 		addUIParameter(new StringUIParameter(this, PARAM_NAMES, helpNames, names));
