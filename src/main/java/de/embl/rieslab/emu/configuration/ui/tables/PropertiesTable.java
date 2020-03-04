@@ -335,7 +335,7 @@ public class PropertiesTable extends JPanel {
 		cb.addItem(GlobalConfiguration.KEY_UNALLOCATED);
 
 		if (!device.equals(GlobalConfiguration.KEY_UNALLOCATED)) {
-			// RescaledUIProperty are only compatible with Integer- and FloatMMProperty with limits, so
+			// RescaledUIProperty are only compatible with Integer- and FloatMMProperty, so
 			// we filter them here
 			boolean rescaledUIProp = false;
 			if(uipropertySet_.containsKey(uipropName) && uipropertySet_.get(uipropName) instanceof RescaledUIProperty) {
