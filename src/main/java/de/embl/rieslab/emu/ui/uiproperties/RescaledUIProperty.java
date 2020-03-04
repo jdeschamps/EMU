@@ -46,9 +46,7 @@ public class RescaledUIProperty extends UIProperty{
 	public boolean isCompatibleMMProperty(@SuppressWarnings("rawtypes") MMProperty prop) {
 		if(prop.getType() == MMProperty.MMPropertyType.FLOAT 
 				|| prop.getType() == MMProperty.MMPropertyType.INTEGER) {
-			if(prop.hasLimits()) {
-				return true;
-			}
+			return true;
 		}
 		return false;
 	}
