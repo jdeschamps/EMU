@@ -15,7 +15,6 @@ de.embl.rieslab.emu.plugin
 de.embl.rieslab.emu.plugin.examples.components
 de.embl.rieslab.emu.plugin.examples.ibeamsmart
 de.embl.rieslab.emu.plugin.examples.simpleui
-de.embl.rieslab.emu.swinglisteners
 de.embl.rieslab.emu.ui
 de.embl.rieslab.emu.ui.internalproperties
 de.embl.rieslab.emu.ui.swinglisteners
