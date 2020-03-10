@@ -18,7 +18,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 # How to install EMU?
 
-EMU is now distributed with Micro-Manager 2-gamma. If you wish to install it from the source code, then follow the next steps:
+**EMU is now distributed with Micro-Manager 2-gamma.** If you wish to install it from the source code, then follow the next steps:
 
 1. Download and install [Micro-Manager 2-gamma](https://micro-manager.org/wiki/Download_Micro-Manager_Latest_Release).
 
