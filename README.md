@@ -45,7 +45,8 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 
 7. Install an EMU plugin by placing the plugin compiled .jar file in "C:\Path\to\MicroManager2gamma\EMU\".
 
-
+# Cite us
+Joran Deschamps and Jonas Ries, ["EMU: reconfigurable graphical user interfaces for Micro-Manager, bioRxiv 2020.03.18.997494.](https://www.biorxiv.org/content/10.1101/2020.03.18.997494v1)
 
 # EMU plugins and resources
 
