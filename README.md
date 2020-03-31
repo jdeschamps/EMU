@@ -37,17 +37,24 @@ If you wish to install it from the source code, then follow the next steps:
    ```
 
 6. Navigate to the EMU folder and compile it using the path to Micro-manager:
-
+   
+   Windows (git bash)
    ```bash
    $ cd emu
-   $ ./compileAndDeploy.sh "C:\Path\to\MicroManager2gamma"
+   $ ./compileAndDeploy-Win.sh "C:\Program\Path\to\MicroManager2gamma"
+   ```
+  
+   macOs
+   ```bash
+   $ cd emu
+   $ sh compileAndDeploy-Mac.sh /Application/Path/to/MicroManager2gamma/
    ```
 
    > Note: the script requires bash, which is shipped with the git console on Windows.
    
    > Note: the EMU .jar shipped with Micro-Manager will be overwritten (it is located in the /mmplugins/ folder).
 
-7. Install an EMU plugin by placing the plugin compiled .jar file in "C:\Path\to\MicroManager2gamma\EMU\" or use the default plugins.
+7. Install an EMU plugin by placing the plugin compiled .jar file in "C:\Program\Path\to\MicroManager2gamma\EMU\" or use the default plugins.
 
 # Cite us
 Joran Deschamps and Jonas Ries, ["EMU: reconfigurable graphical user interfaces for Micro-Manager", bioRxiv 2020.03.18.997494.](https://www.biorxiv.org/content/10.1101/2020.03.18.997494v1)
