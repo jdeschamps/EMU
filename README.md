@@ -24,9 +24,9 @@ If you wish to install it from the source code, then follow the next steps:
 
 1. Download and install [Micro-Manager 2-gamma](https://micro-manager.org/wiki/Download_Micro-Manager_Latest_Release).
 
-2. Install git (for windows users: [git bash](https://gitforwindows.org/))
+2. Install git (for windows users: [git bash](https://gitforwindows.org/), or for os mac users: [source forge](https://sourceforge.net/projects/git-osx-installer/files/))
 
-3. Download the [Java SE Development Kit 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). Set the environment variable [JAVA_HOME to the JDK 1.8 folder path](https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html).
+3. Download the [Java SE Development Kit 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html). Set the environment variable [JAVA_HOME to the JDK 1.8 folder path](https://confluence.atlassian.com/doc/setting-the-java_home-variable-in-windows-8895.html) (windows).
 
 4. Download and install [Maven](https://maven.apache.org/install.html).
 
