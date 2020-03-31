@@ -44,6 +44,7 @@ If you wish to install it from the source code, then follow the next steps:
    ```
 
    > Note: the script requires bash, which is shipped with the git console on Windows.
+   
    > Note: the EMU .jar shipped with Micro-Manager will be overwritten (it is located in the /mmplugins/ folder).
 
 7. Install an EMU plugin by placing the plugin compiled .jar file in "C:\Path\to\MicroManager2gamma\EMU\" or use the default plugins.
