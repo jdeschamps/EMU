@@ -83,8 +83,8 @@ The Ries lab is using its own advanced EMU plugin to control automated localizat
 #### Javadoc
 The javadoc is available [here](https://jdeschamps.github.io/EMU/).
 
-#### Gitter
-Join us on Gitter if you have any question regarding EMU or want to develop your own EMU plugin.
+# Contact
+Join us on Gitter if you have any question regarding EMU or want to develop your own EMU plugin, or contact us at joran.deschamps(at)embl(.)de.
 
 [![Join the chat at https://gitter.im/emu-dev/community](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/emu-dev/community)
 
