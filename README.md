@@ -56,6 +56,8 @@ If you wish to install it from the source code, then follow the next steps:
 
 7. Install an EMU plugin by placing the plugin compiled .jar file in "C:\Program\Path\to\MicroManager2gamma\EMU\" or use the default plugins.
 
+> Note: For macOs users, [few manual steps](https://micro-manager.org/wiki/Micro-Manager_Installation_Notes) might be required to start Micro-manager.
+
 # Cite us
 Joran Deschamps and Jonas Ries, ["EMU: reconfigurable graphical user interfaces for Micro-Manager", bioRxiv 2020.03.18.997494.](https://www.biorxiv.org/content/10.1101/2020.03.18.997494v1)
 
