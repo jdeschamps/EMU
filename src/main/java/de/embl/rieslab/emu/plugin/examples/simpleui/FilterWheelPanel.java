@@ -139,11 +139,7 @@ public class FilterWheelPanel extends ConfigurablePanel {
 	@Override
 	protected void initializeProperties() {
 		// Description of the UIProperty
-		String description = "Filter wheel position property. Note: the property actually receives "
-				+ "the state number and not the state values. To avoid collisions, if you need to use a "
-				+ "state value that is an integer smaller than the number of states, place it in the state"
-				+ "with a number equal to the value (e.g.: \"state 1\" with value \"1\"). Alternatively, you"
-				+ "can use the label mechanism available in Micro-Manager or define a configuration preset group.";
+		String description = "Filter wheel position property.";
 		
 		// We create a MultiStateUIProperty with 6 states.
 		addUIProperty(new MultiStateUIProperty(this, FW_POSITION, description, NUM_POS));				
