@@ -81,4 +81,4 @@ Joran Deschamps and Jonas Ries, ["EMU: reconfigurable graphical user interfaces 
 The Ries lab is using its own advanced EMU plugin to control automated localization microscopes: [htSMLM](https://github.com/jdeschamps/htSMLM). 
 
 #### Javadoc
-The javadoc is available [here](https://jdeschamps.github.io/EMU/)
+The javadoc is available [here](https://jdeschamps.github.io/EMU/).
