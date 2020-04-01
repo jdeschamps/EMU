@@ -63,13 +63,13 @@ Joran Deschamps and Jonas Ries, ["EMU: reconfigurable graphical user interfaces 
 
 # EMU plugins and resources
 
-#### Examples
-
-[EMU plugin examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser. The latter two are shipped with EMU in Micro-Manager 2-gamma.
-
 #### Guide
 
 [The EMU guide](https://jdeschamps.github.io/EMU-guide/) offers both a description of EMU menus for users and a programming guide for implementing your own EMU plugin.
+
+#### Examples
+
+[EMU plugin examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser. The latter two are shipped with EMU in Micro-Manager 2-gamma.
 
 #### Tutorial
 
