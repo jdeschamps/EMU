@@ -14,7 +14,7 @@ Easier Micro-manager User interface (EMU) offers means to make your Micro-Manage
 - Functional Micro-Manager UI with only few lines of code thanks to EMU's back-end.
 - Flexible and transferable: easy and intuitive configuration through EMU's interface.
 
-<br>
+
 Check out the [EMU guide]( https://jdeschamps.github.io/EMU-guide ) for a quick introduction, a user guide and a programming guide. Resources are linked at the bottom of this page.
 
 # How to install EMU?
