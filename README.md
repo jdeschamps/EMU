@@ -84,5 +84,5 @@ The Ries lab is using its own advanced EMU plugin to control automated localizat
 The javadoc is available [here](https://jdeschamps.github.io/EMU/).
 
 # Contact
-Join us on Image.sc if you have any question regarding EMU or want to develop your own EMU plugin and tag @jdeschamps.
+If you have any question regarding EMU, or want to develop your own EMU plugin, post it on [image.sc](https://forum.image.sc/) and tag @jdeschamps.
 
