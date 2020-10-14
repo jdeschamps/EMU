@@ -370,11 +370,11 @@ public class UIProperty {
 		return UIPropertyType.UIPROPERTY;
 	}
 	
-	public MMPropertyType getMMpropertyType() {
+	public MMPropertyType getMMPropertyType() {
 		if(assigned_) {
 			return mmproperty_.getType();
 		}
-		return MMPropertyType.UNDEF;
+		return MMPropertyType.NONE;
 	}
 	
 }
