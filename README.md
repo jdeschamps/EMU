@@ -61,6 +61,7 @@ If you wish to install it from the source code, then follow the next steps:
 
 # Cite us
 Deschamps, J., Ries, J. EMU: reconfigurable graphical user interfaces for Micro-Manager. BMC Bioinformatics 21, 456 (2020).
+
 [doi.org/10.1186/s12859-020-03727-8](https://doi.org/10.1186/s12859-020-03727-8)
 
 # EMU plugins and resources
