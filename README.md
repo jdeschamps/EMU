@@ -60,7 +60,7 @@ If you wish to install it from the source code, then follow the next steps:
 > Note: For macOs users, [few manual steps](https://micro-manager.org/wiki/Micro-Manager_Installation_Notes) might be required to start Micro-manager.
 
 # Cite us
-Joran Deschamps and Jonas Ries, ["EMU: reconfigurable graphical user interfaces for Micro-Manager", bioRxiv 2020.03.18.997494.](https://www.biorxiv.org/content/10.1101/2020.03.18.997494v1)
+Deschamps, J., Ries, J. [EMU: reconfigurable graphical user interfaces for Micro-Manager](https://doi.org/10.1186/s12859-020-03727-8). BMC Bioinformatics 21, 456 (2020).
 
 # EMU plugins and resources
 
