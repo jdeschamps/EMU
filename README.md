@@ -71,11 +71,11 @@ Deschamps, J., Ries, J. EMU: reconfigurable graphical user interfaces for Micro-
 
 #### Examples
 
-[EMU plugin examples]( https://github.com/jdeschamps/EMU-guide/tree/master/examples ): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel and an interface for a commercial laser. The latter two are shipped with EMU in Micro-Manager 2-gamma.
+[EMU plugin examples](https://github.com/jdeschamps/EMU-guide/tree/master/examples): these projects include an empty base project, a simple UI for controlling lasers and a filterwheel, an interface for a commercial laser and the [example plugin from the publication](https://doi.org/10.1186/s12859-020-03727-8).
 
 #### Tutorial
 
-[Tutorial for Eclipse Windows Builder](  https://github.com/jdeschamps/EMU-guide/tree/master/tutorial ): a detailed walk through on how to easily assemble an EMU user interface using drag and drop software.
+[Tutorial for Eclipse Windows Builder](https://github.com/jdeschamps/EMU-guide/tree/master/tutorial): a detailed walk through on how to easily assemble an EMU user interface using drag and drop software.
 
 #### htSMLM
 
