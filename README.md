@@ -1,3 +1,5 @@
+# EMU development is now performed directly in [https://github.com/micro-manager/micro-manager](the official Micro-Manager repository).
+
 # What is EMU?
 
 [Micro-Manager](https://micro-manager.org/wiki/Micro-Manager) controls the devices on your microscope using device properties (e.g. laser on/off). All device properties can be accessed through the device property browser. However, controlling the microscope through a long list of properties is cumbersome, slow and rather aimed at the microscope engineer than at the user. While interactions with device properties can be facilitated by using configuration preset groups or the quick access plugin, these cannot replace a user interface (UI) tailored to the microscope. 
@@ -19,7 +21,7 @@ Check out the [EMU guide]( https://jdeschamps.github.io/EMU-guide ) for a quick 
 
 # How to install EMU?
 
-**EMU is now distributed with Micro-Manager 2.0-gamma (nightly build). To download the latest Micro-Manager 2.0-gamma nightly build, refer [to this page and choose your platform](https://micro-manager.org/wiki/Micro-Manager_Nightly_Builds). EMU is then available from the Plugin menu, under "User Interface".** 
+EMU is distributed with Micro-Manager. To download the latest Micro-Manager 2.0.*,EMU is then available from the Plugin menu, under "User Interface".** 
 
 If you wish to install it from the source code, then follow the next steps:
 
