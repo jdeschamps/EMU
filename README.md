@@ -1,4 +1,4 @@
-# EMU development is now performed directly in [https://github.com/micro-manager/micro-manager](the official Micro-Manager repository).
+# EMU development is now performed directly in [the official Micro-Manager repository](https://github.com/micro-manager/micro-manager).
 
 # What is EMU?
 
