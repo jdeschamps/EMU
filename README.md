@@ -21,7 +21,7 @@ Check out the [EMU guide]( https://jdeschamps.github.io/EMU-guide ) for a quick 
 
 # How to install EMU?
 
-EMU is distributed with Micro-Manager. To download the latest Micro-Manager 2.0.*,EMU is then available from the Plugin menu, under "User Interface".** 
+EIn Micro-Manager 2.0, EMU is now available from the Plugin menu, under "User Interface".
 
 If you wish to install it from the source code, then follow the next steps:
 
